@@ -1228,7 +1228,7 @@ function load() {
   if (raw) { try { const s = JSON.parse(raw); if (s && s.v === 1 && Array.isArray(s.cars)) return normalize(s); } catch (e) {} }
   return makeDemo();
 }
-function save() { store.set(KEY, JSON.stringify(S)); }
+function save() { store.set(KEY, JSON.stringify(S)); if (typeof nativeSchedule === 'function') nativeSchedule(); }
 
 /* ================= premium ================= */
 const isPrem = () => !!(S.premium && S.premium.until && S.premium.until >= todayISO());
@@ -2053,6 +2053,7 @@ function locate() {
   const done = () => { if (curPage().p === 'nearby') render(); };
   const fail = () => { ui.geo.status = 'denied'; done(); };
   try {
+    if (CAP && NP.Geolocation) { NP.Geolocation.requestPermissions().then(() => NP.Geolocation.getCurrentPosition({enableHighAccuracy: false, timeout: 8000, maximumAge: 300000})).then(p => { ui.geo.pos = {lat: +p.coords.latitude.toFixed(3), lon: +p.coords.longitude.toFixed(3)}; ui.geo.status = 'ok'; done(); }).catch(fail); return; }
     if (!navigator.geolocation) return setTimeout(fail, 0);
     navigator.geolocation.getCurrentPosition(p => { ui.geo.pos = {lat: +p.coords.latitude.toFixed(3), lon: +p.coords.longitude.toFixed(3)}; ui.geo.status = 'ok'; done(); }, fail, {enableHighAccuracy: false, timeout: 8000, maximumAge: 300000});
   } catch (e) { setTimeout(fail, 0); }
@@ -2112,7 +2113,7 @@ function bizText(a) {
   return ['Заявка партнёра Helper', 'Компания: ' + a.company, 'Категория: ' + BIZ_CATS[a.cat], 'IDNO: ' + a.idno, 'Телефон: ' + a.phone, 'Адрес: ' + (a.address || '—'), 'Предложение: ' + a.offer, 'Скидка: ' + a.discount + '%', 'Баллами: ' + a.bonus + '% от чека', 'Сформирована: ' + fD(a.date)].join('\n');
 }
 function bizResult(a) {
-  openSheet('Заявка сформирована', '<p style="margin:0;line-height:1.5">Отправьте её через Telegram-бот <b>' + TG_BOT + '</b> <span class="xsmall muted">(название бота — заглушка)</span>.</p><label class="vh" for="biz-out">Текст заявки</label><textarea id="biz-out" class="input mono" readonly style="margin-top:12px;min-height:210px">' + esc(bizText(a)) + '</textarea>' +
+  openSheet('Заявка сформирована', '<p style="margin:0;line-height:1.5">Отправьте её через Telegram-бот <b>' + TG_BOT + '</b>.</p><label class="vh" for="biz-out">Текст заявки</label><textarea id="biz-out" class="input mono" readonly style="margin-top:12px;min-height:210px">' + esc(bizText(a)) + '</textarea>' +
     '<div class="stack" style="margin-top:10px"><button class="btn block ink" data-act="copy" data-from="biz-out">' + ic('copy', 'sm') + 'Скопировать заявку</button><button class="btn block soft" data-act="copy" data-text="' + TG_BOT + '">' + ic('send', 'sm') + 'Скопировать имя бота</button></div><p class="xsmall muted" style="margin:10px 0 0">Демо: заявка никуда не отправлена.</p>');
 }
 
@@ -2324,7 +2325,35 @@ function partSheet(id) {
 const CAR_ACT = {zone: el => zoneSheet(el.dataset.id)};
 
 /* ================= UI state & rendering ================= */
-const TG_BOT = '@HelperAutoBot';
+const TG_BOT = '@HelperAutoMD_bot';
+/* Оплата картой через Stripe (сервис helper_pay): адрес без / в конце, например 'https://pay.helper.md'.
+   Пусто — кнопки оплаты картой скрыты. Правила площадок: цифровой Premium внутри Telegram (Mini App) — только
+   Telegram Stars, поэтому «Premium картой» показывается только вне Telegram; бумажный ежедневник — физический товар,
+   его можно оплатить картой и из Mini App. В будущем iOS-приложении Premium — только Apple In-App Purchase. */
+const PAY_BASE = '';
+const IN_TG = (() => {
+  let t = false;
+  try {
+    t = /tgWebApp(Data|Platform|Version)=/.test(location.hash + location.search) || !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
+    if (t) sessionStorage.setItem('hlp_in_tg', '1'); else t = sessionStorage.getItem('hlp_in_tg') === '1';
+  } catch (e) {}
+  return t;
+})();
+
+/* ===== Нативное приложение (Capacitor: iOS / Android) ===== */
+const CAP = (() => { try { return window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() ? window.Capacitor : null; } catch (e) { return null; } })();
+const IS_IOS = !!(CAP && CAP.getPlatform && CAP.getPlatform() === 'ios');
+const NP = CAP ? (CAP.Plugins || {}) : {};
+const payLink = k => PAY_BASE.replace(/\/+$/, '') + '/buy/' + k;
+function payBlock() {
+  if (!PAY_BASE) return '';
+  const a = (k, cls, icon, text) => '<a class="btn block ' + cls + '" style="text-decoration:none;margin-top:10px" href="' + esc(payLink(k)) + '" target="_blank" rel="noopener noreferrer">' + ic(icon, 'sm') + text + '</a>';
+  let b = '<div class="card section"><p class="eyebrow">Оплата картой</p>';
+  if (!IN_TG && !IS_IOS) b += '<p style="margin:6px 0 0;font-weight:600">Купить код Premium картой</p><p class="small muted" style="margin:2px 0 0">Код появится сразу после оплаты — активируйте его выше или в Telegram-боте.</p>' +
+    a('premium_code_year', 'ink', 'wallet', 'Premium на год') + a('premium_code_month', 'soft', 'wallet', 'Premium на месяц') + a('premium_code_family', 'soft', 'wallet', 'Premium «Семья»');
+  b += a('diary', 'line', 'book', 'Купить бумажный ежедневник') + '<p class="xsmall muted" style="margin:8px 0 0">Откроется защищённая страница оплаты Stripe в новой вкладке.</p></div>';
+  return b;
+}
 const TABS = [['home', 'Главная', 'home'], ['car', 'Авто', 'car'], ['journal', 'Журнал', 'journal'], ['bonus', 'Бонусы', 'loyal'], ['more', 'Ещё', 'more']];
 const emptyStacks = () => ({home: [], car: [], journal: [], bonus: [], more: []});
 const ui = {tab: 'home', stacks: emptyStacks(), jf: 'all', period: 'year', kbq: '', onb: null, plan: 'year', saeW: '5W', saeH: '30', allFuel: false, pf: 'all', session: {}, themeSet: false, geo: {status: null, pos: null}, allHist: false, jseg: 'works'};
@@ -2538,10 +2567,11 @@ function paywall() {
   b += '<div class="plans section" role="radiogroup" aria-label="Тариф" style="margin-top:22px">' + ['year', 'month', 'family'].map(k => '<button class="plan" role="radio" aria-checked="' + (ui.plan === k) + '" data-act="plan" data-plan="' + k + '">' + (k === 'year' ? '<span class="flag">−53% · выгоднее</span>' : '') + '<span class="radio"></span><span><span class="pn" style="display:block">' + PLANS[k].n + '</span><span class="pd">' + PLANS[k].note + '</span></span><span class="pp"><b>' + PLANS[k].price + ' MDL</b><span>' + PLANS[k].usd + ' / ' + PLANS[k].per + '</span></span></button>').join('') + '</div>';
   b += '<button class="btn block ink" style="margin-top:16px" data-act="trial">' + (p ? 'Сменить тариф' : 'Попробовать 7 дней бесплатно') + '</button><p class="xsmall muted num" style="text-align:center;margin:8px 0 0" id="pw-after">' + afterText() + '</p>';
   b += '<div class="section"><table class="cmp"><thead><tr><th scope="col">Возможности</th><th scope="col">Free</th><th scope="col">Premium</th></tr></thead><tbody>' + CMP.map(r => '<tr><td>' + r[0] + '</td><td>' + cell(r[1]) + '</td><td>' + cell(r[2]) + '</td></tr>').join('') + '</tbody></table></div>';
-  b += '<div class="card section"><form class="form" data-form="code" novalidate><div class="field"><label for="pw-code">Код активации</label><input id="pw-code" class="input num" autocomplete="off" autocapitalize="characters" placeholder="HLP-XXXX-XXXX" style="letter-spacing:.06em"><span class="hint">Напечатан на последней странице бумажного ежедневника Helper. Даёт Premium на 12 месяцев.</span></div>' + errBox('pw-err') + '<button class="btn block soft" type="submit">Активировать код</button></form>' +
+  if (!IS_IOS) b += '<div class="card section"><form class="form" data-form="code" novalidate><div class="field"><label for="pw-code">Код активации</label><input id="pw-code" class="input num" autocomplete="off" autocapitalize="characters" placeholder="HLP-XXXX-XXXX" style="letter-spacing:.06em"><span class="hint">Напечатан на последней странице бумажного ежедневника Helper. Даёт Premium на 12 месяцев.</span></div>' + errBox('pw-err') + '<button class="btn block soft" type="submit">Активировать код</button></form>' +
     '<button class="btn block line" style="margin-top:10px" data-act="corp">' + ic('building', 'sm') + 'У меня корпоративная лицензия</button></div>';
+  b += payBlock();
   b += refBlock();
-  b += '<div class="card section row" style="gap:12px"><span class="ic-circle">' + ic('send', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">Также доступно в Telegram-боте Helper</p><p class="small muted num" style="margin:2px 0 0">' + TG_BOT + ' — скоро: напоминания и активация кода в чате (имя бота — заглушка)</p></div><button class="iconbtn" data-act="copy" data-text="' + TG_BOT + '" aria-label="Скопировать имя бота">' + ic('copy', 'sm') + '</button></div>';
+  if (!IS_IOS) b += '<div class="card section row" style="gap:12px"><span class="ic-circle">' + ic('send', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">Также доступно в Telegram-боте Helper</p><p class="small muted num" style="margin:2px 0 0">' + TG_BOT + ' — скоро: напоминания и активация кода в чате</p></div><button class="iconbtn" data-act="copy" data-text="' + TG_BOT + '" aria-label="Скопировать имя бота">' + ic('copy', 'sm') + '</button></div>';
   b += '<p class="xsmall muted" style="margin:18px 0 0">Подписка продлевается автоматически; отменить её можно в настройках App Store или Google Play. В этой демо-сборке оплата не подключена.</p>';
   openSheet('Premium', b, {full: true});
 }
@@ -2823,6 +2853,63 @@ function onSubmit(e) {
   const h = FORMS[f.dataset.form]; if (h) h(f);
 }
 
+/* ===== Нативные напоминания (Local Notifications) ===== */
+const NOTIF_BASE = 7000, NOTIF_MAX = 60;
+let notifT = null, notifAsked = false;
+function at10(iso) { const d = pd(iso); d.setHours(10, 0, 0, 0); return d; }
+function nativeReminders() {
+  const out = [], now = Date.now(), T = todayISO();
+  const push = (when, title, body, extra) => { if (when && when.getTime() > now + 60000) out.push({when, title, body, extra: extra || {}}); };
+  S.cars.forEach(car => {
+    const kpd = kmPerDay(car), name = carName(car);
+    serviceList(car).forEach(x => {
+      if (x.status === 'none') return;
+      if (x.status === 'bad') { push(at10(addDays(T, 1)), 'Просрочено: ' + x.item.n.toLowerCase(), name + ' · ' + svcText(x), {tab: 'car'}); return; }
+      const p = typeof predict === 'function' ? predict(x, kpd) : null;
+      if (!p) return;
+      push(at10(addDays(p.d, -3)), 'Скоро: ' + x.item.n.toLowerCase(), name + ' · по прогнозу через 3 дня', {tab: 'car'});
+      push(at10(p.d), 'Пора: ' + x.item.n.toLowerCase(), name + ' · отметьте замену в Helper', {tab: 'car'});
+    });
+    if (isPrem()) carDocs(car.id).forEach(d => {
+      if (d.type === 'license') return;
+      [30, 7, 1].forEach(n => push(at10(addDays(d.expires, -n)), DOCT[d.type][0] + ': осталось ' + n + ' ' + plural(n, W_DAY), name + ' · продлите заранее', {tab: 'home'}));
+    });
+    push(at10(addDays(car.odoAt || T, S.settings.remindDays || 15)), 'Давайте сверим пробег', name + ': точный пробег — точные напоминания', {tab: 'home'});
+  });
+  out.sort((a, b) => a.when - b.when);
+  return out.slice(0, NOTIF_MAX);
+}
+async function nativeScheduleNow() {
+  const LN = NP.LocalNotifications; if (!LN || !S || !S.cars.length) return;
+  try {
+    let perm = await LN.checkPermissions();
+    if (perm.display === 'prompt' || perm.display === 'prompt-with-rationale') { if (notifAsked) return; notifAsked = true; perm = await LN.requestPermissions(); }
+    if (perm.display !== 'granted') return;
+    const pend = await LN.getPending();
+    const ours = (pend.notifications || []).filter(n => n.id >= NOTIF_BASE && n.id < NOTIF_BASE + 1000).map(n => ({id: n.id}));
+    if (ours.length) await LN.cancel({notifications: ours});
+    const list = nativeReminders().map((r, i) => ({id: NOTIF_BASE + i, title: r.title, body: r.body, schedule: {at: r.when, allowWhileIdle: true}, extra: r.extra}));
+    if (list.length) await LN.schedule({notifications: list});
+  } catch (e) {}
+}
+function nativeSchedule() { if (!CAP) return; clearTimeout(notifT); notifT = setTimeout(nativeScheduleNow, 800); }
+function nativeInit() {
+  if (!CAP) return;
+  try { document.documentElement.classList.add('native', IS_IOS ? 'ios' : 'android'); } catch (e) {}
+  try { NP.SplashScreen && NP.SplashScreen.hide(); } catch (e) {}
+  try { NP.LocalNotifications && NP.LocalNotifications.addListener('localNotificationActionPerformed', ev => { const t = ev && ev.notification && ev.notification.extra && ev.notification.extra.tab; if (t) setTab(t); }); } catch (e) {}
+  try { NP.App && NP.App.addListener('appStateChange', st => { if (st && st.isActive) { render(); nativeSchedule(); } }); } catch (e) {}
+  /* внешние ссылки https — в системном браузере (Safari / Chrome) */
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="http"]');
+    if (!a) return;
+    try { const u = new URL(a.href); if (u.origin === location.origin) return; } catch (x) { return; }
+    e.preventDefault(); e.stopPropagation();
+    try { if (NP.Browser) NP.Browser.open({url: a.href}); else window.open(a.href, '_system'); } catch (x) {}
+  }, true);
+  nativeSchedule();
+}
+
 function init() {
   S = load();
   const hs = (location.hash || '').replace('#', '');
@@ -2843,6 +2930,7 @@ function init() {
   let rz = null; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layoutHotspots, 120); });
   try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layoutHotspots()); } catch (e) {}
   if (!S.cars.length) startOnb('first'); else render(false);
+  nativeInit();
   save();
 }
 init();
@@ -2850,7 +2938,7 @@ init();
 })();
 </script>
 <script>
-try { if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); } } catch (e) {}
+try { if (!window.Capacitor && 'serviceWorker' in navigator && location.protocol.indexOf('http') === 0) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); } } catch (e) {}
 </script>
 </body>
 </html>
