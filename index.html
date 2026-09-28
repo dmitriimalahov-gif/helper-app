@@ -3047,6 +3047,7 @@ function carEditSheet(id, pre) {
 
 /* ================= premium sheets ================= */
 function refBlock() {
+  if (CAP) return ''; /* приложения App Store / Google Play: без кодов на Premium */
   const inv = 'Веду сервисную книжку авто в приложении Helper. Установи его и введи мой код ' + S.ref + ' — получим по месяцу Premium.';
   return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('gift', 'sm') + '</span><div><p style="margin:0;font-weight:600">Пригласи друга — месяц Premium вам обоим</p><p class="small muted" style="margin:2px 0 0">Друг вводит ваш код при оформлении подписки.</p></div></div>' +
     '<div class="copyline" style="margin-top:12px"><span class="v" id="ref-code">' + esc(S.ref) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(S.ref) + '" aria-label="Скопировать код">' + ic('copy', 'sm') + '</button></div>' +
