@@ -6,4 +6,6 @@
 
 Telegram-бот: https://t.me/HelperAutoMD_bot
 
-© SC Dirax Plus SRL, группа компаний «Dirax». Демо-версия: данные хранятся только на устройстве пользователя.
+Аккаунт Helper — по желанию: без входа данные хранятся только на устройстве; с аккаунтом журнал синхронизируется через API Helper (адрес — в `config.json`, поле `api`; приложения iOS/Android сначала читают `config.json` с этой страницы GitHub Pages). Premium на сайте — подписка Stripe (1–4 авто), в Telegram — звёзды в боте, в приложениях — App Store / Google Play.
+
+© SC Dirax Plus SRL, группа компаний «Dirax».
