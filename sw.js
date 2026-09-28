@@ -1,7 +1,8 @@
 /* Helper — offline cache */
-const CACHE = 'helper-v4';
+/* Меняйте версию кэша при каждом изменении index.html или словарей i18n/*.js */
+const CACHE = 'helper-v5';
 const FONTS = 'helper-fonts-v1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './i18n/ru.js', './i18n/ro.js', './i18n/en.js'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -20,6 +21,12 @@ self.addEventListener('fetch', e => {
     if (url.pathname.endsWith('/config.json')) {
       e.respondWith(fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./config.json', copy)); } return r; })
         .catch(() => caches.match('./config.json')));
+      return;
+    }
+    /* словари интерфейса (i18n/*.js) меняются вместе с index.html — из сети, из кэша только без интернета */
+    if (url.pathname.startsWith(root + 'i18n/')) {
+      e.respondWith(fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })
+        .catch(() => caches.match(req, {ignoreSearch: true})));
       return;
     }
     if (req.mode === 'navigate') {

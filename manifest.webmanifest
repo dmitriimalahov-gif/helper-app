@@ -1,9 +1,9 @@
 {
-  "name": "Helper — сервисная книжка авто",
+  "name": "Helper",
   "short_name": "Helper",
-  "lang": "ru",
+  "lang": "en",
   "dir": "ltr",
-  "description": "Напоминания о ТО по пробегу, журнал обслуживания, расходы на топливо и справочник по устройству автомобиля.",
+  "description": "Helper — your car’s service book: mileage-based service reminders, a maintenance log, fuel costs and a car guide. Русский · Română · English.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
