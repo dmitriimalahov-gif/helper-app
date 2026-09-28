@@ -1215,7 +1215,7 @@ function pageLanding(openLogin) {
       '<li><div><b>Бонус и акция</b><span>Выберите, какой % чека возвращать баллами, и создайте акцию для водителей рядом.</span></div></li>' +
       '<li><div><b>Касса</b><span>Клиент показывает QR из приложения, кассир сканирует его телефоном и начисляет баллы.</span></div></li>' +
     '</ol><div class="btn-row" style="margin-top:28px;max-width:560px"><a class="btn ink" href="#/register">Зарегистрировать компанию</a><button class="btn soft" data-act="login">У меня уже есть кабинет</button></div></section>' +
-    '<footer class="land-foot"><span>© SC Dirax Plus SRL · Helper</span><a href="../">Приложение для водителей</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">Telegram-бот Helper</a></footer>' +
+    '<footer class="land-foot"><span>© SC NumerOM SRL · Helper</span><a href="../">Приложение для водителей</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">Telegram-бот Helper</a></footer>' +
   '</div>';
   if (openLogin) loginSheet();
 }
@@ -2527,7 +2527,7 @@ VIEWS.settings = async (v, r, alive) => {
     '<section class="card pad-lg"><h3>Компании</h3>' + (others.length ? '<div class="group" style="margin-top:12px">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '<p class="small muted" style="margin:8px 0 0">Вы состоите только в этой компании.</p>') +
       '<form class="form" data-form="join-code" novalidate style="margin-top:16px">' + fld('jc-code', 'Код приглашения в другую команду', inp('jc-code', '', 'autocapitalize="off" spellcheck="false" placeholder="Код или ссылка"')) + errBox('jc-err') + '<button class="btn soft" type="submit">Вступить</button></form>' +
       '<a class="btn soft block" style="margin-top:12px" href="#/register">' + ic('plus', 'sm') + 'Зарегистрировать ещё компанию</a></section>' +
-    '<p class="hint">Helper для бизнеса · © SC Dirax Plus SRL' + (store.get(K.api) ? ' · API: ' + esc(net.api) : '') + '</p>' +
+    '<p class="hint">Helper для бизнеса · © SC NumerOM SRL' + (store.get(K.api) ? ' · API: ' + esc(net.api) : '') + '</p>' +
   '</div></div>';
   v.innerHTML = h;
   SET.dk = dk;

@@ -1855,7 +1855,7 @@ function pageMore() {
   h += '<div class="group section">' +
     row('go', 'sync', 'Резервная копия', 'Экспорт и восстановление данных', lk, 'data-p="backup"') +
     row('go', 'sliders', 'Настройки', 'Интервалы, валюта, тема', '', 'data-p="settings"') +
-    row('go', 'info', 'О приложении', 'Dirax Plus SRL', '', 'data-p="about"') + '</div>';
+    row('go', 'info', 'О приложении', 'SC NumerOM SRL', '', 'data-p="about"') + '</div>';
   h += '<p class="xsmall muted" style="text-align:center;margin-top:22px">Helper — это то, что нужно твоему авто!<br><span id="app-ver">Версия 1.0</span></p>';
   return h;
 }
@@ -1951,7 +1951,7 @@ function pageSettings() {
 function pageAbout() {
   let h = topbar('О приложении', {back: true});
   h += '<div class="welcome" style="padding-top:18px"><div class="corner-ring" style="width:200px;height:200px;right:-80px;top:-40px"></div>' + logoImg('big') + '<p style="font-weight:300;font-size:22px;margin:4px 0 0;line-height:1.3">Helper — это то, что нужно твоему авто!</p><p class="muted" style="margin:0">Цифровая сервисная книжка к бумажному автоежедневнику Helper: журнал обслуживания, напоминания, расходы и справочник по устройству автомобиля.</p></div>';
-  h += '<div class="card section"><p class="eyebrow">Разработчик</p><p style="font-weight:600;margin:8px 0 2px">SC Dirax Plus SRL</p><p class="small muted" style="margin:0">Группа компаний «Dirax»<br>Кишинёв, ул. Штефан чел Маре, 137, 4 этаж</p><div class="copyline" style="margin-top:12px"><span class="v">022 280 003</span><button class="iconbtn" data-act="copy" data-text="022 280 003" aria-label="Скопировать номер">' + ic('copy', 'sm') + '</button><a class="iconbtn" href="tel:+37322280003" aria-label="Позвонить">' + ic('phone', 'sm') + '</a></div></div>';
+  h += '<div class="card section"><p class="eyebrow">Разработчик</p><p style="font-weight:600;margin:8px 0 2px">SC NumerOM SRL</p><p class="small muted" style="margin:0">Группа компаний «Dirax»<br>Кишинёв, ул. Штефан чел Маре, 137, 4 этаж</p><div class="copyline" style="margin-top:12px"><span class="v">022 280 003</span><button class="iconbtn" data-act="copy" data-text="022 280 003" aria-label="Скопировать номер">' + ic('copy', 'sm') + '</button><a class="iconbtn" href="tel:+37322280003" aria-label="Позвонить">' + ic('phone', 'sm') + '</a></div></div>';
   h += '<div class="card section"><p class="eyebrow">Важно</p><p class="small" style="margin:8px 0 0">Интервалы обслуживания носят рекомендательный характер. Всегда сверяйтесь с руководством по эксплуатации вашего автомобиля и рекомендациями СТО.</p></div>';
   h += '<p class="xsmall muted" style="text-align:center;margin-top:20px">Версия 1.0 · демо-сборка · EVERYONE NEEDS A Helper</p>';
   return h;
@@ -4087,7 +4087,7 @@ function webInit() {
 function corpSheet() {
   openSheet('Корпоративная лицензия', '<p class="muted" style="margin:0 0 14px">Страховые компании, лизинг, автосалоны и автопарки дарят Helper Premium своим клиентам и сотрудникам. Лицензии продаются по договору, а каждый пользователь активирует личный код.</p>' +
     '<form class="form" data-form="corp" novalidate>' + fld('corp-org', 'Компания', inp('corp-org', '', 'autocomplete="organization" placeholder="Необязательно"')) + fld('corp-code', 'Код лицензии', inp('corp-code', '', 'autocomplete="off" autocapitalize="characters" placeholder="HLP-XXXX-XXXX"')) + errBox('corp-err') + '<button class="btn block ink" type="submit">Активировать</button></form>' +
-    '<div class="card section"><p class="eyebrow">Для компаний</p><p class="small" style="margin:6px 0 10px">Лицензии для клиентов и сотрудников, брендированный ежедневник Helper — SC Dirax Plus SRL.</p><div class="copyline"><span class="v">022 280 003</span><button class="iconbtn" data-act="copy" data-text="022 280 003" aria-label="Скопировать номер">' + ic('copy', 'sm') + '</button></div></div>');
+    '<div class="card section"><p class="eyebrow">Для компаний</p><p class="small" style="margin:6px 0 10px">Лицензии для клиентов и сотрудников, брендированный ежедневник Helper — SC NumerOM SRL.</p><div class="copyline"><span class="v">022 280 003</span><button class="iconbtn" data-act="copy" data-text="022 280 003" aria-label="Скопировать номер">' + ic('copy', 'sm') + '</button></div></div>');
 }
 const UPS = {
   rec3: ['report', 'Три записи — отличное начало', 'С Premium журнал превращается в отчёт «История обслуживания»: авто с подтверждённой историей продаётся быстрее и дороже.'],
