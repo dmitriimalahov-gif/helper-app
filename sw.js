@@ -1,5 +1,5 @@
 /* Helper — offline cache */
-const CACHE = 'helper-v2';
+const CACHE = 'helper-v4';
 const FONTS = 'helper-fonts-v1';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
@@ -13,6 +13,9 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin === self.location.origin) {
+    /* кабинет партнёра (/partner/) — отдельное приложение: не кэшируем и не подменяем им офлайн-копию приложения */
+    const root = new URL(self.registration.scope).pathname;
+    if (url.pathname.startsWith(root + 'partner/') || url.pathname === root + 'partner') return;
     /* config.json (адрес API) — всегда из сети, из кэша только без интернета */
     if (url.pathname.endsWith('/config.json')) {
       e.respondWith(fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./config.json', copy)); } return r; })
@@ -20,7 +23,8 @@ self.addEventListener('fetch', e => {
       return;
     }
     if (req.mode === 'navigate') {
-      e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); return r; })
+      const own = url.pathname === root || url.pathname === root + 'index.html';
+      e.respondWith(fetch(req).then(r => { if (own && r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./index.html', copy)); } return r; })
         .catch(() => caches.match('./index.html').then(r => r || caches.match('./'))));
       return;
     }

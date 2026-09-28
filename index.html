@@ -88,7 +88,7 @@ svg{display:block}
 
 /* ---------- shell ---------- */
 .notch{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
-#app{position:relative;max-width:440px;margin:0 auto;min-height:100%;background:var(--bg);overflow-x:clip}
+#app{position:relative;max-width:440px;margin:0 auto;min-height:100%;min-height:100vh;background:var(--bg);overflow-x:clip}
 @media (min-width:600px){#app{box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.08)}}
 #view{position:relative;z-index:0;padding:0 18px calc(var(--tabbar-h) + 34px + env(safe-area-inset-bottom,0px))}
 #view.noTab{padding-bottom:40px}
@@ -497,6 +497,60 @@ div.item:hover{background:none}
 
 .sync-bad{color:var(--bad-t)}
 #app-ver{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+/* Helper-код: карточка на главной, полноэкранный показ кассиру */
+.hidc{display:flex;gap:14px;align-items:center;margin-top:14px;padding:12px 14px 12px 12px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);width:100%;text-align:left}
+.hidc .qrbox{flex:none;display:block;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--line);line-height:0}
+.hidc .body{flex:1;min-width:0}
+.hidc .hid{font-size:17px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hidc .pts{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hidc .btn{margin-top:8px}
+.hidc.cta{background:var(--teal-3);color:var(--ink);border-color:transparent;box-shadow:none}
+.hidc.cta .s{font-size:12px;color:var(--ink-2);margin-top:2px;display:block}
+.hidc.cta .t{font-weight:600;font-size:14px;line-height:1.3;display:block}
+.hidc.cta .go{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;flex:none}
+.codefs{outline:none;position:fixed;inset:0;z-index:95;background:#FFFFFF;color:#231F20;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:fade .15s ease}
+.codefs-in{min-height:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:calc(64px + env(safe-area-inset-top,0px)) 22px calc(24px + env(safe-area-inset-bottom,0px))}
+.codefs .x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(14px,calc(50% - 206px));width:44px;height:44px;border-radius:50%;background:#EEF2F2;color:#231F20;display:grid;place-items:center}
+.codefs .ttl{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#56605F;margin:0}
+.codefs .sub{font-size:15px;font-weight:600;margin:0;color:#231F20}
+.codefs .qr{width:min(78vw,320px);height:auto;display:block}
+.codefs .bc{max-width:100%;height:78px;display:block}
+.codefs .big{font-size:clamp(28px,9vw,38px);font-weight:600;letter-spacing:.1em;line-height:1.1;font-variant-numeric:tabular-nums;margin:0;user-select:all;-webkit-user-select:all;color:#000}
+.codefs .hint{font-size:15px;line-height:1.45;margin:0;max-width:330px;color:#231F20}
+.codefs .note{font-size:12.5px;color:#56605F;margin:0;max-width:320px}
+.codefs .btn{background:#231F20;color:#FFFFFF;min-width:220px}
+/* Акции партнёров */
+.ostrip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:2px 18px 6px;scroll-snap-type:x proximity;scroll-padding:0 18px}
+.ostrip::-webkit-scrollbar{display:none}
+.offer{flex:none;width:min(248px,72vw);scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--card);text-align:left;position:relative}
+.offer:hover{border-color:var(--line-2)}
+.offer.wide{width:100%}
+.offer .oh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.offer .ocat{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.offer .ot{font-weight:600;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.offer .oc{font-size:12.5px;color:var(--ink-2)}
+.offer .od{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:auto}
+.obadge{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;background:var(--teal);color:var(--on-teal);font-size:12px;font-weight:700;white-space:nowrap;flex:none;font-variant-numeric:tabular-nums}
+.oempty{display:flex;gap:12px;align-items:center}
+.oloc{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.oloc .body{flex:1;min-width:0}
+.oloc .t{font-weight:600;font-size:14px}
+.oloc .s{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.obanner{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:420px;z-index:92;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:12px 10px 12px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);animation:fade .25s ease}
+.obanner .body{flex:1;min-width:0;text-align:left}
+.obanner .t{font-weight:600;font-size:13.5px;line-height:1.3;display:block}
+.obanner .s{font-size:12px;opacity:.75;display:block;margin-top:2px}
+.obanner .iconbtn{background:transparent;color:var(--on-ink)}
+/* сканер техпаспорта: карточка онбординга и прогресс */
+.scan-card{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:18px;border-radius:var(--r-lg);background:var(--ink);color:var(--on-ink);position:relative;overflow:hidden;isolation:isolate}
+.scan-card .ring{z-index:-1;position:absolute;right:-34px;top:-34px;width:130px;height:130px;border-radius:50%;border:1.5px solid var(--teal);opacity:.7}
+.scan-card .t{font-weight:600;font-size:18px;line-height:1.25;margin:0}
+.scan-card .s{font-size:13.5px;opacity:.78;margin:0;line-height:1.45}
+.scan-card .btn{background:var(--teal);color:var(--on-teal);margin-top:4px}
+.scan-safe{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink-2);margin:10px 2px 0;line-height:1.45}
+.scan-prog .bar{height:8px;margin:14px 0 10px}
+.scan-prog .bar>i{background:var(--teal-ink);transition:width .3s}
 </style>
 </head>
 <body>
@@ -1435,7 +1489,9 @@ const I = {
   loyal: '<circle cx="12" cy="12" r="8.5"/><path d="m12 7.6 1.35 2.75 3.05.45-2.2 2.15.5 3.05L12 14.55 9.3 16l.5-3.05-2.2-2.15 3.05-.45z"/>',
   pin: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/>',
   qr: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1"/>',
-  store: '<path d="M4 9.5 5.5 4h13L20 9.5zM4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12v8.5h13V12M10 20.5v-5h4v5"/>'
+  store: '<path d="M4 9.5 5.5 4h13L20 9.5zM4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12v8.5h13V12M10 20.5v-5h4v5"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  camera: '<path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/>'
 };
 const ic = (n, cls) => '<svg class="ico ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (I[n] || I.wrench) + '</svg>';
 
@@ -1566,6 +1622,7 @@ function pageHome() {
   h += '<button class="car-title" data-act="car-switch" aria-label="Сменить автомобиль">' + esc(carName(car)) + ic('chevD', 'sm') + '</button>';
   h += '<p class="subtitle num">' + esc(carSub(car)) + (car.demo ? ' <span class="badge" style="margin-left:4px;vertical-align:1px">демо</span>' : '') + '</p>';
   if (S.demo) h += '<button class="demo-banner" data-act="demo-exit"><span class="body" style="flex:1"><span class="t" style="display:block">Это демо-данные — нажмите, чтобы начать со своим авто</span><span class="s">Записи, заправки и документы ниже — пример</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
+  h += hidCard();
   if (isPrem()) {
     carDocs(car.id).forEach(d => {
       const n = diffDays(T, d.expires);
@@ -1595,6 +1652,7 @@ function pageHome() {
   } else {
     h += '<div class="card section row between" style="margin-top:20px"><div><p class="eyebrow">Пробег</p><div class="odo" style="margin-top:6px"><span class="v">' + fN(car.odo) + '</span><span class="u">км</span></div><p class="xsmall muted" style="margin:6px 0 0">обновлён ' + (staleDays === 0 ? 'сегодня' : relDays(-staleDays)) + (kpd ? ' · ≈ ' + fN(kpd) + ' км/день' : '') + '</p></div><button class="btn sm soft" data-act="odo">Обновить</button></div>';
   }
+  h += offersHome();
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Обслуживание по пробегу</h2><button class="link" data-act="go" data-p="settings">Интервалы' + ic('chevR', 'xs') + '</button></div><div class="group">';
   h += list.map(x => {
     const w = x.status === 'none' ? 0 : x.status === 'bad' ? 4 : Math.round(clamp(x.frac, 0.03, 1) * 100);
@@ -1790,8 +1848,11 @@ function pageMore() {
     row('go', 'tag', 'Партнёры и скидки', 'СТО, шиномонтаж, мойки, страхование', '', 'data-p="partners"') +
     row('go', 'pin', 'Предложения рядом', S.geo.consent ? 'Включено' : 'Скидки партнёров поблизости', '', 'data-p="nearby"') +
     row('ref', 'gift', 'Пригласить друга', 'Месяц Premium вам обоим и +50 баллов', '') + '</div>';
+  const mine = logged() && Array.isArray(A.partners) ? A.partners : [];
+  if (!CAP) h += '<p class="eyebrow section" style="margin-bottom:8px">Для бизнеса</p><div class="group">' +
+    row('partner-cabinet', 'store', 'Стать партнёром Helper', 'Акции для водителей рядом, баллы, касса — кабинет партнёра', '') +
+    (mine.length ? row('partner-cabinet', 'building', 'Моя компания в Helper', esc(mine.map(x => x.company).filter(Boolean).join(', ')), '') : '') + '</div>';
   h += '<div class="group section">' +
-    row('go', 'store', 'Для бизнеса', 'Стать партнёром Helper', '', 'data-p="biz"') +
     row('go', 'sync', 'Резервная копия', 'Экспорт и восстановление данных', lk, 'data-p="backup"') +
     row('go', 'sliders', 'Настройки', 'Интервалы, валюта, тема', '', 'data-p="settings"') +
     row('go', 'info', 'О приложении', 'Dirax Plus SRL', '', 'data-p="about"') + '</div>';
@@ -1822,7 +1883,7 @@ function pagePartners() {
     h += '<div class="partner"><div class="row between"><span class="row" style="gap:10px"><span class="ic-circle">' + ic(p[2], 'sm') + '</span><span><span class="pn" style="display:block">' + esc(o[0]) + '</span><span class="xsmall muted">' + p[1] + '</span></span></span><span class="badge warn">пример</span></div><p class="po" style="margin:0">' + esc(o[1]) + '</p>' +
       (isPrem() ? '<div class="row between"><span class="promo">' + o[2] + '</span><button class="btn sm soft" data-act="copy" data-text="' + o[2] + '">' + ic('copy', 'xs') + 'Копировать</button></div>' : '<button class="soft-lock" data-act="upsell" data-k="partners"><span class="ic-circle ink">' + ic('lock', 'xs') + '</span><span class="body" style="flex:1"><span class="t" style="display:block">Промокод — в Premium</span><span class="s">Скидки партнёров для подписчиков</span></span></button>') + '</div>';
   }));
-  h += '<div class="partner" style="border-style:dashed"><span class="pn">Место для вашей компании</span><p class="po muted" style="margin:0">СТО, мойки, страховые и магазины запчастей могут разместить предложение для владельцев авто. Контакт: SC Dirax Plus SRL.</p><div class="copyline"><span class="v" style="font-size:16px">022 280 003</span><button class="iconbtn" data-act="copy" data-text="022 280 003" aria-label="Скопировать номер">' + ic('copy', 'sm') + '</button></div></div></div>';
+  h += CAP ? '</div>' : '<div class="partner" style="border-style:dashed"><span class="pn">Место для вашей компании</span><p class="po muted" style="margin:0">СТО, мойки, страховые и магазины запчастей размещают акции для владельцев авто в кабинете партнёра Helper.</p><button class="btn sm ink" data-act="partner-cabinet">' + ic('store', 'xs') + 'Стать партнёром Helper</button></div></div>';
   return h;
 }
 function reportData(car) {
@@ -1883,7 +1944,7 @@ function pageSettings() {
     '<div class="int-row" style="border:0;padding-bottom:0"><span class="xsmall muted">Работа</span><span class="xsmall muted" style="text-align:center">км</span><span class="xsmall muted" style="text-align:center">мес.</span><span></span></div>' +
     ITEMS.filter(i => !i.season).map(i => { const c = cfgFor(i); return '<div class="int-row"><span class="nm">' + esc(i.n) + '</span><label class="vh" for="int-km-' + i.id + '">' + esc(i.n) + ', км</label><input class="input num" id="int-km-' + i.id + '" data-int="' + i.id + '" data-f="km" inputmode="numeric" value="' + (c.km || 0) + '"><label class="vh" for="int-mo-' + i.id + '">' + esc(i.n) + ', месяцев</label><input class="input num" id="int-mo-' + i.id + '" data-int="' + i.id + '" data-f="mo" inputmode="numeric" value="' + (c.mo || 0) + '"><label class="switch" for="int-on-' + i.id + '"><span class="vh">Отслеживать</span><input type="checkbox" id="int-on-' + i.id + '" data-int="' + i.id + '" data-f="on"' + (c.off ? '' : ' checked') + '></label></div>'; }).join('') +
     '<p class="xsmall muted" style="margin:10px 0 0">Сезонная смена шин считается по датам: летние — в апреле, зимние — в ноябре.</p></div>';
-  h += '<div class="card section"><p class="eyebrow">Геолокация</p><label class="switch" for="set-geo" style="margin-top:6px"><span><span style="font-weight:600;display:block">Предложения рядом</span><span class="hint">Местоположение используется только пока открыт экран «Предложения рядом» и не покидает телефон.</span></span><input type="checkbox" id="set-geo"' + (S.geo.consent ? ' checked' : '') + '></label>' + (S.geo.consent ? '<p class="xsmall muted num" style="margin:6px 0 0">Согласие дано ' + fD(S.geo.consentAt) + (S.geo.area ? ' · район: ' + AREAS[S.geo.area][0] : '') + '</p>' : '') + '<button class="btn block soft" style="margin-top:12px" data-act="geo-clear">' + ic('trash', 'sm') + 'Удалить мои гео-данные</button></div>';
+  h += '<div class="card section"><p class="eyebrow">Геолокация</p><label class="switch" for="set-geo" style="margin-top:6px"><span><span style="font-weight:600;display:block">Предложения рядом</span><span class="hint">Местоположение используется, только пока приложение открыто: расстояние до партнёров и напоминание об акции рядом (не чаще 2 раз в день, не с 21:00 до 9:00). Координаты не покидают телефон.</span></span><input type="checkbox" id="set-geo"' + (S.geo.consent ? ' checked' : '') + '></label>' + (S.geo.consent ? '<p class="xsmall muted num" style="margin:6px 0 0">Согласие дано ' + fD(S.geo.consentAt) + (S.geo.area ? ' · район: ' + AREAS[S.geo.area][0] : '') + '</p>' : '') + '<button class="btn block soft" style="margin-top:12px" data-act="geo-clear">' + ic('trash', 'sm') + 'Удалить мои гео-данные</button></div>';
   h += '<div class="card section"><p class="eyebrow">Данные</p><p class="small muted" style="margin:6px 0 12px">' + (logged() ? 'Данные синхронизируются с аккаунтом ' + esc(acctEmail()) + ' и хранятся на сервере Helper.' : 'Данные хранятся только на этом устройстве. Создайте аккаунт в разделе «Ещё», чтобы сохранить их на сервере.') + '</p><div class="stack"><button class="btn block soft" data-act="go" data-p="backup">' + ic('sync', 'sm') + 'Резервная копия</button>' + (S.demo ? '' : '<button class="btn block soft" data-act="demo-restore">Открыть демо-данные</button>') + '<button class="btn block danger" data-act="data-reset">' + ic('trash', 'sm') + 'Удалить все данные</button></div></div>';
   return h;
 }
@@ -1913,6 +1974,12 @@ function renderOnb() {
   h += '<div class="row between"><button class="iconbtn ghost" data-act="onb-back" aria-label="Назад">' + ic('chevL') + '</button><span class="small muted">Шаг ' + st + ' из 3</span>' + (o.mode === 'add' ? '<button class="iconbtn ghost" data-act="onb-cancel" aria-label="Отмена">' + ic('close') + '</button>' : '<span style="width:40px"></span>') + '</div>';
   h += '<div class="steps" aria-hidden="true">' + [1, 2, 3].map(i => '<i class="' + (i <= st ? 'on' : '') + '"></i>').join('') + '</div>';
   const opts = (k, map, dis) => '<div class="opt-grid" role="group">' + Object.keys(map).map(v => '<button class="opt" data-act="onb-opt" data-k="' + k + '" data-v="' + v + '" aria-pressed="' + (d[k] === v) + '"' + (dis && dis(v) ? ' disabled' : '') + '>' + map[v] + '</button>').join('') + '</div>';
+  /* Шаг 1 начинается с выбора: сканировать техпаспорт или ввести вручную (форма — после сканирования или «Ввести вручную») */
+  if (st === 1 && !o.manual && !d.make && !d.model && !d.vin && !d.plate) {
+    h += '<h1 class="large-title">Ваш автомобиль</h1><p class="subtitle" style="margin-bottom:16px">Быстрее всего — сфотографировать техпаспорт (свидетельство о регистрации).</p><div class="form">' + scanCard() +
+      '<button type="button" class="btn block soft" data-act="onb-manual" style="margin-top:6px">' + ic('edit', 'sm') + 'Ввести вручную</button></div>';
+    return h + '</div>';
+  }
   h += '<form class="form" data-form="onb" novalidate>';
   if (st === 1) {
     h += '<h1 class="large-title">Ваш автомобиль</h1><p class="subtitle" style="margin-bottom:6px">Марка, модель, год и текущий пробег — этого достаточно для напоминаний.</p>' + scanBtn('onb') +
@@ -1965,17 +2032,33 @@ function extendPremium(days) {
   if (locPrem()) S.premium.until = addDays(S.premium.until, days);
   else S.premium = {plan: 'bonus', since: T, until: addDays(T, days), trial: false, code: null, cars: 1};
 }
-function qrSVG(text, px) {
-  const N = 21; let h = 2166136261;
-  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
-  const rnd = () => { h = (h + 0x6D2B79F5) >>> 0; let t = h; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const g = []; for (let y = 0; y < N; y++) { g.push([]); for (let x = 0; x < N; x++) g[y].push(rnd() < 0.5 ? 1 : 0); }
-  const finder = (ox, oy) => { for (let y = -1; y < 8; y++) for (let x = -1; x < 8; x++) { const X = ox + x, Y = oy + y; if (X < 0 || Y < 0 || X >= N || Y >= N) continue; const inside = x >= 0 && x <= 6 && y >= 0 && y <= 6; g[Y][X] = inside && (x === 0 || x === 6 || y === 0 || y === 6 || (x >= 2 && x <= 4 && y >= 2 && y <= 4)) ? 1 : 0; } };
-  finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
-  for (let i = 8; i < N - 8; i++) { g[6][i] = i % 2 ? 0 : 1; g[i][6] = i % 2 ? 0 : 1; }
+/* qrcode-generator 1.4.4 — © 2009 Kazuhiko Arase, MIT License (github.com/kazuhikoarase/qrcode-generator).
+   Встроен без сети (нужен офлайн в приложениях iOS/Android); удалены только функции рисования (таблица/SVG/GIF) — рисуем сами. */
+var QRGEN=function(){var r=function(r,t){var n=r,e=c[t],o=null,u=0,a=null,f=[],i={},g=function(r,t){o=function(r){for(var t=new Array(r),n=0;n<r;n+=1){t[n]=new Array(r);for(var e=0;e<r;e+=1)t[n][e]=null}return t}(u=4*n+17),h(0,0),h(u-7,0),h(0,u-7),l(),s(),d(r,t),n>=7&&v(r),null==a&&(a=w(n,e,f)),p(a,t)},h=function(r,t){for(var n=-1;n<=7;n+=1)if(!(r+n<=-1||u<=r+n))for(var e=-1;e<=7;e+=1)t+e<=-1||u<=t+e||(o[r+n][t+e]=0<=n&&n<=6&&(0==e||6==e)||0<=e&&e<=6&&(0==n||6==n)||2<=n&&n<=4&&2<=e&&e<=4)},s=function(){for(var r=8;r<u-8;r+=1)null==o[r][6]&&(o[r][6]=r%2==0);for(var t=8;t<u-8;t+=1)null==o[6][t]&&(o[6][t]=t%2==0)},l=function(){for(var r=k.getPatternPosition(n),t=0;t<r.length;t+=1)for(var e=0;e<r.length;e+=1){var u=r[t],a=r[e];if(null==o[u][a])for(var f=-2;f<=2;f+=1)for(var i=-2;i<=2;i+=1)o[u+f][a+i]=-2==f||2==f||-2==i||2==i||0==f&&0==i}},v=function(r){for(var t=k.getBCHTypeNumber(n),e=0;e<18;e+=1){var a=!r&&1==(t>>e&1);o[Math.floor(e/3)][e%3+u-8-3]=a}for(e=0;e<18;e+=1)a=!r&&1==(t>>e&1),o[e%3+u-8-3][Math.floor(e/3)]=a},d=function(r,t){for(var n=e<<3|t,a=k.getBCHTypeInfo(n),f=0;f<15;f+=1){var i=!r&&1==(a>>f&1);f<6?o[f][8]=i:f<8?o[f+1][8]=i:o[u-15+f][8]=i}for(f=0;f<15;f+=1)i=!r&&1==(a>>f&1),f<8?o[8][u-f-1]=i:f<9?o[8][15-f-1+1]=i:o[8][15-f-1]=i;o[u-8][8]=!r},p=function(r,t){for(var n=-1,e=u-1,a=7,f=0,i=k.getMaskFunction(t),g=u-1;g>0;g-=2)for(6==g&&(g-=1);;){for(var c=0;c<2;c+=1)if(null==o[e][g-c]){var h=!1;f<r.length&&(h=1==(r[f]>>>a&1)),i(e,g-c)&&(h=!h),o[e][g-c]=h,-1==(a-=1)&&(f+=1,a=7)}if((e+=n)<0||u<=e){e-=n,n=-n;break}}},w=function(r,t,n){for(var e=B.getRSBlocks(r,t),o=C(),u=0;u<n.length;u+=1){var a=n[u];o.put(a.getMode(),4),o.put(a.getLength(),k.getLengthInBits(a.getMode(),r)),a.write(o)}var f=0;for(u=0;u<e.length;u+=1)f+=e[u].dataCount;if(o.getLengthInBits()>8*f)throw"code length overflow. ("+o.getLengthInBits()+">"+8*f+")";for(o.getLengthInBits()+4<=8*f&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*f||(o.put(236,8),o.getLengthInBits()>=8*f));)o.put(17,8);return function(r,t){for(var n=0,e=0,o=0,u=new Array(t.length),a=new Array(t.length),f=0;f<t.length;f+=1){var i=t[f].dataCount,g=t[f].totalCount-i;e=Math.max(e,i),o=Math.max(o,g),u[f]=new Array(i);for(var c=0;c<u[f].length;c+=1)u[f][c]=255&r.getBuffer()[c+n];n+=i;var h=k.getErrorCorrectPolynomial(g),s=y(u[f],h.getLength()-1).mod(h);for(a[f]=new Array(h.getLength()-1),c=0;c<a[f].length;c+=1){var l=c+s.getLength()-a[f].length;a[f][c]=l>=0?s.getAt(l):0}}var v=0;for(c=0;c<t.length;c+=1)v+=t[c].totalCount;var d=new Array(v),p=0;for(c=0;c<e;c+=1)for(f=0;f<t.length;f+=1)c<u[f].length&&(d[p]=u[f][c],p+=1);for(c=0;c<o;c+=1)for(f=0;f<t.length;f+=1)c<a[f].length&&(d[p]=a[f][c],p+=1);return d}(o,e)};return i.addData=function(r,t){var n=null;switch(t=t||"Byte"){case"Numeric":n=D(r);break;case"Alphanumeric":n=m(r);break;case"Byte":n=M(r);break;case"Kanji":n=b(r);break;default:throw"mode:"+t}f.push(n),a=null},i.isDark=function(r,t){if(r<0||u<=r||t<0||u<=t)throw r+","+t;return o[r][t]},i.getModuleCount=function(){return u},i.make=function(){if(n<1){for(var r=1;r<40;r++){for(var t=B.getRSBlocks(r,e),o=C(),u=0;u<f.length;u++){var a=f[u];o.put(a.getMode(),4),o.put(a.getLength(),k.getLengthInBits(a.getMode(),r)),a.write(o)}var c=0;for(u=0;u<t.length;u++)c+=t[u].dataCount;if(o.getLengthInBits()<=8*c)break}n=r}g(!1,function(){for(var r=0,t=0,n=0;n<8;n+=1){g(!0,n);var e=k.getLostPoint(i);(0==n||r>e)&&(r=e,t=n)}return t}())},i};r.stringToBytes=(r.stringToBytesFuncs={default:function(r){for(var t=[],n=0;n<r.length;n+=1){var e=r.charCodeAt(n);t.push(255&e)}return t}}).default,r.createStringToBytes=function(r,t){var n=function(){for(var n=base64DecodeInputStream(r),e=function(){var r=n.read();if(-1==r)throw"eof";return r},o=0,u={};;){var a=n.read();if(-1==a)break;var f=e(),i=e()<<8|e();u[String.fromCharCode(a<<8|f)]=i,o+=1}if(o!=t)throw o+" != "+t;return u}(),e="?".charCodeAt(0);return function(r){for(var t=[],o=0;o<r.length;o+=1){var u=r.charCodeAt(o);if(u<128)t.push(u);else{var a=n[r.charAt(o)];"number"==typeof a?(255&a)==a?t.push(a):(t.push(a>>>8),t.push(255&a)):t.push(e)}}return t}};var t,n,e,o,u,a=1,f=2,i=4,g=8,c={L:1,M:0,Q:3,H:2},h=0,s=1,l=2,v=3,d=4,p=5,w=6,A=7,k=(t=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],n=1335,e=7973,u=function(r){for(var t=0;0!=r;)t+=1,r>>>=1;return t},(o={}).getBCHTypeInfo=function(r){for(var t=r<<10;u(t)-u(n)>=0;)t^=n<<u(t)-u(n);return 21522^(r<<10|t)},o.getBCHTypeNumber=function(r){for(var t=r<<12;u(t)-u(e)>=0;)t^=e<<u(t)-u(e);return r<<12|t},o.getPatternPosition=function(r){return t[r-1]},o.getMaskFunction=function(r){switch(r){case h:return function(r,t){return(r+t)%2==0};case s:return function(r,t){return r%2==0};case l:return function(r,t){return t%3==0};case v:return function(r,t){return(r+t)%3==0};case d:return function(r,t){return(Math.floor(r/2)+Math.floor(t/3))%2==0};case p:return function(r,t){return r*t%2+r*t%3==0};case w:return function(r,t){return(r*t%2+r*t%3)%2==0};case A:return function(r,t){return(r*t%3+(r+t)%2)%2==0};default:throw"bad maskPattern:"+r}},o.getErrorCorrectPolynomial=function(r){for(var t=y([1],0),n=0;n<r;n+=1)t=t.multiply(y([1,L.gexp(n)],0));return t},o.getLengthInBits=function(r,t){if(1<=t&&t<10)switch(r){case a:return 10;case f:return 9;case i:case g:return 8;default:throw"mode:"+r}else if(t<27)switch(r){case a:return 12;case f:return 11;case i:return 16;case g:return 10;default:throw"mode:"+r}else{if(!(t<41))throw"type:"+t;switch(r){case a:return 14;case f:return 13;case i:return 16;case g:return 12;default:throw"mode:"+r}}},o.getLostPoint=function(r){for(var t=r.getModuleCount(),n=0,e=0;e<t;e+=1)for(var o=0;o<t;o+=1){for(var u=0,a=r.isDark(e,o),f=-1;f<=1;f+=1)if(!(e+f<0||t<=e+f))for(var i=-1;i<=1;i+=1)o+i<0||t<=o+i||0==f&&0==i||a==r.isDark(e+f,o+i)&&(u+=1);u>5&&(n+=3+u-5)}for(e=0;e<t-1;e+=1)for(o=0;o<t-1;o+=1){var g=0;r.isDark(e,o)&&(g+=1),r.isDark(e+1,o)&&(g+=1),r.isDark(e,o+1)&&(g+=1),r.isDark(e+1,o+1)&&(g+=1),0!=g&&4!=g||(n+=3)}for(e=0;e<t;e+=1)for(o=0;o<t-6;o+=1)r.isDark(e,o)&&!r.isDark(e,o+1)&&r.isDark(e,o+2)&&r.isDark(e,o+3)&&r.isDark(e,o+4)&&!r.isDark(e,o+5)&&r.isDark(e,o+6)&&(n+=40);for(o=0;o<t;o+=1)for(e=0;e<t-6;e+=1)r.isDark(e,o)&&!r.isDark(e+1,o)&&r.isDark(e+2,o)&&r.isDark(e+3,o)&&r.isDark(e+4,o)&&!r.isDark(e+5,o)&&r.isDark(e+6,o)&&(n+=40);var c=0;for(o=0;o<t;o+=1)for(e=0;e<t;e+=1)r.isDark(e,o)&&(c+=1);return n+=Math.abs(100*c/t/t-50)/5*10},o),L=function(){for(var r=new Array(256),t=new Array(256),n=0;n<8;n+=1)r[n]=1<<n;for(n=8;n<256;n+=1)r[n]=r[n-4]^r[n-5]^r[n-6]^r[n-8];for(n=0;n<255;n+=1)t[r[n]]=n;var e={glog:function(r){if(r<1)throw"glog("+r+")";return t[r]},gexp:function(t){for(;t<0;)t+=255;for(;t>=256;)t-=255;return r[t]}};return e}();function y(r,t){if(void 0===r.length)throw r.length+"/"+t;var n=function(){for(var n=0;n<r.length&&0==r[n];)n+=1;for(var e=new Array(r.length-n+t),o=0;o<r.length-n;o+=1)e[o]=r[o+n];return e}(),e={getAt:function(r){return n[r]},getLength:function(){return n.length},multiply:function(r){for(var t=new Array(e.getLength()+r.getLength()-1),n=0;n<e.getLength();n+=1)for(var o=0;o<r.getLength();o+=1)t[n+o]^=L.gexp(L.glog(e.getAt(n))+L.glog(r.getAt(o)));return y(t,0)},mod:function(r){if(e.getLength()-r.getLength()<0)return e;for(var t=L.glog(e.getAt(0))-L.glog(r.getAt(0)),n=new Array(e.getLength()),o=0;o<e.getLength();o+=1)n[o]=e.getAt(o);for(o=0;o<r.getLength();o+=1)n[o]^=L.gexp(L.glog(r.getAt(o))+t);return y(n,0).mod(r)}};return e}var B=function(){var r=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],t=function(r,t){var n={};return n.totalCount=r,n.dataCount=t,n},n={getRSBlocks:function(n,e){var o=function(t,n){switch(n){case c.L:return r[4*(t-1)+0];case c.M:return r[4*(t-1)+1];case c.Q:return r[4*(t-1)+2];case c.H:return r[4*(t-1)+3];default:return}}(n,e);if(void 0===o)throw"bad rs block @ typeNumber:"+n+"/errorCorrectionLevel:"+e;for(var u=o.length/3,a=[],f=0;f<u;f+=1)for(var i=o[3*f+0],g=o[3*f+1],h=o[3*f+2],s=0;s<i;s+=1)a.push(t(g,h));return a}};return n}(),C=function(){var r=[],t=0,n={getBuffer:function(){return r},getAt:function(t){var n=Math.floor(t/8);return 1==(r[n]>>>7-t%8&1)},put:function(r,t){for(var e=0;e<t;e+=1)n.putBit(1==(r>>>t-e-1&1))},getLengthInBits:function(){return t},putBit:function(n){var e=Math.floor(t/8);r.length<=e&&r.push(0),n&&(r[e]|=128>>>t%8),t+=1}};return n},D=function(r){var t=a,n=r,e={getMode:function(){return t},getLength:function(r){return n.length},write:function(r){for(var t=n,e=0;e+2<t.length;)r.put(o(t.substring(e,e+3)),10),e+=3;e<t.length&&(t.length-e==1?r.put(o(t.substring(e,e+1)),4):t.length-e==2&&r.put(o(t.substring(e,e+2)),7))}},o=function(r){for(var t=0,n=0;n<r.length;n+=1)t=10*t+u(r.charAt(n));return t},u=function(r){if("0"<=r&&r<="9")return r.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+r};return e},m=function(r){var t=f,n=r,e={getMode:function(){return t},getLength:function(r){return n.length},write:function(r){for(var t=n,e=0;e+1<t.length;)r.put(45*o(t.charAt(e))+o(t.charAt(e+1)),11),e+=2;e<t.length&&r.put(o(t.charAt(e)),6)}},o=function(r){if("0"<=r&&r<="9")return r.charCodeAt(0)-"0".charCodeAt(0);if("A"<=r&&r<="Z")return r.charCodeAt(0)-"A".charCodeAt(0)+10;switch(r){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+r}};return e},M=function(t){var n=i,e=r.stringToBytes(t),o={getMode:function(){return n},getLength:function(r){return e.length},write:function(r){for(var t=0;t<e.length;t+=1)r.put(e[t],8)}};return o},b=function(t){var n=g,e=r.stringToBytesFuncs.SJIS;if(!e)throw"sjis not supported.";!function(){var r=e("友");if(2!=r.length||38726!=(r[0]<<8|r[1]))throw"sjis not supported."}();var o=e(t),u={getMode:function(){return n},getLength:function(r){return~~(o.length/2)},write:function(r){for(var t=o,n=0;n+1<t.length;){var e=(255&t[n])<<8|255&t[n+1];if(33088<=e&&e<=40956)e-=33088;else{if(!(57408<=e&&e<=60351))throw"illegal char at "+(n+1)+"/"+e;e-=49472}e=192*(e>>>8&255)+(255&e),r.put(e,13),n+=2}if(n<t.length)throw"illegal char at "+(n+1)}};return u};return r}();
+/* ===== QR-код и штрихкод без сети: qrcode-generator (MIT) + свой Code128-B, рисуем в SVG ===== */
+function qrSVG(text, px, label) {
+  let q = null;
+  try { q = QRGEN(0, 'M'); q.addData(String(text)); q.make(); } catch (e) { return ''; }
+  const n = q.getModuleCount(), Z = 4, W = n + 2 * Z;
   let d = '';
-  for (let y = 0; y < N; y++) { let x = 0; while (x < N) { if (g[y][x]) { const s = x; while (x < N && g[y][x]) x++; d += 'M' + s + ' ' + y + 'h' + (x - s) + 'v1h-' + (x - s) + 'z'; } else x++; } }
-  return '<svg class="qr" viewBox="-2 -2 25 25" width="' + px + '" height="' + px + '" role="img" aria-label="Демо-QR для кода ' + esc(text) + '"><rect x="-2" y="-2" width="25" height="25" fill="#FFFFFF"/><path d="' + d + '" fill="#231F20" shape-rendering="crispEdges"/></svg>';
+  for (let y = 0; y < n; y++) { let x = 0; while (x < n) { if (q.isDark(y, x)) { const s = x; while (x < n && q.isDark(y, x)) x++; d += 'M' + (s + Z) + ' ' + (y + Z) + 'h' + (x - s) + 'v1h' + (s - x) + 'z'; } else x++; } }
+  return '<svg class="qr" viewBox="0 0 ' + W + ' ' + W + '" width="' + px + '" height="' + px + '" role="img" aria-label="' + esc(label || 'QR-код ' + text) + '" shape-rendering="crispEdges"><rect width="' + W + '" height="' + W + '" fill="#FFFFFF"/><path d="' + d + '" fill="#000000"/></svg>';
+}
+/* Code 128, набор B (ASCII 32–126): ширины «штрих-пробел-…» для значений 0–106 (103–105 — старты A/B/C, 106 — стоп) */
+const C128 = ('212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 112232 122132 122231 113222 123122 123221 223211 221132 221231 213212 223112 312131 311222 321122 321221 312212 322112 322211 212123 212321 232121 111323 131123 131321 112313 132113 132311 211313 231113 231311 112133 112331 132131 113123 113321 133121 313121 211331 231131 213113 213311 213131 311123 311321 331121 312113 312311 332111 314111 221411 431111 111224 111422 121124 121421 141122 141221 112214 112412 122114 122411 142112 142211 241211 221114 413111 241112 134111 111242 121142 121241 114212 124112 124211 411212 421112 421211 212141 214121 412121 111143 111341 131141 114113 114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112').split(' ');
+function code128(text) {
+  const s = String(text).replace(/[^\x20-\x7E]/g, ''), v = [104];
+  for (let i = 0; i < s.length; i++) v.push(s.charCodeAt(i) - 32);
+  let sum = 104; for (let i = 1; i < v.length; i++) sum += i * v[i];
+  v.push(sum % 103, 106);
+  return v.map(k => C128[k]).join('');
+}
+function barSVG(text, h, label) {
+  const w = code128(text), Q = 10;
+  let x = Q, d = '';
+  for (let i = 0; i < w.length; i++) { const n = +w[i]; if (i % 2 === 0) d += 'M' + x + ' 0h' + n + 'v' + h + 'h-' + n + 'z'; x += n; }
+  const W = x + Q;
+  return '<svg class="bc" viewBox="0 0 ' + W + ' ' + h + '" width="' + (W * 2) + '" height="' + h + '" preserveAspectRatio="none" role="img" aria-label="' + esc(label || 'Штрихкод ' + text) + '" shape-rendering="crispEdges"><rect width="' + W + '" height="' + h + '" fill="#FFFFFF"/><path d="' + d + '" fill="#000000"/></svg>';
 }
 function mmss(exp) { const left = exp - Date.now(); if (left <= 0) return 'истёк'; return 'осталось ' + Math.floor(left / 60000) + ':' + pad(Math.floor(left % 60000 / 1000)); }
 function tick() {
@@ -1985,40 +2068,47 @@ function tick() {
 
 function pageBonus() {
   sweepCoupons();
-  const L = LOY(), bal = balance(), now = Date.now();
+  const L = LOY(), now = Date.now(), srv = loySrv();
+  if (logged()) setTimeout(() => loyFetch(), 0);
+  const bal = srv ? (+srv.balance || 0) : balance();
   let h = topbar('Бонусы', {sub: 'Баллы Helper у всех партнёров'});
-  h += '<div class="card tint pts-card" style="margin-top:8px"><div class="corner-ring" style="width:200px;height:200px;right:-70px;top:-90px;border-color:var(--teal)"></div><div class="corner-ring" style="width:120px;height:120px;right:-20px;top:-40px"></div><p class="eyebrow">Баланс</p><div class="bignum" style="margin-top:8px;font-size:58px">' + fN(bal) + '<small>' + plural(bal, W_PTS) + '</small></div><p class="small muted" style="margin:10px 0 0">' + (S.demo ? 'Демо-баланс: начислен за записи и покупки демо-автомобиля.' : 'Копите за уход за машиной и покупки у партнёров, обменивайте на купоны.') + '</p></div>';
-  h += '<button class="idcard section" data-act="hid">' + qrSVG(L.hid, 62) + '<span class="body" style="flex:1;min-width:0"><span class="eyebrow" style="display:block">Мой Helper ID</span><span class="hid">' + esc(L.hid) + '</span><span class="xsmall muted" style="display:block">Покажите на кассе партнёра — баллы придут сюда</span></span>' + ic('chevR', 'sm') + '</button>';
+  const note = srv ? 'Баллы на вашем счёте Helper: их начисляют партнёры за покупки, а тратите вы на купоны.' + (+srv.expiring_30d > 0 ? ' В ближайшие 30 дней сгорит: ' + fN(srv.expiring_30d) + ' ' + plural(srv.expiring_30d, W_PTS) + '.' : '')
+    : S.demo ? 'Демо-баланс: начислен за записи и покупки демо-автомобиля.' : 'Копите за уход за машиной и покупки у партнёров, обменивайте на купоны.';
+  h += '<div class="card tint pts-card" style="margin-top:8px"><div class="corner-ring" style="width:200px;height:200px;right:-70px;top:-90px;border-color:var(--teal)"></div><div class="corner-ring" style="width:120px;height:120px;right:-20px;top:-40px"></div><p class="eyebrow">Баланс</p><div class="bignum" style="margin-top:8px;font-size:58px">' + fN(bal) + '<small>' + plural(bal, W_PTS) + '</small></div><p class="small muted" style="margin:10px 0 0">' + note + '</p></div>';
+  h += '<div class="section">' + hidCard() + '</div>';
   h += '<button class="soft-lock section" data-act="go" data-p="nearby"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body" style="flex:1"><span class="t" style="display:block">Предложения рядом</span><span class="s">' + (S.geo.consent ? (S.geo.area ? 'Район: ' + AREAS[S.geo.area][0] : 'Партнёры рядом с вами') : 'Скидки партнёров поблизости — только с вашего согласия') + '</span></span>' + ic('chevR', 'sm') + '</button>';
+  const sc = srv && Array.isArray(srv.coupons) ? srv.coupons.filter(c => c && c.code && !(c.expires_at && tsParse(c.expires_at) < now)) : [];
   const act = L.coupons.filter(c => !c.used && c.exp > now).sort((a, b) => a.exp - b.exp);
-  if (act.length) h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Мои купоны</h2></div><div class="group">' + act.map(c => { const k = COUPON_BY[c.cid]; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · код ' + c.code + '</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div></section>';
-  h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Обменять баллы</h2><span class="xsmall muted">купон действует 15 минут</span></div><div class="stack">' + COUPONS.map(c => {
-    const ok = bal >= c.cost;
-    return '<div class="coupon"><span class="ic-circle">' + (c.sp ? pi(c.sp, 28) : ic(c.ic, 'sm')) + '</span><div><span class="t" style="display:block">' + c.t + '</span><span class="small muted">' + c.p + '</span> ' + (c.self ? '' : '<span class="badge warn">пример</span>') + '</div><div class="foot"><span class="cost">' + c.cost + ' <small class="xsmall muted">' + plural(c.cost, W_PTS) + '</small></span><button class="btn sm ' + (ok ? '' : 'soft') + '" data-act="coupon-get" data-id="' + c.id + '"' + (ok ? '' : ' disabled') + '>' + (ok ? 'Получить купон' : 'Нужно ещё ' + (c.cost - bal)) + '</button></div></div>';
-  }).join('') + '</div></section>';
+  if (sc.length || act.length) h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Мои купоны</h2><span class="xsmall muted">покажите QR на кассе</span></div><div class="group">' +
+    sc.map(c => '<button class="item" data-act="scoupon" data-code="' + esc(c.code) + '"><span class="ic-circle ink">' + ic('qr', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(c.title || 'Купон партнёра') + '</span><span class="s">' + esc([c.company, 'код ' + c.code].filter(Boolean).join(' · ')) + '</span></span><span class="end">' + (c.expires_at ? '<span class="status st-soon">' + fUntil(c.expires_at) + '</span>' : '') + '</span></button>').join('') +
+    act.map(c => { const k = COUPON_BY[c.cid]; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · код ' + c.code + ' · пример</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div></section>';
+  h += offersSection();
+  if (!srv) {
+    h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Обменять баллы</h2><span class="xsmall muted">купон действует 15 минут</span></div><div class="stack">' + COUPONS.map(c => {
+      const ok = bal >= c.cost;
+      return '<div class="coupon"><span class="ic-circle">' + (c.sp ? pi(c.sp, 28) : ic(c.ic, 'sm')) + '</span><div><span class="t" style="display:block">' + c.t + '</span><span class="small muted">' + c.p + '</span> ' + (c.self ? '' : '<span class="badge warn">пример</span>') + '</div><div class="foot"><span class="cost">' + c.cost + ' <small class="xsmall muted">' + plural(c.cost, W_PTS) + '</small></span><button class="btn sm ' + (ok ? '' : 'soft') + '" data-act="coupon-get" data-id="' + c.id + '"' + (ok ? '' : ' disabled') + '>' + (ok ? 'Получить купон' : 'Нужно ещё ' + (c.cost - bal)) + '</button></div></div>';
+    }).join('') + '</div></section>';
+  }
   const oi = odoBonusIn(), rt = recToday();
-  const EARN = [['+10', 'Добавить автомобиль', 'За каждый новый автомобиль', ''], ['+5', 'Запись о ТО в журнале', 'Сегодня ' + rt + ' из 5', 'data-act="rec-new"'], ['+2', 'Обновить пробег', oi ? 'Следующее начисление ' + relDays(oi) : 'Доступно сейчас', 'data-act="odo"'], ['+50', 'Пригласить друга', 'Когда друг активирует ваш код', 'data-act="ref"'], ['+20', 'Код из ежедневника', 'При активации Premium-кода', 'data-act="paywall"'], ['2–5%', 'Покупки у партнёров', 'Покажите Helper ID на кассе', 'data-act="hid"']];
+  const EARN = [['+10', 'Добавить автомобиль', 'За каждый новый автомобиль', ''], ['+5', 'Запись о ТО в журнале', 'Сегодня ' + rt + ' из 5', 'data-act="rec-new"'], ['+2', 'Обновить пробег', oi ? 'Следующее начисление ' + relDays(oi) : 'Доступно сейчас', 'data-act="odo"'], ['+50', 'Пригласить друга', 'Когда друг активирует ваш код', 'data-act="ref"'], ['+20', 'Код из ежедневника', 'При активации Premium-кода', 'data-act="paywall"'], ['2–5%', 'Покупки у партнёров', 'Покажите Helper-код на кассе', 'data-act="hid"']];
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Как получить баллы</h2></div><div class="group">' + EARN.map(e => (e[3] ? '<button class="item" ' + e[3] + '>' : '<div class="item">') + '<span class="earn">' + e[0] + '</span><span class="body"><span class="t" style="display:block">' + e[1] + '</span><span class="s">' + e[2] + '</span></span>' + (e[3] ? ic('chevR', 'sm chev') + '</button>' : '</div>')).join('') + '</div></section>';
-  const hs = L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
+  const hs = srv ? (srv.history || []).map(x => { const t = tsParse(x.created_at); return {t: (x.title || x.reason || 'Операция') + (x.company ? ' · ' + x.company : ''), d: isFinite(t) ? iso(new Date(t)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0}; })
+    : L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
   const shown = ui.allHist ? hs : hs.slice(0, 8);
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">История</h2><span class="xsmall muted">' + hs.length + ' операций</span></div>';
-  h += hs.length ? '<div class="group">' + shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + fD(x.d) + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '">' + (x.p > 0 ? '+' : '−') + Math.abs(x.p) + '</span></div>').join('') + '</div>' : emptyState('star', 'Баллов пока нет', 'Добавьте запись в журнал — это первые +5 баллов.');
+  h += hs.length ? '<div class="group">' + shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + (x.d ? fD(x.d) : '') + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '">' + (x.p > 0 ? '+' : '−') + Math.abs(x.p) + '</span></div>').join('') + '</div>' : emptyState('star', 'Баллов пока нет', srv ? 'Покажите Helper-код на кассе партнёра — баллы за покупку придут сюда.' : 'Добавьте запись в журнал — это первые +5 баллов.');
   if (hs.length > 8) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-hist">' + (ui.allHist ? 'Свернуть' : 'Показать всю историю') + '</button>';
-  h += '</section><p class="xsmall muted" style="margin-top:18px">Партнёры программы в этой версии — демонстрационные примеры. Баллы не являются деньгами и не обмениваются на наличные.</p>';
+  h += '</section><p class="xsmall muted" style="margin-top:18px">' + (srv ? 'Баллы не являются деньгами и не обмениваются на наличные. Партнёр видит только ваш Helper-код — без имени, телефона и e-mail.' : 'Купоны «пример» — демонстрационные. Реальные акции и купоны партнёров — с аккаунтом Helper. Баллы не являются деньгами и не обмениваются на наличные.') + '</p>';
   return h;
 }
-function hidSheet() {
-  const id = LOY().hid;
-  openSheet('Мой Helper ID', '<div class="coupon-view">' + qrSVG(id, 200) + '<div class="ccode" style="font-size:26px">' + esc(id) + '</div><p class="small muted" style="margin:0;max-width:320px">Кассир партнёра сканирует QR или вводит код — баллы за покупку придут сюда. Партнёр не видит ваше имя, телефон и автомобиль.</p><span class="badge warn">демо-QR, не сканируется</span></div>' +
-    '<div class="stack" style="margin-top:16px"><button class="btn block soft" data-act="copy" data-text="' + esc(id) + '">' + ic('copy', 'sm') + 'Скопировать ID</button><button class="btn block line" data-act="partner-grant">Имитировать покупку у партнёра (демо)</button></div>');
-}
+function hidSheet() { hidOpen(); }
 function couponSheet(id) {
   const cp = LOY().coupons.find(x => x.id === id); if (!cp) return;
   const k = COUPON_BY[cp.cid], live = !cp.used && cp.exp > Date.now();
-  openSheet('Купон', '<div class="coupon-view"><p class="small muted" style="margin:0">' + k.p + ' <span class="badge warn">пример</span></p><p style="margin:0;font-weight:600;font-size:18px">' + k.t + '</p>' + qrSVG(cp.code, 180) +
+  openSheet('Купон', '<div class="coupon-view"><p class="small muted" style="margin:0">' + k.p + ' <span class="badge warn">пример</span></p><p style="margin:0;font-weight:600;font-size:18px">' + k.t + '</p>' + qrSVG('HELPER-COUPON:' + cp.code, 180, 'QR-код купона ' + cp.code) +
     '<div class="ccode">' + cp.code.slice(0, 3) + ' ' + cp.code.slice(3) + '</div>' +
     (cp.used ? '<span class="status st-ok">Использован</span>' : '<span class="status ' + (live ? 'st-soon' : 'st-none') + '"' + (live ? ' data-exp="' + cp.exp + '"' : '') + '>' + mmss(cp.exp) + '</span>') +
-    '<p class="xsmall muted" style="margin:0;max-width:300px">Демо-QR строится из кода и не сканируется — кассир вводит код вручную. Одноразовый, действует 15 минут. Не использованный вовремя купон вернёт баллы.</p></div>' +
+    '<p class="xsmall muted" style="margin:0;max-width:300px">Демо-купон: партнёр его не примет — это пример обмена баллов. Реальные купоны партнёров появляются в «Мои купоны» после «Получить купон» в акции. Не использованный вовремя демо-купон вернёт баллы.</p></div>' +
     '<div class="stack" style="margin-top:16px"><button class="btn block soft" data-act="copy" data-text="' + cp.code + '">' + ic('copy', 'sm') + 'Скопировать код</button>' + (live ? '<button class="btn block line" data-act="coupon-use" data-id="' + cp.id + '">Партнёр принял купон (демо)</button>' : '') + '</div>');
 }
 function getCoupon(c) {
@@ -2049,7 +2139,7 @@ const fDist = km => km < 1 ? Math.max(50, Math.round(km * 20) * 50) + ' м' : km
 function locate() {
   if (ui.geo.status === 'locating') return;
   ui.geo.status = 'locating';
-  const done = () => { if (curPage().p === 'nearby') render(); };
+  const done = () => { liveRender(['nearby', 'home', 'bonus']); if (ui.geo.status === 'ok') geoCheck(); };
   const fail = () => { ui.geo.status = 'denied'; done(); };
   try {
     if (CAP && NP.Geolocation) { NP.Geolocation.requestPermissions().then(() => NP.Geolocation.getCurrentPosition({enableHighAccuracy: false, timeout: 8000, maximumAge: 300000})).then(p => { ui.geo.pos = {lat: +p.coords.latitude.toFixed(3), lon: +p.coords.longitude.toFixed(3)}; ui.geo.status = 'ok'; done(); }).catch(fail); return; }
@@ -2059,27 +2149,25 @@ function locate() {
 }
 function pageNearby() {
   let h = topbar('Предложения рядом', {back: true});
+  setTimeout(() => offersFetch(), 0);
+  const g = ui.geo;
   if (!S.geo.consent) {
-    const row = (i, t, s) => '<div class="item" style="align-items:flex-start"><span class="ic-circle">' + ic(i, 'sm') + '</span><span class="body"><span class="t" style="display:block">' + t + '</span><span class="s" style="display:block;line-height:1.45">' + s + '</span></span></div>';
-    h += '<div style="margin-top:16px"><span class="ic-circle ink" style="width:56px;height:56px">' + ic('pin') + '</span><h2 class="large-title" style="margin-top:14px">Скидки партнёров рядом с вами</h2><p class="subtitle">Покажем ближайшие мойки, СТО и шиномонтажи с предложениями для пользователей Helper.</p></div>' +
-      '<div class="group section">' + row('pin', 'Что мы используем', 'Примерное местоположение телефона — только чтобы отсортировать партнёров по расстоянию.') +
-      row('clock', 'Когда', 'Только пока приложение открыто на этом экране. В этой версии нет фонового отслеживания.') +
-      row('shield', 'Приватность', 'Расстояние считается на вашем телефоне, координаты никуда не отправляются. Партнёры не видят, кто вы и где ездите.') +
-      row('sliders', 'Отключить в любой момент', 'Ещё → Настройки → «Предложения рядом». Там же — «Удалить мои гео-данные».') + '</div>' +
-      '<div class="stack section"><button class="btn block ink" data-act="geo-consent">Согласен, показать предложения</button><button class="btn block soft" data-act="back">Не сейчас</button></div><p class="xsmall muted" style="text-align:center">Если не хотите делиться геолокацией, после согласия можно выбрать город или район вручную.</p>';
-    return h;
+    h += '<div class="card tint" style="margin-top:12px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle ink">' + ic('pin', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">Что ближе к вам?</p><p class="small muted" style="margin:2px 0 10px">С вашего согласия покажем расстояние до партнёров и напомним об акции, когда вы рядом. Координаты не покидают телефон.</p><button class="btn sm ink" data-act="geo-intro">Показать расстояние</button></div></div></div>';
+  } else {
+    if (!S.geo.area && !g.pos && !g.status) setTimeout(locate, 0);
+    h += '<p class="eyebrow" style="margin-top:14px">Город или район</p><div class="chips" role="group" aria-label="Город или район" style="margin-top:8px"><button class="chip" data-act="geo-here" aria-pressed="' + (!S.geo.area && !!g.pos) + '">' + ic('target', 'xs') + 'Моё местоположение</button>' + Object.keys(AREAS).map(k => '<button class="chip" data-act="geo-area" data-id="' + k + '" aria-pressed="' + (S.geo.area === k) + '">' + AREAS[k][0] + '</button>').join('') + '</div>';
+    if (!geoSrc()) h += g.status === 'denied' ? '<div class="card tint section"><p style="margin:0;font-weight:600">Выберите город или район</p><p class="small muted" style="margin:4px 0 0">Геолокация недоступна: браузер или окно приложения не дали доступ. Выбора района достаточно — точные координаты не нужны.</p></div>' : '<div class="card tint section"><p style="margin:0" class="small">Определяем местоположение… Можно сразу выбрать район выше.</p></div>';
   }
-  const g = ui.geo; let src = null;
-  if (S.geo.area) { const a = AREAS[S.geo.area]; src = {lat: a[1], lon: a[2], label: 'Район: ' + a[0]}; }
-  else if (g.pos) src = {lat: g.pos.lat, lon: g.pos.lon, label: 'Рядом с вами'};
-  if (!src && !g.status) setTimeout(locate, 0);
-  h += '<p class="eyebrow" style="margin-top:14px">Город или район</p><div class="chips" role="group" aria-label="Город или район" style="margin-top:8px"><button class="chip" data-act="geo-here" aria-pressed="' + (!S.geo.area && !!g.pos) + '">' + ic('target', 'xs') + 'Моё местоположение</button>' + Object.keys(AREAS).map(k => '<button class="chip" data-act="geo-area" data-id="' + k + '" aria-pressed="' + (S.geo.area === k) + '">' + AREAS[k][0] + '</button>').join('') + '</div>';
-  if (!src) {
-    h += g.status === 'denied' ? '<div class="card tint section"><p style="margin:0;font-weight:600">Выберите город или район</p><p class="small muted" style="margin:4px 0 0">Геолокация недоступна: браузер или окно приложения не дали доступ. Выбора района достаточно — точные координаты не нужны.</p></div>' : '<div class="card tint section"><p style="margin:0" class="small">Определяем местоположение… Можно сразу выбрать район выше.</p></div>';
-    return h;
+  const L = offersList(), src = geoSrc();
+  h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Акции партнёров</h2>' + (src && L.length ? '<span class="xsmall muted">' + esc(src.label) + '</span>' : '') + '</div>';
+  if (L.length) h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">Расстояние считается на телефоне — координаты никуда не отправляются.</p>' : '');
+  else h += emptyState('tag', OFF_EMPTY, !OFF.ok && navigator.onLine === false ? 'Нет связи — акции загрузятся, когда появится интернет.' : 'СТО, мойки и шиномонтажи публикуют акции для владельцев авто в Helper. Как только они появятся, покажем их здесь.', '<button class="btn sm soft" data-act="partner-cabinet">' + ic('store', 'xs') + 'Я владелец бизнеса</button>');
+  h += '</section>';
+  if (!L.length && S.demo) {
+    const sp = src || {lat: AREAS.kishinev[1], lon: AREAS.kishinev[2]};
+    const list = SPOTS.map((s2, i) => ({s: s2, i, d: distKm(sp.lat, sp.lon, s2[4], s2[5])})).sort((x, y) => x.d - y.d).slice(0, 4);
+    h += '<section class="section"><div class="section-head"><h2 class="eyebrow">Так это будет выглядеть</h2><span class="badge warn">пример</span></div><div class="stack">' + list.map(x => '<button class="partner" style="text-align:left" data-act="spot" data-i="' + x.i + '"><div class="row between" style="align-items:flex-start"><span class="row" style="gap:10px;align-items:flex-start"><span class="ic-circle">' + ic(x.s[2], 'sm') + '</span><span><span class="pn" style="display:block">' + x.s[0] + '</span><span class="xsmall muted">' + x.s[1] + ' · ' + x.s[3] + '</span></span></span><span style="text-align:right;flex:none">' + (src ? '<b class="num" style="display:block">' + fDist(x.d) + '</b>' : '') + '<span class="badge warn">пример</span></span></div><div class="row wrap" style="gap:6px">' + x.s[6].map(o => '<span class="tagchip">' + o + '</span>').join('') + '</div></button>').join('') + '</div><p class="xsmall muted" style="margin:10px 0 0">Демонстрационные компании — не реальные партнёры.</p></section>';
   }
-  const list = SPOTS.map((s, i) => ({s, i, d: distKm(src.lat, src.lon, s[4], s[5])})).sort((a, b) => a.d - b.d);
-  h += '<p class="small muted section" style="margin-bottom:10px">' + esc(src.label) + ' · демо-точки, расстояние считается на телефоне</p><div class="stack">' + list.map(x => '<button class="partner" style="text-align:left" data-act="spot" data-i="' + x.i + '"><div class="row between" style="align-items:flex-start"><span class="row" style="gap:10px;align-items:flex-start"><span class="ic-circle">' + ic(x.s[2], 'sm') + '</span><span><span class="pn" style="display:block">' + x.s[0] + '</span><span class="xsmall muted">' + x.s[1] + ' · ' + x.s[3] + '</span></span></span><span style="text-align:right;flex:none"><b class="num" style="display:block">' + fDist(x.d) + '</b><span class="badge warn">пример</span></span></div><div class="row wrap" style="gap:6px">' + x.s[6].map(o => '<span class="tagchip">' + o + '</span>').join('') + '</div></button>').join('') + '</div>';
   return h;
 }
 function spotSheet(i) {
@@ -2097,14 +2185,7 @@ function pageBiz() {
     '<li><span class="ic-circle">' + ic('pin', 'sm') + '</span><span>Ваше предложение видят владельцы авто поблизости — в тот момент, когда им нужен сервис.</span></li>' +
     '<li><span class="ic-circle">' + ic('loyal', 'sm') + '</span><span>Коалиционные баллы: клиент копит у всех партнёров и возвращается к вам.</span></li>' +
     '<li><span class="ic-circle">' + ic('qr', 'sm') + '</span><span>Без интеграции: кассир вводит Helper ID клиента или сканирует QR.</span></li></ul></div>';
-  h += '<div class="card section"><p class="eyebrow">Заявка партнёра · демо</p><form class="form" data-form="biz" novalidate style="margin-top:12px">' +
-    fld('biz-company', 'Компания', inp('biz-company', '', 'autocomplete="organization" placeholder="Название, SRL"')) +
-    '<div class="grid2">' + fld('biz-cat', 'Категория', sel('biz-cat', BIZ_CATS, 'sto')) + fld('biz-idno', 'IDNO', inp('biz-idno', '', 'inputmode="numeric" maxlength="13" placeholder="13 цифр"')) + '</div>' +
-    fld('biz-phone', 'Телефон', inp('biz-phone', '', 'type="tel" inputmode="tel" autocomplete="tel" placeholder="022 000 000"')) +
-    fld('biz-address', 'Адрес точки', inp('biz-address', '', 'autocomplete="street-address" placeholder="Город, улица, дом"')) +
-    fld('biz-offer', 'Предложение для клиентов Helper', inp('biz-offer', '', 'placeholder="Например, скидка на мойку кузова"')) +
-    '<div class="grid2">' + fld('biz-discount', 'Скидка, %', inp('biz-discount', '', 'inputmode="numeric" placeholder="10"')) + fld('biz-bonus', 'Баллами, % от чека', inp('biz-bonus', '', 'inputmode="numeric" placeholder="5"')) + '</div>' +
-    errBox('biz-err') + '<button class="btn block ink" type="submit">Сформировать заявку</button><p class="xsmall muted" style="margin:0">Заявка сохраняется только на этом устройстве и никуда не отправляется.</p></form></div>';
+  h += '<div class="card section"><p class="eyebrow">Кабинет партнёра</p><p class="small" style="margin:6px 0 12px">Регистрация компании, точки на карте, акции для водителей рядом, начисление баллов на кассе и статистика — в кабинете партнёра Helper.</p><button class="btn block ink" data-act="partner-cabinet">' + ic('store', 'sm') + 'Стать партнёром Helper</button></div>';
   if (S.bizApps.length) h += '<button class="btn block soft section" data-act="biz-last">Последняя заявка · ' + esc(S.bizApps[S.bizApps.length - 1].company) + '</button>';
   return h;
 }
@@ -2117,16 +2198,16 @@ function bizResult(a) {
 }
 
 const LOYAL_ACT = {
-  hid: () => hidSheet(),
+  hid: () => hidOpen(),
   coupon: el => couponSheet(el.dataset.id),
   'coupon-get': el => { const c = COUPON_BY[el.dataset.id]; if (!c || balance() < c.cost) return; confirmSheet({title: 'Обменять ' + c.cost + ' ' + plural(c.cost, W_PTS) + '?', text: c.self ? 'Premium продлится на 30 дней.' : 'Вы получите одноразовый код «' + c.t + '» — ' + c.p + '. Код действует 15 минут, поэтому получайте его уже на месте. Если не воспользуетесь, баллы вернутся.', ok: 'Получить', danger: false, onOk: () => getCoupon(c)}); },
   'coupon-use': el => { const cp = LOYAL_find(el.dataset.id); if (cp) { cp.used = true; save(); closeSheet(); render(); toast('Купон использован'); } },
   'partner-grant': () => { const amt = 150 + Math.floor(Math.random() * 16) * 10, p = Math.round(amt * 0.05); award('partner', p, 'Автомойка «Пример»: покупка ' + fN(amt) + ' MDL · 5%'); save(); closeSheet(); render(); toast(ptsTxt(p) + ' от партнёра (демо)'); },
   'all-hist': () => { ui.allHist = !ui.allHist; render(); },
-  'geo-consent': () => { S.geo.consent = true; S.geo.consentAt = todayISO(); save(); ui.geo = {status: null, pos: null}; render(); },
+  'geo-consent': () => { S.geo.consent = true; S.geo.consentAt = todayISO(); save(); geoPush(); closeSheet(); ui.geo = {status: null, pos: null}; if (!S.geo.area) locate(); render(); },
   'geo-here': () => { S.geo.area = null; save(); ui.geo = {status: null, pos: null}; locate(); render(); },
   'geo-area': el => { S.geo.area = el.dataset.id; save(); render(); },
-  'geo-clear': () => { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; save(); render(); toast('Гео-данные удалены'); },
+  'geo-clear': () => { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; jset(K_OGEO, null); save(); geoPush(); render(); toast('Гео-данные удалены'); },
   spot: el => spotSheet(+el.dataset.i),
   'biz-last': () => bizResult(S.bizApps[S.bizApps.length - 1])
 };
@@ -2454,13 +2535,13 @@ function acctUI() {
 }
 async function acctMe() {
   if (!logged()) return null;
-  try { const d = await api('/v1/me'); if (d.user) A.user = d.user; premSet(d.premium); A.meAt = Date.now(); acctSave(); acctUI(); return d; } catch (e) { return null; }
+  try { const d = await api('/v1/me'); if (d.user) A.user = d.user; premSet(d.premium); A.meAt = Date.now(); acctSave(); acctUI(); partnerMine(); if (!helperId() || !loySrv()) loyFetch(); return d; } catch (e) { return null; }
 }
 async function premFetch() {
   if (!logged()) return null;
   try { const d = await api('/v1/premium'); premSet(d); acctUI(); return d; } catch (e) { return null; }
 }
-function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); }
+function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); LS = null; jset(K_LOY, null); codeClose(); }
 function acctLost() {
   if (!logged()) return;
   acctLocalOut();
@@ -2489,7 +2570,7 @@ async function afterAuth(d, kind) {
   else if (ui.onb && ui.onb.step === 'acct') { ui.onb = null; render(false); }
   else render();
   toast(kind === 'register' ? 'Аккаунт создан: ' + acctEmail() : 'Вы вошли: ' + acctEmail());
-  acctMe();
+  acctMe(); loyFetch(true); if (S.geo.consent) geoPush();
   await syncNow();
   storeSync(true);
   if (ui.after) { const f = ui.after; ui.after = null; setTimeout(f, 350); }
@@ -2883,6 +2964,7 @@ function render(keep) {
   lastKey = key;
   tick();
   if (pg.p === 'car') layoutHotspots();
+  offersObserve();
 }
 function setTab(t) {
   if (ui.tab === t) ui.stacks[t] = [];
@@ -3277,7 +3359,9 @@ function acctWelcome() {
 }
 function acctCard() {
   if (!logged()) return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('user', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">Аккаунт Helper</p><p class="small muted" style="margin:2px 0 0">Журнал сохранится на сервере и будет на всех устройствах — телефон, сайт, Telegram. Без аккаунта всё работает только на этом устройстве.</p></div></div><div class="btn-row" style="margin-top:12px"><button class="btn sm ink" data-act="acct-register">Создать аккаунт</button><button class="btn sm soft" data-act="acct-login">Войти</button></div></div>';
-  return '<div class="group section"><button class="item" data-act="go" data-p="account"><span class="ic-circle ink">' + ic('user', 'sm') + '</span><span class="body"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(acctEmail() || 'Аккаунт Helper') + '</span><span class="s num" data-sync-text>' + esc(syncText()) + '</span></span>' + ic('chevR', 'sm chev') + '</button></div>';
+  const mine = Array.isArray(A.partners) ? A.partners : [];
+  return '<div class="group section"><button class="item" data-act="go" data-p="account"><span class="ic-circle ink">' + ic('user', 'sm') + '</span><span class="body"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(acctEmail() || 'Аккаунт Helper') + '</span><span class="s num" data-sync-text>' + esc(syncText()) + '</span></span>' + ic('chevR', 'sm chev') + '</button>' +
+    (mine.length && !CAP ? '<button class="item" data-act="partner-cabinet"><span class="ic-circle">' + ic('building', 'sm') + '</span><span class="body"><span class="t" style="display:block">Моя компания в Helper</span><span class="s">' + esc(mine.map(x => x.company + (x.status_title ? ' · ' + x.status_title : '')).join(', ')) + '</span></span>' + ic('chevR', 'sm chev') + '</button>' : '') + '</div>';
 }
 function pageAccount() {
   let h = topbar('Аккаунт', {back: true});
@@ -3379,7 +3463,10 @@ async function acctTg() {
   catch (e) { if (e.code === 'already_linked') acctMe(); toast(e.message); }
 }
 
-/* ================= Сканер техпаспорта (только приложение: HelperScan + scan/parser.js) ================= */
+/* ================= Сканер техпаспорта =================
+   Приложение: HelperScan (камера документов + OCR на устройстве). Браузер, Telegram Mini App: фото через <input type=file>
+   → уменьшение и выравнивание яркости на canvas → Tesseract.js (лениво с jsDelivr, eng+ron+rus) → те же pages → scan/parser.js.
+   Фото никуда не отправляется: из сети скачиваются только модуль распознавания и языковые данные (кэш браузера). */
 const SCAN = CAP && NP.HelperScan ? NP.HelperScan : null;
 let parserP = null;
 function parserLoad() {
@@ -3393,16 +3480,22 @@ function parserLoad() {
   });
   return parserP;
 }
-const scanBtn = where => SCAN ? '<button type="button" class="btn block line" data-act="scan" data-where="' + where + '">' + ic('doc', 'sm') + 'Сканировать техпаспорт</button>' : '';
+const SCAN_SAFE = SCAN ? 'Фото не сохраняется и не покидает телефон — распознавание прямо на устройстве.' : 'Фото не покидает устройство — распознавание прямо в браузере. Из интернета загружается только модуль распознавания (~9 МБ, один раз).';
+const scanSafe = () => '<p class="scan-safe">' + ic('shield', 'xs') + '<span>' + SCAN_SAFE + '</span></p>';
+const scanBtn = where => '<div><button type="button" class="btn block line" data-act="scan" data-where="' + where + '">' + ic('camera', 'sm') + 'Сканировать техпаспорт</button>' + (where === 'car' ? '' : scanSafe()) + '</div>';
+/* Карточка в начале шага «Ваш автомобиль» (после регистрации и при первом запуске) */
+const scanCard = () => '<button type="button" class="scan-card" data-act="scan" data-where="onb"><span class="ring"></span><span class="ic-circle" style="width:48px;height:48px;background:var(--teal);color:var(--on-teal)">' + ic('camera') + '</span><span class="t">Сканировать техпаспорт</span><span class="s">Заполним марку, модель, год, VIN и номер сами — останется проверить.</span><span class="btn sm">' + ic('camera', 'xs') + 'Сфотографировать</span></button>' +
+  '<button type="button" class="textbtn" data-act="scan" data-where="onb" data-src="photos" style="align-self:flex-start">Выбрать готовое фото</button>' + scanSafe();
 function carFormRead() { const o = {}; ['make', 'model', 'year', 'odo', 'fuel', 'engine', 'gearbox', 'drive', 'vin', 'plate', 'currency', 'color'].forEach(k => { const e = $('#car-' + k); if (e) o[k] = e.value; }); return o; }
 function scanStart(el) {
-  if (!SCAN) return;
   const where = el.dataset.where;
   if (where === 'onb') { captureOnb(); ui.scan = {where}; }
   else ui.scan = {where: 'car', carId: val('car-id'), pre: carFormRead()};
-  scanRun('camera');
+  scanRun(el.dataset.src || 'camera');
 }
-async function scanRun(source) {
+/* Вызывается из обработчика нажатия: в браузере выбор файла должен открыться синхронно */
+function scanRun(source) { if (SCAN) scanNative(source); else webScanPick(source); }
+async function scanNative(source) {
   const ctx = ui.scan;
   if (!SCAN || !ctx || ui.scanBusy) return;
   ui.scanBusy = true;
@@ -3413,6 +3506,159 @@ async function scanRun(source) {
   if (!r || r.cancelled) return;
   let res = null;
   try { res = P.parseVehicleDoc(r.pages || []); } catch (e) {}
+  if (!res || !res.found) return scanFail('empty', (res && res.warnings && res.warnings[0]) || 'Не удалось распознать данные техпаспорта.');
+  scanSheet(res);
+}
+
+/* --- Веб: Tesseract.js 5 (Apache-2.0) с jsDelivr, версия зафиксирована, скрипт — с проверкой целостности (SRI) --- */
+const TESS_V = '5.1.1', TESS_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@' + TESS_V + '/dist/';
+const TESS_SRI = 'sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F';
+let tessP = null, tessWP = null, tessLog = null, tessIdle = null;
+function tessLoad() {
+  if (window.Tesseract) return Promise.resolve(window.Tesseract);
+  if (!tessP) tessP = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = TESS_CDN + 'tesseract.min.js'; s.async = true; s.crossOrigin = 'anonymous'; s.integrity = TESS_SRI;
+    s.onload = () => window.Tesseract ? res(window.Tesseract) : rej(new Error('load'));
+    s.onerror = () => { tessP = null; s.remove(); rej(new Error('load')); };
+    document.head.appendChild(s);
+  });
+  return tessP;
+}
+/* Языковые данные — @tesseract.js-data/{eng,ron,rus}/4.0.0_best_int (по умолчанию в v5 для OEM 1): ~7 МБ, меньше «fast»-моделей с GitHub (~10 МБ) */
+function tessWorker() {
+  clearTimeout(tessIdle);
+  if (!tessWP) tessWP = tessLoad().then(T => T.createWorker('eng+ron+rus', 1, {workerPath: TESS_CDN + 'worker.min.js', corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@' + TESS_V, logger: m => { if (tessLog) tessLog(m); }}))
+    .catch(e => { tessWP = null; throw new Error('load'); });
+  return tessWP;
+}
+function tessKill() { clearTimeout(tessIdle); const p = tessWP; tessWP = null; if (p) p.then(w => w.terminate()).catch(() => {}); }
+function webScanPick(source) {
+  if (!ui.scan || ui.scanBusy) return;
+  let inp = $('#scan-file');
+  if (!inp) {
+    inp = document.createElement('input');
+    inp.type = 'file'; inp.id = 'scan-file'; inp.accept = 'image/*'; inp.className = 'vh'; inp.tabIndex = -1; inp.setAttribute('aria-hidden', 'true');
+    inp.addEventListener('change', () => { const f = inp.files && inp.files[0]; if (f) webScanRun(f); inp.value = ''; });
+    document.body.appendChild(inp);
+  }
+  if (source === 'photos') inp.removeAttribute('capture'); else inp.setAttribute('capture', 'environment');
+  inp.click();
+  parserLoad().catch(() => {}); tessWorker().catch(() => {}); /* пока человек фотографирует — загружаем модуль */
+}
+function scanProgress(frac, status, create) {
+  const bar = $('#scan-bar'), txt = $('#scan-pct'), st = $('#scan-st');
+  if (!bar && !create) { if (ui.scan && ui.scanBusy) { ui.scan = null; ui.scanBusy = false; tessKill(); } return; } /* лист закрыли крестиком — это отмена */
+  if (!bar) ui.scanPct = 0;
+  const pct = ui.scanPct = Math.max(ui.scanPct || 0, Math.min(99, Math.round(frac * 100))); /* не убывает */
+  if (!bar) {
+    openSheet('Распознаём техпаспорт', '<div class="scan-prog" aria-live="polite"><div class="bar"><i id="scan-bar" style="width:' + pct + '%"></i></div><p id="scan-pct" class="num" style="margin:0;font-weight:600;font-size:17px">Распознаём… ' + pct + '%</p><p id="scan-st" class="small muted" style="margin:4px 0 0">' + esc(status || '') + '</p>' + scanSafe() +
+      '<button class="btn block soft" style="margin-top:16px" data-act="scan-cancel">Отмена</button></div>');
+    return;
+  }
+  bar.style.width = pct + '%'; txt.textContent = 'Распознаём… ' + pct + '%'; if (status != null) st.textContent = status;
+}
+/* Уменьшение до ~2000 px по длинной стороне, оттенки серого, выравнивание освещения (фон по клеткам) и контраст */
+async function scanPrep(file) {
+  let src = null, w = 0, h = 0, url = null;
+  try { if (typeof createImageBitmap === 'function') { src = await createImageBitmap(file, {imageOrientation: 'from-image'}); w = src.width; h = src.height; } } catch (e) { src = null; }
+  if (!src) {
+    url = URL.createObjectURL(file);
+    src = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('image')); i.src = url; });
+    w = src.naturalWidth; h = src.naturalHeight;
+  }
+  const k = Math.min(1, 2000 / Math.max(w, h)), W = Math.max(1, Math.round(w * k)), H = Math.max(1, Math.round(h * k));
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d', {willReadFrequently: true});
+  g.imageSmoothingQuality = 'high'; g.drawImage(src, 0, 0, W, H);
+  if (url) URL.revokeObjectURL(url); if (src.close) src.close();
+  const d = g.getImageData(0, 0, W, H), p = d.data, hist = new Uint32Array(256);
+  for (let i = 0; i < p.length; i += 4) p[i] = (p[i] * 299 + p[i + 1] * 587 + p[i + 2] * 114) / 1000;
+  const G = 24, cw = Math.ceil(W / G), ch = Math.ceil(H / G), bg = new Float32Array(G * G), th = new Uint32Array(256);
+  for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+    th.fill(0); let cnt = 0;
+    for (let y = gy * ch; y < Math.min(H, (gy + 1) * ch); y += 2) for (let x = gx * cw; x < Math.min(W, (gx + 1) * cw); x += 2) { th[p[(y * W + x) * 4]]++; cnt++; }
+    let v = 255, a = 0; while (v > 0 && (a += th[v]) < cnt * 0.1) v--;
+    bg[gy * G + gx] = Math.max(v, 40);
+  }
+  for (let y = 0; y < H; y++) {
+    const fy = Math.min(G - 1, Math.max(0, y / ch - 0.5)), y0 = Math.floor(fy), y1 = Math.min(G - 1, y0 + 1), ty = fy - y0;
+    for (let x = 0; x < W; x++) {
+      const fx = Math.min(G - 1, Math.max(0, x / cw - 0.5)), x0 = Math.floor(fx), x1 = Math.min(G - 1, x0 + 1), tx = fx - x0;
+      const b = (bg[y0 * G + x0] * (1 - tx) + bg[y0 * G + x1] * tx) * (1 - ty) + (bg[y1 * G + x0] * (1 - tx) + bg[y1 * G + x1] * tx) * ty;
+      const i = (y * W + x) * 4, v = Math.min(255, p[i] * 235 / b); p[i] = v; hist[v | 0]++;
+    }
+  }
+  const n = W * H; let lo = 0, hi = 255, acc = 0;
+  while (lo < 255 && (acc += hist[lo]) < n * 0.01) lo++;
+  acc = 0; while (hi > 0 && (acc += hist[hi]) < n * 0.01) hi--;
+  const span = Math.max(1, hi - lo);
+  for (let i = 0; i < p.length; i += 4) { let v = (p[i] - lo) * 255 / span; v = v < 0 ? 0 : v > 255 ? 255 : v; p[i] = p[i + 1] = p[i + 2] = v; }
+  g.putImageData(d, 0, 0);
+  return c;
+}
+/* Строки Tesseract → формат HelperScan: строка делится на части по большим разрывам между словами (две колонки полей) */
+function ocrPages(data, W, H) {
+  const lines = [];
+  (data.lines || []).forEach(l => {
+    const ws = (l.words || []).filter(x => x.text && x.text.trim());
+    if (!ws.length) { if (l.text && l.text.trim()) lines.push({text: l.text.trim(), confidence: (l.confidence || 0) / 100, box: {x: l.bbox.x0 / W, y: l.bbox.y0 / H, w: (l.bbox.x1 - l.bbox.x0) / W, h: (l.bbox.y1 - l.bbox.y0) / H}}); return; }
+    const hgt = Math.max(8, l.bbox.y1 - l.bbox.y0);
+    let seg = [ws[0]];
+    const flush = () => {
+      const x0 = Math.min.apply(null, seg.map(x => x.bbox.x0)), x1 = Math.max.apply(null, seg.map(x => x.bbox.x1)), y0 = Math.min.apply(null, seg.map(x => x.bbox.y0)), y1 = Math.max.apply(null, seg.map(x => x.bbox.y1));
+      lines.push({text: seg.map(x => x.text).join(' '), confidence: seg.reduce((a, x) => a + (x.confidence || 0), 0) / seg.length / 100, box: {x: x0 / W, y: y0 / H, w: (x1 - x0) / W, h: (y1 - y0) / H}});
+    };
+    for (let i = 1; i < ws.length; i++) { if (ws[i].bbox.x0 - ws[i - 1].bbox.x1 > Math.max(hgt * 2.2, W * 0.04)) { flush(); seg = []; } seg.push(ws[i]); }
+    flush();
+  });
+  if (!lines.length && data.text) String(data.text).split(/\r?\n/).forEach(t => { if (t.trim()) lines.push({text: t.trim(), confidence: (data.confidence || 0) / 100}); });
+  return [{width: W, height: H, lines}];
+}
+const SCAN_KEYS = ['plate', 'vin', 'make', 'model', 'year'];
+const scanWeak = r => !r || SCAN_KEYS.some(k => r[k] == null || r[k] === '' || (r.confidence && r.confidence[k] < 0.7));
+/* Два прохода разметки (разреженный текст и одна колонка): по каждому полю берём значение с большей уверенностью */
+function scanMerge(a, b) {
+  if (!a || !a.found) return b; if (!b || !b.found) return a;
+  const out = Object.assign({}, a), ca = a.confidence || {}, cb = b.confidence || {}, conf = Object.assign({}, ca);
+  const sc = (r, c, k) => r[k] == null || r[k] === '' ? -1 : c[k] != null ? c[k] : 0.5;
+  [['plate', 'plate_country'], ['vin'], ['make'], ['model'], ['year'], ['engine_cc', 'engine'], ['fuel'], ['color', 'color_key'], ['category'], ['mass'], ['mass_empty']].forEach(g => {
+    if (sc(b, cb, g[0]) > sc(a, ca, g[0])) g.forEach(f => { out[f] = b[f]; if (cb[f] != null) conf[f] = cb[f]; else delete conf[f]; });
+  });
+  out.confidence = conf;
+  out.found = Math.max(a.found || 0, b.found || 0, SCAN_KEYS.concat(['engine_cc', 'fuel', 'color']).filter(k => out[k] != null && out[k] !== '').length);
+  out.warnings = Array.from(new Set([].concat(a.warnings || [], b.warnings || []))).slice(0, 3);
+  return out;
+}
+async function webScanRun(file) {
+  if (!ui.scan || ui.scanBusy) return;
+  const ctx = ui.scan;
+  ui.scanBusy = true;
+  let phase = 'load', span = [0.05, 0.35], res = null, err = null;
+  tessLog = m => {
+    if (!m || ui.scan !== ctx) return;
+    if (m.status === 'recognizing text') scanProgress(span[0] + (span[1] - span[0]) * (m.progress || 0), 'Читаем текст на фото…');
+    else if (phase === 'load') scanProgress(0.05 + 0.3 * (m.progress || 0) * (/language/.test(m.status || '') ? 1 : 0.3), /language|core/.test(m.status || '') ? 'Загружаем модуль распознавания…' : 'Готовим распознавание…');
+  };
+  scanProgress(0.02, 'Готовим фото…', true);
+  try {
+    const [P, canvas, W] = await Promise.all([parserLoad(), scanPrep(file), tessWorker()]);
+    if (ui.scan !== ctx) throw new Error('cancel');
+    phase = 'ocr'; span = [0.35, 0.8];
+    await W.setParameters({tessedit_pageseg_mode: '11'});
+    let r = await W.recognize(canvas);
+    res = P.parseVehicleDoc(ocrPages(r.data, canvas.width, canvas.height));
+    if (scanWeak(res) && ui.scan === ctx) {
+      span = [0.8, 0.98];
+      await W.setParameters({tessedit_pageseg_mode: '4'});
+      r = await W.recognize(canvas);
+      res = scanMerge(res, P.parseVehicleDoc(ocrPages(r.data, canvas.width, canvas.height)));
+    }
+  } catch (e) { err = e; }
+  ui.scanBusy = false; tessLog = null;
+  clearTimeout(tessIdle); tessIdle = setTimeout(tessKill, 180000); /* освободить память через 3 минуты */
+  if (ui.scan !== ctx) return; /* отменили, пока распознавали */
+  if (err) return scanFail('err', err.message === 'load' || err.message === 'parser' ? 'Не удалось загрузить модуль распознавания. При первом запуске нужен интернет (~9 МБ), потом он сохраняется в браузере.' : err.message === 'image' ? 'Не удалось открыть фото. Попробуйте другое фото в формате JPEG или PNG.' : 'Не удалось распознать фото. Попробуйте ещё раз.');
   if (!res || !res.found) return scanFail('empty', (res && res.warnings && res.warnings[0]) || 'Не удалось распознать данные техпаспорта.');
   scanSheet(res);
 }
@@ -3427,7 +3673,7 @@ function scanSheet(res) {
   const conf = res.confidence || {};
   const tag = f => res[f] == null || res[f] === '' ? ' <span class="badge">не найдено</span>' : typeof conf[f] === 'number' && conf[f] < 0.7 ? ' <span class="badge warn">проверьте</span>' : '';
   const box = (f, label, attrs) => '<div class="field"><label for="sc-' + f + '">' + label + tag(f) + '</label>' + inp('sc-' + f, f === 'color' ? scanColor(res) : res[f] == null ? '' : res[f], 'autocomplete="off" ' + (attrs || '')) + '</div>';
-  let b = '<p class="small muted" style="margin:0 0 12px">Проверьте распознанные данные и исправьте, если нужно. Фото не сохраняется — распознавание прошло на телефоне.</p>';
+  let b = '<p class="small muted" style="margin:0 0 12px">Проверьте распознанные данные и исправьте, если нужно. ' + (SCAN ? 'Фото не сохраняется — распознавание прошло на телефоне.' : 'Фото не сохраняется и никуда не отправлялось — распознавание прошло в браузере.') + '</p>';
   (res.warnings || []).forEach(w => { b += '<div class="card tint" style="margin-bottom:10px"><p class="small" style="margin:0">' + esc(w) + '</p></div>'; });
   b += '<form class="form" data-form="scan" novalidate>' + box('plate', 'Гос. номер', 'autocapitalize="characters"') + box('vin', 'VIN', 'autocapitalize="characters" maxlength="17"') +
     '<div class="grid2">' + box('make', 'Марка', 'list="dl-makes3"') + box('model', 'Модель') + '</div><datalist id="dl-makes3">' + MAKES.map(m => '<option value="' + m + '">').join('') + '</datalist>' +
@@ -3437,9 +3683,393 @@ function scanSheet(res) {
   openSheet('Данные техпаспорта', b);
 }
 
+/* ===================== Партнёры Helper: Helper-код, баллы с сервера, акции, события, гео =====================
+   Контракт — 04_AUTOMATION/docs/PARTNER_API.md (разделы 1 и 11). Координаты клиента на сервер не уходят:
+   расстояние и фильтры аудитории считаются здесь, на телефоне; в события — только campaign_id / location_id. */
+const PARTNER_URL = 'https://dmitriimalahov-gif.github.io/helper-app/partner/';
+const K_LOY = 'helper.loy.v1', K_OFF = 'helper.offers.v1', K_OEV = 'helper.oev.v1', K_OGEO = 'helper.ogeo.v1';
+const acctWho = () => (A.user && (A.user.id || A.user.email)) || '';
+let LS = jget(K_LOY);
+const loySrv = () => logged() && LS && LS.who === acctWho() ? LS : null;
+const helperId = () => { if (!logged()) return ''; const s = loySrv(); return (s && s.helper_id) || (A.user && A.user.helper_id) || ''; };
+/* Время сервера: ISO 8601 UTC; «2026-09-28 08:38:15» без зоны (так отдаёт /v1/sync/loyalty) — тоже UTC */
+const tsParse = v => { if (v == null || v === '') return NaN; const s = String(v).trim(); return Date.parse(/^\d{4}-\d\d-\d\d[ T]\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(s) ? s.replace(' ', 'T') + 'Z' : s); };
+const fDt = v => { const t = tsParse(v); return isFinite(t) ? fD(iso(new Date(t))) : ''; };
+const fUntil = v => { const t = tsParse(v); if (!isFinite(t)) return ''; return 'до ' + (iso(new Date(t)) === todayISO() ? hhmm(t) : fD(iso(new Date(t)))); };
+const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+let loyP = null, loyTry = 0, loyPath = '/v1/sync/loyalty';
+/* GET /v1/sync/loyalty (контракт) → при 404 — /v1/loyalty (текущий сервер); helper_id, баланс и купоны кэшируются для офлайна */
+function loyFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  const s = loySrv();
+  if (loyP) return loyP;
+  if (!force && ((s && Date.now() - s.at < 120000) || Date.now() - loyTry < 30000)) return Promise.resolve(s);
+  loyTry = Date.now();
+  const who = acctWho();
+  loyP = (async () => {
+    let d = null;
+    try { d = await api(loyPath); }
+    catch (e) { if (e.status === 404 && loyPath !== '/v1/loyalty') { loyPath = '/v1/loyalty'; try { d = await api(loyPath); } catch (x) { d = null; } } }
+    if (!d || !logged() || acctWho() !== who) return loySrv();
+    const prev = loySrv();
+    LS = {who, helper_id: d.helper_id || (prev && prev.helper_id) || (A.user && A.user.helper_id) || '', balance: +d.balance || 0, expiring_30d: +d.expiring_30d || 0,
+      coupons: Array.isArray(d.coupons) ? d.coupons.slice(0, 50) : [], history: Array.isArray(d.history) ? d.history.slice(0, 200) : [], at: Date.now()};
+    jset(K_LOY, LS);
+    if (JSON.stringify(Object.assign({}, prev || {}, {at: 0})) !== JSON.stringify(Object.assign({}, LS, {at: 0}))) liveRender(['home', 'bonus']);
+    return LS;
+  })().finally(() => { loyP = null; });
+  return loyP;
+}
+/* перерисовать, только если открыт один из разделов и нет онбординга */
+function liveRender(pages) { if (!S || ui.onb) return; if (pages.indexOf(curPage().p) >= 0) render(); }
+
+/* --- Карточка «Мой Helper-код» (главная и «Бонусы») --- */
+function hidCard() {
+  if (!logged()) return '<button class="hidc cta" data-act="hid-register"><span class="ic-circle" style="background:var(--teal);color:var(--on-teal)">' + ic('qr', 'sm') + '</span><span class="body"><span class="t">Получайте баллы у партнёров Helper — создайте аккаунт</span><span class="s">Личный QR-код для кассы появится здесь</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
+  const id = helperId(), s = loySrv();
+  if (!id) { setTimeout(() => loyFetch(), 0); return '<div class="hidc"><span class="ic-circle">' + ic('qr', 'sm') + '</span><span class="body"><span class="eyebrow" style="display:block">Мой Helper-код</span><span class="small muted">' + (navigator.onLine === false ? 'Нет связи — код появится, когда будет интернет' : 'Получаем ваш код…') + '</span></span></div>'; }
+  const pts = s ? fN(s.balance) + ' ' + plural(s.balance, W_PTS) + ' на счёте' : 'Баллы начисляют партнёры';
+  return '<div class="hidc"><button class="qrbox" data-act="hid" aria-label="Показать Helper-код на весь экран">' + qrSVG('HELPER:' + id, 84, 'QR-код Helper ' + id) + '</button><div class="body"><span class="eyebrow" style="display:block">Мой Helper-код</span><span class="hid">' + esc(id) + '</span><span class="pts">' + pts + '</span><div><button class="btn sm" data-act="hid">' + ic('qr', 'xs') + 'Показать партнёру</button></div></div></div>';
+}
+/* --- Полноэкранный код для кассира: белый фон, крупный QR, Code128, код текстом --- */
+let bright = null;
+function brightUp() {
+  const B = CAP && (NP.ScreenBrightness || NP.Brightness);
+  if (!B || typeof B.setBrightness !== 'function') return; /* плагин яркости не установлен — ничего не делаем */
+  try { Promise.resolve(B.getBrightness ? B.getBrightness() : null).then(r => { bright = r && typeof r.brightness === 'number' ? r.brightness : -1; return B.setBrightness({brightness: 1}); }).catch(() => {}); } catch (e) {}
+}
+function brightBack() {
+  const B = CAP && (NP.ScreenBrightness || NP.Brightness);
+  if (!B || bright === null) return;
+  try { B.setBrightness({brightness: bright}); } catch (e) {}
+  bright = null;
+}
+function codeFull(o) {
+  codeClose(true);
+  const el = document.createElement('div');
+  el.id = 'codefs'; el.className = 'codefs'; el.tabIndex = -1; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', o.title);
+  setHTML(el, '<div class="codefs-in"><button class="x" data-act="code-close" aria-label="Закрыть">' + ic('close') + '</button><p class="ttl">' + esc(o.title) + '</p>' + (o.sub ? '<p class="sub">' + esc(o.sub) + '</p>' : '') +
+    qrSVG(o.qr, 300, 'QR-код ' + o.big) + barSVG(o.bar, 78, 'Штрихкод ' + o.bar) + '<p class="big" id="codefs-big">' + esc(o.big) + '</p><p class="hint">' + esc(o.hint) + '</p>' + (o.note ? '<p class="note">' + esc(o.note) + '</p>' : '') +
+    '<button class="btn" data-act="code-close">Закрыть</button></div>');
+  document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  try { el.focus({preventScroll: true}); } catch (e) {}
+  brightUp();
+}
+function codeClose(silent) {
+  const el = $('#codefs'); if (!el) return false;
+  el.remove(); if ($('#sheet').hidden) document.body.style.overflow = '';
+  if (!silent) brightBack();
+  return true;
+}
+function hidOpen() {
+  if (!logged()) return ACT['hid-register']();
+  const id = helperId();
+  if (!id) { loyFetch(true); return toast(navigator.onLine === false ? 'Нет связи — Helper-код появится, когда будет интернет' : 'Получаем ваш Helper-код…'); }
+  const s = loySrv();
+  codeFull({title: 'Мой Helper-код', sub: s ? fN(s.balance) + ' ' + plural(s.balance, W_PTS) + ' на счёте' : '', qr: 'HELPER:' + id, bar: id, big: id, hint: 'Покажите код кассиру — баллы начислятся на ваш счёт', note: 'Партнёр видит только этот код — без имени, телефона и e-mail.'});
+}
+function couponFull(c) {
+  if (!c || !c.code) return;
+  codeFull({title: 'Купон', sub: [c.title, c.company].filter(Boolean).join(' · '), qr: c.qr || 'HELPER-COUPON:' + c.code, bar: c.code, big: c.code, hint: 'Покажите купон кассиру до оплаты — скидка применится к чеку', note: c.expires_at ? 'Действует ' + fUntil(c.expires_at) + '. Одноразовый.' : 'Одноразовый.'});
+}
+
+/* --- Акции партнёров: GET /v1/offers (кэш для офлайна) --- */
+let OFF = jget(K_OFF) || {items: [], at: 0, ok: false};
+let offP = null, offTry = 0;
+function offersFetch(force) {
+  if (offP) return offP;
+  if (!force && (Date.now() - (OFF.at || 0) < 600000 || Date.now() - offTry < 60000)) return Promise.resolve(OFF);
+  offTry = Date.now();
+  offP = (async () => {
+    let d = null;
+    try { d = await api('/v1/offers'); } catch (e) { if (e.status === 404) d = {items: []}; }
+    if (!d) return OFF;
+    const before = JSON.stringify(OFF.items || []);
+    OFF = {items: Array.isArray(d.items) ? d.items.filter(o => o && o.campaign_id != null).slice(0, 200) : [], updated_at: d.updated_at || null, at: Date.now(), ok: true};
+    jset(K_OFF, OFF);
+    if (JSON.stringify(OFF.items) !== before) liveRender(['home', 'bonus', 'nearby']);
+    return OFF;
+  })().finally(() => { offP = null; });
+  return offP;
+}
+const offerById = cid => (OFF.items || []).find(o => String(o.campaign_id) === String(cid)) || null;
+/* services_due (ключи контракта) → работы приложения; inspection / insurance — документы; wash — нужна всегда */
+const DUE_MAP = {oil: ['oil'], filters: ['air', 'cabin', 'fuelf'], tires: ['tires'], brakes: ['pads', 'discs', 'brakefluid'], battery: ['battery'], timing: ['timing', 'belt'], coolant: ['coolant'], ac: ['ac'], inspection: ['doc:inspection'], insurance: ['doc:rca', 'doc:green', 'doc:casco'], wash: ['*']};
+function carDue(car) {
+  const due = {'*': 1}, T = todayISO();
+  serviceList(car).forEach(x => { if (x.status === 'soon' || x.status === 'bad') due[x.item.id] = 1; });
+  carDocs(car.id).forEach(d => { if (d.expires && diffDays(T, d.expires) <= 30) due['doc:' + d.type] = 1; });
+  return due;
+}
+const mkNorm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9а-яё]/g, '');
+/* Фильтр аудитории по активному автомобилю — на устройстве */
+function offerMatch(o, car, due) {
+  const a = o.audience || {};
+  const has = k => Array.isArray(a[k]) && a[k].length > 0;
+  if (!car) return !has('fuel') && !has('makes') && !has('services_due') && a.car_age_min == null && a.car_age_max == null;
+  if (has('fuel') && a.fuel.indexOf(car.fuel) < 0) return false;
+  if (has('makes')) { const m = mkNorm(car.make); if (!a.makes.some(x => { const n = mkNorm(x); return n && m && (n === m || (n.length >= 3 && m.indexOf(n) === 0) || (m.length >= 3 && n.indexOf(m) === 0)); })) return false; }
+  if (a.car_age_min != null || a.car_age_max != null) {
+    const y = +car.year; if (!y) return false;
+    const age = new Date().getFullYear() - y;
+    if (a.car_age_min != null && age < +a.car_age_min) return false;
+    if (a.car_age_max != null && age > +a.car_age_max) return false;
+  }
+  if (has('services_due')) { const d = due || carDue(car); if (!a.services_due.some(k => (DUE_MAP[k] || []).some(i => d[i]))) return false; }
+  return true;
+}
+const offerLive = o => !(o.ends_at && tsParse(o.ends_at) < Date.now()) && !(o.starts_at && tsParse(o.starts_at) > Date.now());
+const offerCouponable = o => !!(o.has_coupon || o.reward); /* has_coupon — купон можно получить (в т. ч. бесплатный для скидки без награды) */
+/* Точка отсчёта для расстояния: выбранный район или текущее местоположение (только с согласием) */
+function geoSrc() {
+  if (!S.geo.consent) return null;
+  if (S.geo.area && AREAS[S.geo.area]) { const a = AREAS[S.geo.area]; return {lat: a[1], lon: a[2], label: 'Район: ' + a[0]}; }
+  return ui.geo.pos ? {lat: ui.geo.pos.lat, lon: ui.geo.pos.lon, label: 'Рядом с вами'} : null;
+}
+function offerNear(o, src) {
+  let best = null;
+  (o.locations || []).forEach(l => { if (!src || !isFinite(+l.lat) || !isFinite(+l.lon)) return; const d = distKm(src.lat, src.lon, +l.lat, +l.lon); if (!best || d < best.d) best = {d, l}; });
+  return best;
+}
+/* Список для ленты: канал feed, не закончилась, подходит автомобилю; ближние — выше */
+function offersList() {
+  const car = S.cars.length ? activeCar() : null, due = car ? carDue(car) : null, src = geoSrc();
+  const out = (OFF.items || []).filter(o => (!o.channels || o.channels.feed !== false) && offerLive(o) && offerMatch(o, car, due)).map(o => { const n = offerNear(o, src); return {o, d: n ? n.d : null, l: n ? n.l : null}; });
+  if (src) out.sort((a, b) => (a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d));
+  return out;
+}
+const fKm = km => '~' + (km < 1 ? Math.max(50, Math.round(km * 20) * 50) + ' м' : km < 10 ? f1(km) + ' км' : fN(km) + ' км');
+function offerBadge(o) {
+  const v = +o.discount_value || 0;
+  if (o.discount_kind === 'percent' && v) return '−' + fN(v) + '%';
+  if (o.discount_kind === 'fixed' && v) return '−' + fN(v) + ' MDL';
+  if (o.kind === 'bonus' && +o.bonus_multiplier > 1) return 'баллы ×' + fN(o.bonus_multiplier);
+  if (o.reward) return 'купон';
+  if (o.discount_text) return o.discount_text;
+  return 'акция';
+}
+function offerDiscText(o) {
+  const v = +o.discount_value || 0, b = [];
+  if (o.discount_kind === 'percent' && v) b.push('Скидка ' + fN(v) + '%');
+  else if (o.discount_kind === 'fixed' && v) b.push('Скидка ' + fN(v) + ' MDL');
+  if (o.kind === 'bonus' && +o.bonus_multiplier > 1) b.push('Баллы ×' + fN(o.bonus_multiplier) + ' за покупку');
+  if (o.reward) b.push('Купон «' + o.reward.title + '»' + (+o.reward.cost_points ? ' за ' + fN(o.reward.cost_points) + ' ' + plural(+o.reward.cost_points, W_PTS) : ''));
+  return b.join(' · ');
+}
+function offerCard(x, wide) {
+  const o = x.o, bits = [];
+  if (x.d != null) bits.push(fKm(x.d));
+  if (o.ends_at) bits.push('до ' + fDt(o.ends_at));
+  return '<button class="offer' + (wide ? ' wide' : '') + '" data-act="offer" data-id="' + esc(o.campaign_id) + '" data-ov="' + esc(o.campaign_id) + '"><span class="oh"><span class="ocat">' + esc(o.category_title || 'Партнёр Helper') + '</span><span class="obadge">' + esc(offerBadge(o)) + '</span></span><span class="ot">' + esc(o.title || o.company) + '</span><span class="oc">' + esc(o.company || '') + '</span>' + (bits.length ? '<span class="od">' + esc(bits.join(' · ')) + '</span>' : '') + '</button>';
+}
+const OFF_EMPTY = 'Скоро здесь появятся акции партнёров рядом с вами';
+function offersEmpty() {
+  const txt = !OFF.ok && navigator.onLine === false ? 'Нет связи — акции загрузятся, когда появится интернет' : OFF_EMPTY;
+  return '<div class="card tint oempty"><span class="ic-circle">' + ic('tag', 'sm') + '</span><p class="small" style="margin:0">' + txt + '</p></div>';
+}
+function offersHome() {
+  setTimeout(() => offersFetch(), 0);
+  const L = offersList().slice(0, 3);
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">Акции партнёров</h2>' + (L.length ? '<button class="link" data-act="go" data-p="nearby">Все' + ic('chevR', 'xs') + '</button>' : '') + '</div>' +
+    (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) + '</section>';
+}
+function offersSection() {
+  setTimeout(() => offersFetch(), 0);
+  const L = offersList();
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">Акции партнёров</h2>' + (L.length ? '<span class="xsmall muted">' + L.length + ' ' + plural(L.length, ['акция', 'акции', 'акций']) + '</span>' : '') + '</div>' +
+    (L.length ? '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' : offersEmpty()) + '</section>';
+}
+function routeUrl(l) {
+  const ll = (+l.lat).toFixed(6) + ',' + (+l.lon).toFixed(6), q = encodeURIComponent(l.title || l.address || 'Helper');
+  if (IS_IOS) return 'https://maps.apple.com/?daddr=' + ll + '&q=' + q;
+  if (IS_AND) return 'geo:' + ll + '?q=' + ll + '(' + q + ')';
+  return 'https://www.google.com/maps/dir/?api=1&destination=' + ll;
+}
+/* Приложение: переход верхнего уровня на внешний адрес Capacitor отдаёт системе (Apple Maps / выбор карт Android) */
+function openRoute(l) { const u = routeUrl(l); if (CAP) { try { location.href = u; } catch (e) {} } else openExt(u); }
+function offerSheet(cid, from) {
+  const o = offerById(cid);
+  if (!o) return toast('Акция закончилась или недоступна');
+  const src = geoSrc(), disc = offerDiscText(o);
+  let b = '<p class="small muted" style="margin:0 0 6px">' + esc(o.category_title || 'Партнёр Helper') + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(offerBadge(o)) + '</span></p>' +
+    '<p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(o.title || '') + '</p>' + (o.text ? '<p style="margin:8px 0 0;line-height:1.55">' + esc(o.text) + '</p>' : '');
+  if (disc || o.ends_at) b += '<div class="tip" style="margin-top:14px">' + ic('tag') + '<span>' + esc(disc || 'Акция партнёра Helper') + (o.ends_at ? '<br><span class="small muted">Действует до ' + fDt(o.ends_at) + '</span>' : '') + '</span></div>';
+  const locs = (o.locations || []).map(l => ({l, d: src && isFinite(+l.lat) ? distKm(src.lat, src.lon, +l.lat, +l.lon) : null})).sort((a, b2) => (a.d == null ? 1e9 : a.d) - (b2.d == null ? 1e9 : b2.d));
+  if (locs.length) b += '<p class="eyebrow" style="margin:18px 0 0">' + (locs.length > 1 ? 'Адреса' : 'Адрес') + '</p>' + locs.map((x, i) => '<div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.l.title || o.company) + (x.d != null ? ' <span class="small muted num">· ' + fKm(x.d) + '</span>' : '') + '</span><span class="s" style="display:block">' + esc(x.l.address || '') + '</span>' + (x.l.hours ? '<span class="s" style="display:block">Часы работы: ' + esc(x.l.hours) + '</span>' : '') + '</span>' + (isFinite(+x.l.lat) && isFinite(+x.l.lon) ? '<button class="btn sm soft" data-act="offer-route" data-id="' + esc(o.campaign_id) + '" data-i="' + i + '" data-lid="' + esc(x.l.id) + '">Маршрут</button>' : '') + '</div>').join('');
+  b += '<div class="stack" style="margin-top:16px">';
+  const cc = o.reward ? +o.reward.cost_points || 0 : 0;
+  if (offerCouponable(o)) b += '<button class="btn block ink" data-act="offer-coupon" data-id="' + esc(o.campaign_id) + '">' + ic('gift', 'sm') + 'Получить купон' + (cc ? ' · ' + fN(cc) + ' ' + plural(cc, W_PTS) : ' · бесплатно') + '</button>';
+  b += '<button class="btn block ' + (offerCouponable(o) ? 'soft' : 'ink') + '" data-act="hid">' + ic('qr', 'sm') + 'Показать мой код</button></div>';
+  b += '<p class="xsmall muted" style="margin:12px 0 0">Покажите Helper-код на кассе — баллы за покупку придут на ваш счёт. Партнёр не видит ваше имя, телефон и где вы ездите.</p>';
+  openSheet(esc(o.company || 'Акция партнёра'), b);
+  offerEvent('open', o.campaign_id);
+}
+async function offerCoupon(cid) {
+  const o = offerById(cid); if (!o || !offerCouponable(o)) return;
+  if (!logged()) { ui.after = () => { if (!ui.onb) offerSheet(cid); }; ui.authWhy = 'Купоны партнёров привязываются к аккаунту Helper: войдите или создайте аккаунт — это бесплатно.'; return authSheet('register', {why: ui.authWhy}); }
+  const cost = o.reward ? +o.reward.cost_points || 0 : 0, s = loySrv();
+  const go = async () => {
+    toast('Получаем купон…');
+    let d;
+    try { d = await api('/v1/offers/' + encodeURIComponent(o.campaign_id) + '/coupon', {body: {}}); }
+    catch (e) {
+      if (e.code === 'coupon_active') { await loyFetch(true); const s2 = loySrv(), ex = s2 && (s2.coupons || []).find(x => String(x.campaign_id || '') === String(o.campaign_id) || (x.company && x.company === o.company)); if (ex) { closeSheet(); return couponFull(ex); } }
+      return toast(e.message);
+    }
+    const c = d.coupon || {};
+    if (!c.code) return toast('Купон не получен — попробуйте позже');
+    const spent = d.points != null ? Math.abs(+d.points) || 0 : c.points != null ? Math.abs(+c.points) || 0 : cost;
+    const cp = {code: c.code, title: c.title || (o.reward && o.reward.title) || o.title, company: d.company || c.company || o.company, expires_at: c.expires_at || null, qr: c.qr || 'HELPER-COUPON:' + c.code, campaign_id: o.campaign_id};
+    if (loySrv()) { LS.coupons = [cp].concat((LS.coupons || []).filter(x => x.code !== cp.code)); if (spent) LS.balance = Math.max(0, (+LS.balance || 0) - spent); jset(K_LOY, LS); }
+    offerEvent('coupon', o.campaign_id);
+    closeSheet(); liveRender(['home', 'bonus']); couponFull(cp);
+    loyFetch(true);
+  };
+  if (!cost) return go();
+  if (s && s.balance < cost) return toast('Нужно ' + fN(cost) + ' ' + plural(cost, W_PTS) + ', на счёте ' + fN(s.balance));
+  confirmSheet({title: 'Обменять ' + fN(cost) + ' ' + plural(cost, W_PTS) + '?', text: 'Вы получите купон «' + esc((o.reward && o.reward.title) || o.title) + '» — ' + esc(o.company) + '. Покажите его на кассе до оплаты.', ok: 'Получить купон', danger: false, onOk: go, onCancel: () => offerSheet(cid)});
+}
+
+/* --- События акций: POST /v1/offers/events пачками (до 100), с задержкой; без сети — молча отбрасываем --- */
+let OEV = Object.assign({q: [], seen: {}}, jget(K_OEV) || {}), oevT = null, oevBusy = false;
+function offerEvent(type, cid, lid) {
+  if (cid == null) return;
+  const T = todayISO();
+  Object.keys(OEV.seen).forEach(k => { if (OEV.seen[k] !== T) delete OEV.seen[k]; });
+  if (type === 'view' || type === 'near') { const k = type + ':' + cid + (lid != null ? ':' + lid : ''); if (OEV.seen[k] === T) return; OEV.seen[k] = T; }
+  const e = {campaign_id: cid, type, at: nowIso()};
+  if (lid != null) e.location_id = lid;
+  OEV.q.push(e); if (OEV.q.length > 300) OEV.q = OEV.q.slice(-300);
+  jset(K_OEV, OEV);
+  clearTimeout(oevT); oevT = setTimeout(offerFlush, 4000);
+}
+async function offerFlush() {
+  if (oevBusy || !OEV.q.length) return;
+  const batch = OEV.q.splice(0, 100);
+  jset(K_OEV, OEV);
+  if (navigator.onLine === false) { OEV.q = []; jset(K_OEV, OEV); return; }
+  oevBusy = true;
+  try { await api('/v1/offers/events', {body: {events: batch}, timeout: 15000}); } catch (e) { /* офлайн или ошибка — событие теряется, это нормально */ }
+  oevBusy = false;
+  if (OEV.q.length) oevT = setTimeout(offerFlush, 1500);
+}
+/* «Показ» карточки — когда она реально видна на экране (раз в день на акцию) */
+let offIO = null;
+function offersObserve() {
+  const els = $$('[data-ov]'); if (!els.length) return;
+  if (typeof IntersectionObserver !== 'function') { els.forEach(el => { const o = offerById(el.dataset.ov); if (o) offerEvent('view', o.campaign_id); }); return; }
+  if (!offIO) offIO = new IntersectionObserver(list => list.forEach(en => { if (en.isIntersecting) { offIO.unobserve(en.target); const o = offerById(en.target.dataset.ov); if (o) offerEvent('view', o.campaign_id); } }), {threshold: 0.6});
+  offIO.disconnect();
+  els.forEach(el => offIO.observe(el));
+}
+
+/* --- Гео-уведомления (channels.geo_push): только с согласием, при запуске и возврате в приложение.
+   Лимиты: 1 раз в 3 дня на акцию, 2 в день всего, тишина 21:00–09:00. Фонового отслеживания нет. --- */
+const GEO_NOTIF_BASE = 9000;
+function geoPos() {
+  /* без запроса разрешения: только если доступ уже выдан */
+  return new Promise(res => {
+    const ok = p => res({lat: +p.coords.latitude.toFixed(4), lon: +p.coords.longitude.toFixed(4)});
+    try {
+      if (CAP && NP.Geolocation) {
+        NP.Geolocation.checkPermissions().then(pm => { if (pm && (pm.location === 'granted' || pm.coarseLocation === 'granted')) return NP.Geolocation.getCurrentPosition({enableHighAccuracy: false, timeout: 10000, maximumAge: 120000}).then(ok); res(null); }).catch(() => res(null));
+        return;
+      }
+      if (!navigator.geolocation || !navigator.permissions || !navigator.permissions.query) return res(null);
+      navigator.permissions.query({name: 'geolocation'}).then(st => { if (st.state !== 'granted') return res(null); navigator.geolocation.getCurrentPosition(ok, () => res(null), {enableHighAccuracy: false, timeout: 10000, maximumAge: 120000}); }).catch(() => res(null));
+    } catch (e) { res(null); }
+  });
+}
+let geoBusy = false, geoAt = 0;
+async function geoCheck(force) {
+  if (!S || !S.geo.consent || S.geo.area || geoBusy) return;
+  if (!force && Date.now() - geoAt < 300000) return;
+  geoBusy = true; geoAt = Date.now();
+  try {
+    const pos = await geoPos();
+    if (!pos) return;
+    const moved = !ui.geo.pos || Math.abs(ui.geo.pos.lat - pos.lat) > 0.002 || Math.abs(ui.geo.pos.lon - pos.lon) > 0.002;
+    ui.geo.pos = {lat: +pos.lat.toFixed(3), lon: +pos.lon.toFixed(3)}; ui.geo.status = 'ok';
+    if (moved) liveRender(['home', 'bonus', 'nearby']);
+    const car = S.cars.length ? activeCar() : null, due = car ? carDue(car) : null, hits = [];
+    (OFF.items || []).forEach(o => {
+      if (!o.channels || !o.channels.geo_push || !offerLive(o) || !offerMatch(o, car, due)) return;
+      (o.locations || []).forEach(l => { if (!isFinite(+l.lat) || !isFinite(+l.lon)) return; const m = distKm(pos.lat, pos.lon, +l.lat, +l.lon) * 1000; if (m <= (+l.radius_m || +o.radius_m || 500)) hits.push({o, l, m}); });
+    });
+    if (!hits.length) return;
+    hits.sort((a, b) => a.m - b.m);
+    hits.forEach(x => offerEvent('near', x.o.campaign_id, x.l.id));
+    const h = new Date().getHours(); if (h >= 21 || h < 9) return;
+    const G = Object.assign({sent: {}, days: {}}, jget(K_OGEO) || {}), T = todayISO();
+    Object.keys(G.days).forEach(d => { if (d !== T) delete G.days[d]; });
+    Object.keys(G.sent).forEach(k => { if (Date.now() - G.sent[k] > 3 * 864e5) delete G.sent[k]; });
+    if ((G.days[T] || 0) >= 2) return;
+    const x = hits.find(y => !G.sent[y.o.campaign_id]);
+    if (!x) return;
+    G.sent[x.o.campaign_id] = Date.now(); G.days[T] = (G.days[T] || 0) + 1; G.n = ((G.n || 0) + 1) % 100;
+    jset(K_OGEO, G);
+    await geoNotify(x, GEO_NOTIF_BASE + G.n);
+    offerEvent('push', x.o.campaign_id, x.l.id);
+  } finally { geoBusy = false; }
+}
+async function geoNotify(x, id) {
+  const o = x.o, title = (o.company || 'Партнёр Helper') + ': ' + offerBadge(o), body = (o.title || 'Акция рядом') + ' · ' + fKm(x.m / 1000) + (x.l.title ? ' — ' + x.l.title : '');
+  const LN = CAP && NP.LocalNotifications;
+  if (LN) {
+    try {
+      const pm = await LN.checkPermissions();
+      if (pm && pm.display === 'granted') { await LN.schedule({notifications: [{id, title, body, schedule: {at: new Date(Date.now() + 1500), allowWhileIdle: true}, extra: {offer: String(o.campaign_id)}}]}); return; }
+    } catch (e) {}
+  }
+  offerBanner(o, title, body);
+}
+function offerBanner(o, title, body) {
+  const old = $('#obanner'); if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'obanner'; el.className = 'obanner'; el.setAttribute('role', 'status');
+  setHTML(el, '<span class="ic-circle" style="background:var(--teal);color:var(--on-teal)">' + ic('pin', 'sm') + '</span><button class="body" data-act="banner-open" data-id="' + esc(o.campaign_id) + '"><span class="t">' + esc(title) + '</span><span class="s">' + esc(body) + '</span></button><button class="iconbtn" data-act="banner-close" aria-label="Скрыть">' + ic('close', 'sm') + '</button>');
+  document.body.appendChild(el);
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 15000);
+}
+/* Запуск и возврат в приложение: акции (не чаще раза в 10 мин), баллы, гео */
+let offResAt = 0;
+function offResume() {
+  if (!S || Date.now() - offResAt < 20000) return;
+  offResAt = Date.now();
+  offersFetch().then(() => geoCheck());
+  if (logged()) loyFetch();
+}
+
+/* --- Для бизнеса: кабинет партнёра и «Моя компания в Helper» (GET /v1/partner/mine) --- */
+let pmAt = 0;
+async function partnerMine() {
+  if (!logged() || Date.now() - pmAt < 600000) return;
+  pmAt = Date.now();
+  try {
+    const d = await api('/v1/partner/mine');
+    const items = Array.isArray(d.items) ? d.items : [];
+    if (JSON.stringify(items) !== JSON.stringify(A.partners || [])) { A.partners = items; acctSave(); acctUI(); }
+  } catch (e) { if (e.status === 404) { if (A.partners) { delete A.partners; acctSave(); } } }
+}
+const partnerCabinet = () => openExt(PARTNER_URL);
+/* согласие на «Предложения рядом» — и на сервер: без него проходы рядом с точками партнёров не учитываются */
+function geoPush() { if (logged()) api('/v1/me', {method: 'PATCH', body: {geo_consent: !!S.geo.consent}}).catch(() => {}); }
+
+function geoIntroSheet() {
+  const row = (i, t, s) => '<div class="item" style="align-items:flex-start;padding-left:0;padding-right:0"><span class="ic-circle">' + ic(i, 'sm') + '</span><span class="body"><span class="t" style="display:block">' + t + '</span><span class="s" style="display:block;line-height:1.45">' + s + '</span></span></div>';
+  openSheet('Акции партнёров рядом', '<p class="muted" style="margin:0 0 6px">Покажем, какие мойки, СТО и шиномонтажи с акциями Helper ближе к вам, и напомним об акции, когда вы окажетесь рядом с партнёром.</p>' +
+    row('pin', 'Что мы используем', 'Примерное местоположение телефона — чтобы посчитать расстояние до партнёров.') +
+    row('clock', 'Когда', 'Только пока приложение открыто: на экране акций, при запуске и при возврате в приложение. Фонового отслеживания нет.') +
+    row('shield', 'Приватность', 'Расстояние считается на вашем телефоне, координаты никуда не отправляются. Партнёры не видят, кто вы и где ездите.') +
+    row('bell', 'Напоминания', 'Не чаще 2 раз в день и раза в 3 дня от одного партнёра, никогда с 21:00 до 9:00.') +
+    row('sliders', 'Отключить в любой момент', 'Ещё → Настройки → «Предложения рядом». Там же — «Удалить мои гео-данные».') +
+    '<div class="stack" style="margin-top:14px"><button class="btn block ink" data-act="geo-consent">Согласен, показать акции рядом</button><button class="btn block soft" data-act="sheet-close">Не сейчас</button></div><p class="xsmall muted" style="text-align:center;margin:10px 0 0">Не хотите делиться геолокацией — после согласия можно выбрать город или район вручную.</p>');
+}
+
 /* ================= Кнопка «Назад» Android, возврат в приложение, скрытые настройки ================= */
 function appMin() { try { if (NP.App.minimizeApp) NP.App.minimizeApp(); else NP.App.exitApp(); } catch (e) { try { NP.App.exitApp(); } catch (x) {} } }
 function onBack() {
+  if (codeClose()) return;
   if (!$('#sheet').hidden) { const p = pending; closeSheet(); if (p && p.onCancel) p.onCancel(); return; }
   if (ui.onb) { if (ui.onb.step === 'acct' || ui.onb.step === 0) return appMin(); ACT['onb-back'](); return; }
   if (ui.stacks[ui.tab].length) return back();
@@ -3447,8 +4077,8 @@ function onBack() {
   appMin();
 }
 function webInit() {
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') onResume(); });
-  window.addEventListener('online', () => { if (logged()) syncNow(); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { onResume(); offResume(); } else offerFlush(); });
+  window.addEventListener('online', () => { if (logged()) syncNow(); offersFetch(); });
   let lp = null;
   document.addEventListener('pointerdown', e => { clearTimeout(lp); const t = e.target && e.target.closest && e.target.closest('#app-ver'); if (t) lp = setTimeout(devApiPrompt, 1500); });
   ['pointerup', 'pointercancel'].forEach(n => document.addEventListener(n, () => clearTimeout(lp)));
@@ -3637,7 +4267,7 @@ FORMS.scan = function () {
   if (g('plate')) p.plate = g('plate').toUpperCase();
   if (g('color')) p.color = g('color');
   ui.scan = null;
-  if (ctx.where === 'onb') { if (ui.onb) Object.assign(ui.onb.d, p); closeSheet(); render(false); toast('Данные из техпаспорта заполнены — проверьте и продолжайте'); }
+  if (ctx.where === 'onb') { if (ui.onb) { Object.assign(ui.onb.d, p); ui.onb.manual = true; } closeSheet(); render(false); toast('Данные из техпаспорта заполнены — проверьте и продолжайте'); }
   else { carEditSheet(ctx.carId, Object.assign({}, ctx.pre, p)); toast('Данные из техпаспорта заполнены — проверьте и сохраните'); }
 };
 
@@ -3759,7 +4389,19 @@ Object.assign(ACT, {
   'acct-delete': () => delSheet(),
   scan: el => scanStart(el),
   'scan-again': el => scanRun(el.dataset.src || 'camera'),
-  'scan-cancel': () => { const c = ui.scan; ui.scan = null; if (c && c.where === 'car') carEditSheet(c.carId, c.pre); else closeSheet(); }
+  'scan-cancel': () => { const c = ui.scan; ui.scan = null; if (ui.scanBusy && !SCAN) { tessKill(); ui.scanBusy = false; } if (c && c.where === 'car') carEditSheet(c.carId, c.pre); else closeSheet(); },
+  'onb-manual': () => { captureOnb(); if (ui.onb) ui.onb.manual = true; render(false); setTimeout(() => { const e = $('#onb-make'); if (e) try { e.focus(); } catch (x) {} }, 60); },
+  /* Helper-код, купоны и акции партнёров */
+  'hid-register': () => { ui.after = () => { if (!ui.onb) hidOpen(); }; ui.authWhy = 'С аккаунтом у вас появится личный Helper-код: покажите его кассиру партнёра — баллы начислятся на ваш счёт.'; authSheet('register', {why: ui.authWhy}); },
+  'code-close': () => codeClose(),
+  scoupon: el => { const s = loySrv(), c = s && (s.coupons || []).find(x => x.code === el.dataset.code); if (c) couponFull(c); },
+  offer: el => offerSheet(el.dataset.id),
+  'offer-route': el => { const o = offerById(el.dataset.id); if (!o) return; const l = (o.locations || []).find(x => String(x.id) === el.dataset.lid) || (o.locations || [])[+el.dataset.i || 0]; if (l) openRoute(l); },
+  'offer-coupon': el => offerCoupon(el.dataset.id),
+  'geo-intro': () => geoIntroSheet(),
+  'banner-open': el => { const b = $('#obanner'); if (b) b.remove(); if (ui.onb) return; offerSheet(el.dataset.id); },
+  'banner-close': () => { const b = $('#obanner'); if (b) b.remove(); },
+  'partner-cabinet': () => partnerCabinet()
 });
 
 /* ================= events ================= */
@@ -3784,7 +4426,7 @@ function onChange(e) {
   if (id === 'sae-w' || id === 'sae-h') { ui.saeW = val('sae-w'); ui.saeH = val('sae-h'); setHTML($('#sae-out'), saeOut()); return; }
   if (id === 'set-currency') { activeCar().currency = t.value; save(); render(); toast('Валюта: ' + t.value); return; }
   if (id === 'set-remind') { S.settings.remindDays = +t.value; save(); return; }
-  if (id === 'set-geo') { if (t.checked) { S.geo.consent = true; S.geo.consentAt = todayISO(); } else { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; } save(); render(); toast(t.checked ? 'Предложения рядом включены' : 'Предложения рядом выключены'); return; }
+  if (id === 'set-geo') { if (t.checked) { S.geo.consent = true; S.geo.consentAt = todayISO(); } else { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; } save(); geoPush(); render(); toast(t.checked ? 'Предложения рядом включены' : 'Предложения рядом выключены'); return; }
   if (id === 'set-tow') { S.settings.tow = t.value.trim(); save(); toast('Номер эвакуатора сохранён'); return; }
   if (t.dataset && t.dataset.int) {
     const o = S.settings.intervals[t.dataset.int] = S.settings.intervals[t.dataset.int] || {};
@@ -3800,6 +4442,7 @@ function onTip(e) {
 }
 function onKey(e) {
   const w = $('#sheet');
+  if (e.key === 'Escape' && codeClose()) return;
   if (e.key === 'Escape' && !w.hidden) { closeSheet(); return; }
   if (e.key === 'Tab' && !w.hidden) {
     const f = $$('button:not([disabled]),a[href],input:not([type=hidden]),select,textarea,[tabindex="0"]', w).filter(x => x.offsetParent !== null);
@@ -3859,8 +4502,8 @@ function nativeInit() {
   if (!CAP) return;
   try { document.documentElement.classList.add('native', IS_IOS ? 'ios' : 'android'); } catch (e) {}
   try { NP.SplashScreen && NP.SplashScreen.hide(); } catch (e) {}
-  try { NP.LocalNotifications && NP.LocalNotifications.addListener('localNotificationActionPerformed', ev => { const t = ev && ev.notification && ev.notification.extra && ev.notification.extra.tab; if (t) setTab(t); }); } catch (e) {}
-  try { NP.App && NP.App.addListener('appStateChange', st => { if (st && st.isActive) { if (!ui.onb) render(); nativeSchedule(); storeSync(); onResume(); } }); } catch (e) {}
+  try { NP.LocalNotifications && NP.LocalNotifications.addListener('localNotificationActionPerformed', ev => { const x = (ev && ev.notification && ev.notification.extra) || {}; if (x.offer && !ui.onb) { setTab('home'); setTimeout(() => offerSheet(x.offer), 300); return; } if (x.tab) setTab(x.tab); }); } catch (e) {}
+  try { NP.App && NP.App.addListener('appStateChange', st => { if (st && st.isActive) { if (!ui.onb) render(); nativeSchedule(); storeSync(); onResume(); offResume(); } }); } catch (e) {}
   if (IS_AND) { try { NP.App && NP.App.addListener('backButton', onBack); } catch (e) {} }
   if (STORE) { try { STORE.addListener('entitlementsChanged', d => storeApply(d && d.entitlements)); } catch (e) {} storeSync(); storeLoad(); }
   /* внешние ссылки https — в системном браузере (Safari / Chrome) */
@@ -3878,7 +4521,7 @@ function init() {
   const fresh = !store.get(KEY);
   S = load();
   if (!fresh) S.flags.acctIntro = true; /* у тех, кто уже пользовался приложением, приветствие аккаунта не показываем */
-  cfgLoad().then(() => { plansLoad(); payReturn(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); } });
+  cfgLoad().then(() => { plansLoad(); payReturn(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); } offResume(); });
   const hs = (location.hash || '').replace('#', '');
   if (TABS.some(t => t[0] === hs)) ui.tab = hs;
   else if (hs === 'guide' || hs === 'nearby' || hs === 'biz') { ui.tab = 'more'; ui.stacks.more = [{p: hs}]; }

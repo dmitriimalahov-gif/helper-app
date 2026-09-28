@@ -9,3 +9,7 @@ Telegram-бот: https://t.me/HelperAutoMD_bot
 Аккаунт Helper — по желанию: без входа данные хранятся только на устройстве; с аккаунтом журнал синхронизируется через API Helper (адрес — в `config.json`, поле `api`; приложения iOS/Android сначала читают `config.json` с этой страницы GitHub Pages). Premium на сайте — подписка Stripe (1–4 авто), в Telegram — звёзды в боте, в приложениях — App Store / Google Play.
 
 © SC Dirax Plus SRL, группа компаний «Dirax».
+
+Партнёры Helper: на главной — «Мой Helper-код» (QR `HELPER:<id>` и штрихкод Code128 для кассира, рисуются без сети) и «Акции партнёров» (`GET /v1/offers`, фильтр аудитории и расстояние считаются на телефоне, координаты на сервер не отправляются). Кабинет партнёра — `partner/`.
+
+Сканер техпаспорта на сайте и в Telegram: фото обрабатывается прямо в браузере (Tesseract.js загружается с jsDelivr только при первом сканировании), парсер — `scan/parser.js` (копия `07_MOBILE/scan/parser.js`, обновляется `07_MOBILE/scripts/sync-web.sh`).
