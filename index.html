@@ -7,6 +7,8 @@
 <meta name="description" content="Helper — сервисная книжка автомобиля: напоминания о ТО по пробегу, журнал работ, расходы и справочник.">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1314" media="(prefers-color-scheme: dark)">
+<script>/* тема до первой отрисовки (без вспышки): helper.theme.v1 = auto | light | dark — выбор на этом устройстве */
+(function(){try{var t=localStorage.getItem('helper.theme.v1');if(!t){var m=/"theme":"(light|dark)"/.exec(localStorage.getItem('helper.app.v1')||'');t=m?m[1]:'auto'}if(t!=='light'&&t!=='dark')return;document.documentElement.setAttribute('data-theme',t);var c=t==='dark'?'#0E1314':'#FFFFFF',ms=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<ms.length;i++)ms[i].setAttribute('content',c)}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -390,7 +392,17 @@ textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:
 .welcome{isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding-top:24px;position:relative}
 .welcome .big-mark{width:120px;height:120px}
 /* переключатель языка на экранах приветствия: «RU · RO · EN» */
-.onb-lang{display:flex;justify-content:flex-end;position:relative;z-index:2;margin:0 0 -8px}
+.onb-lang{display:flex;justify-content:flex-end;align-items:center;gap:8px;position:relative;z-index:2;margin:0 0 -8px}
+/* тема: кнопка рядом с языком + маленькое меню (Системная / Светлая / Тёмная) */
+.thm-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--ink);background:var(--bar-bg);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.thm-btn:hover{background:var(--teal-3)}
+.thm-btn[aria-expanded="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.thm-menu{position:fixed;z-index:200;min-width:196px;padding:6px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px;animation:thmIn .14s ease}
+.thm-menu button{display:flex;align-items:center;gap:10px;width:100%;height:42px;padding:0 12px;border-radius:11px;font-size:14px;font-weight:600;color:var(--ink);text-align:left}
+.thm-menu button:hover,.thm-menu button:focus-visible{background:var(--surface);outline:none}
+.thm-menu button[aria-checked="true"]{color:var(--teal-ink)}
+.thm-menu .ck{margin-left:auto}
+@keyframes thmIn{from{opacity:0;transform:translateY(-4px)}}
 .lang-pick{display:inline-flex;align-items:center;gap:1px;padding:3px;border-radius:999px;background:var(--bar-bg);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .lang-pick .lp{min-width:40px;height:32px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-2)}
 .lang-pick .lp[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
@@ -2248,7 +2260,7 @@ function pageSettings() {
   let h = topbar(t('settings.title'), {back: true});
   h += '<div class="card section" style="margin-top:12px"><div class="row between"><div><p class="eyebrow">' + t('settings.sub') + '</p><p style="margin:6px 0 0;font-weight:600">' + (isPrem() ? 'Helper Premium' : t('c.free')) + '</p><p class="small muted num" style="margin:2px 0 0">' + esc(premStatusText()) + '</p></div>' + markSVG(40) + '</div><div class="btn-row" style="margin-top:12px"><button class="btn sm ' + (isPrem() ? 'soft' : '') + '" data-act="paywall">' + (isPrem() ? t('settings.manage') : t('c.tryPremium')) + '</button>' + (isPrem() ? (STORE && locPrem() && isStoreSrc(S.premium.source) ? '<button class="btn sm line" data-act="iap-manage">' + t('settings.manageSub') + '</button>' : !CAP && !logged() && locPrem() && !isStoreSrc(S.premium.source) ? '<button class="btn sm line" data-act="prem-off">' + t('settings.premOff') + '</button>' : '') : '') + '</div></div>';
   h += '<div class="card section form"><div class="field"><label for="set-currency">' + t('settings.currencyFor', {car: esc(carName(car))}) + '</label><select id="set-currency" class="input">' + CUR.map(c => '<option' + (c === car.currency ? ' selected' : '') + '>' + c + '</option>').join('') + '</select><span class="hint">' + t('settings.currencyHint') + '</span></div>' +
-    '<div class="field"><span class="flabel">' + t('settings.theme') + '</span><div class="seg" role="group" aria-label="' + esc(t('settings.theme')) + '">' + [['auto', t('settings.themeAuto')], ['light', t('settings.themeLight')], ['dark', t('settings.themeDark')]].map(tt => '<button data-act="theme" data-v="' + tt[0] + '" aria-pressed="' + (st.theme === tt[0]) + '">' + tt[1] + '</button>').join('') + '</div></div>' +
+    '<div class="field"><span class="flabel">' + t('settings.theme') + '</span><div class="seg" role="group" aria-label="' + esc(t('settings.theme')) + '">' + [['auto', t('settings.themeAuto')], ['light', t('settings.themeLight')], ['dark', t('settings.themeDark')]].map(tt => '<button data-act="theme" data-v="' + tt[0] + '" aria-pressed="' + (themeGet() === tt[0]) + '">' + tt[1] + '</button>').join('') + '</div></div>' +
     '<div class="field" id="set-lang"><span class="flabel">' + t('lang.label') + '</span>' + langPicker(false) + '<span class="hint">' + t('lang.hint') + '</span></div>' +
     '<div class="field"><label for="set-remind">' + t('settings.remind') + '</label><select id="set-remind" class="input">' + [7, 15, 30].map(d => '<option value="' + d + '"' + (d === st.remindDays ? ' selected' : '') + '>' + t('settings.every', {days: fDays(d)}) + '</option>').join('') + '</select></div>' +
     '<div class="field"><label for="set-tow">' + t('settings.tow') + '</label><input id="set-tow" class="input" type="tel" inputmode="tel" placeholder="' + esc(t('settings.towPh')) + '" value="' + esc(st.tow) + '"></div></div>';
@@ -2276,7 +2288,7 @@ function renderOnb() {
   let h = '<div class="onb">';
   if (st === 0) {
     h += '<div class="corner-ring" style="width:320px;height:320px;right:-170px;top:-120px"></div><div class="corner-ring" style="width:180px;height:180px;right:-70px;top:-40px;border-color:var(--teal)"></div>';
-    h += '<div class="onb-lang">' + langPicker(true) + '</div>';
+    h += '<div class="onb-lang">' + thmBtn() + langPicker(true) + '</div>';
     h += '<div class="welcome">' + markSVG(96) + logoImg('big') + '<h1>' + t('onb.slogan') + '</h1><ul>' +
       '<li><span class="ic-circle">' + ic('gauge', 'sm') + '</span><span>' + t('onb.b1') + '</span></li>' +
       '<li><span class="ic-circle">' + ic('journal', 'sm') + '</span><span>' + t('onb.b2') + '</span></li>' +
@@ -2789,8 +2801,8 @@ function cfgLoad() {
     await cachedP;
     let best = net.verified;
     const take = async j => { if (j && await cfgAccept(j) && (!best || +j.iat >= +best.iat)) best = j; };
-    if (CAP) await take(await cfgFetch(CFG_REMOTE, 4000));
-    await take(await cfgFetch('./config.json', 6000));
+    if (CAP) await take(await cfgFetch(cfgUrl(CFG_REMOTE), 4000));
+    await take(await cfgFetch(CAP ? './config.json' : cfgUrl('./config.json'), 6000));
     if (best && best !== net.verified) { net.verified = {api: best.api, v: best.v, iat: +best.iat, sig: best.sig}; jset(K_CFG, Object.assign({at: Date.now()}, net.verified)); }
     if (best) net.api = cfgApi(best);
     return net.api;
@@ -2799,6 +2811,33 @@ function cfgLoad() {
   net.ready = (async () => { await cachedP; if (net.api) { fetchP.catch(() => {}); return net.api; } return fetchP; })();
   net.fetched = fetchP;
   return net.ready;
+}
+/* config.json — мимо всех кэшей: браузера (no-store), service worker (не перехватывает) и CDN GitHub Pages (параметр ?t=) */
+const cfgUrl = u => u + (u.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now();
+/* Адрес туннеля API сменился, а в кэше старый подписанный config: запрос не дошёл до сервера, хотя интернет есть →
+   дождаться стартовой загрузки config.json, при необходимости скачать его заново (подпись проверяется как обычно)
+   и, если адрес другой, повторить запрос один раз. Одна загрузка одновременно и не чаще раза в 30 с. */
+let cfgReP = null, cfgReAt = 0;
+async function cfgStale(base) {
+  if (navigator.onLine === false || !CFG_SUBTLE || devApiNorm(store.get(K_DEV))) return false;
+  try { if (net.fetched) await net.fetched; } catch (e) {}
+  if (net.api && net.api !== base) return true;
+  if (!cfgReP) {
+    if (Date.now() - cfgReAt < 30000) return false;
+    cfgReAt = Date.now();
+    cfgReP = (async () => {
+      let best = null;
+      const take = async j => { if (j && await cfgAccept(j) && (!best || +j.iat > +best.iat)) best = j; };
+      if (CAP) await take(await cfgFetch(cfgUrl(CFG_REMOTE), 4000));
+      else await take(await cfgFetch(cfgUrl('./config.json'), 6000));
+      if (!best || (net.verified && +best.iat < +net.verified.iat) || cfgApi(best) === net.api) return false;
+      net.verified = {api: best.api, v: best.v, iat: +best.iat, sig: best.sig}; jset(K_CFG, Object.assign({at: Date.now()}, net.verified));
+      net.api = cfgApi(best);
+      return true;
+    })().catch(() => false).finally(() => { cfgReP = null; });
+  }
+  await cfgReP;
+  return !!net.api && net.api !== base;
 }
 function devApiPrompt() {
   const cur = store.get(K_DEV) || '';
@@ -2830,8 +2869,13 @@ async function api(path, o) {
   if (o.body !== undefined) h['Content-Type'] = 'application/json';
   if (auth) h.Authorization = 'Bearer ' + tok;
   let r;
-  try { r = await fetchT(net.api + path, {method: o.method || (o.body !== undefined ? 'POST' : 'GET'), headers: h, body: o.body !== undefined ? JSON.stringify(o.body) : undefined, cache: 'no-store'}, o.timeout || 20000); }
-  catch (e) { throw apiErr(0, 'offline', offlineMsg()); }
+  const base = net.api;
+  try { r = await fetchT(base + path, {method: o.method || (o.body !== undefined ? 'POST' : 'GET'), headers: h, body: o.body !== undefined ? JSON.stringify(o.body) : undefined, cache: 'no-store'}, o.timeout || 20000); }
+  catch (e) {
+    /* сервер не ответил, а интернет есть — возможно, сменился адрес туннеля: свежий config.json и один повтор */
+    if (!o.cfgRetried && await cfgStale(base)) return api(path, Object.assign({}, o, {cfgRetried: true}));
+    throw apiErr(0, 'offline', offlineMsg());
+  }
   if (r.status === 401 && auth && !o.retried) {
     const ok = A.access !== tok ? logged() : await apiRefresh();
     if (ok && logged()) return api(path, Object.assign({}, o, {retried: true}));
@@ -3288,7 +3332,7 @@ function payBlock() {
 const TABS = [['home', '', 'home'], ['car', '', 'car'], ['journal', '', 'journal'], ['bonus', '', 'loyal'], ['more', '', 'more']];
 onLang(() => TABS.forEach(x => { x[1] = t('tab.' + x[0]); }));
 const emptyStacks = () => ({home: [], car: [], journal: [], bonus: [], more: []});
-const ui = {tab: 'home', stacks: emptyStacks(), jf: 'all', period: 'year', kbq: '', onb: null, plan: 'year', saeW: '5W', saeH: '30', allFuel: false, pf: 'all', session: {}, themeSet: false, geo: {status: null, pos: null}, allHist: false, jseg: 'works'};
+const ui = {tab: 'home', stacks: emptyStacks(), jf: 'all', period: 'year', kbq: '', onb: null, plan: 'year', saeW: '5W', saeH: '30', allFuel: false, pf: 'all', session: {}, geo: {status: null, pos: null}, allHist: false, jseg: 'works'};
 const curPage = () => { const s = ui.stacks[ui.tab]; return s.length ? s[s.length - 1] : {p: ui.tab}; };
 const PAGES = {home: pageHome, car: pageCar, journal: pageJournal, bonus: pageGame, more: pageMore, guide: pageGuide, nearby: pageNearby, biz: pageBiz, perks: pagePerks,
   sys: p => pageSys(p.id), kb: p => pageKb(p.id), art: p => pageArt(p.id), cars: pageCars, partners: pagePartners,
@@ -3297,9 +3341,7 @@ let lastKey = '';
 /* All markup below is built from app constants; every user-entered value passes through esc(). */
 function setHTML(el, html) { el.innerHTML = html; }
 function applyTheme() {
-  const tt = S.settings.theme, r = document.documentElement;
-  if (tt === 'light' || tt === 'dark') { r.setAttribute('data-theme', tt); ui.themeSet = true; }
-  else if (ui.themeSet) { r.removeAttribute('data-theme'); ui.themeSet = false; }
+  themeApply();
 }
 function render(keep) {
   applyTheme();
@@ -4000,7 +4042,7 @@ const TERMS_APP_URL = 'https://dmitriimalahov-gif.github.io/helper-app/legal/ter
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 function acctWelcome() {
   let h = '<div class="onb"><div class="corner-ring" style="width:320px;height:320px;right:-170px;top:-120px"></div><div class="corner-ring" style="width:180px;height:180px;right:-70px;top:-40px;border-color:var(--teal)"></div>';
-  h += '<div class="onb-lang">' + langPicker(true) + '</div>';
+  h += '<div class="onb-lang">' + thmBtn() + langPicker(true) + '</div>';
   h += '<div class="welcome">' + markSVG(96) + logoImg('big') + '<h1>' + t('account.slogan') + '</h1><ul>' +
     '<li><span class="ic-circle">' + ic('gauge', 'sm') + '</span><span>' + t('account.w1') + '</span></li>' +
     '<li><span class="ic-circle">' + ic('journal', 'sm') + '</span><span>' + t('account.w2') + '</span></li>' +
@@ -6188,7 +6230,9 @@ const ACT = {
   'ref-add-car': () => { closeSheet(); if (!S.cars.length) return startOnb('first'); ACT['car-add'](); },
   'prem-off': () => confirmSheet({title: t('act.premOffTitle'), text: t('act.premOffText'), ok: t('act.premOffOk'), onOk: () => { S.premium = {plan: null, until: null, since: null, trial: false, code: null}; save(); render(); toast(t('act.premOff')); }}),
   upsell: el => upsell(el.dataset.k),
-  theme: el => { S.settings.theme = el.dataset.v; save(); render(); },
+  theme: el => { const v = el.dataset.v; themeSet(v); const b = $('[data-act="theme"][data-v="' + v + '"]'); if (b) try { b.focus({preventScroll: true}); } catch (e) {} },
+  'thm-menu': el => thmMenu(el),
+  'thm-set': el => { thmClose(); themeSet(el.dataset.v); const b = $('.thm-btn'); if (b) try { b.focus({preventScroll: true}); } catch (e) {} },
   'int-reset': () => { S.settings.intervals = {}; save(); render(); toast(t('act.intReset')); },
   'data-reset': () => confirmSheet({title: t('act.resetTitle'), text: t('act.resetText') + (logged() ? ' ' + t('act.resetAcct', {email: esc(acctEmail())}) : ''), ok: t('act.resetOk'), onOk: async () => { if (logged()) await acctLogout(false); store.del(KEY); S = baseState(); save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
   'onb-next': () => { if (acctFirst()) return startOnb('first', 'acct'); ui.onb.step = 1; render(false); },
@@ -6379,6 +6423,82 @@ function shellI18n() {
   $('#fab').setAttribute('aria-label', t('c.add'));
   try { const m = document.querySelector('meta[name="description"]'); if (m) m.setAttribute('content', t('shell.meta')); } catch (e) {}
 }
+/* ===================== Тема: Системная / Светлая / Тёмная (на этом устройстве) =====================
+   Выбор — в localStorage helper.theme.v1 (не в настройках аккаунта: на телефоне и ноутбуке может быть разная тема); до первой
+   отрисовки его применяет скрипт в <head>. «Системная» — prefers-color-scheme. Цвета — только токены CSS (:root — светлая,
+   :root[data-theme="dark"] и @media dark для :root:not([data-theme="light"]) — тёмная). QR-коды всегда тёмные на белом. */
+const THEME_KEY = 'helper.theme.v1', THEMES = ['auto', 'light', 'dark'], THEME_BG = {light: '#FFFFFF', dark: '#0E1314'};
+const THM_T = {auto: 'settings.themeAuto', light: 'settings.themeLight', dark: 'settings.themeDark'};
+const THM_IC = {
+  auto: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></svg>',
+  light: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',
+  dark: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg>'
+};
+const THM_CK = '<svg class="ico sm ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+let themeMem = null, themeSig = '', thmOpen = null;
+const themeGet = () => { let v = themeMem; try { v = localStorage.getItem(THEME_KEY) || v; } catch (e) {} return THEMES.indexOf(v) >= 0 ? v : 'auto'; };
+const osDark = () => !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+const themeDark = () => { const v = themeGet(); return v === 'dark' || (v === 'auto' && osDark()); };
+/* data-theme на <html>, цвет строки состояния браузера (theme-color) и нативного StatusBar (Capacitor, если плагин есть) */
+function themeApply() {
+  const v = themeGet(), dark = themeDark(), r = document.documentElement, sig = v + ':' + dark;
+  if (v === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', v);
+  if (sig === themeSig) return;
+  themeSig = sig;
+  $$('meta[name="theme-color"]').forEach(m => { const md = m.getAttribute('media') || ''; m.setAttribute('content', v === 'auto' ? (/dark/.test(md) ? THEME_BG.dark : THEME_BG.light) : THEME_BG[v]); });
+  try {
+    const SB = CAP && NP.StatusBar;
+    if (SB && SB.setStyle) {
+      Promise.resolve(SB.setStyle({style: dark ? 'DARK' : 'LIGHT'})).catch(() => {});
+      if (IS_AND && SB.setBackgroundColor) Promise.resolve(SB.setBackgroundColor({color: dark ? THEME_BG.dark : THEME_BG.light})).catch(() => {});
+    }
+  } catch (e) {}
+}
+/* кнопки Google рисует GIS в своих iframe — после смены темы нарисовать заново */
+function gRedraw() { const els = $$('[data-gbtn]'); if (!els.length) return; els.forEach(el => { el.innerHTML = ''; }); gMount(); }
+function themeSet(v) {
+  if (THEMES.indexOf(v) < 0) return;
+  themeMem = v;
+  try { localStorage.setItem(THEME_KEY, v); } catch (e) {}
+  themeApply();
+  if (S) render();
+  gRedraw();
+}
+/* кнопка темы рядом с языком: значок текущего режима, по нажатию — меню из трёх пунктов */
+function thmBtn() {
+  const v = themeGet(), lb = t('settings.theme') + ': ' + t(THM_T[v]);
+  return '<button type="button" class="thm-btn" data-act="thm-menu" aria-haspopup="menu" aria-expanded="false" aria-label="' + esc(lb) + '" title="' + esc(lb) + '">' + THM_IC[v] + '</button>';
+}
+function thmMenu(btn) {
+  if (thmOpen) { const same = thmOpen.btn === btn; thmClose(); if (same) return; }
+  const cur = themeGet(), m = document.createElement('div');
+  m.className = 'thm-menu'; m.setAttribute('role', 'menu'); m.setAttribute('aria-label', t('settings.theme'));
+  setHTML(m, THEMES.map(v => '<button type="button" role="menuitemradio" tabindex="-1" aria-checked="' + (v === cur) + '" data-act="thm-set" data-v="' + v + '">' + THM_IC[v] + '<span>' + t(THM_T[v]) + '</span>' + (v === cur ? THM_CK : '') + '</button>').join(''));
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect(), w = m.offsetWidth, h = m.offsetHeight;
+  m.style.top = (r.bottom + 6 + h <= window.innerHeight - 8 ? r.bottom + 6 : Math.max(8, r.top - 6 - h)) + 'px';
+  m.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.right - w)) + 'px';
+  btn.setAttribute('aria-expanded', 'true');
+  const items = $$('[role="menuitemradio"]', m), at = i => { try { items[(i + items.length) % items.length].focus({preventScroll: true}); } catch (e) {} };
+  m.addEventListener('keydown', e => {
+    const i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); at(i + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); at(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); at(0); }
+    else if (e.key === 'End') { e.preventDefault(); at(items.length - 1); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); thmClose(true); }
+    else if (e.key === 'Tab') thmClose();
+  });
+  const out = e => { if (!m.contains(e.target) && !btn.contains(e.target)) thmClose(); }, off = () => thmClose();
+  document.addEventListener('pointerdown', out, true); window.addEventListener('resize', off); window.addEventListener('scroll', off, true);
+  thmOpen = {m, btn, undo: () => { document.removeEventListener('pointerdown', out, true); window.removeEventListener('resize', off); window.removeEventListener('scroll', off, true); }};
+  at(Math.max(0, THEMES.indexOf(cur)));
+}
+function thmClose(refocus) {
+  if (!thmOpen) return;
+  const o = thmOpen; thmOpen = null; o.undo(); o.m.remove();
+  if (document.contains(o.btn)) { o.btn.setAttribute('aria-expanded', 'false'); if (refocus) try { o.btn.focus({preventScroll: true}); } catch (e) {} }
+}
 /* Переключатель языка: compact — «RU · RO · EN» (экраны приветствия), иначе — названия языков (Ещё → Настройки → Язык) */
 function langPicker(compact) {
   const b = (l, cls, txt) => '<button type="button" class="' + cls + '" data-act="lang" data-v="' + l + '" lang="' + l + '" aria-pressed="' + (l === LANG) + '"' + (compact ? ' aria-label="' + LANG_NAME[l] + '"' : '') + '>' + txt + '</button>';
@@ -6417,6 +6537,10 @@ function langFromAccount(u) {
 function init() {
   const fresh = !store.get(KEY);
   S = load();
+  /* тема раньше хранилась в настройках (они синхронизируются) — один раз переносим на устройство */
+  try { if (!localStorage.getItem(THEME_KEY)) localStorage.setItem(THEME_KEY, S.settings.theme === 'light' || S.settings.theme === 'dark' ? S.settings.theme : 'auto'); } catch (e) {}
+  themeApply();
+  try { const mq = window.matchMedia && matchMedia('(prefers-color-scheme: dark)'), f = () => { if (themeGet() !== 'auto') return; themeApply(); gRedraw(); }; if (mq) { if (mq.addEventListener) mq.addEventListener('change', f); else if (mq.addListener) mq.addListener(f); } } catch (e) {}
   if (!fresh) S.flags.acctIntro = true; /* у тех, кто уже пользовался приложением, приветствие аккаунта не показываем */
   inviteCapture(); /* ?ref=HLP-XXXXXX — приглашение друга (до первого рендера) */
   cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); gCelDiff(); } offResume(); });

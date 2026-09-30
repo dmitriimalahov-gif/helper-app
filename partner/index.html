@@ -9,6 +9,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1314" media="(prefers-color-scheme: dark)">
+<script>/* тема до первой отрисовки (без вспышки): helper.theme.v1 = auto | light | dark — общий выбор устройства с приложением водителя */
+(function(){try{var t=localStorage.getItem('helper.theme.v1');if(t!=='light'&&t!=='dark')return;document.documentElement.setAttribute('data-theme',t);var c=t==='dark'?'#0E1314':'#FFFFFF',ms=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<ms.length;i++)ms[i].setAttribute('content',c)}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -54,6 +56,22 @@
     --logo-light:none; --logo-dark:block;
     --tile-filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.88) saturate(.6);
   }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --teal:#96D5D2; --teal-2:#24413F; --teal-3:#142726; --teal-ink:#9ADAD6;
+  --ink:#EEF3F2; --ink-2:#AAB7B6; --ink-3:#7A8A89;
+  --bg:#0E1314; --bg-outer:#070A0B; --surface:#161F20; --card:#172122; --line:#243234; --line-2:#30413F;
+  --bar-bg:rgba(14,19,20,.9);
+  --on-teal:#0E1314; --on-ink:#0E1314;
+  --ok:#4CC27F; --ok-bg:#15301F; --ok-t:#79DBA1;
+  --soon:#E7A93A; --soon-bg:#33270F; --soon-t:#F2C063;
+  --bad:#EF6A60; --bad-bg:#3A1A18; --bad-t:#FF9A90;
+  --c1:#1aa39a; --c2:#d9683a; --c3:#6f64e0; --c4:#d65590;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  --shadow-up:0 -8px 30px rgba(0,0,0,.45);
+  --logo-light:none; --logo-dark:block;
+  --tile-filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.88) saturate(.6);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
@@ -565,11 +583,22 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .lsw button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .lsw i{width:3px;height:3px;border-radius:50%;background:var(--ink-3);opacity:.7;flex:none}
 .lsw.sm button{height:26px;min-width:27px;padding:0 4px;font-size:10.5px}
-.mtop .lsw{margin-left:auto}
-.mtop .lsw+.co-btn{margin-left:0}
+.lsw-box{display:inline-flex;align-items:center;gap:6px;flex:none}
+.thm-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--ink-2);background:var(--surface)}
+.thm-btn:hover{color:var(--ink)}
+.thm-btn[aria-expanded="true"]{background:var(--ink);color:var(--on-ink)}
+.lsw-box.sm .thm-btn{width:32px;height:32px}
+.thm-menu{position:fixed;z-index:200;min-width:196px;padding:6px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px;animation:thmIn .14s ease}
+.thm-menu button{display:flex;align-items:center;gap:10px;width:100%;height:42px;padding:0 12px;border-radius:11px;font-size:14px;font-weight:600;color:var(--ink);text-align:left}
+.thm-menu button:hover,.thm-menu button:focus-visible{background:var(--surface);outline:none}
+.thm-menu button[aria-checked="true"]{color:var(--teal-ink)}
+.thm-menu .ck{margin-left:auto}
+@keyframes thmIn{from{opacity:0;transform:translateY(-4px)}}
+.mtop .lsw-box{margin-left:auto}
+.mtop .lsw-box+.co-btn{margin-left:0}
 .lang-float{display:none}
 @media (min-width:960px){.lang-float{display:block;position:absolute;top:16px;right:48px;z-index:6}}
-.item>.lsw{margin-left:auto}
+.item>.lsw-box{margin-left:auto}
 @media (max-width:480px){.land-top .logo-sub,.wiz-head .logo-sub{display:none}}
 
 /* ---------- выпадающий список с поиском (страна, город, код телефона) ---------- */
@@ -825,7 +854,71 @@ function srvT(server, local) {
   return local || (server && !CYR.test(server) ? server : '') || server;
 }
 const srvMsg = (m, fb) => m && (LANG === 'ru' || !CYR.test(m)) ? m : fb;
-const langSw = cls => '<div class="lsw' + (cls ? ' ' + cls : '') + '" role="group" aria-label="' + esc(tx('lang.aria')) + '">' + LANGS.map((l, i) => (i ? '<i aria-hidden="true"></i>' : '') + '<button type="button" data-act="lang" data-l="' + l + '" lang="' + l + '" title="' + LNAME[l] + '" aria-label="' + LNAME[l] + '" aria-pressed="' + (l === LANG) + '">' + l.toUpperCase() + '</button>').join('') + '</div>';
+/* ===================== Тема: Системная / Светлая / Тёмная (на этом устройстве, helper.theme.v1 — как в приложении водителя) =====================
+   До первой отрисовки её применяет скрипт в <head>; цвета — токены CSS (:root, :root[data-theme="dark"], @media dark). */
+const THEME_KEY = 'helper.theme.v1', THEMES = ['auto', 'light', 'dark'], THEME_BG = {light: '#FFFFFF', dark: '#0E1314'};
+const THM_IC = {
+  auto: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></svg>',
+  light: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',
+  dark: '<svg class="ico sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg>'
+};
+const THM_CK = '<svg class="ico sm ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+let themeMem = null, themeSig = '', thmOpen = null, THEME_STALE = false;
+const themeGet = () => { const v = store.get(THEME_KEY) || themeMem; return THEMES.indexOf(v) >= 0 ? v : 'auto'; };
+const themeDark = () => { const v = themeGet(); return v === 'dark' || (v === 'auto' && !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)); };
+function themeApply() {
+  const v = themeGet(), r = document.documentElement, sig = v + ':' + themeDark();
+  if (v === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', v);
+  if (sig === themeSig) return;
+  themeSig = sig;
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => { const md = m.getAttribute('media') || ''; m.setAttribute('content', v === 'auto' ? (/dark/.test(md) ? THEME_BG.dark : THEME_BG.light) : THEME_BG[v]); });
+}
+/* после смены темы: графики и карта берут цвета из токенов при отрисовке — перерисовать страницу (открыт лист — после его закрытия);
+   кнопку Google рисует GIS — нарисовать заново */
+function themeSet(v) {
+  if (THEMES.indexOf(v) < 0) return;
+  themeMem = v; store.set(THEME_KEY, v);
+  themeApply();
+  const gb = $('#g-box'); if (gb && !gb.hidden) gLogin(gb);
+  if (sheetOpen() || CB_OPEN) { THEME_STALE = true; $$('.thm-btn').forEach(b => { b.outerHTML = thmBtn(); }); } else render();
+}
+function thmBtn() {
+  const v = themeGet(), lb = tx('thm.label') + ': ' + tx('thm.' + v);
+  return '<button type="button" class="thm-btn" data-act="thm-menu" aria-haspopup="menu" aria-expanded="false" aria-label="' + esc(lb) + '" title="' + esc(lb) + '">' + THM_IC[v] + '</button>';
+}
+function thmMenu(btn) {
+  if (thmOpen) { const same = thmOpen.btn === btn; thmClose(); if (same) return; }
+  const cur = themeGet(), m = document.createElement('div');
+  m.className = 'thm-menu'; m.setAttribute('role', 'menu'); m.setAttribute('aria-label', tx('thm.label'));
+  m.innerHTML = THEMES.map(v => '<button type="button" role="menuitemradio" tabindex="-1" aria-checked="' + (v === cur) + '" data-act="thm-set" data-v="' + v + '">' + THM_IC[v] + '<span>' + esc(tx('thm.' + v)) + '</span>' + (v === cur ? THM_CK : '') + '</button>').join('');
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect(), w = m.offsetWidth, h = m.offsetHeight;
+  m.style.top = (r.bottom + 6 + h <= window.innerHeight - 8 ? r.bottom + 6 : Math.max(8, r.top - 6 - h)) + 'px';
+  m.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.right - w)) + 'px';
+  btn.setAttribute('aria-expanded', 'true');
+  const items = Array.from(m.querySelectorAll('[role="menuitemradio"]')), at = i => { try { items[(i + items.length) % items.length].focus({preventScroll: true}); } catch (e) {} };
+  m.addEventListener('keydown', e => {
+    const i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); at(i + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); at(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); at(0); }
+    else if (e.key === 'End') { e.preventDefault(); at(items.length - 1); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); thmClose(true); }
+    else if (e.key === 'Tab') thmClose();
+  });
+  const out = e => { if (!m.contains(e.target) && !btn.contains(e.target)) thmClose(); }, off = () => thmClose();
+  document.addEventListener('pointerdown', out, true); window.addEventListener('resize', off); window.addEventListener('scroll', off, true);
+  thmOpen = {m, btn, undo: () => { document.removeEventListener('pointerdown', out, true); window.removeEventListener('resize', off); window.removeEventListener('scroll', off, true); }};
+  at(Math.max(0, THEMES.indexOf(cur)));
+}
+function thmClose(refocus) {
+  if (!thmOpen) return;
+  const o = thmOpen; thmOpen = null; o.undo(); o.m.remove();
+  if (document.contains(o.btn)) { o.btn.setAttribute('aria-expanded', 'false'); if (refocus) try { o.btn.focus({preventScroll: true}); } catch (e) {} }
+}
+/* язык — рядом кнопка темы */
+const langSw = (cls, noThm) => '<span class="lsw-box' + (cls ? ' ' + cls : '') + '">' + (noThm ? '' : thmBtn()) + langOnly(cls) + '</span>';
+const langOnly = cls => '<div class="lsw' + (cls ? ' ' + cls : '') + '" role="group" aria-label="' + esc(tx('lang.aria')) + '">' + LANGS.map((l, i) => (i ? '<i aria-hidden="true"></i>' : '') + '<button type="button" data-act="lang" data-l="' + l + '" lang="' + l + '" title="' + LNAME[l] + '" aria-label="' + LNAME[l] + '" aria-pressed="' + (l === LANG) + '">' + l.toUpperCase() + '</button>').join('') + '</div>';
 
 /* ================= formatting (Intl) ================= */
 let LOCN = 'en-GB', NF, NF2, NF1, DFC = {};
@@ -884,6 +977,11 @@ Object.assign(TX, {
   'device': ['Helper для бизнеса · браузер', 'Helper pentru business · browser', 'Helper for Business · browser'],
   'lang.aria': ['Язык', 'Limba', 'Language'],
   'lang.ui': ['Язык интерфейса', 'Limba interfeței', 'Interface language'],
+  'lang.uiTheme': ['Язык и тема', 'Limba și tema', 'Language and theme'],
+  'thm.label': ['Тема', 'Temă', 'Theme'],
+  'thm.auto': ['Системная', 'Sistem', 'System'],
+  'thm.light': ['Светлая', 'Luminoasă', 'Light'],
+  'thm.dark': ['Тёмная', 'Întunecată', 'Dark'],
   'lang.co': ['Язык компании', 'Limba companiei', 'Company language'],
   'lang.co.hint': ['На этом языке приходят письма и уведомления, пишется оригинал новых акций; это и язык кабинета по умолчанию.', 'În această limbă primiți e-mailurile și notificările și scrieți textul original al campaniilor noi; este și limba implicită a panoului.', 'Used for company e-mails and notifications and for the original text of new campaigns; it is also the default dashboard language.'],
   'ln.ru': ['русский', 'rusă', 'Russian'],
@@ -2177,6 +2275,7 @@ function closeSheet(silent) {
   if (!$('#scan')) document.body.classList.remove('lock');
   const cb = sheetOnClose; sheetOnClose = null;
   if (had && cb && !silent) { try { cb(); } catch (e) {} }
+  if (had && !silent && THEME_STALE) { THEME_STALE = false; setTimeout(render, 0); }
 }
 const sheetOpen = () => $('#sheets').children.length > 0;
 function confirmSheet(o) {
@@ -2291,12 +2390,34 @@ function apiOverrideFromURL() {
   const qs = q.toString();
   try { history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash); } catch (e) {}
 }
+/* config.json — мимо кэшей браузера (no-store) и CDN GitHub Pages (параметр ?t=) */
+const cfgUrl = u => u + (u.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now();
+/* Адрес туннеля API сменился, а config был старый (кэш CDN / localStorage): запрос не дошёл до сервера, хотя интернет есть →
+   скачать config.json заново (подпись проверяется как обычно); адрес другой — сохранить и повторить запрос один раз.
+   Одна загрузка одновременно и не чаще раза в 30 с; при адресе разработчика (?api= на localhost) — не трогаем. */
+let cfgReP = null, cfgReAt = 0;
+async function cfgStale(base) {
+  if (navigator.onLine === false || (devPage() && apiDev(store.get(K.api)))) return false;
+  if (net.api && net.api !== base) return true;
+  if (!cfgReP) {
+    if (Date.now() - cfgReAt < 30000) return false;
+    cfgReAt = Date.now();
+    cfgReP = (async () => {
+      const c = await cfgFetch(cfgUrl('../config.json'), 8000), cur = jget(K.cfg);
+      if (!c || c.api === net.api || (cur && +c.signed.iat < +cur.iat)) return false;
+      net.api = c.api; jset(K.cfg, c.signed);
+      return true;
+    })().catch(() => false).finally(() => { cfgReP = null; });
+  }
+  await cfgReP;
+  return !!net.api && net.api !== base;
+}
 function cfgLoad() {
   const dev = devPage() ? apiDev(store.get(K.api)) : '';
   net.api = dev;
   net.ready = (async () => {
     if (dev) return dev;
-    const c = await cfgFetch('../config.json', 8000);
+    const c = await cfgFetch(cfgUrl('../config.json'), 8000);
     if (c) { net.api = c.api; jset(K.cfg, c.signed); return net.api; }
     /* нет сети — последний подписанный config из кэша, после повторной проверки подписи */
     const s = jget(K.cfg);
@@ -2346,8 +2467,13 @@ async function api(path, o) {
   if (hasBody) h['Content-Type'] = 'application/json';
   if (auth) h.Authorization = 'Bearer ' + tok;
   let r;
-  try { r = await fetchT(net.api + path, {method: o.method || (hasBody ? 'POST' : 'GET'), headers: h, body: hasBody ? JSON.stringify(o.body) : undefined, cache: 'no-store'}, o.timeout || 20000); }
-  catch (e) { throw apiErr(0, 'offline', tx('err.offline')); }
+  const base = net.api;
+  try { r = await fetchT(base + path, {method: o.method || (hasBody ? 'POST' : 'GET'), headers: h, body: hasBody ? JSON.stringify(o.body) : undefined, cache: 'no-store'}, o.timeout || 20000); }
+  catch (e) {
+    /* сервер не ответил, а интернет есть — возможно, сменился адрес туннеля: свежий config.json и один повтор */
+    if (!o.cfgRetried && await cfgStale(base)) return api(path, Object.assign({}, o, {cfgRetried: true}));
+    throw apiErr(0, 'offline', tx('err.offline'));
+  }
   if (r.status === 401 && auth && !o.retried) {
     const ok = A.access !== tok ? logged() : await apiRefresh();
     if (ok && logged()) return api(path, Object.assign({}, o, {retried: true}));
@@ -2731,7 +2857,7 @@ function accountSheet() {
     '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + '</div></div></div>' +
     (others.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.others') + '</p><div class="group">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + ' · ' + esc(pstT(x.status, x.status_title)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '') +
     '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle">' + ic('user', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(acctEmail() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
-    '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('lang.ui') + '</span></span>' + langSw() + '</div>' +
+    '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
     (canManage() ? '<a class="item" href="#/settings"><span class="ic-circle">' + ic('gear', 'sm') + '</span><span class="body"><span class="t">' + tx('acct.settings') + '</span></span>' + ic('chevR', 'sm') + '</a>' : '') +
     '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t">' + tx('logout') + '</span></span></button></div>');
 }
@@ -3841,6 +3967,8 @@ FORMS.reg4 = async f => {
 
 /* ================= global actions ================= */
 ACTS['sheet-close'] = () => closeSheet();
+ACTS['thm-menu'] = el => thmMenu(el);
+ACTS['thm-set'] = el => { thmClose(); themeSet(el.dataset.v); const b = $('.thm-btn'); if (b) try { b.focus({preventScroll: true}); } catch (e) {} };
 ACTS.login = () => loginSheet();
 ACTS.forgot = () => forgotSheet(val('li-email'));
 ACTS.logout = () => logout();
@@ -5250,7 +5378,7 @@ VIEWS.settings = async (v, r, alive) => {
       errBox('sb-err') + '<button class="btn ink" type="submit">' + tx('save') + '</button></form>' +
   '</div><div class="stack" style="gap:18px">' +
     '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="ic-circle">' + ic('user', 'sm') + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctEmail()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
-      '<div class="row between wrap" style="margin-top:16px;gap:10px"><span class="small muted">' + tx('lang.ui') + '</span>' + langSw() + '</div>' +
+      '<div class="row between wrap" style="margin-top:16px;gap:10px"><span class="small muted">' + tx('lang.uiTheme') + '</span>' + langSw() + '</div>' +
       '<button class="btn line block" style="margin-top:16px" data-act="logout">' + ic('logout', 'sm') + tx('logout') + '</button></section>' +
     '<section class="card pad-lg"><h3>' + tx('set.cos') + '</h3>' + (others.length ? '<div class="group" style="margin-top:12px">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '<p class="small muted" style="margin:8px 0 0">' + tx('set.only') + '</p>') +
       '<form class="form" data-form="join-code" novalidate style="margin-top:16px">' + fld('jc-code', tx('set.join.l'), inp('jc-code', '', 'autocapitalize="off" spellcheck="false" placeholder="' + esc(tx('set.join.ph')) + '"')) + errBox('jc-err') + '<button class="btn soft" type="submit">' + tx('set.join') + '</button></form>' +
@@ -5298,7 +5426,7 @@ VIEWS.more = async (v) => {
   v.innerHTML = phead(tx('nav.more'), tx('more.h'), null) +
     '<div class="group more-list">' + items.map(n => '<a class="item" href="#/' + n.r + '"><span class="ic-circle">' + ic(n.ic, 'sm') + '</span><span class="body"><span class="t">' + navT(n.r) + '</span></span>' + ic('chevR', 'sm') + '</a>').join('') + '</div>' +
     '<div class="group more-list section">' + (st.mine.length > 1 ? '<button class="item" data-act="account"><span class="ic-circle">' + ic('building', 'sm') + '</span><span class="body"><span class="t">' + tx('more.switch') + '</span></span>' + ic('chevR', 'sm') + '</button>' : '') +
-    '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t">' + tx('lang.ui') + '</span></span>' + langSw() + '</div>' +
+    '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
     '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('logout') + '</span><span class="s">' + esc(acctEmail()) + '</span></span></button></div>';
 };
 
@@ -5473,6 +5601,8 @@ document.addEventListener('keydown', e => {
 window.addEventListener('hashchange', () => { if (specialHash()) return; render(); });
 
 { const lp = langPick(); LANG = lp[0]; LANG_SRC = lp[1]; }
+themeApply();
+try { const mq = window.matchMedia && matchMedia('(prefers-color-scheme: dark)'), f = () => { if (themeGet() !== 'auto') return; themeApply(); const gb = $('#g-box'); if (gb && !gb.hidden) gLogin(gb); if (sheetOpen() || CB_OPEN) THEME_STALE = true; else render(); }; if (mq) { if (mq.addEventListener) mq.addEventListener('change', f); else if (mq.addListener) mq.addListener(f); } } catch (e) {}
 applyLang();
 st.meta = jget(K.meta(LANG));
 st.gmeta = jget(K.gmeta(LANG));

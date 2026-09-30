@@ -1,6 +1,6 @@
 /* Helper — offline cache */
 /* Меняйте версию кэша при каждом изменении index.html или словарей i18n/*.js */
-const CACHE = 'helper-v7';
+const CACHE = 'helper-v8';
 const FONTS = 'helper-fonts-v1';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './i18n/ru.js', './i18n/ro.js', './i18n/en.js'];
 self.addEventListener('install', e => {
@@ -17,12 +17,9 @@ self.addEventListener('fetch', e => {
     /* кабинет партнёра (/partner/) — отдельное приложение: не кэшируем и не подменяем им офлайн-копию приложения */
     const root = new URL(self.registration.scope).pathname;
     if (url.pathname.startsWith(root + 'partner/') || url.pathname === root + 'partner') return;
-    /* config.json (адрес API) — всегда из сети, из кэша только без интернета */
-    if (url.pathname.endsWith('/config.json')) {
-      e.respondWith(fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./config.json', copy)); } return r; })
-        .catch(() => caches.match('./config.json')));
-      return;
-    }
+    /* config.json (адрес API, меняется вместе с туннелем) — не перехватываем и не кэшируем: только сеть.
+       Без сети приложение берёт последний проверенный config из своего localStorage */
+    if (url.pathname.endsWith('/config.json')) return;
     /* словари интерфейса (i18n/*.js) меняются вместе с index.html — из сети, из кэша только без интернета */
     if (url.pathname.startsWith(root + 'i18n/')) {
       e.respondWith(fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })
