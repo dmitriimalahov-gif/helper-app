@@ -642,7 +642,7 @@ const jget = k => { const v = store.get(k); if (!v) return null; try { return JS
 const jset = (k, v) => { if (v == null) store.del(k); else store.set(k, JSON.stringify(v)); };
 const K = {
   acct: 'helper.partner.acct.v1', pid: 'helper.partner.pid', api: 'helper.partner.api', cfg: 'helper.partner.cfg.v2' /* только подписанный config */,
-  join: 'helper.partner.join', reg: 'helper.partner.reg.v1', lang: 'helper.partner.lang',
+  join: 'helper.partner.join', reg: 'helper.partner.reg.v1', lang: 'helper.partner.lang', dref: 'helper.partner.dref.v1' /* ?ref=HLP-XXXXXX — водитель, рекомендовавший компанию */,
   meta: l => 'helper.partner.meta.v2.' + l, geoC: l => 'helper.partner.geo.countries.v1.' + l,
   loc: p => 'helper.partner.loc.' + p, todo: p => 'helper.partner.todo.' + p
 };
@@ -1082,6 +1082,7 @@ Object.assign(TX, {
   /* регистрация */
   'reg.doctitle': ['Регистрация компании', 'Înregistrarea companiei', 'Company registration'],
   'reg.s1': ['Компания', 'Compania', 'Company'],
+  'reg.driverRef': ['Вас рекомендовал водитель Helper — после подключения и первого пополнения он получит награду, а вы — клиентов из приложения.', 'V-a recomandat un șofer Helper — după conectare și prima reîncărcare el primește o recompensă, iar dvs. clienți din aplicație.', 'A Helper driver recommended you — once you join and make your first top-up they get a reward and you get customers from the app.'],
   'reg.s2': ['Контакт', 'Contact', 'Contact'],
   'reg.s3': ['Точка на карте', 'Locația pe hartă', 'Location on the map'],
   'reg.s4': ['Бонусы', 'Puncte bonus', 'Bonuses'],
@@ -1890,6 +1891,17 @@ async function cfgFetch(url, ms) {
 }
 /* ?api=https://… — адрес API для разработки (только на 127.0.0.1/localhost, хранится на устройстве); ?api=default — вернуть адрес из config.json.
    На любом другом адресе (GitHub Pages) параметр игнорируется и убирается из адреса, сохранённое переопределение удаляется. */
+/* ?ref=HLP-XXXXXX — ссылка водителя «Пригласить бизнес»: сохраняем до регистрации компании (partners.referrer_user_id) */
+function driverRefFromURL() {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const ref = String(q.get('ref') || '').trim().slice(0, 40);
+  if (!ref) return;
+  store.set(K.dref, ref);
+  q.delete('ref');
+  const qs = q.toString();
+  try { history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash); } catch (e) {}
+}
 function apiOverrideFromURL() {
   if (!devPage()) store.del(K.api);
   store.del('helper.partner.cfg.v1'); /* старый кэш без подписи */
@@ -2455,7 +2467,10 @@ FORMS['join-reg'] = async f => {
   if (pw.length < 8) return showErr('jr-err', tx('v.pass8'));
   const done = busy(f.querySelector('[type=submit]'), tx('busy.acct'));
   let d;
-  try { d = await api('/v1/auth/register', {body: {email, password: pw, name, device: tx('device'), language: LANG}, auth: false}); }
+  /* закрытый запуск Helper: код приглашения в команду партнёра принимается сервером как приглашение (ref) */
+  const jrBody = {email, password: pw, name, device: tx('device'), language: LANG};
+  const jrCode = store.get(K.join); if (jrCode) jrBody.ref = jrCode;
+  try { d = await api('/v1/auth/register', {body: jrBody, auth: false}); }
   catch (e) { done(); return showErr('jr-err', e.code === 'email_taken' ? (e.message + ' ' + tx('join.taken')) : e.message); }
   done();
   setTokens(d);
@@ -3152,6 +3167,7 @@ async function pageRegister(r, alive) {
   if (step === 1) {
     const cc = R.place.country;
     h += '<h1 class="wiz-title">' + tx('reg.1.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.1.p') + '</p>' +
+      (store.get(K.dref) ? '<div class="card tint" style="margin:0 0 18px"><p class="small" style="margin:0">' + tx('reg.driverRef') + '</p></div>' : '') +
       '<form class="form" data-form="reg1" novalidate>' +
       fld('rg-company', tx('f.company'), inp('rg-company', R.company, 'autocomplete="organization" placeholder="' + esc(tx('f.company.ph')) + '" maxlength="120" autofocus data-in="reg-f" data-f="company"')) +
       fld('rg-category', tx('f.category'), sel('rg-category', [['', tx('f.category.ph'), true]].concat(m.categories.map(c => [c.key, c.title])), R.category, 'data-ch="reg-f" data-f="category"')) +
@@ -3278,6 +3294,7 @@ FORMS.reg4 = async f => {
     if (lcity) body.location.city = lcity;
   }
   showErr('rg-err', '');
+  const dref = store.get(K.dref); if (dref) body.ref = dref;
   const done = busy(f.querySelector('[type=submit]'), tx('reg.busy'));
   let d;
   try { d = await api('/v1/partner/register', {body}); }
@@ -3301,6 +3318,7 @@ FORMS.reg4 = async f => {
   st.partner = null; st.cache = {}; st.mine = [];
   store.del(K.todo(p.id));
   toast(tx('reg.done'), 4000);
+  store.del(K.dref);
   go('home', true);
 };
 
@@ -4531,6 +4549,7 @@ window.addEventListener('hashchange', () => { if (specialHash()) return; render(
 applyLang();
 st.meta = jget(K.meta(LANG));
 apiOverrideFromURL();
+driverRefFromURL();
 cfgLoad();
 /* свой пустой service worker (scope /partner/), чтобы кабинет не обрабатывал SW приложения водителя */
 if ('serviceWorker' in navigator && window.isSecureContext) { try { navigator.serviceWorker.register('sw.js', {scope: './'}).catch(() => {}); } catch (e) {} }

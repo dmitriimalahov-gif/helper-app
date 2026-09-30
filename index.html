@@ -1331,12 +1331,12 @@ function baseState() {
     premium: {plan: null, until: null, since: null, trial: false, code: null},
     flags: {}, stats: {recAdded: 0},
     loyalty: {hist: [], coupons: [], lastOdo: null, usedCodes: [], hid: 'HID-' + rnd4() + '-' + rnd4()},
-    geo: {consent: false, consentAt: null, area: null}, bizApps: [], ref: 'HELPER-' + Array.from({length: 6}, () => ALPH[Math.floor(Math.random() * 32)]).join(''), createdAt: todayISO()};
+    geo: {consent: false, consentAt: null, area: null}, bizApps: [], createdAt: todayISO()};
 }
 function makeDemo(keep) {
   const T = todayISO();
   const s = baseState();
-  if (keep) { s.settings = keep.settings; s.premium = keep.premium; s.ref = keep.ref; s.flags = keep.flags || {}; s.stats = keep.stats || s.stats; if (keep.loyalty && keep.loyalty.hid) s.loyalty.hid = keep.loyalty.hid; s.geo = keep.geo || s.geo; s.bizApps = keep.bizApps || []; }
+  if (keep) { s.settings = keep.settings; s.premium = keep.premium; s.flags = keep.flags || {}; s.stats = keep.stats || s.stats; if (keep.loyalty && keep.loyalty.hid) s.loyalty.hid = keep.loyalty.hid; s.geo = keep.geo || s.geo; s.bizApps = keep.bizApps || []; }
   s.demo = true; s.activeCar = 'demo';
   s.cars = [{id: 'demo', demo: true, make: 'Toyota', model: 'Camry', year: 2017, gearbox: 'at', fuel: 'petrol', engine: '2.5', drive: 'fwd', vin: '4T1B11HK5JU000000', plate: 'HLP 017', odo: 86400, odoAt: addDays(T, -17), currency: 'MDL', odoLog: [{d: addDays(T, -17), km: 86400}]}];
   /* Подписи демо-данных — ключи словаря (demo.*): запись хранит их в dl, при смене языка relabelDemo() переводит неизменённые поля */
@@ -1803,6 +1803,7 @@ function pageHome() {
     h += '<div class="card section row between" style="margin-top:20px"><div><p class="eyebrow">' + t('c.odo') + '</p><div class="odo" style="margin-top:6px"><span class="v">' + fN(car.odo) + '</span><span class="u">' + t('c.km') + '</span></div><p class="xsmall muted" style="margin:6px 0 0">' + t('home.odoUpdated', {when: staleDays === 0 ? t('d.today') : relDays(-staleDays)}) + (kpd ? ' · ' + t('home.kmPerDay', {km: fN(kpd)}) : '') + '</p></div><button class="btn sm soft" data-act="odo">' + t('home.odoUpdateBtn') + '</button></div>';
   }
   h += offersHome();
+  h += inviteHomeCard();
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('home.svcByOdo') + '</h2><button class="link" data-act="go" data-p="settings">' + t('home.intervals') + ic('chevR', 'xs') + '</button></div><div class="group">';
   h += list.map(x => {
     const w = x.status === 'none' ? 0 : x.status === 'bad' ? 4 : Math.round(clamp(x.frac, 0.03, 1) * 100);
@@ -2247,8 +2248,9 @@ function pageBonus() {
     }).join('') + '</div></section>';
   }
   const oi = odoBonusIn(), rt = recToday();
-  const EARN = [['+10', t('c.addCar'), t('bonus.earnCar'), ''], ['+5', t('bonus.earnRec'), t('bonus.earnRecToday', {n: rt}), 'data-act="rec-new"'], ['+2', t('c.updateOdo'), oi ? t('bonus.earnOdoNext', {when: relDays(oi)}) : t('bonus.availNow'), 'data-act="odo"'], ['+50', t('c.invite'), t('bonus.earnRef'), 'data-act="ref"'], ['+20', t('plan.code'), t('bonus.earnCode'), 'data-act="paywall"'], ['2–5%', t('bonus.earnBuy'), t('bonus.earnBuySub'), 'data-act="hid"']];
+  const EARN = [['+10', t('c.addCar'), t('bonus.earnCar'), ''], ['+5', t('bonus.earnRec'), t('bonus.earnRecToday', {n: rt}), 'data-act="rec-new"'], ['+2', t('c.updateOdo'), oi ? t('bonus.earnOdoNext', {when: relDays(oi)}) : t('bonus.availNow'), 'data-act="odo"'], ['+50', t('c.invite'), t('bonus.earnRef'), 'data-act="ref"'], ['+50', t('rec.btn'), t('rec.earnSub'), 'data-act="biz-rec"'], ['+500', t('rec.bizTitle'), t('rec.bizEarnSub'), 'data-act="biz-share"'], ['+20', t('plan.code'), t('bonus.earnCode'), 'data-act="paywall"'], ['2–5%', t('bonus.earnBuy'), t('bonus.earnBuySub'), 'data-act="hid"']];
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('bonus.howEarn') + '</h2></div><div class="group">' + EARN.map(e => (e[3] ? '<button class="item" ' + e[3] + '>' : '<div class="item">') + '<span class="earn">' + e[0] + '</span><span class="body"><span class="t" style="display:block">' + e[1] + '</span><span class="s">' + e[2] + '</span></span>' + (e[3] ? ic('chevR', 'sm chev') + '</button>' : '</div>')).join('') + '</div></section>';
+  h += recMineSection();
   const hs = srv ? (srv.history || []).map(x => { const tt = tsParse(x.created_at); return {t: (x.title || x.reason || t('bonus.op')) + (x.company ? ' · ' + x.company : ''), d: isFinite(tt) ? iso(new Date(tt)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0}; })
     : L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
   const shown = ui.allHist ? hs : hs.slice(0, 8);
@@ -2331,6 +2333,7 @@ function pageNearby() {
   if (L.length) h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>' : '');
   else h += emptyState('tag', offEmpty(), !OFF.ok && navigator.onLine === false ? t('nearby.offline') : t('nearby.emptyText'), '<button class="btn sm soft" data-act="partner-cabinet">' + ic('store', 'xs') + t('nearby.bizOwner') + '</button>');
   h += '</section>';
+  h += bizRecCard();
   if (!L.length && S.demo) {
     const sp = src || {lat: AREAS.kishinev[1], lon: AREAS.kishinev[2]};
     const list = SPOTS.map((s2, i) => ({s: s2, i, d: distKm(sp.lat, sp.lon, s2[4], s2[5])})).sort((x, y) => x.d - y.d).slice(0, 4);
@@ -2605,6 +2608,7 @@ const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stde
 const PLAY_MANAGE_URL = 'https://play.google.com/store/account/subscriptions?package=md.dirax.helper';
 const CFG_REMOTE = 'https://dmitriimalahov-gif.github.io/helper-app/config.json';
 const K_CFG = 'helper.cfg.v1', K_DEV = 'helper.dev.api', K_ACCT = 'helper.acct.v1', K_SYNC = 'helper.sync.v1', K_PLANS = 'helper.plans.v1';
+const K_INV = 'helper.invite.v1', K_STATUS = 'helper.status.v1', K_REF = 'helper.ref.v1', K_NOTICES = 'helper.notices.v1';
 const MAX_CARS = 4, SYNC_KINDS = ['cars', 'records', 'fuel', 'docs'];
 const jget = k => { const v = store.get(k); if (!v) return null; try { return JSON.parse(v); } catch (e) { return null; } };
 const jset = (k, v) => { if (v == null) store.del(k); else store.set(k, JSON.stringify(v)); };
@@ -2754,7 +2758,7 @@ async function premFetch() {
   if (!logged()) return null;
   try { const d = await api('/v1/premium'); premSet(d); acctUI(); return d; } catch (e) { return null; }
 }
-function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); LS = null; jset(K_LOY, null); codeClose(); }
+function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); LS = null; jset(K_LOY, null); RF = null; jset(K_REF, null); RC = null; jset(K_REC, null); codeClose(); }
 function acctLost() {
   if (!logged()) return;
   acctLocalOut();
@@ -2784,7 +2788,7 @@ async function afterAuth(d, kind) {
   else if (ui.onb && ui.onb.step === 'acct') { ui.onb = null; render(false); }
   else render();
   toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctEmail()}));
-  acctMe(); loyFetch(true); if (S.geo.consent) geoPush();
+  acctMe(); loyFetch(true); refFetch(true); if (S.geo.consent) geoPush();
   await syncNow();
   storeSync(true);
   if (ui.after) { const f = ui.after; ui.after = null; setTimeout(f, 350); }
@@ -2795,7 +2799,7 @@ async function acctLogout(wipe) {
   await Promise.race([api('/v1/auth/logout', {body: {}}).catch(() => null), sleep(3000)]);
   acctLocalOut();
   ui.stacks = emptyStacks();
-  if (wipe) { const ref = S.ref; store.del(KEY); S = baseState(); S.ref = ref; S.flags.acctIntro = true; SY.hash = kmap(); syncPersist(); save(); startOnb('first'); }
+  if (wipe) { store.del(KEY); S = baseState(); S.flags.acctIntro = true; SY.hash = kmap(); syncPersist(); save(); startOnb('first'); }
   else { ui.tab = 'more'; render(false); }
   toast(t('acct.loggedOut'));
 }
@@ -2963,6 +2967,7 @@ function syncApply(r, body, sent, setDirty) {
   else if ((r.full || r.reset) && !setDirty) { if (!SY.setAt) SY.setAt = Date.now(); SY.setAcked = 0; syncAgain = true; } /* в аккаунте настроек ещё нет — отправим свои */
   /* 5) Premium, курсор, демо-данные */
   if (r.premium) premSet(r.premium);
+  if (Array.isArray(r.notices) && r.notices.length) syncNotices(r.notices);
   if (typeof r.cursor === 'number' && !(setDirty && r.settings_status === 'server_newer' && !r.settings)) SY.cursor = r.cursor;
   if (S.cars.some(c => c.demo) && S.cars.some(c => !c.demo)) { dropDemo(); changed = true; }
   const first = SY.first, demoOnly = SY.demoOnly;
@@ -3356,14 +3361,276 @@ function carEditSheet(id, pre) {
   openSheet(t('c.car'), b);
 }
 
-/* ================= premium sheets ================= */
-function refBlock() {
-  if (CAP) return ''; /* приложения App Store / Google Play: без кодов на Premium */
-  const inv = t('pw.refInvite', {code: S.ref});
-  return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('gift', 'sm') + '</span><div><p style="margin:0;font-weight:600">' + t('pw.refTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('pw.refText') + '</p></div></div>' +
-    '<div class="copyline" style="margin-top:12px"><span class="v" id="ref-code">' + esc(S.ref) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(S.ref) + '" aria-label="' + t('pw.copyCode') + '">' + ic('copy', 'sm') + '</button></div>' +
-    '<button class="btn block soft" style="margin-top:10px" data-act="copy" data-text="' + esc(inv) + '">' + ic('share', 'sm') + t('pw.copyInvite') + '</button><p class="xsmall muted" style="margin:8px 0 0">' + t('pw.refDemo') + '</p></div>';
+/* ================= Приглашения: закрытый запуск, ссылка друга, «Пригласить друга» (04_AUTOMATION/docs/INVITES_API.md) =================
+   Код приглашения = Helper ID друга (HLP-XXXXXX) или код из бумажного ежедневника (HLP-XXXX-XXXX). Ссылка ?ref=… сохраняется как
+   ожидающее приглашение, проверяется на сервере и отправляется при регистрации. Ценность баллов в деньгах нигде не показывается. */
+let INV = jget(K_INV), ST = jget(K_STATUS), RF = jget(K_REF), SEEN_NOTICES = jget(K_NOTICES) || [], invP = null, stP = null, rfP = null;
+const closedMode = () => ST && ST.at ? !!ST.invite_only : true; /* статус неизвестен (офлайн, нет сервера) — считаем закрытым */
+function inviteCapture() {
+  let code = '';
+  try {
+    code = new URLSearchParams(location.search).get('ref') || '';
+    if (!code) code = new URLSearchParams((location.hash || '').replace(/^#\??/, '')).get('ref') || '';
+  } catch (e) {}
+  code = String(code || '').trim().slice(0, 40);
+  if (!code) return;
+  INV = {code, at: Date.now(), check: null, checkedAt: 0};
+  jset(K_INV, INV);
+  try { /* убрать ref из адреса, остальное (вкладка, tgWebAppData) оставить */
+    const q = new URLSearchParams(location.search); q.delete('ref');
+    let hash = location.hash;
+    const h = new URLSearchParams((hash || '').replace(/^#\??/, ''));
+    if (h.has('ref')) { h.delete('ref'); hash = h.toString() ? '#' + h.toString() : ''; }
+    history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q.toString() : '') + hash);
+  } catch (e) {}
 }
+function inviteWelcomeRefresh() { if (ui.onb && ui.onb.step === 'acct') render(false); }
+function inviteCheck(force) {
+  if (!INV || !INV.code) return Promise.resolve(null);
+  if (invP) return invP;
+  if (!force && INV.check && Date.now() - (INV.checkedAt || 0) < 600000) return Promise.resolve(INV.check);
+  const code = INV.code, fresh = !INV.check;
+  invP = api('/v1/auth/invite/' + encodeURIComponent(code), {auth: false}).then(d => {
+    if (!INV || INV.code !== code || !d) return null;
+    INV.check = {valid: !!d.valid, kind: d.kind || null, reason: d.reason || null, inviter: d.inviter || null, days: +d.referral_bonus_days || 30, message: d.message || ''};
+    INV.checkedAt = Date.now(); jset(K_INV, INV);
+    if (d.valid && fresh && !logged() && !(ui.onb && ui.onb.step === 'acct')) toast(inviteText(INV.check));
+    inviteWelcomeRefresh();
+    return INV.check;
+  }, () => null).finally(() => { invP = null; });
+  return invP;
+}
+function inviteClear() { INV = null; jset(K_INV, null); }
+function statusLoad(force) {
+  if (stP) return stP;
+  if (!force && ST && ST.at && Date.now() - ST.at < 60000) return Promise.resolve(ST);
+  stP = api('/v1/status', {auth: false}).then(d => {
+    if (d && typeof d.invite_only === 'boolean') { ST = Object.assign({}, d, {at: Date.now()}); jset(K_STATUS, ST); inviteWelcomeRefresh(); }
+    return ST;
+  }, () => ST).finally(() => { stP = null; });
+  return stP;
+}
+const inviteText = c => c.kind === 'premium_code' ? t('inv.invitedByDiary') : t('inv.invitedBy', {name: esc((c.inviter && c.inviter.name) || t('inv.friend')), days: c.days || 30});
+/* баннер приглашения на экране приветствия и в форме регистрации */
+function inviteBanner() {
+  if (!INV || !INV.code) return '';
+  const c = INV.check;
+  if (!c) { inviteCheck(); return '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + t('inv.checking') + '</p></div>'; }
+  if (!c.valid) return '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + t('inv.badLink', {msg: esc(c.message || '')}) + '</p></div>';
+  return '<div class="card tint row" style="gap:12px;margin-bottom:12px"><span class="ic-circle">' + ic('gift', 'sm') + '</span><p class="small" style="margin:0;flex:1">' + inviteText(c) + '</p></div>';
+}
+/* «Helper пока открыт по приглашениям» + счётчик мест (только пока закрыто) */
+function closedCard() {
+  if (!closedMode()) return '';
+  const st = ST || {};
+  const places = st.at && +st.open_at > 0 && +st.places_left > 0 ? '<p class="xsmall muted num" style="margin:6px 0 0">' + tn('inv.places', +st.places_left, {total: fN(+st.open_at)}) + '</p>' : '';
+  return '<div class="card section" style="margin-bottom:12px;text-align:left"><p style="margin:0;font-weight:600">' + t('inv.closedTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('inv.closedText') + '</p>' + places + '</div>';
+}
+/* --- «Пригласить друга»: личная ссылка, уровень, квота, друзья --- */
+const refSrv = () => logged() && RF && RF.who === acctWho() && RF.d ? RF : null;
+function refFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  if (rfP) return rfP;
+  const cur = refSrv();
+  if (!force && cur && Date.now() - cur.at < 120000) return Promise.resolve(cur);
+  const who = acctWho();
+  rfP = api('/v1/me/referral').then(d => {
+    if (!logged() || acctWho() !== who || !d || !d.code) return refSrv();
+    RF = {who, at: Date.now(), d}; jset(K_REF, RF); refRender(); return RF;
+  }, () => refSrv()).finally(() => { rfP = null; });
+  return rfP;
+}
+function refRender() { const el = $('#ref-body'); if (el) setHTML(el, refBody()); liveRender(['home', 'more', 'bonus']); }
+function refBody() {
+  if (!logged()) return '<p class="small muted" style="margin:0 0 12px">' + t('inv.needAcct') + '</p><div class="btn-row"><button class="btn sm ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn sm soft" data-act="acct-login">' + t('c.login') + '</button></div>';
+  const s = refSrv();
+  if (!s) { setTimeout(() => refFetch(), 0); return '<p class="small muted" style="margin:0">' + t(navigator.onLine === false ? 'inv.offline' : 'inv.loading') + '</p>'; }
+  const d = s.d, q = d.quota || {}, tier = d.tier || {}, nx = d.next_tier, pct = Math.max(0, Math.min(100, +d.score || 0));
+  let h = '<div class="row between" style="gap:10px"><span class="badge dark">' + esc(tier.title || '') + '</span><span class="small muted num">' + t('inv.score', {n: pct}) + '</span></div>';
+  h += '<span class="bar" style="display:block"><i style="width:' + pct + '%;display:block;height:100%;background:var(--teal)"></i></span>';
+  h += '<p class="xsmall muted" style="margin:6px 0 0">' + (nx ? t('inv.toNext', {n: +nx.score_needed || 0, tier: esc(nx.title || '')}) + (d.how_to_earn && d.how_to_earn[0] ? ' ' + esc(d.how_to_earn[0]) : '') : t('inv.maxTier')) + '</p>';
+  h += '<p class="small" style="margin:12px 0 0">' + t('inv.sub', {days: +d.bonus_days || 30, km: tn('inv.km', +d.points_referral || 0)}) + '</p>';
+  if (+q.total <= 0 && q.reason === 'tier') {
+    h += '<div class="card tint" style="margin-top:12px"><p class="small" style="margin:0">' + esc(q.hint || t('inv.guestCta')) + '</p><button class="btn sm ink" style="margin-top:10px" data-act="ref-add-car">' + ic('plus', 'xs') + t('inv.guestBtn') + '</button></div>';
+  } else {
+    h += '<p class="small num" style="margin:10px 0 0;font-weight:600">' + t('inv.available', {n: +q.available || 0, total: +q.total || 0}) + '</p>';
+    h += '<p class="xsmall muted" style="margin:2px 0 0">' + (q.reason && q.hint ? esc(q.hint) : t('inv.earnMore', {n: +d.earn_activated || 2})) + '</p>';
+    h += '<p class="eyebrow" style="margin:12px 0 6px">' + t('inv.link') + '</p><div class="copyline"><span class="v num" style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(d.url) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(d.url) + '" aria-label="' + t('inv.copyLink') + '">' + ic('copy', 'sm') + '</button></div>';
+    if (+q.available > 0) h += '<button class="btn block ink" style="margin-top:10px" data-act="ref-share">' + ic('share', 'sm') + t('inv.share') + '</button>';
+  }
+  const list = Array.isArray(d.invited) ? d.invited : [];
+  h += '<p class="eyebrow" style="margin:16px 0 6px">' + t('inv.friends') + '</p>';
+  if (!list.length) h += '<p class="small muted" style="margin:0">' + t('inv.noFriends') + '</p>';
+  else h += '<div class="group">' + list.slice(0, 20).map(f => '<div class="item" style="cursor:default"><span class="ic-circle' + (f.rewarded ? ' ink' : '') + '">' + ic(f.rewarded ? 'gift' : 'user', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(f.name_masked || '') + '</span><span class="s num">' + esc(f.status_title || t('inv.st.' + f.status)) + (f.registered_at ? ' · ' + fD(String(f.registered_at).slice(0, 10)) : '') + '</span></span></div>').join('') + '</div>';
+  return h;
+}
+function refBlock() {
+  return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('gift', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('c.invite') + '</p><p class="small muted" style="margin:2px 0 0">' + t('more.inviteSub') + '</p></div></div><div id="ref-body" style="margin-top:12px">' + refBody() + '</div></div>';
+}
+function refSheet() { openSheet(t('c.invite'), '<div id="ref-body">' + refBody() + '</div>'); refFetch(); }
+/* карточка на главной */
+function inviteHomeCard() {
+  const s = refSrv(), q = s && s.d.quota;
+  const sub = !logged() ? t('inv.homeNeedAcct') : q && +q.total > 0 ? t('inv.available', {n: +q.available || 0, total: +q.total || 0}) : t('more.inviteSub');
+  return '<button class="hidc" style="margin-top:12px" data-act="ref"><span class="ic-circle" style="background:var(--teal);color:var(--on-teal)">' + ic('gift', 'sm') + '</span><span class="body"><span class="t" style="display:block;font-weight:600">' + t('c.invite') + '</span><span class="s small muted num" style="display:block">' + sub + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
+}
+/* поделиться: Share-плагин Capacitor → navigator.share → лист Telegram / WhatsApp / скопировать */
+function shareInvite() {
+  const s = refSrv();
+  if (!s) { refFetch(true); return toast(t('inv.loading')); }
+  shareLink(t('inv.shareTitle'), t('inv.shareText', {days: +s.d.bonus_days || 30}), s.d.url);
+}
+function shareLink(title, text, url) {
+  if (CAP && NP.Share && typeof NP.Share.share === 'function') { NP.Share.share({title, text, url, dialogTitle: t('inv.share')}).catch(() => {}); return; }
+  if (navigator.share) { try { navigator.share({title, text, url}).catch(() => {}); return; } catch (e) {} }
+  const enc = encodeURIComponent;
+  openSheet(t('inv.share'), '<p class="small muted" style="margin:0 0 14px">' + esc(text) + '</p><div class="stack">' +
+    '<a class="btn block soft" href="https://t.me/share/url?url=' + enc(url) + '&text=' + enc(text) + '" target="_blank" rel="noopener noreferrer">' + ic('send', 'sm') + 'Telegram</a>' +
+    '<a class="btn block soft" href="https://wa.me/?text=' + enc(text + '\n' + url) + '" target="_blank" rel="noopener noreferrer">' + ic('phone', 'sm') + 'WhatsApp</a>' +
+    '<button class="btn block ink" data-act="copy" data-text="' + esc(text + '\n' + url) + '">' + ic('copy', 'sm') + t('inv.copyLink') + '</button></div>');
+}
+/* тосты о наградах за друга из /v1/sync → notices (каждое уведомление — один раз, по id) */
+function syncNotices(list) {
+  let delay = 0, changed = false;
+  list.forEach(n => {
+    if (!n || !n.id || SEEN_NOTICES.indexOf(n.id) >= 0) return;
+    SEEN_NOTICES.push(n.id); changed = true;
+    if (n.message) { const msg = String(n.message); setTimeout(() => toast(msg), delay); delay += 2800; }
+  });
+  if (!changed) return;
+  if (SEEN_NOTICES.length > 60) SEEN_NOTICES = SEEN_NOTICES.slice(-60);
+  jset(K_NOTICES, SEEN_NOTICES);
+  premFetch(); loyFetch(true); refFetch(true);
+}
+
+/* ================= Рекомендации компаний → партнёры Helper (04_AUTOMATION/docs/INVITES_API.md §7) =================
+   Водитель у СТО/мойки отправляет название, категорию, адрес и координаты (только для этой рекомендации, 4 знака) —
+   менеджер получает лид; награды — километры Helper (без денежной ценности). «Пригласить бизнес» — ссылка на кабинет партнёра. */
+const K_REC = 'helper.rec.v1', K_PMETA = 'helper.pmeta.v1'; /* адрес кабинета партнёра — PARTNER_URL ниже (const в том же скрипте) */
+let RC = jget(K_REC), rcP = null, PMETA = jget(K_PMETA), pmP = null, REC = null;
+const REC_CATS = ['sto', 'wash', 'tires', 'parts', 'fuel', 'other'];
+function pmetaLoad(force) {
+  if (pmP) return pmP;
+  if (!force && PMETA && PMETA.lang === LANG && Date.now() - (PMETA.at || 0) < 86400000) return Promise.resolve(PMETA);
+  pmP = api('/v1/partner/meta', {auth: false}).then(d => { if (d && Array.isArray(d.categories) && d.categories.length) { PMETA = {lang: LANG, at: Date.now(), categories: d.categories.map(c => ({key: String(c.key), title: String(c.title)}))}; jset(K_PMETA, PMETA); } return PMETA; }, () => PMETA).finally(() => { pmP = null; });
+  return pmP;
+}
+const recCats = () => PMETA && PMETA.lang === LANG && PMETA.categories ? PMETA.categories : REC_CATS.map(k => ({key: k, title: t('rec.cat.' + k)}));
+const recSrv = () => logged() && RC && RC.who === acctWho() && RC.d ? RC : null;
+const recPts = () => { const s = recSrv(); return {a: s ? +s.d.points_recommend || 50 : 50, b: s ? +s.d.points_partner_joined || 500 : 500}; };
+function recFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  if (rcP) return rcP;
+  const cur = recSrv();
+  if (!force && cur && Date.now() - cur.at < 120000) return Promise.resolve(cur);
+  const who = acctWho();
+  rcP = api('/v1/me/recommendations').then(d => { if (!logged() || acctWho() !== who || !d || !Array.isArray(d.items)) return recSrv(); RC = {who, at: Date.now(), d}; jset(K_REC, RC); liveRender(['bonus']); return RC; }, () => recSrv()).finally(() => { rcP = null; });
+  return rcP;
+}
+/* точная геопозиция один раз, только по нажатию кнопки; на пользователе не сохраняется */
+function recLocate() {
+  const round = p => ({lat: +(+p.coords.latitude).toFixed(4), lon: +(+p.coords.longitude).toFixed(4)});
+  const opts = {enableHighAccuracy: true, timeout: 12000, maximumAge: 0};
+  return new Promise(res => {
+    try {
+      if (CAP && NP.Geolocation) { NP.Geolocation.requestPermissions().then(() => NP.Geolocation.getCurrentPosition(opts)).then(p => res(round(p))).catch(() => res(null)); return; }
+      if (!navigator.geolocation) return res(null);
+      navigator.geolocation.getCurrentPosition(p => res(round(p)), () => res(null), opts);
+    } catch (e) { res(null); }
+  });
+}
+/* обратное геокодирование адреса (Nominatim, OpenStreetMap): подсказка, которую можно поправить */
+async function recGeocode(lat, lon) {
+  try {
+    const r = await fetchT('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&lat=' + lat + '&lon=' + lon + '&accept-language=' + LANG, {headers: {Accept: 'application/json'}}, 6000);
+    if (!r.ok) return '';
+    const j = await r.json(), a = j.address || {};
+    const street = [a.road || a.pedestrian || a.footway || '', a.house_number || ''].filter(Boolean).join(' ');
+    const city = a.city || a.town || a.village || a.municipality || '';
+    const out = [street, city].filter(Boolean).join(', ');
+    return out || String(j.display_name || '').split(',').slice(0, 3).join(',').trim();
+  } catch (e) { return ''; }
+}
+function bizRecSheet() {
+  if (!logged()) { ui.after = () => { if (!ui.onb) bizRecSheet(); }; ui.authWhy = t('rec.needAcct'); return authSheet('register', {why: ui.authWhy}); }
+  REC = {pos: null, geo: 'locating', near: null};
+  const p = recPts(), cats = recCats();
+  openSheet(t('rec.title'), '<p class="small muted" style="margin:0 0 6px">' + t('rec.intro') + '</p><p class="small" style="margin:0 0 12px">' + t('rec.reward', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}) + '</p>' +
+    '<form class="form" data-form="biz-rec" novalidate>' +
+    fld('rc-name', t('rec.name'), inp('rc-name', '', 'autocomplete="organization" maxlength="120" placeholder="' + esc(t('rec.namePh')) + '"')) +
+    fld('rc-cat', t('rec.category'), '<select id="rc-cat" class="input">' + cats.map(c => '<option value="' + esc(c.key) + '">' + esc(c.title) + '</option>').join('') + '</select>') +
+    '<div id="rc-geo">' + recGeoHTML() + '</div>' +
+    fld('rc-address', t('rec.address'), inp('rc-address', '', 'autocomplete="off" maxlength="300"'), t('rec.addressHint')) +
+    fld('rc-phone', t('rec.phone'), inp('rc-phone', '', 'type="tel" inputmode="tel" maxlength="40"')) +
+    fld('rc-comment', t('rec.comment'), '<textarea id="rc-comment" class="input" rows="2" maxlength="500" placeholder="' + esc(t('rec.commentPh')) + '"></textarea>') +
+    '<div id="rc-near"></div>' + errBox('rc-err') +
+    '<button class="btn block ink" type="submit">' + ic('send', 'sm') + t('rec.send') + '</button>' +
+    '<p class="xsmall muted" style="margin:0">' + t('rec.privacy') + '</p></form>');
+  pmetaLoad().then(() => { const el = $('#rc-cat'); if (el && REC && PMETA) { const cur = el.value; setHTML(el, recCats().map(c => '<option value="' + esc(c.key) + '">' + esc(c.title) + '</option>').join('')); if (cur) el.value = cur; } });
+  recStart();
+}
+function recGeoHTML() {
+  if (!REC) return '';
+  if (REC.geo === 'locating') return '<p class="small muted" style="margin:0 0 10px">' + t('rec.locating') + '</p>';
+  if (REC.geo === 'denied') return '<div class="card tint" style="margin:0 0 12px"><p class="small" style="margin:0">' + t('rec.noGeo') + '</p><button class="btn sm soft" type="button" style="margin-top:8px" data-act="biz-rec-retry">' + t('rec.retryGeo') + '</button></div>';
+  return '<p class="xsmall muted" style="margin:0 0 10px">' + ic('pin', 'xs') + ' ' + t('rec.geoOk') + '</p>';
+}
+function recNearHTML() {
+  const n = REC && REC.near; if (!n) return '';
+  if (n.partner) return '<div class="card tint" style="margin:0 0 12px"><p class="small" style="margin:0">' + t('rec.nearPartner', {name: esc(n.partner.company || '')}) + '</p><button class="btn sm soft" type="button" style="margin-top:8px" data-act="biz-offers">' + t('rec.offersBtn') + '</button></div>';
+  if (n.recommended) return '<p class="small" style="margin:0 0 12px">' + t('rec.nearVotes', {who: tn('rec.drivers', +n.votes || 1)}) + '</p>';
+  return '';
+}
+function recRender() { const g = $('#rc-geo'), nr = $('#rc-near'); if (g) setHTML(g, recGeoHTML()); if (nr) setHTML(nr, recNearHTML()); }
+function recStart() {
+  if (!REC) return;
+  REC.geo = 'locating'; REC.near = null; recRender();
+  recLocate().then(async pos => {
+    if (!REC) return;
+    if (!pos) { REC.geo = 'denied'; recRender(); return; }
+    REC.pos = pos; REC.geo = 'ok'; recRender();
+    const [addr, near] = await Promise.all([recGeocode(pos.lat, pos.lon), api('/v1/recommend/nearby?lat=' + pos.lat + '&lon=' + pos.lon).catch(() => null)]);
+    if (!REC || REC.pos !== pos) return;
+    const el = $('#rc-address'); if (addr && el && !el.value.trim()) el.value = addr;
+    REC.near = near; recRender();
+  });
+}
+function recResultSheet(d) {
+  const p = recPts();
+  let title, text, btn = '';
+  if (d.result === 'partner_exists') { title = t('rec.partnerTitle'); text = t('rec.partnerText', {name: esc((d.partner && d.partner.company) || '')}); btn = '<button class="btn block ink" data-act="biz-offers">' + t('rec.offersBtn') + '</button>'; }
+  else if (d.result === 'vote') { title = t('rec.voteTitle', {who: tn('rec.drivers', +d.votes || 2)}); text = t('rec.sentText', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}); }
+  else { title = t('rec.sentTitle'); text = t('rec.sentText', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}); }
+  openSheet(title, '<p class="muted" style="margin:0 0 18px;line-height:1.55">' + text + '</p><div class="stack">' + btn + '<button class="btn block soft" data-act="sheet-close">' + t('c.done') + '</button></div>');
+  toast(d.result === 'partner_exists' ? t('rec.partnerTitle') : t('rec.sentTitle'));
+}
+/* карточки: «Порекомендовать компанию» (Предложения рядом, главная) и «Мои рекомендации» + «Пригласить бизнес» (Бонусы) */
+function bizRecCard() {
+  return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle ink">' + ic('store', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('rec.btn') + '</p><p class="small muted" style="margin:2px 0 0">' + t('rec.intro') + '</p></div></div><button class="btn block soft" style="margin-top:12px" data-act="biz-rec">' + ic('pin', 'sm') + t('rec.btn') + '</button></div>';
+}
+function recMineSection() {
+  const p = recPts();
+  let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('rec.mine') + '</h2>' + (logged() ? '<button class="link" data-act="biz-rec">' + ic('plus', 'xs') + t('rec.short') + '</button>' : '') + '</div>';
+  if (!logged()) h += '<p class="small muted" style="margin:0">' + t('rec.needAcct') + '</p>';
+  else {
+    const s = recSrv();
+    if (!s) { setTimeout(() => recFetch(), 0); h += '<p class="small muted" style="margin:0">' + t(navigator.onLine === false ? 'inv.offline' : 'inv.loading') + '</p>'; }
+    else if (!s.d.items.length) h += '<p class="small muted" style="margin:0">' + t('rec.mineEmpty') + '</p>';
+    else h += '<div class="group">' + s.d.items.slice(0, 20).map(x => '<div class="item" style="cursor:default"><span class="ic-circle' + (x.rewarded || x.joined_rewarded ? ' ink' : '') + '">' + ic(x.status === 'rewarded' || x.status === 'joined' ? 'store' : 'pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.name) + '</span><span class="s">' + esc(x.category_title || '') + ' · ' + esc(x.status_title || '') + (x.created_at ? ' · ' + fD(String(x.created_at).slice(0, 10)) : '') + '</span></span>' + (x.rewarded || x.joined_rewarded ? '<span class="badge">' + ic('gift', 'xs') + '</span>' : '') + '</div>').join('') + '</div>';
+  }
+  h += '<div class="card" style="margin-top:12px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('building', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('rec.bizTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('rec.bizText', {b: tn('inv.km', p.b)}) + '</p></div></div>' +
+    (logged() ? '<button class="btn block soft" style="margin-top:12px" data-act="biz-share">' + ic('share', 'sm') + t('rec.bizShare') + '</button>' : '') + '</div></section>';
+  return h;
+}
+/* серверные подписи (уровень, статусы, подсказки) приходят на языке запроса — при смене языка кэши обновляются */
+onLang(() => { RF = null; RC = null; if (PMETA && PMETA.lang !== LANG) PMETA = null; });
+function shareBusiness() {
+  const id = helperId();
+  if (!id) { loyFetch(true); return toast(t('inv.loading')); }
+  shareLink(t('rec.bizShareTitle'), t('rec.bizShareText'), PARTNER_URL + '?ref=' + encodeURIComponent(id));
+}
+
+/* ================= premium sheets ================= */
 function paywall(o) {
   o = o || {};
   pwDefaults(o);
@@ -3584,7 +3851,10 @@ function acctWelcome() {
     '<li><span class="ic-circle">' + ic('gauge', 'sm') + '</span><span>' + t('account.w1') + '</span></li>' +
     '<li><span class="ic-circle">' + ic('journal', 'sm') + '</span><span>' + t('account.w2') + '</span></li>' +
     '<li><span class="ic-circle">' + ic('sync', 'sm') + '</span><span>' + t('account.w3') + '</span></li></ul></div>';
-  h += '<div class="foot"><button class="btn block ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn block soft" data-act="acct-login">' + t('c.login') + '</button><button class="textbtn" data-act="acct-skip" style="align-self:center">' + t('account.skip') + '</button><p class="xsmall muted" style="text-align:center;margin:0">' + t('account.welcomeNote') + '</p></div>';
+  const closed = closedMode();
+  h += '<div class="foot">' + inviteBanner() + closedCard() + '<button class="btn block ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn block soft" data-act="acct-login">' + t('c.login') + '</button>' +
+    (closed ? '' : '<button class="textbtn" data-act="acct-skip" style="align-self:center">' + t('account.skip') + '</button><p class="xsmall muted" style="text-align:center;margin:0">' + t('account.welcomeNote') + '</p>') + '</div>';
+  if (!ST || !ST.at) statusLoad();
   return h + '</div>';
 }
 function acctCard() {
@@ -3614,7 +3884,10 @@ function authSheet(mode, o) {
   const why = o.why ? '<div class="card tint" style="margin-bottom:14px"><p class="small" style="margin:0">' + esc(o.why) + '</p></div>' : '';
   const em = fld('au-email', 'E-mail', inp('au-email', email, 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@example.com"'));
   if (mode === 'register') {
-    openSheet(t('c.register'), why + '<form class="form" data-form="register" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + errBox('au-err') + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
+    /* закрытый запуск или есть ссылка друга — поле «Код приглашения» (Helper ID друга или код из ежедневника) */
+    const needRef = closedMode() || !!(INV && INV.code);
+    const rf = needRef ? fld('au-ref', t('inv.codeLabel'), inp('au-ref', INV && INV.code ? INV.code : '', 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="HLP-XXXXXX"'), t('inv.codeHint')) : '';
+    openSheet(t('c.register'), why + inviteBanner() + '<form class="form" data-form="register" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + rf + errBox('au-err') + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
       '<p class="xsmall muted" style="margin:0">' + t('auth.legal', {terms: '<a href="' + TERMS_APP_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.termsLink') + '</a>', privacy: '<a href="' + PRIVACY_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.privacyLink') + '</a>'}) + '</p></form>' +
       '<div class="stack" style="margin-top:8px;align-items:center"><button class="textbtn" data-act="acct-login" data-keep="1">' + t('auth.haveAccount') + '</button></div>');
   } else {
@@ -3628,11 +3901,24 @@ async function authSubmit(f, kind) {
   if (!EMAIL_RE.test(email)) return showErr('au-err', t('auth.badEmail'));
   if (!pw) return showErr('au-err', t('auth.enterPass'));
   if (kind === 'register' && pw.length < 8) return showErr('au-err', t('auth.passShort'));
+  const ref = kind === 'register' ? (val('au-ref') || (INV && INV.code) || '').trim().slice(0, 40) : '';
+  if (kind === 'register' && closedMode() && !ref) return showErr('au-err', t('inv.codeRequired'));
   const done = formBusy(f, t(kind === 'register' ? 'busy.register' : 'busy.login'));
   let d;
-  try { d = await api('/v1/auth/' + kind, {body: kind === 'register' ? {email, password: pw, device: devName(), language: LANG} : {email, password: pw, device: devName()}, auth: false}); }
-  catch (e) { done(); return showErr('au-err', e.code === 'email_taken' ? e.message + ' ' + t('auth.takenHint') : e.message); }
+  const body = kind === 'register' ? {email, password: pw, device: devName(), language: LANG} : {email, password: pw, device: devName()};
+  if (ref) body.ref = ref;
+  try { d = await api('/v1/auth/' + kind, {body, auth: false}); }
+  catch (e) {
+    done();
+    if (e.code === 'invite_required') { /* сервер закрыл регистрацию, а мы считали её открытой — показать поле кода */
+      ST = Object.assign({}, ST || {}, {invite_only: true, at: Date.now()}); jset(K_STATUS, ST);
+      authSheet('register', {why: ui.authWhy, email});
+      return showErr('au-err', e.message);
+    }
+    return showErr('au-err', e.code === 'email_taken' ? e.message + ' ' + t('auth.takenHint') : e.message);
+  }
   done();
+  if (kind === 'register') { inviteClear(); statusLoad(true); }
   await afterAuth(d, kind);
 }
 function forgotSheet() {
@@ -3657,7 +3943,7 @@ function delSheet() {
     '<label class="switch" for="del-wipe"><span><span style="font-weight:600;display:block">' + t('account.delWipe') + '</span><span class="hint">' + t('account.delWipeHint') + '</span></span><input type="checkbox" id="del-wipe"></label>' + errBox('del-err') +
     '<button class="btn block danger" type="submit">' + ic('trash', 'sm') + t('account.deleteForever') + '</button><button class="btn block soft" type="button" data-act="sheet-close">' + t('c.cancel') + '</button></form>');
 }
-function wipeLocal() { const ref = S.ref; store.del(KEY); S = baseState(); S.ref = ref; S.flags.acctIntro = true; SY.hash = kmap(); syncPersist(); save(); }
+function wipeLocal() { store.del(KEY); S = baseState(); S.flags.acctIntro = true; SY.hash = kmap(); syncPersist(); save(); }
 async function acctDelete(f) {
   const needPw = !(A.user && A.user.has_password === false), pw = val('del-pass'), wipe = !!($('#del-wipe') && $('#del-wipe').checked);
   if (needPw && !pw) return showErr('del-err', t('account.delNeedPass'));
@@ -4126,7 +4412,8 @@ function offersHome() {
   setTimeout(() => offersFetch(), 0);
   const L = offersList().slice(0, 3);
   return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('c.offers') + '</h2>' + (L.length ? '<button class="link" data-act="go" data-p="nearby">' + t('c.all') + ic('chevR', 'xs') + '</button>' : '') + '</div>' +
-    (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) + '</section>';
+    (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) +
+    '<button class="textbtn" data-act="biz-rec" style="margin-top:8px">' + ic('pin', 'xs') + t('rec.btn') + '</button></section>';
 }
 function offersSection() {
   setTimeout(() => offersFetch(), 0);
@@ -4510,6 +4797,21 @@ Object.assign(FORMS, {
   },
   'acct-del'(f) { return acctDelete(f); }
 });
+/* рекомендация компании (форма листа; FORMS объявлен выше) */
+FORMS['biz-rec'] = async f => {
+  if (!REC) return;
+  const name = val('rc-name').trim(), category = val('rc-cat');
+  if (name.length < 2) return showErr('rc-err', t('rec.nameShort'));
+  if (!REC.pos) return showErr('rc-err', t('rec.noGeo'));
+  const body = {name, category, address: val('rc-address').trim(), phone: val('rc-phone').trim(), comment: val('rc-comment').trim(), lat: REC.pos.lat, lon: REC.pos.lon, consent: true};
+  const done = formBusy(f, t('rec.sending'));
+  let d;
+  try { d = await api('/v1/recommend', {body}); }
+  catch (e) { done(); return showErr('rc-err', e.message); }
+  done(); REC = null;
+  recResultSheet(d);
+  recFetch(true);
+};
 FORMS.scan = function () {
   const ctx = ui.scan;
   if (!ctx) return closeSheet();
@@ -4555,7 +4857,7 @@ const ACT = {
   sos: () => sosSheet(),
   copy: el => { const src = el.dataset.from ? $('#' + el.dataset.from) : null; copyText(src ? src.value : el.dataset.text, src); },
   'demo-exit': () => confirmSheet({title: t('act.demoExitTitle'), text: t('act.demoExitText'), ok: t('act.demoExitOk'), danger: false,
-    onOk: () => { const k = S; S = baseState(); S.settings = k.settings; S.premium = k.premium; S.ref = k.ref; S.flags = k.flags; S.loyalty.hid = k.loyalty.hid; S.geo = k.geo; S.bizApps = k.bizApps; save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
+    onOk: () => { const k = S; S = baseState(); S.settings = k.settings; S.premium = k.premium; S.flags = k.flags; S.loyalty.hid = k.loyalty.hid; S.geo = k.geo; S.bizApps = k.bizApps; save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
   'demo-restore': () => {
     if (logged() && S.cars.some(c => !c.demo)) return confirmSheet({title: t('act.demoOpenTitle'), text: t('act.demoOpenAcct', {email: esc(acctEmail())}), ok: t('act.demoOpenAcctOk'), danger: false, onOk: async () => { await acctLogout(false); restoreDemo(); }});
     if (S.cars.some(c => !c.demo)) confirmSheet({title: t('act.demoOpenTitle'), text: t('act.demoReplaceText'), ok: t('act.demoReplaceOk'), onOk: restoreDemo});
@@ -4595,12 +4897,18 @@ const ACT = {
   paywall: () => paywall(),
   trial: () => paywall(),
   corp: () => corpSheet(),
-  ref: () => openSheet(t('c.invite'), refBlock().replace('card section', 'card')),
+  ref: () => refSheet(),
+  'biz-rec': () => bizRecSheet(),
+  'biz-rec-retry': () => recStart(),
+  'biz-share': () => shareBusiness(),
+  'biz-offers': () => { closeSheet(); REC = null; ui.tab = 'more'; ui.stacks.more = [{p: 'nearby'}]; render(false); },
+  'ref-share': () => shareInvite(),
+  'ref-add-car': () => { closeSheet(); if (!S.cars.length) return startOnb('first'); ACT['car-add'](); },
   'prem-off': () => confirmSheet({title: t('act.premOffTitle'), text: t('act.premOffText'), ok: t('act.premOffOk'), onOk: () => { S.premium = {plan: null, until: null, since: null, trial: false, code: null}; save(); render(); toast(t('act.premOff')); }}),
   upsell: el => upsell(el.dataset.k),
   theme: el => { S.settings.theme = el.dataset.v; save(); render(); },
   'int-reset': () => { S.settings.intervals = {}; save(); render(); toast(t('act.intReset')); },
-  'data-reset': () => confirmSheet({title: t('act.resetTitle'), text: t('act.resetText') + (logged() ? ' ' + t('act.resetAcct', {email: esc(acctEmail())}) : ''), ok: t('act.resetOk'), onOk: async () => { if (logged()) await acctLogout(false); const ref = S.ref; store.del(KEY); S = baseState(); S.ref = ref; save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
+  'data-reset': () => confirmSheet({title: t('act.resetTitle'), text: t('act.resetText') + (logged() ? ' ' + t('act.resetAcct', {email: esc(acctEmail())}) : ''), ok: t('act.resetOk'), onOk: async () => { if (logged()) await acctLogout(false); store.del(KEY); S = baseState(); save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
   'onb-next': () => { ui.onb.step = 1; render(false); },
   'onb-back': () => { captureOnb(); const o = ui.onb; if (o.step > 1) o.step--; else if (o.mode === 'add') ui.onb = null; else o.step = 0; render(false); },
   'onb-cancel': () => { ui.onb = null; render(false); },
@@ -4822,7 +5130,8 @@ function init() {
   const fresh = !store.get(KEY);
   S = load();
   if (!fresh) S.flags.acctIntro = true; /* у тех, кто уже пользовался приложением, приветствие аккаунта не показываем */
-  cfgLoad().then(() => { plansLoad(); payReturn(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); } offResume(); });
+  inviteCapture(); /* ?ref=HLP-XXXXXX — приглашение друга (до первого рендера) */
+  cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); } offResume(); });
   const hs = (location.hash || '').replace('#', '');
   if (TABS.some(tt => tt[0] === hs)) ui.tab = hs;
   else if (hs === 'guide' || hs === 'nearby' || hs === 'biz') { ui.tab = 'more'; ui.stacks.more = [{p: hs}]; }
