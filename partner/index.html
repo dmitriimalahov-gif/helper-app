@@ -1190,7 +1190,7 @@ Object.assign(TX, {
   'pin.radius': ['Радиус акций и гео-уведомлений', 'Raza campaniilor și a notificărilor geo', 'Radius for campaigns and geo-notifications'],
   'pin.radius.hint': ['Водители в этом радиусе увидят вашу акцию и смогут получить уведомление.', 'Șoferii din această rază vă vor vedea campania și pot primi o notificare.', 'Drivers within this radius will see your campaign and can get a notification.'],
   'pin.title': ['Точка', 'Locație', 'Location'],
-  'pin.q.short': ['Введите город и улицу, например: «Кишинёв, Штефан чел Маре 1».', 'Introduceți localitatea și strada, de exemplu: «Chișinău, Ștefan cel Mare 1».', 'Enter a city and street, e.g. “Chișinău, Ștefan cel Mare 1”.'],
+  'pin.q.short': ['Введите город и улицу, например: «Кишинёв, бул. Дачия 1».', 'Introduceți localitatea și strada, de exemplu: «Chișinău, bd. Dacia 1».', 'Enter a city and street, e.g. “Chișinău, Dacia Blvd 1”.'],
   'pin.q.none': ['Ничего не нашли. Уточните запрос или поставьте пин на карте.', 'Nu am găsit nimic. Precizați căutarea sau puneți pinul pe hartă.', 'Nothing found. Refine your search or place the pin on the map.'],
 
   /* регистрация */
@@ -2782,7 +2782,7 @@ function pageLanding(openLogin) {
       '<li><div><b>' + tx('land.how.2t') + '</b><span>' + tx('land.how.2d') + '</span></div></li>' +
       '<li><div><b>' + tx('land.how.3t') + '</b><span>' + tx('land.how.3d') + '</span></div></li>' +
     '</ol><div class="btn-row" style="margin-top:28px;max-width:560px"><a class="btn ink" href="#/register">' + tx('land.cta.reg') + '</a><button class="btn soft" data-act="login">' + tx('land.have') + '</button></div></section>' +
-    '<footer class="land-foot"><span>© SC NumerOM SRL · Helper</span><a href="../">' + tx('land.f.app') + '</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('land.f.bot') + '</a></footer>' +
+    '<footer class="land-foot"><span>© NUMEROM SRL · Helper</span><a href="../">' + tx('land.f.app') + '</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('land.f.bot') + '</a></footer>' +
   '</div>';
   if (openLogin) loginSheet();
 }
@@ -5185,7 +5185,7 @@ VIEWS.settings = async (v, r, alive) => {
     '<section class="card pad-lg"><h3>' + tx('set.cos') + '</h3>' + (others.length ? '<div class="group" style="margin-top:12px">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '<p class="small muted" style="margin:8px 0 0">' + tx('set.only') + '</p>') +
       '<form class="form" data-form="join-code" novalidate style="margin-top:16px">' + fld('jc-code', tx('set.join.l'), inp('jc-code', '', 'autocapitalize="off" spellcheck="false" placeholder="' + esc(tx('set.join.ph')) + '"')) + errBox('jc-err') + '<button class="btn soft" type="submit">' + tx('set.join') + '</button></form>' +
       '<a class="btn soft block" style="margin-top:12px" href="#/register">' + ic('plus', 'sm') + tx('pick.more') + '</a></section>' +
-    '<p class="hint">' + tx('app.name') + ' · © SC NumerOM SRL' + (store.get(K.api) ? ' · API: ' + esc(net.api) : '') + '</p>' +
+    '<p class="hint">' + tx('app.name') + ' · © NUMEROM SRL' + (store.get(K.api) ? ' · API: ' + esc(net.api) : '') + '</p>' +
   '</div></div>';
   v.innerHTML = h;
   SET.dk = dk;

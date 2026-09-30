@@ -2158,7 +2158,7 @@ function pageMore() {
   h += '<div class="group section">' +
     row('go', 'sync', t('c.backup'), t('more.backupSub'), lk, 'data-p="backup"') +
     row('go', 'sliders', t('settings.title'), t('more.settingsSub'), '', 'data-p="settings"') +
-    row('go', 'info', t('about.title'), 'SC NumerOM SRL', '', 'data-p="about"') + '</div>';
+    row('go', 'info', t('about.title'), 'NUMEROM SRL', '', 'data-p="about"') + '</div>';
   h += '<p class="xsmall muted" style="text-align:center;margin-top:22px">' + t('about.tagline') + '<br><span id="app-ver">' + t('more.version', {v: '1.0'}) + '</span></p>';
   return h;
 }
@@ -2256,7 +2256,7 @@ function pageSettings() {
 function pageAbout() {
   let h = topbar(t('about.title'), {back: true});
   h += '<div class="welcome" style="padding-top:18px"><div class="corner-ring" style="width:200px;height:200px;right:-80px;top:-40px"></div>' + logoImg('big') + '<p style="font-weight:300;font-size:22px;margin:4px 0 0;line-height:1.3">' + t('about.tagline') + '</p><p class="muted" style="margin:0">' + t('about.desc') + '</p></div>';
-  h += '<div class="card section"><p class="eyebrow">' + t('about.dev') + '</p><p style="font-weight:600;margin:8px 0 2px">SC NumerOM SRL</p><p class="small muted" style="margin:0">' + t('about.group') + '<br>' + t('about.address') + '</p><div class="copyline" style="margin-top:12px"><span class="v">069 183 398</span><button class="iconbtn" data-act="copy" data-text="069 183 398" aria-label="' + esc(t('about.copyPhone')) + '">' + ic('copy', 'sm') + '</button><a class="iconbtn" href="tel:+37369183398" aria-label="' + esc(t('about.call')) + '">' + ic('phone', 'sm') + '</a></div></div>';
+  h += '<div class="card section"><p class="eyebrow">' + t('about.dev') + '</p><p style="font-weight:600;margin:8px 0 2px">NUMEROM SRL</p><p class="small muted" style="margin:0">' + t('about.group') + '<br>' + t('about.address') + '</p><div class="copyline" style="margin-top:12px"><span class="v">069 183 398</span><button class="iconbtn" data-act="copy" data-text="069 183 398" aria-label="' + esc(t('about.copyPhone')) + '">' + ic('copy', 'sm') + '</button><a class="iconbtn" href="tel:+37369183398" aria-label="' + esc(t('about.call')) + '">' + ic('phone', 'sm') + '</a></div></div>';
   h += '<div class="card section"><p class="eyebrow">' + t('about.important') + '</p><p class="small" style="margin:8px 0 0">' + t('about.disclaimer') + '</p></div>';
   h += '<p class="xsmall muted" style="text-align:center;margin-top:20px">' + t('about.footer', {v: '1.0'}) + '</p>';
   return h;
@@ -2709,7 +2709,7 @@ const NP = CAP ? (CAP.Plugins || {}) : {};
 const IS_AND = !!(CAP && CAP.getPlatform && CAP.getPlatform() === 'android');
 const PRIVACY_URL = 'https://dmitriimalahov-gif.github.io/helper-app/legal/privacy.html';
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
-const PLAY_MANAGE_URL = 'https://play.google.com/store/account/subscriptions?package=md.dirax.helper';
+const PLAY_MANAGE_URL = 'https://play.google.com/store/account/subscriptions?package=md.numerom.helper';
 const CFG_REMOTE = 'https://dmitriimalahov-gif.github.io/helper-app/config.json';
 const K_CFG = 'helper.cfg.v1', K_DEV = 'helper.dev.api', K_ACCT = 'helper.acct.v1', K_SYNC = 'helper.sync.v1', K_PLANS = 'helper.plans.v1';
 const K_INV = 'helper.invite.v1', K_STATUS = 'helper.status.v1', K_REF = 'helper.ref.v1', K_NOTICES = 'helper.notices.v1';
@@ -3153,9 +3153,9 @@ function premStatusText() {
 /* --- Тарифы: GET /v1/premium/plans (месяц/год × 1–4 авто), без сети — таблица по умолчанию --- */
 const PLAN_USD = {month: [4.99, 7.49, 9.99, 12.49], year: [29.99, 44.99, 59.99, 74.99]}, PLAN_XTR = {month: [384, 576, 768, 961], year: [2307, 3461, 4615, 5768]};
 let PL = jget(K_PLANS);
-const productId = (per, cars) => 'md.dirax.helper.premium.' + per + '.' + cars;
+const productId = (per, cars) => 'md.numerom.helper.premium.' + per + '.' + cars;
 const STORE_IDS = ['month', 'year'].reduce((a, p) => a.concat([1, 2, 3, 4].map(n => productId(p, n))), []);
-const prodParse = id => { const m = /^md\.dirax\.helper\.premium\.(month|year)\.([1-4])$/.exec(id || ''); return m ? {plan: m[1], cars: +m[2]} : null; };
+const prodParse = id => { const m = /^md\.numerom\.helper\.premium\.(month|year)\.([1-4])$/.exec(id || ''); return m ? {plan: m[1], cars: +m[2]} : null; };
 function planRow(per, cars) {
   const p = PL && Array.isArray(PL.plans) ? PL.plans.find(x => x.plan === per && +x.cars === cars) : null;
   return p || {plan: per, cars, usd: PLAN_USD[per][cars - 1], stars: PLAN_XTR[per][cars - 1], product_id: productId(per, cars), trial_days: per === 'year' ? 7 : 0};
