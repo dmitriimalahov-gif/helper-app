@@ -1052,7 +1052,7 @@
     "about.desc": "Cartea de service digitală pentru agenda auto Helper tipărită: jurnalul de service, mementouri, cheltuieli și un ghid despre construcția mașinii.",
     "about.dev": "Dezvoltator",
     "about.group": "Grupul de companii „Dirax”",
-    "about.address": "Chișinău, bd. Ștefan cel Mare 137, etajul 4",
+    "about.address": "Chișinău, str. Calea Ieșilor 10",
     "about.copyPhone": "Copiați numărul",
     "about.call": "Sunați",
     "about.important": "Important",

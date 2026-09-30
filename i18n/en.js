@@ -1036,7 +1036,7 @@
     "about.desc": "The digital service book for the printed Helper car planner: a service log, reminders, expenses and a guide to how your car works.",
     "about.dev": "Developer",
     "about.group": "Dirax Group of Companies",
-    "about.address": "137 Ștefan cel Mare Blvd, 4th floor, Chișinău",
+    "about.address": "10 Calea Ieșilor St., Chișinău",
     "about.copyPhone": "Copy number",
     "about.call": "Call",
     "about.important": "Important",
