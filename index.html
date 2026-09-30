@@ -318,6 +318,13 @@ mark{background:var(--teal-2);color:inherit;border-radius:3px;padding:0 1px}
 .input,select.input,textarea.input{width:100%;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);padding:0 14px;font-size:16px;font-weight:500;color:var(--ink);appearance:none;-webkit-appearance:none}
 select.input{background-image:linear-gradient(45deg,transparent 50%,var(--ink-2) 50%),linear-gradient(135deg,var(--ink-2) 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 15px) 21px;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
 textarea.input{height:auto;min-height:92px;padding:12px 14px;line-height:1.45;resize:vertical}
+#au-ref,#gr-code,#iv-code{letter-spacing:.04em;font-variant-numeric:tabular-nums}
+#au-ref[readonly]{background:var(--teal-3);border-color:transparent}
+.gwrap{display:flex;flex-direction:column;gap:12px}
+.gslot{display:flex;justify-content:center;min-height:44px}
+.gslot.busy{opacity:.5;pointer-events:none}
+.or-div{display:flex;align-items:center;gap:12px;color:var(--ink-3);font-size:12.5px;font-weight:500}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--line)}
 textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;min-height:180px}
 .input:focus{outline:none;border-color:var(--teal-ink);box-shadow:0 0 0 3px var(--teal-2)}
 .input[aria-invalid="true"]{border-color:var(--bad)}
@@ -1921,7 +1928,7 @@ function pageHome() {
   h += '<button class="car-title" data-act="car-switch" aria-label="' + t('home.switchCar') + '">' + esc(carName(car)) + ic('chevD', 'sm') + '</button>';
   h += '<p class="subtitle num">' + esc(carSub(car)) + (car.demo ? ' <span class="badge" style="margin-left:4px;vertical-align:1px">' + t('home.demoBadge') + '</span>' : '') + '</p>';
   if (S.demo) h += '<button class="demo-banner" data-act="demo-exit"><span class="body" style="flex:1"><span class="t" style="display:block">' + t('home.demoTitle') + '</span><span class="s">' + t('home.demoText') + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
-  h += hidCard();
+  h += acctSaveCard() || hidCard();
   h += gameStrip();
   if (isPrem()) {
     carDocs(car.id).forEach(d => {
@@ -2265,7 +2272,7 @@ function pageAbout() {
 /* ================= onboarding ================= */
 function renderOnb() {
   const o = ui.onb, d = o.d, st = o.step;
-  if (st === 'acct') return acctWelcome();
+  if (st === 'acct' || (st === 0 && acctFirst())) return acctWelcome();
   let h = '<div class="onb">';
   if (st === 0) {
     h += '<div class="corner-ring" style="width:320px;height:320px;right:-170px;top:-120px"></div><div class="corner-ring" style="width:180px;height:180px;right:-70px;top:-40px;border-color:var(--teal)"></div>';
@@ -2891,7 +2898,7 @@ async function afterAuth(d, kind) {
   if (kind === 'register' && demoOnly) dropDemo();
   save();
   closeSheet();
-  if (kind === 'register' && !S.cars.length) { ui.stacks = emptyStacks(); ui.tab = 'home'; startOnb('first', 1); }
+  if (!S.cars.length) { ui.stacks = emptyStacks(); ui.tab = 'home'; startOnb('first', kind === 'register' ? 1 : 0); }
   else if (ui.onb && ui.onb.step === 'acct') { ui.onb = null; render(false); }
   else render();
   toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctEmail()}));
@@ -3081,6 +3088,9 @@ function syncApply(r, body, sent, setDirty) {
   if (S.cars.some(c => c.demo) && S.cars.some(c => !c.demo)) { dropDemo(); changed = true; }
   const first = SY.first, demoOnly = SY.demoOnly;
   SY.first = ''; SY.demoOnly = false;
+  /* пилот: вошли, а в аккаунте авто нет — демо убрать и сразу к добавлению своего авто */
+  const toOnb = first === 'login' && demoOnly && closedMode() && !S.cars.some(c => !c.demo);
+  if (toOnb && S.cars.length) { dropDemo(); changed = true; }
   const rej = r.rejected || [], lim = rej.find(x => x.code === 'car_limit'), other = rej.filter(x => x.code !== 'car_limit');
   SY.noticeK = lim ? {k: 'limit', n: +lim.limit || 0} : other.length ? {k: 'rejected', n: other.length, err: other[0].error || ''} : null;
   SY.notice = syncNoticeText(SY.noticeK);
@@ -3089,8 +3099,8 @@ function syncApply(r, body, sent, setDirty) {
   S.demo = S.cars.some(c => c.demo);
   syncPersist();
   if (changed) { store.set(KEY, JSON.stringify(S)); if (typeof nativeSchedule === 'function') nativeSchedule(); }
-  if (ui.onb) { if ((ui.onb.step === 'acct' || ui.onb.step === 0) && S.cars.length) { ui.onb = null; render(false); } }
-  else if (!S.cars.length) startOnb('first');
+  if (ui.onb) { if ((ui.onb.step === 'acct' || ui.onb.step === 0) && S.cars.length) { ui.onb = null; render(false); } else if (toOnb && ui.onb.step === 0) { ui.onb.step = 1; render(false); } }
+  else if (!S.cars.length) startOnb('first', toOnb ? 1 : undefined);
   else if (changed) render();
   syncUI();
   if (first === 'login' && demoOnly) toast(t(S.cars.some(c => !c.demo) ? 'sync.loaded' : 'sync.noCars'));
@@ -3479,8 +3489,11 @@ function carEditSheet(id, pre) {
 /* ================= Приглашения: закрытый запуск, ссылка друга, «Пригласить друга» (04_AUTOMATION/docs/INVITES_API.md) =================
    Код приглашения = Helper ID друга (HLP-XXXXXX) или код из бумажного ежедневника (HLP-XXXX-XXXX). Ссылка ?ref=… сохраняется как
    ожидающее приглашение, проверяется на сервере и отправляется при регистрации. Ценность километров Helper в деньгах нигде не показывается. */
-let INV = jget(K_INV), ST = jget(K_STATUS), RF = jget(K_REF), SEEN_NOTICES = jget(K_NOTICES) || [], invP = null, stP = null, rfP = null;
+let INV = jget(K_INV), ST = jget(K_STATUS), RF = jget(K_REF), SEEN_NOTICES = jget(K_NOTICES) || [], invP = null, stP = null, rfP = null, invFail = false;
 const closedMode = () => ST && ST.at ? !!ST.invite_only : true; /* статус неизвестен (офлайн, нет сервера) — считаем закрытым */
+/* Пилот (закрытый запуск): без аккаунта данные на устройстве не заводятся — сначала регистрация по приглашению или вход,
+   авто и журнал сразу сохраняются на сервере. В открытом режиме (после порога) — как раньше: можно без регистрации. */
+const acctFirst = () => !logged() && closedMode();
 function inviteCapture() {
   let code = '';
   try {
@@ -3505,6 +3518,7 @@ function inviteCheck(force) {
   if (invP) return invP;
   if (!force && INV.check && Date.now() - (INV.checkedAt || 0) < 600000) return Promise.resolve(INV.check);
   const code = INV.code, fresh = !INV.check;
+  invFail = false;
   invP = api('/v1/auth/invite/' + encodeURIComponent(code), {auth: false}).then(d => {
     if (!INV || INV.code !== code || !d) return null;
     INV.check = {valid: !!d.valid, kind: d.kind || null, reason: d.reason || null, inviter: d.inviter || null, days: +d.referral_bonus_days || 30, message: d.message || ''};
@@ -3512,26 +3526,35 @@ function inviteCheck(force) {
     if (d.valid && fresh && !logged() && !(ui.onb && ui.onb.step === 'acct')) toast(inviteText(INV.check));
     inviteWelcomeRefresh();
     return INV.check;
-  }, () => null).finally(() => { invP = null; });
+  }, () => { invFail = true; if (INV && INV.code === code && !INV.check) inviteWelcomeRefresh(); return null; }).finally(() => { invP = null; });
   return invP;
 }
 function inviteClear() { INV = null; jset(K_INV, null); }
+/* причина «код не подошёл» пришла текстом сервера на прежнем языке — при смене языка спросить заново */
+onLang(() => { if (S && INV && INV.check && !INV.check.valid && !logged()) inviteCheck(true); }); /* S — после запуска (onLang вызывает сразу) */
 function statusLoad(force) {
   if (stP) return stP;
   if (!force && ST && ST.at && Date.now() - ST.at < 60000) return Promise.resolve(ST);
   stP = api('/v1/status', {auth: false}).then(d => {
-    if (d && typeof d.invite_only === 'boolean') { ST = Object.assign({}, d, {at: Date.now()}); jset(K_STATUS, ST); inviteWelcomeRefresh(); }
+    if (d && typeof d.invite_only === 'boolean') {
+      ST = Object.assign({}, d, {at: Date.now()}); jset(K_STATUS, ST);
+      /* закрыто, а на экране — приветствие «Добавить авто» без аккаунта: сначала аккаунт */
+      if (ui.onb && ui.onb.step === 0 && acctFirst()) { ui.onb.step = 'acct'; render(false); } else inviteWelcomeRefresh();
+      liveRender(['home']);
+    }
     return ST;
   }, () => ST).finally(() => { stP = null; });
   return stP;
 }
-const inviteText = c => c.kind === 'premium_code' ? t('inv.invitedByDiary') : t('inv.invitedBy', {name: esc((c.inviter && c.inviter.name) || t('inv.friend')), days: c.days || 30});
+/* Premium за друга — только по Helper ID друга; приглашение владельца или команды партнёра — просто «приглашение действует» */
+const inviteText = c => c.kind === 'premium_code' ? t('inv.invitedByDiary') : c.kind === 'owner_invite' || c.kind === 'partner_invite' ? t('inv.invitedHelper') : t('inv.invitedBy', {name: esc((c.inviter && c.inviter.name) || t('inv.friend')), days: c.days || 30});
 /* баннер приглашения на экране приветствия и в форме регистрации */
 function inviteBanner() {
   if (!INV || !INV.code) return '';
   const c = INV.check;
-  if (!c) { inviteCheck(); return '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + t('inv.checking') + '</p></div>'; }
-  if (!c.valid) return '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + t('inv.badLink', {msg: esc(c.message || '')}) + '</p></div>';
+  /* сервер не ответил — код сохранён и уйдёт вместе с регистрацией (там и проверится) */
+  if (!c) { if (!invFail) inviteCheck(); return '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + (invFail ? t('inv.pending', {code: esc(INV.code)}) : t('inv.checking')) + '</p></div>'; }
+  if (!c.valid) return '<div class="card tint row" style="gap:12px;margin-bottom:12px;text-align:left"><span class="ic-circle soon">' + ic('info', 'sm') + '</span><p class="small" style="margin:0;flex:1">' + t('inv.badLink', {msg: esc(c.message || '')}) + ' ' + t('inv.badLinkMore') + '</p></div>';
   return '<div class="card tint row" style="gap:12px;margin-bottom:12px"><span class="ic-circle">' + ic('gift', 'sm') + '</span><p class="small" style="margin:0;flex:1">' + inviteText(c) + '</p></div>';
 }
 /* «Helper пока открыт по приглашениям» + счётчик мест (только пока закрыто) */
@@ -3539,7 +3562,14 @@ function closedCard() {
   if (!closedMode()) return '';
   const st = ST || {};
   const places = st.at && +st.open_at > 0 && +st.places_left > 0 ? '<p class="xsmall muted num" style="margin:6px 0 0">' + tn('inv.places', +st.places_left, {total: fN(+st.open_at)}) + '</p>' : '';
-  return '<div class="card section" style="margin-bottom:12px;text-align:left"><p style="margin:0;font-weight:600">' + t('inv.closedTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('inv.closedText') + '</p>' + places + '</div>';
+  return '<div class="card section" style="margin-bottom:12px;text-align:left"><p style="margin:0;font-weight:600">' + t('inv.closedTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('inv.closedText') + '</p>' + places + inviteCodeForm() + '</div>';
+}
+/* поле «Код приглашения» на экране приветствия: кода нет или он не подошёл (действующий код меняется в форме регистрации) */
+function inviteCodeForm() {
+  if (INV && INV.code && !(INV.check && !INV.check.valid)) return '';
+  return '<form data-form="inv-code" novalidate style="margin-top:12px"><label class="small" for="iv-code" style="font-weight:600;display:block;margin-bottom:6px">' + t(INV && INV.code ? 'inv.otherCodeQ' : 'inv.haveCode') + '</label>' +
+    '<div class="row" style="gap:8px"><input id="iv-code" class="input num" style="flex:1;min-width:0;letter-spacing:.04em" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="HLP-XXXXXX" maxlength="40"><button class="btn sm ink" type="submit">' + t('inv.apply') + '</button></div>' +
+    errBox('iv-err') + '</form>';
 }
 /* --- «Пригласить друга»: личная ссылка, уровень, квота, друзья --- */
 const refSrv = () => logged() && RF && RF.who === acctWho() && RF.d ? RF : null;
@@ -3976,8 +4006,9 @@ function acctWelcome() {
     '<li><span class="ic-circle">' + ic('journal', 'sm') + '</span><span>' + t('account.w2') + '</span></li>' +
     '<li><span class="ic-circle">' + ic('sync', 'sm') + '</span><span>' + t('account.w3') + '</span></li></ul></div>';
   const closed = closedMode();
-  h += '<div class="foot">' + inviteBanner() + closedCard() + '<button class="btn block ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn block soft" data-act="acct-login">' + t('c.login') + '</button>' +
-    (closed ? '' : '<button class="textbtn" data-act="acct-skip" style="align-self:center">' + t('account.skip') + '</button><p class="xsmall muted" style="text-align:center;margin:0">' + t('account.welcomeNote') + '</p>') + '</div>';
+  /* закрыто (пилот): без аккаунта — только демо (пример без своих данных, выход из него — снова сюда) */
+  h += '<div class="foot">' + inviteBanner() + closedCard() + '<button class="btn block ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn block soft" data-act="acct-login">' + t('c.login') + '</button>' + gSlot('welcome') +
+    (closed ? '<button class="textbtn" data-act="demo-restore" style="align-self:center">' + t('onb.demo') + '</button>' : '<button class="textbtn" data-act="acct-skip" style="align-self:center">' + t('account.skip') + '</button><p class="xsmall muted" style="text-align:center;margin:0">' + t('account.welcomeNote') + '</p>') + '</div>';
   if (!ST || !ST.at) statusLoad();
   return h + '</div>';
 }
@@ -3998,7 +4029,7 @@ function pageAccount() {
     ? '<p class="small" style="margin:6px 0 0">' + t('account.tgLinked', {bot: TG_BOT, user: tg.username ? ' (@' + esc(tg.username) + ')' : ''}) + '</p>'
     : '<p class="small muted" style="margin:6px 0 0">' + t('account.tgHint', {bot: TG_BOT}) + '</p><button class="btn block soft" style="margin-top:12px" data-act="acct-tg">' + ic('send', 'sm') + t('account.tgLink') + '</button>') + '</div>';
   const row = (act, icn, tt, s) => '<button class="item" data-act="' + act + '"><span class="ic-circle">' + ic(icn, 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tt + '</span>' + (s ? '<span class="s">' + s + '</span>' : '') + '</span>' + ic('chevR', 'sm chev') + '</button>';
-  h += '<div class="group section">' + (u.has_password === false ? '' : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
+  h += '<div class="group section">' + (u.has_password === false ? row('acct-setpass', 'lock', t('account.setPass'), t('account.setPassHint')) : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
   h += '<div class="card section"><p class="eyebrow">' + t('account.delTitle') + '</p><p class="small muted" style="margin:6px 0 12px">' + t('account.delText') + '</p><button class="btn block danger" data-act="acct-delete">' + ic('trash', 'sm') + t('account.delete') + '</button></div>';
   return h;
 }
@@ -4007,15 +4038,20 @@ function authSheet(mode, o) {
   const email = o.email || ui.authEmail || '';
   const why = o.why ? '<div class="card tint" style="margin-bottom:14px"><p class="small" style="margin:0">' + esc(o.why) + '</p></div>' : '';
   const em = fld('au-email', 'E-mail', inp('au-email', email, 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@example.com"'));
+  /* сервер недоступен (нет сети, туннель API не отвечает, нет адреса API) — сообщение и «Повторить»; без аккаунта не продолжаем */
+  const down = '<div class="card tint" id="au-down" role="alert" hidden><p class="small" style="margin:0 0 10px">' + t('api.down') + '</p><button type="button" class="btn sm ink" data-act="au-retry">' + ic('sync', 'xs') + t('c.retry') + '</button></div>';
   if (mode === 'register') {
-    /* закрытый запуск или есть ссылка друга — поле «Код приглашения» (Helper ID друга или код из ежедневника) */
+    /* закрытый запуск или есть ссылка друга — поле «Код приглашения» (Helper ID друга или код из ежедневника):
+       код из ссылки подставлен и закреплён (кнопка «Другой код»); не подошёл — поле пустое для другого кода */
     const needRef = closedMode() || !!(INV && INV.code);
-    const rf = needRef ? fld('au-ref', t('inv.codeLabel'), inp('au-ref', INV && INV.code ? INV.code : '', 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="HLP-XXXXXX"'), t('inv.codeHint')) : '';
-    openSheet(t('c.register'), why + inviteBanner() + '<form class="form" data-form="register" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + rf + errBox('au-err') + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
+    const bad = !!(INV && INV.check && !INV.check.valid), code = INV && INV.code && !bad ? INV.code : '', lock = !!(code && INV.check && INV.check.valid);
+    const rf = needRef ? fld('au-ref', t('inv.codeLabel'), inp('au-ref', code, 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40" placeholder="HLP-XXXXXX"' + (lock ? ' readonly' : '')) +
+      (lock ? '<button type="button" class="textbtn" data-act="au-ref-edit" style="align-self:flex-start;padding:2px">' + t('inv.otherCode') + '</button>' : ''), t('inv.codeHint')) : '';
+    openSheet(t('c.register'), why + inviteBanner() + gSlot('register') + '<form class="form" data-form="register" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + rf + errBox('au-err') + down + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
       '<p class="xsmall muted" style="margin:0">' + t('auth.legal', {terms: '<a href="' + TERMS_APP_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.termsLink') + '</a>', privacy: '<a href="' + PRIVACY_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.privacyLink') + '</a>'}) + '</p></form>' +
       '<div class="stack" style="margin-top:8px;align-items:center"><button class="textbtn" data-act="acct-login" data-keep="1">' + t('auth.haveAccount') + '</button></div>');
   } else {
-    openSheet(t('auth.loginTitle'), why + '<form class="form" data-form="login" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="current-password"')) + errBox('au-err') + '<button class="btn block ink" type="submit">' + t('c.login') + '</button></form>' +
+    openSheet(t('auth.loginTitle'), why + gSlot('login') + '<form class="form" data-form="login" novalidate>' + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="current-password"')) + errBox('au-err') + down + '<button class="btn block ink" type="submit">' + t('c.login') + '</button></form>' +
       '<div class="stack" style="margin-top:8px;align-items:center"><button class="textbtn" data-act="acct-forgot">' + t('auth.forgot') + '</button><button class="textbtn" data-act="acct-register" data-keep="1">' + t('auth.noAccount') + '</button></div>');
   }
 }
@@ -4025,15 +4061,26 @@ async function authSubmit(f, kind) {
   if (!EMAIL_RE.test(email)) return showErr('au-err', t('auth.badEmail'));
   if (!pw) return showErr('au-err', t('auth.enterPass'));
   if (kind === 'register' && pw.length < 8) return showErr('au-err', t('auth.passShort'));
-  const ref = kind === 'register' ? (val('au-ref') || (INV && INV.code) || '').trim().slice(0, 40) : '';
+  /* поле кода есть — берём то, что в поле (код, который не подошёл, там уже стёрт); поля нет (открыто) — сохранённая ссылка */
+  const ref = kind === 'register' ? String($('#au-ref') ? val('au-ref') : (INV && INV.code) || '').trim().slice(0, 40) : '';
   if (kind === 'register' && closedMode() && !ref) return showErr('au-err', t('inv.codeRequired'));
   const done = formBusy(f, t(kind === 'register' ? 'busy.register' : 'busy.login'));
   let d;
   const body = kind === 'register' ? {email, password: pw, device: devName(), language: LANG} : {email, password: pw, device: devName()};
   if (ref) body.ref = ref;
+  authDown(false);
   try { d = await api('/v1/auth/' + kind, {body, auth: false}); }
   catch (e) {
     done();
+    if (srvDown(e)) return authDown(true);
+    if (kind === 'register' && /^invite_/.test(e.code || '') && e.code !== 'invite_required') {
+      /* код не подошёл (не найден, исчерпан, суточный лимит…) — запомнить причину и дать ввести другой код */
+      if (INV && INV.code === ref) { INV.check = {valid: false, kind: null, reason: e.code.slice(7), inviter: null, days: 30, message: e.message}; INV.checkedAt = Date.now(); jset(K_INV, INV); }
+      const i = $('#au-ref'), b = $('[data-act="au-ref-edit"]');
+      if (b) b.remove();
+      if (i) { i.readOnly = false; try { i.focus(); i.select(); } catch (x) {} }
+      return showErr('au-err', e.message);
+    }
     if (e.code === 'invite_required') { /* сервер закрыл регистрацию, а мы считали её открытой — показать поле кода */
       ST = Object.assign({}, ST || {}, {invite_only: true, at: Date.now()}); jset(K_STATUS, ST);
       authSheet('register', {why: ui.authWhy, email});
@@ -4044,6 +4091,19 @@ async function authSubmit(f, kind) {
   done();
   if (kind === 'register') { inviteClear(); statusLoad(true); }
   await afterAuth(d, kind);
+}
+/* нет связи с сервером Helper: нет сети, нет адреса API, туннель/прокси отвечает 5xx */
+const srvDown = e => !!e && (e.code === 'offline' || e.code === 'no_api' || e.status >= 500);
+function authDown(on) { const d = $('#au-down'), er = $('#au-err'); if (d) d.hidden = !on; if (on && er) er.hidden = true; }
+/* «Повторить»: адрес API не загрузился — загрузить заново; затем та же форма ещё раз (введённые данные на месте) */
+async function authRetry(el) {
+  const f = el && el.closest('form'); if (!f || !FORMS[f.dataset.form]) return;
+  el.disabled = true;
+  try { if (!net.api) await cfgLoad(); } catch (e) {}
+  el.disabled = false;
+  statusLoad(true);
+  if (INV && INV.code && !INV.check) inviteCheck(true);
+  FORMS[f.dataset.form](f);
 }
 function forgotSheet() {
   openSheet(t('auth.forgotTitle'), '<form class="form" data-form="forgot" novalidate><p class="small muted" style="margin:0">' + t('auth.forgotText') + '</p>' + fld('fg-email', 'E-mail', inp('fg-email', ui.authEmail || '', 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"')) + errBox('fg-err') + '<button class="btn block ink" type="submit">' + t('auth.getCode') + '</button></form><div class="stack" style="margin-top:8px;align-items:center"><button class="textbtn" data-act="acct-reset">' + t('auth.haveCode') + '</button></div>');
@@ -4102,6 +4162,101 @@ async function acctTg() {
   try { const d = await api('/v1/me/telegram/link', {body: {}}); A.meAt = 0; resumeAt = 0; openTg(d.url); toast(t('account.tgOpen')); }
   catch (e) { if (e.code === 'already_linked') acctMe(); toast(e.message); }
 }
+
+/* ================= Вход через Google (Google Identity Services — только сайт / PWA) =================
+   Кнопка есть, только если сервер вернул google_client_id в /v1/status. В приложениях iOS/Android (WebView: Google не
+   разрешает там OAuth — будет нативный вход) и в Telegram Mini App кнопки нет. Скрипт GIS грузится лениво, когда кнопка нужна.
+   ID token → POST /v1/auth/google {credential, ref?, device, language} → те же токены, что у пароля, дальше — afterAuth.
+   Закрыто и нет кода приглашения → лист «Код приглашения» (удостоверение Google живёт ~1 ч — держим в памяти и повторяем). */
+const GIS_SRC = 'https://accounts.google.com/gsi/client';
+let gisP = null, gisInit = '', gCred = null;
+const gClientId = () => (!CAP && !IN_TG && ST && typeof ST.google_client_id === 'string' && ST.google_client_id.trim()) || '';
+function gisLoad() {
+  const ok = () => window.google && google.accounts && google.accounts.id;
+  if (ok()) return Promise.resolve(google.accounts.id);
+  if (!gisP) gisP = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = GIS_SRC; s.async = true; s.defer = true;
+    s.onload = () => ok() ? res(google.accounts.id) : rej(new Error('gis'));
+    s.onerror = () => { gisP = null; s.remove(); rej(new Error('gis')); };
+    document.head.appendChild(s);
+  });
+  return gisP;
+}
+/* место под кнопку Google и разделитель «или» (кнопку рисует GIS после вставки разметки) */
+function gSlot(where) {
+  if (!gClientId()) return '';
+  setTimeout(gMount, 0);
+  const btn = '<div class="gslot" data-gbtn="' + where + '"></div>', or = '<div class="or-div" aria-hidden="true"><span>' + t('auth.or') + '</span></div>';
+  return '<div class="gwrap"' + (where === 'welcome' ? '' : ' style="margin-bottom:14px"') + '>' + (where === 'welcome' ? or + btn : btn + or) + '<p class="err g-err" role="alert" hidden></p></div>';
+}
+const gDark = () => { const a = document.documentElement.getAttribute('data-theme'); return a ? a === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); };
+async function gMount() {
+  const cid = gClientId(), els = $$('[data-gbtn]').filter(el => !el.childElementCount);
+  if (!els.length || !cid) return;
+  let id;
+  try { id = await gisLoad(); } catch (e) { $$('.gwrap').forEach(w => { w.hidden = true; }); return; } /* Google недоступен — только e-mail */
+  if (gisInit !== cid) { id.initialize({client_id: cid, callback: gCallback, auto_select: false, cancel_on_tap_outside: true, context: 'signin', ux_mode: 'popup', itp_support: true}); gisInit = cid; }
+  els.forEach(el => {
+    if (!document.contains(el) || el.childElementCount) return;
+    const w = Math.max(200, Math.min(400, Math.round(el.getBoundingClientRect().width) || 320));
+    try { id.renderButton(el, {type: 'standard', theme: gDark() ? 'filled_black' : 'outline', size: 'large', shape: 'pill', text: el.dataset.gbtn === 'login' ? 'signin_with' : 'continue_with', logo_alignment: 'center', width: w, locale: LANG}); } catch (e) {}
+  });
+}
+function gCallback(r) {
+  if (!r || !r.credential) return;
+  gCred = {cred: r.credential, at: Date.now()};
+  gAuth(null, null);
+}
+/* ошибка — под кнопкой Google на экране (лист поверх приветствия — в листе), иначе всплывающим сообщением */
+function gErr(msg) {
+  const sh = $('#sheet'), inSheet = sh && !sh.hidden;
+  if (inSheet && $('#gr-err')) return showErr('gr-err', msg);
+  const el = (inSheet && sh.querySelector('.g-err')) || (!inSheet && $('#onb .g-err'));
+  if (el) { el.textContent = msg; el.hidden = false; } else toast(msg);
+}
+/* ref: код из листа «Код приглашения»; иначе — из поля формы регистрации или сохранённое приглашение (ссылка ?ref=) */
+async function gAuth(ref, f) {
+  if (!gCred) return;
+  if (Date.now() - gCred.at > 50 * 60000) { gCred = null; closeSheet(); return gErr(t('auth.gExpired')); }
+  const typed = $('#au-ref') ? val('au-ref').trim() : '';
+  const code = String(ref != null ? ref : typed || (INV && INV.code && !(INV.check && !INV.check.valid) ? INV.code : '')).trim().slice(0, 40);
+  const body = {credential: gCred.cred, device: devName(), language: LANG};
+  if (code) body.ref = code;
+  $$('.g-err').forEach(x => { x.hidden = true; });
+  const slots = $$('.gslot');
+  slots.forEach(x => x.classList.add('busy'));
+  const done = f ? formBusy(f, t('auth.gBusy')) : (toast(t('auth.gBusy')), () => {});
+  const undo = () => { done(); slots.forEach(x => x.classList.remove('busy')); };
+  let d;
+  try { d = await api('/v1/auth/google', {body, auth: false}); }
+  catch (e) {
+    undo();
+    if (e.code === 'google_disabled') { if (ST) { ST.google_client_id = null; jset(K_STATUS, ST); } gCred = null; $$('.gwrap').forEach(w => { w.hidden = true; }); return f ? showErr('gr-err', t('auth.gDisabled')) : toast(t('auth.gDisabled')); }
+    if (srvDown(e)) return gErr(t('api.down'));
+    if (/^invite_/.test(e.code || '')) {
+      /* нужен код приглашения или он не подошёл — запомнить причину для сохранённого кода и спросить код (удостоверение Google сохраняем) */
+      if (code && INV && INV.code === code && e.code !== 'invite_required') { INV.check = {valid: false, kind: null, reason: e.code.slice(7), inviter: null, days: 30, message: e.message}; INV.checkedAt = Date.now(); jset(K_INV, INV); }
+      if (f) { const i = $('#gr-code'); if (i) { try { i.focus(); i.select(); } catch (x) {} } return showErr('gr-err', e.message); }
+      return gInviteSheet(e.code === 'invite_required' ? '' : e.message);
+    }
+    if (e.status !== 429) gCred = null;
+    return gErr(e.code === 'google_bad_token' ? t('auth.gBad') : e.code === 'google_email_unverified' ? t('auth.gUnverified') : e.message);
+  }
+  undo();
+  gCred = null;
+  if (d.created) { inviteClear(); statusLoad(true); }
+  await afterAuth(d, d.created ? 'register' : 'login');
+}
+function gInviteSheet(err) {
+  const bad = !!(INV && INV.check && !INV.check.valid), code = INV && INV.code && !bad ? INV.code : '';
+  openSheet(t('inv.codeLabel'), '<p class="muted" style="margin:0 0 14px;line-height:1.5">' + t('auth.gInviteS') + '</p>' + (INV && INV.code ? inviteBanner() : closedCardText()) +
+    '<form class="form" data-form="g-ref" novalidate>' + fld('gr-code', t('inv.codeLabel'), inp('gr-code', code, 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40" placeholder="HLP-XXXXXX"'), t('inv.codeHint')) + errBox('gr-err') +
+    '<button class="btn block ink" type="submit">' + t('auth.gContinue') + '</button></form>');
+  if (err) showErr('gr-err', err);
+  setTimeout(() => { const i = $('#gr-code'); if (i && !i.value) try { i.focus(); } catch (e) {} }, 80);
+}
+const closedCardText = () => '<div class="card tint" style="margin-bottom:12px"><p class="small" style="margin:0">' + t('inv.closedText') + '</p></div>';
 
 /* ================= Сканер техпаспорта =================
    Приложение: HelperScan (камера документов + OCR на устройстве). Браузер, Telegram Mini App: фото через <input type=file>
@@ -4391,6 +4546,12 @@ function hidCard() {
   if (!id) { setTimeout(() => loyFetch(), 0); return '<div class="hidc"><span class="ic-circle">' + ic('qr', 'sm') + '</span><span class="body"><span class="eyebrow" style="display:block">' + t('c.myCode') + '</span><span class="small muted">' + t(navigator.onLine === false ? 'hcode.offline' : 'hcode.loading') + '</span></span></div>'; }
   const pts = s ? loyBal(s.balance) : t('hcode.byPartners');
   return '<div class="hidc"><button class="qrbox" data-act="hid" aria-label="' + esc(t('hcode.fullAria')) + '">' + qrSVG('HELPER:' + id, 84, t('hcode.qrAlt', {id: String(id)})) + '</button><div class="body"><span class="eyebrow" style="display:block">' + t('c.myCode') + '</span><span class="hid">' + esc(id) + '</span><span class="pts">' + pts + '</span><div><button class="btn sm" data-act="hid">' + ic('qr', 'xs') + t('hcode.showPartner') + '</button></div></div></div>';
+}
+/* --- Пилот: на устройстве свои данные, а аккаунта нет — постоянная карточка на главной (не скрывается, пока нет входа) --- */
+function acctSaveCard() {
+  if (logged() || !closedMode() || !S.cars.some(c => !c.demo)) return '';
+  return '<div class="card" style="margin-top:14px;border-color:var(--soon)"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle soon">' + ic('sync', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('acct.saveT') + '</p><p class="small muted" style="margin:4px 0 0">' + t('acct.saveS') + '</p></div></div>' +
+    '<div class="btn-row" style="margin-top:12px"><button class="btn sm ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn sm soft" data-act="acct-login">' + t('c.login') + '</button></div></div>';
 }
 /* --- Полноэкранный код для кассира: белый фон, крупный QR, Code128, код текстом --- */
 let bright = null;
@@ -5731,16 +5892,32 @@ function upsell(k) {
 
 /* ================= onboarding ================= */
 function startOnb(mode, step) {
-  const c = activeCar();
-  ui.onb = {step: step != null ? step : mode === 'first' ? 0 : 1, mode, d: {make: '', model: '', year: '', odo: '', fuel: 'petrol', engine: '', gearbox: 'mt', drive: 'fwd', vin: '', plate: '', currency: c ? c.currency : 'MDL', oil: '', color: ''}};
+  if (acctFirst() && step !== 'acct') {
+    /* пилот: авто заводится только в аккаунте. Данные на устройстве уже есть — лист регистрации (после входа — продолжить),
+       иначе — экран «Создать аккаунт / Войти» */
+    if (S.cars.some(x => !x.demo)) return acctGate(mode === 'add' ? () => { if (!ui.onb) ACT['car-add'](); } : null);
+    mode = 'first'; step = 'acct';
+  }
+  /* черновик авто, введённый до регистрации, — продолжить с ним после входа (шаг 1) */
+  const c = activeCar(), draft = step === 1 && mode === 'first' ? ui.onbDraft : null;
+  if (step !== 'acct') ui.onbDraft = null;
+  ui.onb = {step: step != null ? step : mode === 'first' ? 0 : 1, mode, d: draft || {make: '', model: '', year: '', odo: '', fuel: 'petrol', engine: '', gearbox: 'mt', drive: 'fwd', vin: '', plate: '', currency: c ? c.currency : 'MDL', oil: '', color: ''}};
+  if (draft) ui.onb.manual = true;
   closeSheet(); render(false);
   try { $('#onb').scrollTop = 0; } catch (e) {}
+}
+/* без аккаунта (пилот) — лист «Создать аккаунт» с пояснением; after — что сделать после входа */
+function acctGate(after) {
+  ui.after = after || null; ui.authWhy = t('acct.gateWhy');
+  authSheet('register', {why: ui.authWhy});
 }
 function captureOnb() {
   if (!ui.onb) return;
   ['make', 'model', 'year', 'odo', 'engine', 'vin', 'plate', 'oil'].forEach(k => { const el = $('#onb-' + k); if (el) ui.onb.d[k] = el.value; });
 }
 function finishOnb() {
+  /* закрыто и нет аккаунта (статус сменился, пока заполняли) — сохранить введённое и сначала создать аккаунт */
+  if (acctFirst()) { ui.onbDraft = ui.onb.d; return startOnb('first', 'acct'); }
   const d = ui.onb.d, T = todayISO(), id = uid(), odo = Math.round(parseNum(d.odo));
   const eng = parseNum(d.engine);
   const car = {id, make: d.make.trim(), model: d.model.trim(), year: +d.year, gearbox: d.gearbox, fuel: d.fuel, engine: d.fuel === 'ev' || !eng ? '' : String(eng), drive: d.drive, vin: d.vin.trim().toUpperCase(), plate: d.plate.trim().toUpperCase(), odo, odoAt: T, currency: d.currency, odoLog: [{d: T, km: odo}]};
@@ -5752,6 +5929,7 @@ function finishOnb() {
   const got = S.cars.filter(c => !c.demo).length <= 3 ? award('car', 20, 'loy.h.car', {car: carName(car)}) : 0;
   if (car.scanned) gEvent('car_scanned', car.id);
   save(); ui.onb = null; ui.tab = 'home'; ui.stacks = emptyStacks(); ui.jf = 'all';
+  if (logged()) syncSoon(400); /* авто — сразу на сервер */
   render(false); toast(t('onbx.carAdded', {car: carName(car)}) + (got ? ' · ' + ptsTxt(got) : ''));
 }
 
@@ -5860,12 +6038,19 @@ Object.assign(FORMS, LOYAL_FORMS);
 Object.assign(FORMS, {
   login(f) { return authSubmit(f, 'login'); },
   register(f) { return authSubmit(f, 'register'); },
+  /* код приглашения, введённый на экране приветствия: сохраняется как ожидающее приглашение и проверяется на сервере */
+  'inv-code'() {
+    const code = val('iv-code').trim().slice(0, 40);
+    if (!code) return showErr('iv-err', t('inv.codeRequired'));
+    INV = {code, at: Date.now(), check: null, checkedAt: 0}; jset(K_INV, INV);
+    invFail = false; render(false);
+  },
   async forgot(f) {
     const email = val('fg-email').trim().toLowerCase(); ui.authEmail = email;
     if (!EMAIL_RE.test(email)) return showErr('fg-err', t('fv.email'));
     const done = formBusy(f, t('fv.sending'));
     try { const d = await api('/v1/auth/password/forgot', {body: {email}, auth: false}); done(); resetSheet(email, d.message); }
-    catch (e) { done(); showErr('fg-err', e.message); }
+    catch (e) { done(); showErr('fg-err', srvDown(e) ? t('api.down') : e.message); }
   },
   async reset(f) {
     const email = val('rs-email').trim().toLowerCase(), code = val('rs-code').replace(/\D/g, ''), pw = val('rs-pass');
@@ -5874,7 +6059,7 @@ Object.assign(FORMS, {
     if (pw.length < 8) return showErr('rs-err', t('fv.pwLen'));
     const done = formBusy(f, t('fv.saving'));
     try { const d = await api('/v1/auth/password/reset', {body: {email, code, new_password: pw}, auth: false}); done(); ui.authEmail = email; authSheet('login', {email, why: d.message || t('act.pwChangedLogin')}); }
-    catch (e) { done(); showErr('rs-err', e.message); }
+    catch (e) { done(); showErr('rs-err', srvDown(e) ? t('api.down') : e.message); }
   },
   async pass(f) {
     const old = val('cp-old'), nw = val('cp-new');
@@ -5886,6 +6071,13 @@ Object.assign(FORMS, {
   },
   'acct-del'(f) { return acctDelete(f); }
 });
+/* вход через Google: код приглашения из листа (FORMS объявлен выше) */
+FORMS['g-ref'] = f => {
+  const code = val('gr-code').trim().slice(0, 40);
+  if (!code) return showErr('gr-err', t('inv.codeRequired'));
+  if (!gCred) { closeSheet(); return gErr(t('auth.gExpired')); }
+  gAuth(code, f);
+};
 /* рекомендация компании (форма листа; FORMS объявлен выше) */
 FORMS['biz-rec'] = async f => {
   if (!REC) return;
@@ -5957,6 +6149,7 @@ const ACT = {
   'car-add': () => {
     closeSheet();
     if (S.demo) return ACT['demo-exit']();
+    if (acctFirst()) return startOnb('add');
     if (S.cars.length >= MAX_CARS) return toast(tn('act.maxCars', MAX_CARS));
     if (S.cars.length >= carLimit()) { const n = S.cars.length + 1; return paywall({cars: n, note: t('act.carLimitNote', {n})}); }
     startOnb('add');
@@ -5998,7 +6191,7 @@ const ACT = {
   theme: el => { S.settings.theme = el.dataset.v; save(); render(); },
   'int-reset': () => { S.settings.intervals = {}; save(); render(); toast(t('act.intReset')); },
   'data-reset': () => confirmSheet({title: t('act.resetTitle'), text: t('act.resetText') + (logged() ? ' ' + t('act.resetAcct', {email: esc(acctEmail())}) : ''), ok: t('act.resetOk'), onOk: async () => { if (logged()) await acctLogout(false); store.del(KEY); S = baseState(); save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
-  'onb-next': () => { ui.onb.step = 1; render(false); },
+  'onb-next': () => { if (acctFirst()) return startOnb('first', 'acct'); ui.onb.step = 1; render(false); },
   'onb-back': () => { captureOnb(); const o = ui.onb; if (o.step > 1) o.step--; else if (o.mode === 'add') ui.onb = null; else o.step = 0; render(false); },
   'onb-cancel': () => { ui.onb = null; render(false); },
   'onb-opt': el => { captureOnb(); ui.onb.d[el.dataset.k] = el.dataset.v; render(false); },
@@ -6027,6 +6220,8 @@ Object.assign(ACT, {
   'acct-login': el => { if (!el.dataset.keep) { ui.after = null; ui.authWhy = ''; } authSheet('login', {why: ui.authWhy}); },
   'acct-register': el => { if (!el.dataset.keep) { ui.after = null; ui.authWhy = ''; } authSheet('register', {why: ui.authWhy}); },
   'acct-forgot': () => forgotSheet(),
+  'au-retry': el => authRetry(el),
+  'au-ref-edit': el => { const i = $('#au-ref'); el.remove(); if (i) { i.readOnly = false; i.value = ''; try { i.focus(); } catch (e) {} } },
   'acct-reset': () => resetSheet((val('fg-email') || ui.authEmail || '').trim()),
   'acct-skip': () => { S.flags.acctIntro = true; save(); ui.onb = null; if (!S.cars.length) startOnb('first'); else render(false); },
   'acct-sync': () => {
@@ -6038,6 +6233,7 @@ Object.assign(ACT, {
   },
   'acct-tg': () => acctTg(),
   'acct-pass': () => passSheet(),
+  'acct-setpass': () => { ui.authEmail = acctEmail(); forgotSheet(); },
   'acct-export': () => acctExport(),
   'acct-logout': () => logoutSheet(),
   'acct-logout-keep': () => acctLogout(false),
@@ -6241,7 +6437,9 @@ function init() {
   setInterval(tick, 1000);
   let rz = null; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layoutHotspots, 120); });
   try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layoutHotspots()); } catch (e) {}
-  if (!S.flags.acctIntro && !logged()) startOnb('first', 'acct'); else if (!S.cars.length) startOnb('first'); else render(false);
+  /* закрыто (пилот) и на устройстве нет своих авто — сначала «Создать аккаунт / Войти» (демо — оттуда же);
+     открыто — приветствие аккаунта один раз, дальше можно без регистрации. Свои данные без аккаунта — главная с карточкой «Создайте аккаунт» */
+  if (!logged() && (closedMode() ? !S.cars.some(c => !c.demo) : !S.flags.acctIntro)) startOnb('first', 'acct'); else if (!S.cars.length) startOnb('first'); else render(false);
   nativeInit();
   webInit();
   save();

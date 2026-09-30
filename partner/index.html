@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Helper для бизнеса — кабинет партнёра</title>
 <meta name="description" content="Кабинет партнёра Helper: клиенты с приложением Helper приходят к вам, вы отмечаете визиты и дарите бесплатные плюшки за километры Helper, растёте в рейтинге партнёров, запускаете акции для водителей рядом и видите статистику.">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://accounts.google.com/gsi/style; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://accounts.google.com/gsi/">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1314" media="(prefers-color-scheme: dark)">
@@ -159,6 +159,11 @@ h1,h2,h3{text-wrap:balance}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap}
 .btn-row>.btn{flex:1 1 140px}
 .textbtn{color:var(--teal-ink);font-weight:600;font-size:14px;padding:8px 2px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.gwrap{display:flex;flex-direction:column;gap:12px;margin:6px 0 10px}
+.gslot{display:flex;justify-content:center;min-height:44px}
+.gslot.busy{opacity:.5;pointer-events:none}
+.or-div{display:flex;align-items:center;gap:12px;color:var(--ink-3);font-size:12.5px;font-weight:500}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--line)}
 .iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);flex:none}
 .iconbtn:hover{background:var(--teal-3)}
 .iconbtn.ghost{background:transparent}
@@ -1107,6 +1112,12 @@ Object.assign(TX, {
   'li.note.bot': ['Telegram-боте', 'botul Telegram', 'Telegram bot'],
   'li.busy': ['Входим…', 'Se conectează…', 'Signing in…'],
   'li.done': ['Вы вошли: {email}', 'Ați intrat: {email}', 'Signed in: {email}'],
+  'li.or': ['или', 'sau', 'or'],
+  'g.bad': ['Не удалось войти через Google. Попробуйте ещё раз или войдите по e-mail.', 'Autentificarea cu Google nu a reușit. Încercați din nou sau intrați cu e-mailul.', 'Couldn’t sign in with Google. Try again or sign in with your e-mail.'],
+  'g.unverified': ['Почта в аккаунте Google не подтверждена. Подтвердите её в Google или войдите по e-mail и паролю.', 'Adresa de e-mail din contul Google nu este confirmată. Confirmați-o în Google sau intrați cu e-mail și parolă.', 'The e-mail in your Google account isn’t verified. Verify it in Google or sign in with e-mail and password.'],
+  'g.disabled': ['Вход через Google сейчас недоступен — войдите по e-mail и паролю.', 'Autentificarea cu Google nu este disponibilă acum — intrați cu e-mail și parolă.', 'Google sign-in isn’t available right now — sign in with e-mail and password.'],
+  'g.noacct': ['Аккаунта Helper с этой почтой Google пока нет. Зарегистрируйте компанию — ссылка ниже.', 'Încă nu există un cont Helper cu acest e-mail Google. Înregistrați compania — linkul este mai jos.', 'There’s no Helper account with this Google e-mail yet. Register your company — the link is below.'],
+  'g.busy': ['Входим через Google…', 'Intrăm cu Google…', 'Signing in with Google…'],
   'v.email': ['Проверьте e-mail: нужен адрес вида name@company.md', 'Verificați e-mailul: e nevoie de o adresă de tipul name@company.md', 'Check the e-mail: use an address like name@company.md'],
   'v.email.short': ['Проверьте e-mail', 'Verificați e-mailul', 'Check the e-mail'],
   'v.password': ['Введите пароль', 'Introduceți parola', 'Enter your password'],
@@ -2793,6 +2804,7 @@ function loginSheet(o) {
   o = o || {};
   openSheet(tx('li.title'),
     (o.why ? '<div class="banner teal" style="margin-top:0"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0">' + esc(o.why) + '</div></div>' : '') +
+    '<div class="gwrap" id="g-box" hidden></div>' +
     '<form class="form" data-form="login" novalidate style="margin-top:6px">' +
       fld('li-email', tx('f.email'), inp('li-email', o.email || '', 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@company.md" autofocus')) +
       fld('li-pass', tx('f.password'), inp('li-pass', '', 'type="password" autocomplete="current-password"')) +
@@ -2802,8 +2814,71 @@ function loginSheet(o) {
     '<div class="stack" style="align-items:center;margin-top:10px;gap:2px"><button class="textbtn" data-act="forgot">' + tx('li.forgot') + '</button>' + (o.noReg ? '' : '<a class="textbtn" href="#/register">' + tx('land.cta.reg') + '</a>') + '</div>' +
     '<p class="hint" style="text-align:center;margin:10px 0 0">' + tx('li.note', {bot: '<a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('li.note.bot') + '</a>'}) + '</p>',
     {onClose: () => { UI.afterLogin = null; if (st.route.name === 'login') go('', true); }});
+  gLogin($('#g-box'));
 }
 const FORMS = {};
+/* вход выполнен (пароль или Google): токены сохранены — дальше как обычно */
+function loginDone() {
+  st.partner = null; st.cache = {};
+  const cb = UI.afterLogin; UI.afterLogin = null;
+  closeSheet(true);
+  toast(tx('li.done', {email: acctEmail()}));
+  if (cb) return cb();
+  go('', true);
+}
+/* ================= вход через Google (Google Identity Services) =================
+   Кнопка в листе входа — только если сервер вернул google_client_id в /v1/status; скрипт GIS грузится лениво.
+   ID token → POST /v1/auth/google → те же токены, что у входа по паролю. Новому человеку в закрытом режиме сервер
+   ответит invite_* — компании регистрируются через «Зарегистрировать компанию» (там приглашение не нужно). */
+const GIS_SRC = 'https://accounts.google.com/gsi/client';
+let gisP = null, gisInit = '', gStP = null;
+function gCid() {
+  if (!gStP) gStP = api('/v1/status', {auth: false}).then(d => (d && typeof d.google_client_id === 'string' && d.google_client_id.trim()) || '', () => { gStP = null; return ''; });
+  return gStP;
+}
+function gisLoad() {
+  const ok = () => window.google && google.accounts && google.accounts.id;
+  if (ok()) return Promise.resolve(google.accounts.id);
+  if (!gisP) gisP = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = GIS_SRC; s.async = true; s.defer = true;
+    s.onload = () => ok() ? res(google.accounts.id) : rej(new Error('gis'));
+    s.onerror = () => { gisP = null; s.remove(); rej(new Error('gis')); };
+    document.head.appendChild(s);
+  });
+  return gisP;
+}
+async function gLogin(box) {
+  if (!box) return;
+  const cid = await gCid();
+  if (!cid || !box.isConnected) return;
+  let id;
+  try { id = await gisLoad(); } catch (e) { return; }
+  if (!box.isConnected) return;
+  box.innerHTML = '<div class="gslot"></div><div class="or-div" aria-hidden="true"><span>' + tx('li.or') + '</span></div>';
+  box.hidden = false;
+  if (gisInit !== cid) { id.initialize({client_id: cid, callback: gCallback, auto_select: false, cancel_on_tap_outside: true, context: 'signin', ux_mode: 'popup', itp_support: true}); gisInit = cid; }
+  const slot = box.querySelector('.gslot'), a = document.documentElement.getAttribute('data-theme');
+  const dark = a ? a === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  try { id.renderButton(slot, {type: 'standard', theme: dark ? 'filled_black' : 'outline', size: 'large', shape: 'pill', text: 'signin_with', logo_alignment: 'center', width: Math.max(200, Math.min(400, Math.round(slot.getBoundingClientRect().width) || 320)), locale: LANG}); } catch (e) {}
+}
+async function gCallback(r) {
+  if (!r || !r.credential) return;
+  const slot = $('#g-box .gslot');
+  if (slot) slot.classList.add('busy');
+  showErr('li-err', '');
+  toast(tx('g.busy'));
+  let d;
+  try { d = await api('/v1/auth/google', {body: {credential: r.credential, device: tx('device'), language: LANG}, auth: false}); }
+  catch (e) {
+    if (slot && slot.isConnected) slot.classList.remove('busy');
+    if (e.code === 'google_disabled') { gStP = Promise.resolve(''); const b = $('#g-box'); if (b) b.hidden = true; return showErr('li-err', tx('g.disabled')); }
+    if (/^invite_/.test(e.code || '')) return showErr('li-err', tx('g.noacct'));
+    return showErr('li-err', e.code === 'google_bad_token' ? tx('g.bad') : e.code === 'google_email_unverified' ? tx('g.unverified') : e.message);
+  }
+  if (!setTokens(d)) return showErr('li-err', tx('e.no_tokens'));
+  loginDone();
+}
 FORMS.login = async f => {
   const email = val('li-email').trim().toLowerCase(), pw = val('li-pass');
   if (!EMAIL_RE.test(email)) return showErr('li-err', tx('v.email'));
@@ -2815,12 +2890,7 @@ FORMS.login = async f => {
   catch (e) { done(); return showErr('li-err', e.message); }
   done();
   if (!setTokens(d)) return showErr('li-err', tx('e.no_tokens'));
-  st.partner = null; st.cache = {};
-  const cb = UI.afterLogin; UI.afterLogin = null;
-  closeSheet(true);
-  toast(tx('li.done', {email: acctEmail()}));
-  if (cb) return cb();
-  go('', true);
+  loginDone();
 };
 function forgotSheet(email) {
   openSheet(tx('fg.title'), '<form class="form" data-form="forgot" novalidate><p class="small muted" style="margin:0">' + tx('fg.text') + '</p>' +
