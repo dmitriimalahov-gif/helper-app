@@ -558,6 +558,146 @@ div.item:hover{background:none}
 .scan-safe{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink-2);margin:10px 2px 0;line-height:1.45}
 .scan-prog .bar{height:8px;margin:14px 0 10px}
 .scan-prog .bar>i{background:var(--teal-ink);transition:width .3s}
+/* ---------- Игра: километры Helper, уровень, серии, задания, значки, плюшки партнёров ---------- */
+.kmh{display:inline-flex;align-items:center;gap:.26em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kmh>svg.mark{width:.95em;height:.95em;flex:none}
+.kmh.lg>svg.mark{width:.6em;height:.6em}
+.btn.ink .kmh>svg.mark g,.gbanner .kmh>svg.mark g{stroke:var(--teal)}
+.kmh-u{font-size:.5em;font-weight:500;color:var(--ink-2);letter-spacing:0;margin-left:.1em}
+.g-hero{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--r-xl);padding:18px 16px 16px;background:var(--teal-3);margin-top:8px}
+.g-hero .corner-ring{z-index:-1}
+.lvl{display:flex;align-items:center;gap:14px}
+.lvl-badge{position:relative;width:62px;height:62px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 3px var(--teal),0 1px 2px rgba(35,31,32,.06);font-weight:300;font-size:28px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.lvl-badge.sm{width:34px;height:34px;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 2px var(--teal)}
+.lvl-badge.xl{width:132px;height:132px;font-size:64px;font-weight:200;box-shadow:inset 0 0 0 5px var(--teal)}
+.lvl-name{font-weight:600;font-size:20px;line-height:1.2;margin:2px 0 0}
+.xpbar{height:8px;border-radius:8px;background:var(--card);overflow:hidden;margin-top:14px}
+.xpbar>i{display:block;height:100%;border-radius:8px;background:var(--teal-ink);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.xpline{display:flex;justify-content:space-between;gap:10px;margin-top:6px;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.g-stats{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px;margin-top:14px}
+.g-stat{background:var(--card);border-radius:var(--r-md);padding:12px 14px;min-width:0;text-align:left}
+.g-stat .k{font-size:11.5px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:5px}
+.g-stat .v{display:block;font-weight:300;font-size:28px;line-height:1.1;margin-top:6px;letter-spacing:-.01em}
+.g-stat .s{display:block;font-size:11.5px;color:var(--ink-2);margin-top:6px;line-height:1.35}
+.g-note{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink-2);margin:12px 2px 0;line-height:1.45}
+.g-note .ico{color:var(--ink-3);margin-top:1px}
+.streaks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.streak{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.streak .top{display:flex;align-items:center;gap:8px}
+.streak .n{font-weight:200;font-size:38px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.streak .u{font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.25}
+.streak .fl{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--soon-bg);color:var(--soon-t);flex:none}
+.streak .fl.off{background:var(--surface);color:var(--ink-3)}
+.streak .fl.care{background:var(--teal-3);color:var(--teal-ink)}
+.weeks{display:flex;gap:4px}
+.weeks i{flex:1;height:6px;border-radius:6px;background:var(--surface)}
+.weeks i.on{background:var(--soon)}
+.weeks i.now{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.weeks i.frz{background:var(--teal-2)}
+.weeks.care i.on{background:var(--teal-ink)}
+.frz{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.frz .ico{color:var(--teal-ink)}
+.frz.off .ico{color:var(--ink-3)}
+.quest{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 14px 6px}
+.quest+.quest{margin-top:10px}
+.quest .qh{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.quest p{margin:0}
+.quest .qk{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.quest .qt{font-weight:600;font-size:15.5px;line-height:1.3;margin-top:3px}
+.quest .qd{font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.4}
+.quest .qp{font-size:12px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.quest .bar{height:6px;margin-top:10px}
+.quest .bar>i{background:var(--teal-ink)}
+.quest.done .bar>i{background:var(--ok)}
+.rw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rw>span{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:3px 9px;border-radius:12px;background:var(--teal-3);font-size:12px;font-weight:600;line-height:1.3;max-width:100%}
+.qsteps{margin-top:8px;border-top:1px solid var(--line)}
+.qstep{display:flex;align-items:center;gap:10px;width:100%;padding:10px 0;text-align:left;font-size:13.5px;font-weight:500;line-height:1.3;min-height:44px}
+.qstep+.qstep{border-top:1px solid var(--line)}
+.qstep .ck{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line-2);color:transparent}
+.qstep.done .ck{background:var(--ok);box-shadow:none;color:#fff}
+.qstep.done .tx{color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--ink-3)}
+.qstep .tx{flex:1;min-width:0}
+.qstep .cnt{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.qstep .go{color:var(--teal-ink);flex:none}
+button.qstep:hover .tx{color:var(--teal-ink)}
+.badges{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 8px}
+.bdg{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0;padding:2px}
+.bdg .bi{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--teal-3);color:var(--ink);box-shadow:inset 0 0 0 2px var(--teal)}
+.bdg .bn{font-size:10.5px;font-weight:600;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;hyphens:auto}
+.bdg.off .bi{background:transparent;color:var(--ink-3);box-shadow:inset 0 0 0 1.5px var(--line-2);border:0}
+.bdg.off .bn{color:var(--ink-3)}
+.earn-t{width:100%;border-collapse:collapse;font-size:13px}
+.earn-t th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;text-align:right;padding:0 0 6px 6px;white-space:nowrap}
+.earn-t th:first-child{text-align:left;padding-left:0}
+.earn-t td{padding:9px 0 9px 6px;border-top:1px solid var(--line);vertical-align:top;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.earn-t td:first-child{text-align:left;white-space:normal;font-weight:500;padding-left:0}
+.earn-t td small{display:block;font-size:11.5px;color:var(--ink-2);font-weight:500;margin-top:1px}
+.gstrip{display:block;width:100%;text-align:left;margin-top:12px;padding:12px 14px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line)}
+.gstrip:hover{border-color:var(--line-2)}
+.gstrip .r1{display:flex;align-items:center;gap:10px;min-width:0}
+.gstrip .ln{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.gstrip .sp{flex:1}
+.gstrip .kv{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gstrip .kv .ico{color:var(--soon)}
+.gstrip .r2{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.gstrip .r2 .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gstrip .r2 b{color:var(--ink);font-weight:600}
+.pstrip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:2px 18px 6px;scroll-snap-type:x proximity;scroll-padding:0 18px}
+.pstrip::-webkit-scrollbar{display:none}
+.perk{display:flex;flex-direction:column;gap:8px;width:100%;padding:14px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--card);text-align:left;position:relative}
+.perk:hover{border-color:var(--line-2)}
+.pstrip{align-items:flex-start}
+.pstrip .perk{flex:none;width:min(252px,74vw);scroll-snap-align:start}
+.perk .ph{display:flex;align-items:center;gap:10px;min-width:0}
+.perk .pk{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--teal-3);color:var(--ink);flex:none}
+.perk .pk.helper{background:var(--ink);color:var(--on-ink)}
+.perk .pc{flex:1;min-width:0}
+.perk .pco{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.perk .pm{font-size:11.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:1px}
+.perk .pt{font-weight:600;font-size:15px;line-height:1.3}
+.perk .pf{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:auto}
+.perk .price{font-weight:300;font-size:24px;line-height:1;letter-spacing:-.01em}
+.perk .tags{display:flex;flex-wrap:wrap;gap:6px}
+.perk.locked .pt,.perk.locked .price{color:var(--ink-2)}
+.ptag{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;background:var(--surface);color:var(--ink-2);font-size:11px;font-weight:700;white-space:nowrap}
+.ptag.hh{background:var(--teal-2);color:var(--ink)}
+.ptag.lock{background:var(--ink);color:var(--on-ink)}
+.ptag.low{background:var(--soon-bg);color:var(--soon-t)}
+.plvl{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--surface);color:var(--ink-2)}
+.plvl.silver{background:#E8ECEE;color:#4E5A60}.plvl.gold{background:#F6EBC8;color:#7A5A00}.plvl.platinum{background:#DCEFEE;color:#1F6E69}.plvl.bronze{background:#F3E3D6;color:#7A4A26}
+.rate{display:inline-flex;align-items:center;gap:3px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.rate .ico{width:13px;height:13px;fill:var(--soon);stroke:var(--soon)}
+.stars{display:flex;justify-content:center;gap:6px;margin:6px 0 4px}
+.stars button{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;color:var(--line-2)}
+.stars button .ico{width:34px;height:34px;stroke-width:1.4}
+.stars button.on{color:var(--soon)}
+.stars button.on .ico{fill:currentColor}
+.celeb{outline:none;position:fixed;inset:0;z-index:96;background:var(--bg);color:var(--ink);overflow-y:auto;-webkit-overflow-scrolling:touch;animation:fade .3s ease;isolation:isolate}
+.celeb-in{position:relative;min-height:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:calc(56px + env(safe-area-inset-top,0px)) 24px calc(28px + env(safe-area-inset-bottom,0px));overflow:hidden}
+.celeb .rings{position:relative;width:200px;height:200px;display:grid;place-items:center;margin:34px 0 40px}
+.celeb .rings i{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--teal-2);animation:ringIn 1.4s cubic-bezier(.2,.8,.2,1) both}
+.celeb .rings i:nth-child(2){inset:-30px;border-color:var(--teal-2);opacity:.7;animation-delay:.12s}
+.celeb .rings i:nth-child(3){inset:-58px;opacity:.45;animation-delay:.24s}
+.celeb .rings .lvl-badge{animation:popIn .7s cubic-bezier(.2,.8,.2,1) .15s both}
+.celeb .ey{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-ink);margin:0}
+.celeb h2{font-weight:200;font-size:40px;line-height:1.05;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.celeb .lead{font-size:15px;color:var(--ink-2);margin:0;max-width:320px;line-height:1.5}
+.celeb ul{list-style:none;padding:0;margin:10px 0 6px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;text-align:left}
+.celeb li{display:flex;gap:12px;align-items:center;font-size:14.5px;line-height:1.4;padding:12px 14px;border-radius:var(--r-md);background:var(--teal-3)}
+.celeb .btn{min-width:220px;margin-top:10px}
+.celeb .x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;background:var(--surface);display:grid;place-items:center;z-index:2}
+@keyframes ringIn{from{transform:scale(.55);opacity:0}to{transform:none}}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+.gbanner{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:420px;z-index:93;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:12px 10px 12px 12px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);animation:bannerIn .35s cubic-bezier(.2,.8,.2,1)}
+.gbanner .gi{width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--on-teal);display:grid;place-items:center;flex:none}
+.gbanner .body{flex:1;min-width:0;text-align:left}
+.gbanner .t{font-weight:600;font-size:13.5px;line-height:1.3;display:block}
+.gbanner .s{font-size:12px;opacity:.78;display:block;margin-top:2px}
+.gbanner .iconbtn{background:transparent;color:var(--on-ink)}
+@keyframes bannerIn{from{transform:translate(-50%,-14px);opacity:0}to{transform:translateX(-50%);opacity:1}}
+.cpn-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
+.codefs .btn.line{background:transparent;color:#231F20;border:1.5px solid #CFDBDA}
 </style>
 </head>
 <body>
@@ -1380,26 +1520,26 @@ function makeDemo(keep) {
     day += Math.max(8, Math.round(km / 50.5));
   }
   const D = (type, exp, cost, number) => ({id: uid(), carId: 'demo', type, expires: exp, cost, issued: cost ? addDays(exp, -365) : null, number: number ? t(number) : '', note: '', dl: number ? {number} : {}});
-  /* история баллов: текст хранится вместе с ключом (tk) и параметрами (tp), чтобы переводиться при смене языка — см. histText() */
+  /* история километров Helper: текст хранится вместе с ключом (tk) и параметрами (tp), чтобы переводиться при смене языка — см. histText() */
   const H = (dd, k, p, tk, tp) => ({id: uid(), d: addDays(T, dd), k, p, t: histText(tk, tp), tk, tp});
-  const buy = (shop, amount, pct) => ({shop: '@' + shop, amount, cur: 'MDL', pct});
-  const hist = [H(-540, 'car', 10, 'loy.h.car', {car: 'Toyota Camry'})];
+  const visit = shop => ({shop: '@' + shop});
+  const hist = [H(-540, 'car', 20, 'loy.h.car', {car: 'Toyota Camry'}), H(-538, 'quest', 100, 'loy.h.quest', {quest: '@game.onbTitle'})];
   s.records.forEach(r => hist.push(H(diffDays(T, r.date), 'rec', 5, 'loy.h.rec', {cat: '#' + r.cat})));
-  [-66, -45, -31, -17].forEach(dd => hist.push(H(dd, 'odo', 2, 'loy.h.odo')));
-  hist.push(H(-330, 'partner', 156, 'loy.h.buy', buy(S2, 7800, 2)), H(-172, 'partner', 30, 'loy.h.buy', buy(S1, 1010, 3)),
-    H(-150, 'ref', 50, 'loy.h.ref'), H(-120, 'ref', 50, 'loy.h.ref'), H(-60, 'partner', 12, 'loy.h.buy', buy('demo.shop.wash', 250, 5)),
-    H(-45, 'spend', -100, 'loy.h.coupon', {coupon: '@coupon.wash10', shop: '@demo.shop.wash'}), H(-20, 'partner', 12, 'loy.h.buy', buy('demo.shop.wash', 240, 5)));
+  [-66, -45, -31, -17].forEach(dd => hist.push(H(dd, 'odo', 3, 'loy.h.odo')));
+  hist.push(H(-330, 'visit', 20, 'loy.h.visit', visit(S2)), H(-172, 'visit', 20, 'loy.h.visit', visit(S1)),
+    H(-150, 'ref', 50, 'loy.h.ref'), H(-120, 'ref', 50, 'loy.h.ref'), H(-60, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')), H(-59, 'rate', 2, 'loy.h.rate', visit('demo.shop.wash')),
+    H(-45, 'spend', -150, 'loy.h.perk', {perk: '@gs.p1'}), H(-44, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')), H(-20, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')));
   s.loyalty.hist = hist; s.loyalty.lastOdo = addDays(T, -17);
   s.docs = [D('rca', addDays(T, 23), 1450, 'demo.policy'), D('green', addDays(T, 128), 890), D('inspection', addDays(T, 214), 350), D('license', '2031-06-14', 0)];
   return s;
 }
-/* Текст записи истории баллов по ключу: параметры '#cat' → название категории журнала, '@ключ' → t(ключ); числа — по локали при подстановке */
+/* Текст записи истории километров Helper по ключу: параметры '#cat' → название категории журнала, '@ключ' → t(ключ); числа — по локали при подстановке */
 function histText(tk, tp) {
   const p = {};
   for (const k in (tp || {})) { const v = tp[k]; p[k] = typeof v === 'string' && v[0] === '#' ? (CATS[v.slice(1)] || CATS.other)[0] : typeof v === 'string' && v[0] === '@' ? t(v.slice(1)) : v; }
   return t(tk, p);
 }
-/* Смена языка: перевести подписи демо-данных (поля, которые пользователь не менял) и тексты истории баллов с ключом */
+/* Смена языка: перевести подписи демо-данных (поля, которые пользователь не менял) и тексты истории километров с ключом */
 function relabelDemo() {
   if (!S) return;
   const any = k => { const out = [RU_UI[k]]; LANGS.forEach(l => { const d = I18N[l] && I18N[l].ui; if (d && d[k] != null) out.push(d[k]); }); return out; };
@@ -1641,7 +1781,16 @@ const I = {
   qr: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1"/>',
   store: '<path d="M4 9.5 5.5 4h13L20 9.5zM4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12v8.5h13V12M10 20.5v-5h4v5"/>',
   bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
-  camera: '<path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/>'
+  camera: '<path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/>',
+  /* игра: серия, значок, задание, сундук, виды плюшек */
+  flame: '<path d="M12 21c-3.7 0-6.5-2.7-6.5-6.3 0-2.6 1.5-4.5 3.1-6.2.3 1.6 1.1 2.7 2.2 3.2-.2-3.3 1.1-6 3.6-8.2.3 2.6 1.5 4.4 2.8 6 1.1 1.4 1.8 3 1.8 5.1 0 3.7-3.1 6.4-7 6.4z"/><path d="M12 21c-1.5 0-2.7-1.1-2.7-2.7 0-1.4 1.1-2.5 2.7-3.9 1.6 1.4 2.7 2.5 2.7 3.9 0 1.6-1.2 2.7-2.7 2.7z"/>',
+  medal: '<circle cx="12" cy="14.5" r="5.5"/><path d="M9 9.6 6.5 3.5h3.8L12 7.6l1.7-4.1h3.8L15 9.6"/><path d="m12 11.8 1 1.9 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2-1.5-1.4 2-.3z"/>',
+  flag: '<path d="M5.5 21V3.5M5.5 4.5h12l-2.4 4.2 2.4 4.3h-12"/>',
+  chest: '<path d="M3.5 10a4.5 4.5 0 0 1 4.5-4.5h8a4.5 4.5 0 0 1 4.5 4.5v9.5h-17z"/><path d="M3.5 12.5h17M10.5 11h3v3.5h-3z"/>',
+  fast: '<path d="M4 6.5 11 12l-7 5.5zM12.5 6.5 19.5 12l-7 5.5z"/>',
+  up: '<circle cx="12" cy="12" r="8.5"/><path d="M12 16.5v-9M8.5 11 12 7.5l3.5 3.5"/>',
+  sort: '<path d="M7.5 4.5v15M4.5 16.5l3 3 3-3M16.5 19.5v-15M13.5 7.5l3-3 3 3"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>'
 };
 const ic = (n, cls) => '<svg class="ico ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (I[n] || I.wrench) + '</svg>';
 
@@ -1773,6 +1922,7 @@ function pageHome() {
   h += '<p class="subtitle num">' + esc(carSub(car)) + (car.demo ? ' <span class="badge" style="margin-left:4px;vertical-align:1px">' + t('home.demoBadge') + '</span>' : '') + '</p>';
   if (S.demo) h += '<button class="demo-banner" data-act="demo-exit"><span class="body" style="flex:1"><span class="t" style="display:block">' + t('home.demoTitle') + '</span><span class="s">' + t('home.demoText') + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
   h += hidCard();
+  h += gameStrip();
   if (isPrem()) {
     carDocs(car.id).forEach(d => {
       const n = diffDays(T, d.expires);
@@ -2159,7 +2309,7 @@ function renderOnb() {
   return h + '</div>';
 }
 
-/* ================= loyalty (coalition points) ================= */
+/* ================= километры Helper на устройстве (без аккаунта) и демо-купоны ================= */
 /* p — партнёр (t(pk)), t — название купона (t('coupon.<id>')); пересобираются при смене языка */
 const COUPONS = [
   {id: 'wash10', pk: 'demo.shop.wash', p: '', t: '', cost: 100, ic: 'drop', sp: 'body'},
@@ -2172,13 +2322,15 @@ const COUPON_BY = Object.fromEntries(COUPONS.map(c => [c.id, c]));
 const COUPON_TTL = 15 * 60 * 1000;
 const LOY = () => S.loyalty;
 const balance = () => LOY().hist.reduce((a, h) => a + h.p, 0);
-const ptsTxt = p => (p > 0 ? '+' : '−') + tn('u.points', Math.abs(p));
-/* запись в истории баллов: tk — ключ текста, tp — параметры (см. histText) */
+/* тост о награде за действие: «+5 км Helper»; с аккаунтом без сети — «засчитается после синхронизации» */
+const ptsTxt = p => kmSigned(p) + (logged() && gOffline() ? ' ' + t('game.afterSync') : '');
+/* запись в истории километров Helper: tk — ключ текста, tp — параметры (см. histText) */
 function award(k, p, tk, tp) { LOY().hist.push({id: uid(), d: todayISO(), k, p, t: histText(tk, tp), tk, tp: tp || null}); return p; }
 const recToday = () => LOY().hist.filter(h => h.k === 'rec' && h.d === todayISO()).length;
-function awardRec(cat) { return recToday() < 5 ? award('rec', 5, 'loy.h.rec', {cat: '#' + (CATS[cat] ? cat : 'other')}) : 0; }
+function awardRec(cat) { return recToday() < 3 ? award('rec', 5, 'loy.h.rec', {cat: '#' + (CATS[cat] ? cat : 'other')}) : 0; }
+function awardFuel() { return LOY().hist.filter(h => h.k === 'fuel' && h.d === todayISO()).length < 2 ? award('fuel', 1, 'loy.h.fuel') : 0; }
 function odoBonusIn() { const l = LOY().lastOdo; return l ? Math.max(0, 7 - diffDays(l, todayISO())) : 0; }
-function awardOdo() { if (odoBonusIn() > 0) return 0; LOY().lastOdo = todayISO(); return award('odo', 2, 'loy.h.odo'); }
+function awardOdo() { if (odoBonusIn() > 0) return 0; LOY().lastOdo = todayISO(); return award('odo', 3, 'loy.h.odo'); }
 function awardCode(code) { const L = LOY(); if (L.usedCodes.indexOf(code) >= 0) return 0; L.usedCodes.push(code); return award('code', 20, 'loy.h.code', {code}); }
 function sweepCoupons() {
   const now = Date.now(); let ch = false;
@@ -2224,42 +2376,6 @@ function tick() {
   els.forEach(e => { const tt = mmss(+e.dataset.exp); e.textContent = tt; if (tt === t('c.expired')) e.className = 'status st-none'; });
 }
 
-function pageBonus() {
-  sweepCoupons();
-  const L = LOY(), now = Date.now(), srv = loySrv();
-  if (logged()) setTimeout(() => loyFetch(), 0);
-  const bal = srv ? (+srv.balance || 0) : balance();
-  let h = topbar(t('tab.bonus'), {sub: t('bonus.sub')});
-  const note = srv ? t('bonus.noteSrv') + (+srv.expiring_30d > 0 ? ' ' + t('bonus.expiring', {pts: tn('u.points', +srv.expiring_30d)}) : '')
-    : S.demo ? t('bonus.noteDemo') : t('bonus.note');
-  h += '<div class="card tint pts-card" style="margin-top:8px"><div class="corner-ring" style="width:200px;height:200px;right:-70px;top:-90px;border-color:var(--teal)"></div><div class="corner-ring" style="width:120px;height:120px;right:-20px;top:-40px"></div><p class="eyebrow">' + t('bonus.balance') + '</p><div class="bignum" style="margin-top:8px;font-size:58px">' + tn('bonus.balPts', bal) + '</div><p class="small muted" style="margin:10px 0 0">' + note + '</p></div>';
-  h += '<div class="section">' + hidCard() + '</div>';
-  h += '<button class="soft-lock section" data-act="go" data-p="nearby"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body" style="flex:1"><span class="t" style="display:block">' + t('c.nearby') + '</span><span class="s">' + (S.geo.consent ? (S.geo.area ? t('nearby.area', {area: AREAS[S.geo.area][0]}) : t('nearby.partnersNear')) : t('nearby.optIn')) + '</span></span>' + ic('chevR', 'sm') + '</button>';
-  const sc = srv && Array.isArray(srv.coupons) ? srv.coupons.filter(c => c && c.code && !(c.expires_at && tsParse(c.expires_at) < now)) : [];
-  const act = L.coupons.filter(c => !c.used && c.exp > now).sort((a, b) => a.exp - b.exp);
-  if (sc.length || act.length) h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('cpn.mine') + '</h2><span class="xsmall muted">' + t('cpn.showQr') + '</span></div><div class="group">' +
-    sc.map(c => '<button class="item" data-act="scoupon" data-code="' + esc(c.code) + '"><span class="ic-circle ink">' + ic('qr', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(c.title || t('cpn.partner')) + '</span><span class="s">' + esc([c.company, t('cpn.code', {code: String(c.code)})].filter(Boolean).join(' · ')) + '</span></span><span class="end">' + (c.expires_at ? '<span class="status st-soon">' + fUntil(c.expires_at) + '</span>' : '') + '</span></button>').join('') +
-    act.map(c => { const k = COUPON_BY[c.cid]; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · ' + t('cpn.code', {code: c.code}) + ' · ' + t('bonus.example') + '</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div></section>';
-  h += offersSection();
-  if (!srv) {
-    h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('bonus.exchange') + '</h2><span class="xsmall muted">' + t('bonus.ttl') + '</span></div><div class="stack">' + COUPONS.map(c => {
-      const ok = bal >= c.cost;
-      return '<div class="coupon"><span class="ic-circle">' + (c.sp ? pi(c.sp, 28) : ic(c.ic, 'sm')) + '</span><div><span class="t" style="display:block">' + c.t + '</span><span class="small muted">' + c.p + '</span> ' + (c.self ? '' : '<span class="badge warn">' + t('bonus.example') + '</span>') + '</div><div class="foot"><span class="cost">' + tn('bonus.costPts', c.cost) + '</span><button class="btn sm ' + (ok ? '' : 'soft') + '" data-act="coupon-get" data-id="' + c.id + '"' + (ok ? '' : ' disabled') + '>' + (ok ? t('c.getCoupon') : t('bonus.need', {n: c.cost - bal})) + '</button></div></div>';
-    }).join('') + '</div></section>';
-  }
-  const oi = odoBonusIn(), rt = recToday();
-  const EARN = [['+10', t('c.addCar'), t('bonus.earnCar'), ''], ['+5', t('bonus.earnRec'), t('bonus.earnRecToday', {n: rt}), 'data-act="rec-new"'], ['+2', t('c.updateOdo'), oi ? t('bonus.earnOdoNext', {when: relDays(oi)}) : t('bonus.availNow'), 'data-act="odo"'], ['+50', t('c.invite'), t('bonus.earnRef'), 'data-act="ref"'], ['+50', t('rec.btn'), t('rec.earnSub'), 'data-act="biz-rec"'], ['+500', t('rec.bizTitle'), t('rec.bizEarnSub'), 'data-act="biz-share"'], ['+20', t('plan.code'), t('bonus.earnCode'), 'data-act="paywall"'], ['2–5%', t('bonus.earnBuy'), t('bonus.earnBuySub'), 'data-act="hid"']];
-  h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('bonus.howEarn') + '</h2></div><div class="group">' + EARN.map(e => (e[3] ? '<button class="item" ' + e[3] + '>' : '<div class="item">') + '<span class="earn">' + e[0] + '</span><span class="body"><span class="t" style="display:block">' + e[1] + '</span><span class="s">' + e[2] + '</span></span>' + (e[3] ? ic('chevR', 'sm chev') + '</button>' : '</div>')).join('') + '</div></section>';
-  h += recMineSection();
-  const hs = srv ? (srv.history || []).map(x => { const tt = tsParse(x.created_at); return {t: (x.title || x.reason || t('bonus.op')) + (x.company ? ' · ' + x.company : ''), d: isFinite(tt) ? iso(new Date(tt)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0}; })
-    : L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
-  const shown = ui.allHist ? hs : hs.slice(0, 8);
-  h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('bonus.history') + '</h2><span class="xsmall muted">' + tn('bonus.ops', hs.length) + '</span></div>';
-  h += hs.length ? '<div class="group">' + shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + (x.d ? fD(x.d) : '') + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '">' + (x.p > 0 ? '+' : '−') + Math.abs(x.p) + '</span></div>').join('') + '</div>' : emptyState('star', t('bonus.emptyTitle'), srv ? t('bonus.emptySrv') : t('bonus.emptyLocal'));
-  if (hs.length > 8) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-hist">' + (ui.allHist ? t('bonus.collapse') : t('bonus.showAll')) + '</button>';
-  h += '</section><p class="xsmall muted" style="margin-top:18px">' + (srv ? t('bonus.legalSrv') : t('bonus.legalDemo')) + '</p>';
-  return h;
-}
 function hidSheet() { hidOpen(); }
 function couponSheet(id) {
   const cp = LOY().coupons.find(x => x.id === id); if (!cp) return;
@@ -2270,15 +2386,6 @@ function couponSheet(id) {
     '<p class="xsmall muted" style="margin:0;max-width:300px">' + t('cpn.demoNote') + '</p></div>' +
     '<div class="stack" style="margin-top:16px"><button class="btn block soft" data-act="copy" data-text="' + cp.code + '">' + ic('copy', 'sm') + t('cpn.copyCode') + '</button>' + (live ? '<button class="btn block line" data-act="coupon-use" data-id="' + cp.id + '">' + t('cpn.accepted') + '</button>' : '') + '</div>');
 }
-function getCoupon(c) {
-  if (balance() < c.cost) return;
-  if (c.self && isStoreSrc(S.premium.source) && locPrem()) return toast(t('cpn.premStore', {src: SRC_N[S.premium.source]}));
-  if (c.self) { award('spend', -c.cost, 'loy.h.premium30'); extendPremium(30); save(); render(); toast(t('cpn.premUntil', {date: fD(S.premium.until)})); return; }
-  const code = Array.from({length: 6}, () => ALPH[Math.floor(Math.random() * 32)]).join('');
-  const cp = {id: uid(), cid: c.id, code, created: Date.now(), exp: Date.now() + COUPON_TTL, used: false};
-  LOY().coupons.push(cp); award('spend', -c.cost, 'loy.h.coupon', {coupon: '@coupon.' + c.id, shop: '@' + c.pk});
-  save(); render(); couponSheet(cp.id);
-}
 
 /* ================= nearby offers (opt-in geo) ================= */
 /* [название — t('area.<id>'), lat, lon]; названия пересобираются при смене языка */
@@ -2287,15 +2394,15 @@ onLang(() => { for (const k in AREAS) AREAS[k][0] = t('area.' + k); });
 /* демо-точки партнёров. SPOTS[i] = [название, тип, иконка, адрес, lat, lon, [предложения]] — тексты собираются из SPOT_SRC через t() и пересобираются при смене языка.
    SPOT_SRC: n — ключ названия (name — готовое имя), k — ключ типа, a — ключ района + no (дом, шаблон spot.addr) или street (готовая улица), o — [ключ spot.o.*, параметры] */
 const SPOT_SRC = [
-  {n: 'demo.shop.wash', k: 'spot.type.wash', ic: 'drop', a: 'spot.center', no: '1', lat: 47.0268, lon: 28.8361, o: [['coupon', {pct: 10}], ['pts', {pct: 5}]]},
-  {n: 'demo.shop.service', k: 'c.sto', ic: 'wrench', a: 'area.botanica', no: '12', lat: 46.9868, lon: 28.8618, o: [['diag', {cur: 'MDL'}], ['pts', {pct: 3}]]},
+  {n: 'demo.shop.wash', k: 'spot.type.wash', ic: 'drop', a: 'spot.center', no: '1', lat: 47.0268, lon: 28.8361, o: [['coupon', {pct: 10}], ['visit']]},
+  {n: 'demo.shop.service', k: 'c.sto', ic: 'wrench', a: 'area.botanica', no: '12', lat: 46.9868, lon: 28.8618, o: [['diag', {cur: 'MDL'}], ['visit']]},
   {n: 'demo.shop.tires', k: 'biz.cat.tires', ic: 'tire', a: 'area.riscani', no: '7', lat: 47.0583, lon: 28.8664, o: [['coupon', {pct: 15}], ['tireStorage']]},
   {n: 'spot.parts', k: 'spot.type.parts', ic: 'filter', a: 'spot.center', no: '30', lat: 47.0302, lon: 28.8215, o: [['oilFilters', {pct: 7}]]},
-  {n: 'spot.oil', k: 'c.sto', ic: 'drop', a: 'area.botanica', no: '44', lat: 46.9951, lon: 28.8702, o: [['quickOil'], ['pts', {pct: 3}]]},
+  {n: 'spot.oil', k: 'c.sto', ic: 'drop', a: 'area.botanica', no: '44', lat: 46.9951, lon: 28.8702, o: [['quickOil'], ['visit']]},
   {n: 'spot.washNord', k: 'spot.type.wash', ic: 'drop', a: 'area.balti', no: '3', lat: 47.7580, lon: 27.9195, o: [['fifthWash']]},
   {n: 'spot.stoNord', k: 'c.sto', ic: 'wrench', a: 'area.balti', no: '18', lat: 47.7702, lon: 27.9352, o: [['service', {pct: 10}]]},
   {name: 'Service auto «Exemplu»', k: 'c.sto', ic: 'wrench', a: 'area.bucharest', street: 'Str. Exemplu, 5', lat: 44.4352, lon: 26.0998, o: [['coupon', {pct: 10}], ['diag', {cur: 'RON'}]]},
-  {name: 'Spălătorie «Exemplu»', k: 'spot.type.wash', ic: 'drop', a: 'area.bucharest', street: 'Str. Exemplu, 21', lat: 44.4197, lon: 26.0911, o: [['pts', {pct: 5}]]}
+  {name: 'Spălătorie «Exemplu»', k: 'spot.type.wash', ic: 'drop', a: 'area.bucharest', street: 'Str. Exemplu, 21', lat: 44.4197, lon: 26.0911, o: [['visit']]}
 ];
 const SPOTS = SPOT_SRC.map(s => ['', '', s.ic, '', s.lat, s.lon, []]);
 onLang(() => SPOT_SRC.forEach((s, i) => {
@@ -2330,7 +2437,7 @@ function pageNearby() {
   }
   const L = offersList(), src = geoSrc();
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('c.offers') + '</h2>' + (src && L.length ? '<span class="xsmall muted">' + esc(src.label) + '</span>' : '') + '</div>';
-  if (L.length) h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>' : '');
+  if (L.length) { h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>' : ''); setTimeout(gPartnersSeen, 0); }
   else h += emptyState('tag', offEmpty(), !OFF.ok && navigator.onLine === false ? t('nearby.offline') : t('nearby.emptyText'), '<button class="btn sm soft" data-act="partner-cabinet">' + ic('store', 'xs') + t('nearby.bizOwner') + '</button>');
   h += '</section>';
   h += bizRecCard();
@@ -2345,7 +2452,7 @@ function spotSheet(i) {
   const s = SPOTS[i]; if (!s) return;
   openSheet(esc(s[0]), '<p class="small muted" style="margin:0 0 10px">' + s[1] + ' · ' + s[3] + ' <span class="badge warn">' + t('bonus.example') + '</span></p><div class="row wrap" style="gap:6px">' + s[6].map(o => '<span class="tagchip">' + o + '</span>').join('') + '</div>' +
     '<div class="tip">' + ic('info') + '<span>' + t('spot.tip') + '</span></div>' +
-    '<div class="btn-row" style="margin-top:16px"><button class="btn ink" data-act="hid">' + ic('target', 'sm') + 'Helper ID</button><button class="btn soft" data-act="tab" data-tab="bonus">' + t('spot.coupons') + '</button></div>');
+    '<div class="btn-row" style="margin-top:16px"><button class="btn ink" data-act="hid">' + ic('target', 'sm') + 'Helper ID</button><button class="btn soft" data-act="gq-perks">' + t('spot.coupons') + '</button></div>');
 }
 
 /* ================= for business ================= */
@@ -2363,7 +2470,7 @@ function pageBiz() {
   return h;
 }
 function bizText(a) {
-  return [t('biz.app.title'), t('biz.app.company', {v: a.company}), t('biz.app.cat', {v: BIZ_CATS[a.cat] || '—'}), 'IDNO: ' + a.idno, t('biz.app.phone', {v: a.phone}), t('biz.app.address', {v: a.address || '—'}), t('biz.app.offer', {v: a.offer}), t('biz.app.discount', {n: a.discount}), t('biz.app.bonus', {n: a.bonus}), t('biz.app.date', {date: fD(a.date)})].join('\n');
+  return [t('biz.app.title'), t('biz.app.company', {v: a.company}), t('biz.app.cat', {v: BIZ_CATS[a.cat] || '—'}), 'IDNO: ' + a.idno, t('biz.app.phone', {v: a.phone}), t('biz.app.address', {v: a.address || '—'}), t('biz.app.offer', {v: a.offer}), t('biz.app.discount', {n: a.discount}), t('biz.app.date', {date: fD(a.date)})].join('\n');
 }
 function bizResult(a) {
   openSheet(t('biz.done'), '<p style="margin:0;line-height:1.5">' + t('biz.sendVia', {bot: TG_BOT}) + '</p><label class="vh" for="biz-out">' + t('biz.appText') + '</label><textarea id="biz-out" class="input mono" readonly style="margin-top:12px;min-height:210px">' + esc(bizText(a)) + '</textarea>' +
@@ -2373,9 +2480,7 @@ function bizResult(a) {
 const LOYAL_ACT = {
   hid: () => hidOpen(),
   coupon: el => couponSheet(el.dataset.id),
-  'coupon-get': el => { const c = COUPON_BY[el.dataset.id]; if (!c || balance() < c.cost) return; confirmSheet({title: t('loyal.exchangeQ', {pts: tn('u.points', c.cost)}), text: c.self ? t('loyal.premExt') : t('loyal.couponInfo', {coupon: c.t, shop: c.p}), ok: t('loyal.get'), danger: false, onOk: () => getCoupon(c)}); },
   'coupon-use': el => { const cp = LOYAL_find(el.dataset.id); if (cp) { cp.used = true; save(); closeSheet(); render(); toast(t('loyal.used')); } },
-  'partner-grant': () => { const amt = 150 + Math.floor(Math.random() * 16) * 10, p = Math.round(amt * 0.05); award('partner', p, 'loy.h.buy', {shop: '@demo.shop.wash', amount: amt, cur: 'MDL', pct: 5}); save(); closeSheet(); render(); toast(t('loyal.fromPartner', {pts: ptsTxt(p)})); },
   'all-hist': () => { ui.allHist = !ui.allHist; render(); },
   'geo-consent': () => { S.geo.consent = true; S.geo.consentAt = todayISO(); save(); geoPush(); closeSheet(); ui.geo = {status: null, pos: null}; if (!S.geo.area) locate(); render(); },
   'geo-here': () => { S.geo.area = null; save(); ui.geo = {status: null, pos: null}; locate(); render(); },
@@ -2393,7 +2498,6 @@ const LOYAL_FORMS = {
     if ((a.phone.match(/\d/g) || []).length < 6) return showErr('biz-err', t('loyal.err.phone'));
     if (!a.offer) return showErr('biz-err', t('loyal.err.offer'));
     if (a.discount == null || a.discount < 0 || a.discount > 90) return showErr('biz-err', t('loyal.err.discount'));
-    if (a.bonus == null || a.bonus < 0 || a.bonus > 50) return showErr('biz-err', t('loyal.err.bonus'));
     S.bizApps.push(a); save(); render(); bizResult(a);
   }
 };
@@ -2694,7 +2798,10 @@ function devApiPrompt() {
   let v = null;
   try { v = window.prompt(t('dev.apiPrompt', {api: net.api || t('dev.notSet')}), cur); } catch (e) {}
   if (v === null) return;
+  /* «… gamemock» — имитация сервера игры (только вместе с локальным адресом API, для проверки в симуляторе) */
+  const gm = /\s+gamemock\s*$/i.test(v); v = v.replace(/\s+gamemock\s*$/i, '');
   const n = devApiNorm(v);
+  if (n && gm) store.set('helper.game.mock', '1'); else store.del('helper.game.mock');
   if (v.trim() && !n) return toast(t('dev.badUrl'));
   if (n) store.set(K_DEV, n); else store.del(K_DEV);
   cfgLoad().then(() => { toast('API: ' + (net.api || t('dev.notSet'))); plansLoad(); if (logged()) syncNow(); });
@@ -2752,13 +2859,13 @@ function acctUI() {
 }
 async function acctMe() {
   if (!logged()) return null;
-  try { const d = await api('/v1/me'); if (d.user) { A.user = d.user; langFromAccount(d.user); } premSet(d.premium); A.meAt = Date.now(); acctSave(); acctUI(); partnerMine(); if (!helperId() || !loySrv()) loyFetch(); return d; } catch (e) { return null; }
+  try { const d = await api('/v1/me'); if (d.user) { A.user = d.user; langFromAccount(d.user); if (d.user.telegram && d.user.telegram.linked) gRemindOn(); } premSet(d.premium); A.meAt = Date.now(); acctSave(); acctUI(); partnerMine(); if (!helperId() || !loySrv()) loyFetch(); return d; } catch (e) { return null; }
 }
 async function premFetch() {
   if (!logged()) return null;
   try { const d = await api('/v1/premium'); premSet(d); acctUI(); return d; } catch (e) { return null; }
 }
-function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); LS = null; jset(K_LOY, null); RF = null; jset(K_REF, null); RC = null; jset(K_REC, null); codeClose(); }
+function acctLocalOut() { A = {}; acctGen++; acctSave(); syncReset(); SY.status = ''; SY.notice = ''; syncPersist(); LS = null; jset(K_LOY, null); RF = null; jset(K_REF, null); RC = null; jset(K_REC, null); GS = null; jset(K_GAME, null); CP = null; jset(K_CPN, null); CEL = null; jset(K_CEL, null); GQ = {rates: [], events: []}; jset(K_GQ, null); PK = null; jset(K_PERKS, null); codeClose(); }
 function acctLost() {
   if (!logged()) return;
   acctLocalOut();
@@ -2789,6 +2896,7 @@ async function afterAuth(d, kind) {
   else render();
   toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctEmail()}));
   acctMe(); loyFetch(true); refFetch(true); if (S.geo.consent) geoPush();
+  gameFetch(true); cpnFetch(true); perksFetch(true); gFlush();
   await syncNow();
   storeSync(true);
   if (ui.after) { const f = ui.after; ui.after = null; setTimeout(f, 350); }
@@ -2968,6 +3076,7 @@ function syncApply(r, body, sent, setDirty) {
   /* 5) Premium, курсор, демо-данные */
   if (r.premium) premSet(r.premium);
   if (Array.isArray(r.notices) && r.notices.length) syncNotices(r.notices);
+  if (r.game) gSyncGame(r.game);
   if (typeof r.cursor === 'number' && !(setDirty && r.settings_status === 'server_newer' && !r.settings)) SY.cursor = r.cursor;
   if (S.cars.some(c => c.demo) && S.cars.some(c => !c.demo)) { dropDemo(); changed = true; }
   const first = SY.first, demoOnly = SY.demoOnly;
@@ -2987,6 +3096,10 @@ function syncApply(r, body, sent, setDirty) {
   if (first === 'login' && demoOnly) toast(t(S.cars.some(c => !c.demo) ? 'sync.loaded' : 'sync.noCars'));
   else if (first && pushed) toast(t('sync.pushed'));
   if (lim && first) setTimeout(() => toast(t('sync.limitToast', {cars: tn('sync.nCars', +lim.limit || 0)})), 2700);
+  /* игра: действия, сделанные без сети, засчитаны сервером — обновить уровень и задания; отправить оценки и события из очереди */
+  gFlush();
+  if (pushed) setTimeout(() => gameFetch(true), 800);
+  liveRender(['bonus']);
 }
 function syncFail(e) {
   if (!logged()) return;
@@ -3012,7 +3125,7 @@ function onResume() {
   if (!A.meAt || Date.now() - A.meAt > 300000) acctMe();
 }
 
-/* --- Premium: локальный (коды, баллы, Telegram, покупка в магазине до проверки сервером) + с сервера (GET /v1/premium) --- */
+/* --- Premium: локальный (коды, километры Helper, Telegram, покупка в магазине до проверки сервером) + с сервера (GET /v1/premium) --- */
 const locPrem = () => !!(S.premium && S.premium.until && S.premium.until >= todayISO());
 const srvPrem = () => logged() && A.prem && A.prem.active && (!A.prem.until_date || A.prem.until_date >= todayISO()) ? A.prem : null;
 const isPrem = () => locPrem() || !!srvPrem();
@@ -3119,7 +3232,7 @@ function storeApply(ents) {
   let next;
   if (act.length) {
     next = txPrem(act[0]);
-    if (!isStoreSrc(cur.source) && locPrem() && cur.until > next.until && locCars() >= next.cars) return; /* более длинный Premium (код, баллы) не перетираем */
+    if (!isStoreSrc(cur.source) && locPrem() && cur.until > next.until && locCars() >= next.cars) return; /* более длинный Premium (код, километры Helper) не перетираем */
   } else if (isStoreSrc(cur.source)) next = {plan: null, until: null, since: null, trial: false, code: null};
   else return;
   if (JSON.stringify(next) === JSON.stringify(cur)) return;
@@ -3167,7 +3280,7 @@ onLang(() => TABS.forEach(x => { x[1] = t('tab.' + x[0]); }));
 const emptyStacks = () => ({home: [], car: [], journal: [], bonus: [], more: []});
 const ui = {tab: 'home', stacks: emptyStacks(), jf: 'all', period: 'year', kbq: '', onb: null, plan: 'year', saeW: '5W', saeH: '30', allFuel: false, pf: 'all', session: {}, themeSet: false, geo: {status: null, pos: null}, allHist: false, jseg: 'works'};
 const curPage = () => { const s = ui.stacks[ui.tab]; return s.length ? s[s.length - 1] : {p: ui.tab}; };
-const PAGES = {home: pageHome, car: pageCar, journal: pageJournal, bonus: pageBonus, more: pageMore, guide: pageGuide, nearby: pageNearby, biz: pageBiz,
+const PAGES = {home: pageHome, car: pageCar, journal: pageJournal, bonus: pageGame, more: pageMore, guide: pageGuide, nearby: pageNearby, biz: pageBiz, perks: pagePerks,
   sys: p => pageSys(p.id), kb: p => pageKb(p.id), art: p => pageArt(p.id), cars: pageCars, partners: pagePartners,
   report: pageReport, backup: pageBackup, settings: pageSettings, about: pageAbout, account: pageAccount};
 let lastKey = '';
@@ -3199,6 +3312,7 @@ function render(keep) {
   tick();
   if (pg.p === 'car') layoutHotspots();
   offersObserve();
+  if (CQ.length) setTimeout(celPump, 300);
 }
 function setTab(tt) {
   if (ui.tab === tt) ui.stacks[tt] = [];
@@ -3245,6 +3359,7 @@ function closeSheet() {
   w.hidden = true; setHTML(w, ''); document.body.style.overflow = ''; pending = null;
   if (sheetFocus && document.contains(sheetFocus)) { try { sheetFocus.focus({preventScroll: true}); } catch (e) {} }
   sheetFocus = null;
+  if (typeof CQ !== 'undefined' && CQ.length) setTimeout(celPump, 350);
 }
 function confirmSheet(o) {
   openSheet(o.title, '<p class="muted" style="margin:0 0 18px">' + o.text + '</p><div class="stack"><button class="btn block ' + (o.danger === false ? 'ink' : 'danger') + '" data-act="confirm-ok">' + o.ok + '</button><button class="btn block soft" data-act="confirm-cancel">' + t('c.cancel') + '</button></div>');
@@ -3363,7 +3478,7 @@ function carEditSheet(id, pre) {
 
 /* ================= Приглашения: закрытый запуск, ссылка друга, «Пригласить друга» (04_AUTOMATION/docs/INVITES_API.md) =================
    Код приглашения = Helper ID друга (HLP-XXXXXX) или код из бумажного ежедневника (HLP-XXXX-XXXX). Ссылка ?ref=… сохраняется как
-   ожидающее приглашение, проверяется на сервере и отправляется при регистрации. Ценность баллов в деньгах нигде не показывается. */
+   ожидающее приглашение, проверяется на сервере и отправляется при регистрации. Ценность километров Helper в деньгах нигде не показывается. */
 let INV = jget(K_INV), ST = jget(K_STATUS), RF = jget(K_REF), SEEN_NOTICES = jget(K_NOTICES) || [], invP = null, stP = null, rfP = null;
 const closedMode = () => ST && ST.at ? !!ST.invite_only : true; /* статус неизвестен (офлайн, нет сервера) — считаем закрытым */
 function inviteCapture() {
@@ -3445,16 +3560,17 @@ function refBody() {
   if (!logged()) return '<p class="small muted" style="margin:0 0 12px">' + t('inv.needAcct') + '</p><div class="btn-row"><button class="btn sm ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn sm soft" data-act="acct-login">' + t('c.login') + '</button></div>';
   const s = refSrv();
   if (!s) { setTimeout(() => refFetch(), 0); return '<p class="small muted" style="margin:0">' + t(navigator.onLine === false ? 'inv.offline' : 'inv.loading') + '</p>'; }
-  const d = s.d, q = d.quota || {}, tier = d.tier || {}, nx = d.next_tier, pct = Math.max(0, Math.min(100, +d.score || 0));
-  let h = '<div class="row between" style="gap:10px"><span class="badge dark">' + esc(tier.title || '') + '</span><span class="small muted num">' + t('inv.score', {n: pct}) + '</span></div>';
-  h += '<span class="bar" style="display:block"><i style="width:' + pct + '%;display:block;height:100%;background:var(--teal)"></i></span>';
-  h += '<p class="xsmall muted" style="margin:6px 0 0">' + (nx ? t('inv.toNext', {n: +nx.score_needed || 0, tier: esc(nx.title || '')}) + (d.how_to_earn && d.how_to_earn[0] ? ' ' + esc(d.how_to_earn[0]) : '') : t('inv.maxTier')) + '</p>';
-  h += '<p class="small" style="margin:12px 0 0">' + t('inv.sub', {days: +d.bonus_days || 30, km: tn('inv.km', +d.points_referral || 0)}) + '</p>';
+  /* квота и база — по уровню игры (GAME_API.md §10): «Уровень Активный: 5 приглашений + 2 за каждого активного друга» */
+  const d = s.d, q = d.quota || {}, tier = d.tier || {}, nx = d.next_tier, lv = d.level || {}, base = q.base != null ? +q.base : +tier.base || 0;
+  let h = '<div class="row" style="gap:10px"><span class="lvl-badge sm" aria-hidden="true">' + (lv.n ? fN(+lv.n) : ic('users', 'xs')) + '</span><span style="font-weight:600">' + esc(tier.title || lv.title || '') + '</span></div>';
+  h += '<p class="small" style="margin:8px 0 0">' + (base > 0 ? t('inv.levelQuota', {level: esc(tier.title || lv.title || ''), base: tn('inv.nInv', base), n: +d.earn_activated || 2}) : t('inv.levelNone', {level: esc(tier.title || lv.title || '')})) + '</p>';
+  if (nx) h += '<p class="xsmall muted num" style="margin:4px 0 0">' + t('inv.toNext', {xp: xpTxt(+nx.score_needed || 0), tier: esc(nx.title || '')}) + '</p>';
+  h += '<p class="small" style="margin:12px 0 0">' + t('inv.sub', {days: +d.bonus_days || 30, km: kmFull(+d.points_referral || 0)}) + '</p>';
   if (+q.total <= 0 && q.reason === 'tier') {
     h += '<div class="card tint" style="margin-top:12px"><p class="small" style="margin:0">' + esc(q.hint || t('inv.guestCta')) + '</p><button class="btn sm ink" style="margin-top:10px" data-act="ref-add-car">' + ic('plus', 'xs') + t('inv.guestBtn') + '</button></div>';
   } else {
     h += '<p class="small num" style="margin:10px 0 0;font-weight:600">' + t('inv.available', {n: +q.available || 0, total: +q.total || 0}) + '</p>';
-    h += '<p class="xsmall muted" style="margin:2px 0 0">' + (q.reason && q.hint ? esc(q.hint) : t('inv.earnMore', {n: +d.earn_activated || 2})) + '</p>';
+    if (q.reason && q.hint) h += '<p class="xsmall muted" style="margin:2px 0 0">' + esc(q.hint) + '</p>';
     h += '<p class="eyebrow" style="margin:12px 0 6px">' + t('inv.link') + '</p><div class="copyline"><span class="v num" style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(d.url) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(d.url) + '" aria-label="' + t('inv.copyLink') + '">' + ic('copy', 'sm') + '</button></div>';
     if (+q.available > 0) h += '<button class="btn block ink" style="margin-top:10px" data-act="ref-share">' + ic('share', 'sm') + t('inv.share') + '</button>';
   }
@@ -3489,18 +3605,26 @@ function shareLink(title, text, url) {
     '<a class="btn block soft" href="https://wa.me/?text=' + enc(text + '\n' + url) + '" target="_blank" rel="noopener noreferrer">' + ic('phone', 'sm') + 'WhatsApp</a>' +
     '<button class="btn block ink" data-act="copy" data-text="' + esc(text + '\n' + url) + '">' + ic('copy', 'sm') + t('inv.copyLink') + '</button></div>');
 }
-/* тосты о наградах за друга из /v1/sync → notices (каждое уведомление — один раз, по id) */
-function syncNotices(list) {
-  let delay = 0, changed = false;
+/* уведомления из /v1/sync → notices (и /v1/game/me): награды за друзей — тосты, игровые — поздравления и оценка визита (gNotice).
+   Каждое — один раз, по id; старше 2 суток — без показа (новое устройство, долгий перерыв) */
+function syncNotices(list, fromGame) {
+  let delay = 0, changed = false, game = false;
   list.forEach(n => {
     if (!n || !n.id || SEEN_NOTICES.indexOf(n.id) >= 0) return;
     SEEN_NOTICES.push(n.id); changed = true;
+    const age = Date.now() - tsParse(n.at);
+    if (String(n.id).indexOf('game:') === 0 || /^(level_up|badge|quest_completed|streak|chest|visit|coupon_refund)$/.test(n.kind || '')) {
+      game = true;
+      if (!(age > 2 * 864e5) && !(!CEL && age > 3600e3 && (n.kind === 'level_up' || n.kind === 'badge'))) gNotice(n);
+      return;
+    }
     if (n.message) { const msg = String(n.message); setTimeout(() => toast(msg), delay); delay += 2800; }
   });
   if (!changed) return;
-  if (SEEN_NOTICES.length > 60) SEEN_NOTICES = SEEN_NOTICES.slice(-60);
+  if (SEEN_NOTICES.length > 200) SEEN_NOTICES = SEEN_NOTICES.slice(-200);
   jset(K_NOTICES, SEEN_NOTICES);
-  premFetch(); loyFetch(true); refFetch(true);
+  loyFetch(true);
+  if (!fromGame) { premFetch(); refFetch(true); if (game) gameFetch(true); }
 }
 
 /* ================= Рекомендации компаний → партнёры Helper (04_AUTOMATION/docs/INVITES_API.md §7) =================
@@ -3555,7 +3679,7 @@ function bizRecSheet() {
   if (!logged()) { ui.after = () => { if (!ui.onb) bizRecSheet(); }; ui.authWhy = t('rec.needAcct'); return authSheet('register', {why: ui.authWhy}); }
   REC = {pos: null, geo: 'locating', near: null};
   const p = recPts(), cats = recCats();
-  openSheet(t('rec.title'), '<p class="small muted" style="margin:0 0 6px">' + t('rec.intro') + '</p><p class="small" style="margin:0 0 12px">' + t('rec.reward', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}) + '</p>' +
+  openSheet(t('rec.title'), '<p class="small muted" style="margin:0 0 6px">' + t('rec.intro') + '</p><p class="small" style="margin:0 0 12px">' + t('rec.reward', {a: kmFull(p.a), b: kmFull(p.b)}) + '</p>' +
     '<form class="form" data-form="biz-rec" novalidate>' +
     fld('rc-name', t('rec.name'), inp('rc-name', '', 'autocomplete="organization" maxlength="120" placeholder="' + esc(t('rec.namePh')) + '"')) +
     fld('rc-cat', t('rec.category'), '<select id="rc-cat" class="input">' + cats.map(c => '<option value="' + esc(c.key) + '">' + esc(c.title) + '</option>').join('') + '</select>') +
@@ -3599,8 +3723,8 @@ function recResultSheet(d) {
   const p = recPts();
   let title, text, btn = '';
   if (d.result === 'partner_exists') { title = t('rec.partnerTitle'); text = t('rec.partnerText', {name: esc((d.partner && d.partner.company) || '')}); btn = '<button class="btn block ink" data-act="biz-offers">' + t('rec.offersBtn') + '</button>'; }
-  else if (d.result === 'vote') { title = t('rec.voteTitle', {who: tn('rec.drivers', +d.votes || 2)}); text = t('rec.sentText', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}); }
-  else { title = t('rec.sentTitle'); text = t('rec.sentText', {a: tn('inv.km', p.a), b: tn('inv.km', p.b)}); }
+  else if (d.result === 'vote') { title = t('rec.voteTitle', {who: tn('rec.drivers', +d.votes || 2)}); text = t('rec.sentText', {a: kmFull(p.a), b: kmFull(p.b)}); }
+  else { title = t('rec.sentTitle'); text = t('rec.sentText', {a: kmFull(p.a), b: kmFull(p.b)}); }
   openSheet(title, '<p class="muted" style="margin:0 0 18px;line-height:1.55">' + text + '</p><div class="stack">' + btn + '<button class="btn block soft" data-act="sheet-close">' + t('c.done') + '</button></div>');
   toast(d.result === 'partner_exists' ? t('rec.partnerTitle') : t('rec.sentTitle'));
 }
@@ -3618,7 +3742,7 @@ function recMineSection() {
     else if (!s.d.items.length) h += '<p class="small muted" style="margin:0">' + t('rec.mineEmpty') + '</p>';
     else h += '<div class="group">' + s.d.items.slice(0, 20).map(x => '<div class="item" style="cursor:default"><span class="ic-circle' + (x.rewarded || x.joined_rewarded ? ' ink' : '') + '">' + ic(x.status === 'rewarded' || x.status === 'joined' ? 'store' : 'pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.name) + '</span><span class="s">' + esc(x.category_title || '') + ' · ' + esc(x.status_title || '') + (x.created_at ? ' · ' + fD(String(x.created_at).slice(0, 10)) : '') + '</span></span>' + (x.rewarded || x.joined_rewarded ? '<span class="badge">' + ic('gift', 'xs') + '</span>' : '') + '</div>').join('') + '</div>';
   }
-  h += '<div class="card" style="margin-top:12px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('building', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('rec.bizTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('rec.bizText', {b: tn('inv.km', p.b)}) + '</p></div></div>' +
+  h += '<div class="card" style="margin-top:12px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('building', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('rec.bizTitle') + '</p><p class="small muted" style="margin:2px 0 0">' + t('rec.bizText', {b: kmFull(p.b)}) + '</p></div></div>' +
     (logged() ? '<button class="btn block soft" style="margin-top:12px" data-act="biz-share">' + ic('share', 'sm') + t('rec.bizShare') + '</button>' : '') + '</div></section>';
   return h;
 }
@@ -4217,7 +4341,7 @@ function scanSheet(res) {
   openSheet(t('scan.dataTitle'), b);
 }
 
-/* ===================== Партнёры Helper: Helper-код, баллы с сервера, акции, события, гео =====================
+/* ===================== Партнёры Helper: Helper-код, километры Helper с сервера, акции, события, гео =====================
    Контракт — 04_AUTOMATION/docs/PARTNER_API.md (разделы 1 и 11). Координаты клиента на сервер не уходят:
    расстояние и фильтры аудитории считаются здесь, на телефоне; в события — только campaign_id / location_id. */
 const PARTNER_URL = 'https://dmitriimalahov-gif.github.io/helper-app/partner/';
@@ -4239,7 +4363,7 @@ function loyFetch(force) {
   if (!logged()) return Promise.resolve(null);
   const s = loySrv();
   if (loyP) return loyP;
-  if (!force && ((s && Date.now() - s.at < 120000) || Date.now() - loyTry < 30000)) return Promise.resolve(s);
+  if (!force && ((s && s.lang === LANG && Date.now() - s.at < 120000) || (s && s.lang === LANG && Date.now() - loyTry < 30000))) return Promise.resolve(s);
   loyTry = Date.now();
   const who = acctWho();
   loyP = (async () => {
@@ -4248,7 +4372,7 @@ function loyFetch(force) {
     catch (e) { if (e.status === 404 && loyPath !== '/v1/loyalty') { loyPath = '/v1/loyalty'; try { d = await api(loyPath); } catch (x) { d = null; } } }
     if (!d || !logged() || acctWho() !== who) return loySrv();
     const prev = loySrv();
-    LS = {who, helper_id: d.helper_id || (prev && prev.helper_id) || (A.user && A.user.helper_id) || '', balance: +d.balance || 0, expiring_30d: +d.expiring_30d || 0,
+    LS = {who, helper_id: d.helper_id || (prev && prev.helper_id) || (A.user && A.user.helper_id) || '', balance: +d.balance || 0, expiring_30d: +d.expiring_30d || 0, xp: d.xp != null ? +d.xp : null, level: d.level || null, lang: LANG,
       coupons: Array.isArray(d.coupons) ? d.coupons.slice(0, 50) : [], history: Array.isArray(d.history) ? d.history.slice(0, 200) : [], at: Date.now()};
     jset(K_LOY, LS);
     if (JSON.stringify(Object.assign({}, prev || {}, {at: 0})) !== JSON.stringify(Object.assign({}, LS, {at: 0}))) liveRender(['home', 'bonus']);
@@ -4260,7 +4384,7 @@ function loyFetch(force) {
 function liveRender(pages) { if (!S || ui.onb) return; if (pages.indexOf(curPage().p) >= 0) render(); }
 
 /* --- Карточка «Мой Helper-код» (главная и «Бонусы») --- */
-const loyBal = n => t('loy.onAccount', {pts: tn('u.points', Math.round(+n || 0))}); /* «120 баллов на счёте» */
+const loyBal = n => t('loy.onAccount', {pts: kmShort(gSrv() ? +gSrv().me.points || 0 : n)}); /* «120 км Helper на счёте» */
 function hidCard() {
   if (!logged()) return '<button class="hidc cta" data-act="hid-register"><span class="ic-circle" style="background:var(--teal);color:var(--on-teal)">' + ic('qr', 'sm') + '</span><span class="body"><span class="t">' + t('hcode.ctaT') + '</span><span class="s">' + t('hcode.ctaS') + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
   const id = helperId(), s = loySrv();
@@ -4287,7 +4411,8 @@ function codeFull(o) {
   el.id = 'codefs'; el.className = 'codefs'; el.tabIndex = -1; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', o.title);
   setHTML(el, '<div class="codefs-in"><button class="x" data-act="code-close" aria-label="' + esc(t('c.close')) + '">' + ic('close') + '</button><p class="ttl">' + esc(o.title) + '</p>' + (o.sub ? '<p class="sub">' + esc(o.sub) + '</p>' : '') +
     qrSVG(o.qr, 300, t('hcode.qr', {code: String(o.big)})) + barSVG(o.bar, 78, t('hcode.bar', {code: String(o.bar)})) + '<p class="big" id="codefs-big">' + esc(o.big) + '</p><p class="hint">' + esc(o.hint) + '</p>' + (o.note ? '<p class="note">' + esc(o.note) + '</p>' : '') +
-    '<button class="btn" data-act="code-close">' + t('c.close') + '</button></div>');
+    (o.extra ? '<div class="cpn-actions">' + o.extra + '</div>' : '') + '<button class="btn" data-act="code-close">' + t('c.close') + '</button></div>');
+  if (o.code) el.dataset.code = o.code;
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { el.focus({preventScroll: true}); } catch (e) {}
   brightUp();
@@ -4394,7 +4519,7 @@ function offerDiscText(o) {
   if (o.discount_kind === 'percent' && v) b.push(t('offer.discPct', {v: fN(v)}));
   else if (o.discount_kind === 'fixed' && v) b.push(t('offer.discFixed', {v: fN(v)}));
   if (o.kind === 'bonus' && +o.bonus_multiplier > 1) b.push(t('offer.multBuy', {x: fN(o.bonus_multiplier)}));
-  if (o.reward) b.push(+o.reward.cost_points ? t('offer.couponFor', {title: String(o.reward.title), pts: tn('u.points', Math.round(+o.reward.cost_points))}) : t('offer.couponNamed', {title: String(o.reward.title)}));
+  if (o.reward) b.push(+o.reward.cost_points ? t('offer.couponFor', {title: String(o.reward.title), pts: kmShort(+o.reward.cost_points)}) : t('offer.couponNamed', {title: String(o.reward.title)}));
   return b.join(' · ');
 }
 function offerCard(x, wide) {
@@ -4439,9 +4564,11 @@ function offerSheet(cid, from) {
   const locs = (o.locations || []).map(l => ({l, d: src && isFinite(+l.lat) ? distKm(src.lat, src.lon, +l.lat, +l.lon) : null})).sort((a, b2) => (a.d == null ? 1e9 : a.d) - (b2.d == null ? 1e9 : b2.d));
   if (locs.length) b += '<p class="eyebrow" style="margin:18px 0 0">' + t(locs.length > 1 ? 'offer.addresses' : 'offer.address') + '</p>' + locs.map((x, i) => '<div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.l.title || o.company) + (x.d != null ? ' <span class="small muted num">· ' + fKm(x.d) + '</span>' : '') + '</span><span class="s" style="display:block">' + esc(x.l.address || '') + '</span>' + (x.l.hours ? '<span class="s" style="display:block">' + t('offer.hours', {hours: esc(x.l.hours)}) + '</span>' : '') + '</span>' + (isFinite(+x.l.lat) && isFinite(+x.l.lon) ? '<button class="btn sm soft" data-act="offer-route" data-id="' + esc(o.campaign_id) + '" data-i="' + i + '" data-lid="' + esc(x.l.id) + '">' + t('offer.route') + '</button>' : '') + '</div>').join('');
   b += '<div class="stack" style="margin-top:16px">';
-  const cc = o.reward ? +o.reward.cost_points || 0 : 0;
-  if (offerCouponable(o)) b += '<button class="btn block ink" data-act="offer-coupon" data-id="' + esc(o.campaign_id) + '">' + ic('gift', 'sm') + t('c.getCoupon') + ' · ' + (cc ? tn('u.points', Math.round(cc)) : t('offer.free')) + '</button>';
-  b += '<button class="btn block ' + (offerCouponable(o) ? 'soft' : 'ink') + '" data-act="hid">' + ic('qr', 'sm') + t('offer.showCode') + '</button></div>';
+  const cc = o.reward ? +o.reward.cost_points || 0 : 0, pk = o.perk && o.perk.id != null ? perkById(o.perk.id) : null;
+  /* плюшка акции (perk_id): карточка плюшки — бронь за километры Helper */
+  if (pk) b += '<button class="btn block ink" data-act="perk" data-id="' + esc(pk.id) + '">' + ic('gift', 'sm') + '<span>' + esc(pk.title) + ' · </span>' + kmIco(+pk.points || 0) + '</button>';
+  else if (offerCouponable(o)) b += '<button class="btn block ink" data-act="offer-coupon" data-id="' + esc(o.campaign_id) + '">' + ic('gift', 'sm') + t('c.getCoupon') + ' · ' + (cc ? kmShort(cc) : t('offer.free')) + '</button>';
+  b += '<button class="btn block ' + (offerCouponable(o) || pk ? 'soft' : 'ink') + '" data-act="hid">' + ic('qr', 'sm') + t('offer.showCode') + '</button></div>';
   b += '<p class="xsmall muted" style="margin:12px 0 0">' + t('offer.codeNote') + '</p>';
   openSheet(esc(o.company || t('offer.partnerOfferShort')), b);
   offerEvent('open', o.campaign_id);
@@ -4455,7 +4582,7 @@ async function offerCoupon(cid) {
     let d;
     try { d = await api('/v1/offers/' + encodeURIComponent(o.campaign_id) + '/coupon', {body: {}}); }
     catch (e) {
-      if (e.code === 'coupon_active') { await loyFetch(true); const s2 = loySrv(), ex = s2 && (s2.coupons || []).find(x => String(x.campaign_id || '') === String(o.campaign_id) || (x.company && x.company === o.company)); if (ex) { closeSheet(); return couponFull(ex); } }
+      if (e.code === 'coupon_active') { await loyFetch(true); const s2 = loySrv(), ex = s2 && (s2.coupons || []).find(x => String(x.campaign_id || '') === String(o.campaign_id) || (x.company && x.company === o.company)); if (ex) { closeSheet(); return cpnShow(ex); } }
       return toast(e.message);
     }
     const c = d.coupon || {};
@@ -4464,12 +4591,12 @@ async function offerCoupon(cid) {
     const cp = {code: c.code, title: c.title || (o.reward && o.reward.title) || o.title, company: d.company || c.company || o.company, expires_at: c.expires_at || null, qr: c.qr || 'HELPER-COUPON:' + c.code, campaign_id: o.campaign_id};
     if (loySrv()) { LS.coupons = [cp].concat((LS.coupons || []).filter(x => x.code !== cp.code)); if (spent) LS.balance = Math.max(0, (+LS.balance || 0) - spent); jset(K_LOY, LS); }
     offerEvent('coupon', o.campaign_id);
-    closeSheet(); liveRender(['home', 'bonus']); couponFull(cp);
+    closeSheet(); liveRender(['home', 'bonus']); cpnShow(cp);
     loyFetch(true);
   };
   if (!cost) return go();
-  const costTxt = tn('u.points', Math.round(cost));
-  if (s && s.balance < cost) return toast(t('offer.needPts', {pts: costTxt, bal: fN(s.balance)}));
+  const costTxt = kmShort(cost);
+  if (s && s.balance < cost) return toast(t('offer.needPts', {pts: costTxt, bal: kmShort(s.balance)}));
   confirmSheet({title: t('offer.swapQ', {pts: costTxt}), text: t('offer.swapText', {title: esc((o.reward && o.reward.title) || o.title), company: esc(o.company)}), ok: t('c.getCoupon'), danger: false, onOk: go, onCancel: () => offerSheet(cid)});
 }
 
@@ -4574,13 +4701,14 @@ function offerBanner(o, title, body) {
   document.body.appendChild(el);
   setTimeout(() => { if (el.parentNode) el.remove(); }, 15000);
 }
-/* Запуск и возврат в приложение: акции (не чаще раза в 10 мин), баллы, гео */
+/* Запуск и возврат в приложение: акции (не чаще раза в 10 мин), километры и игра, гео */
 let offResAt = 0;
 function offResume() {
   if (!S || Date.now() - offResAt < 20000) return;
   offResAt = Date.now();
   offersFetch().then(() => geoCheck());
-  if (logged()) loyFetch();
+  if (logged()) { loyFetch(); gameFetch(); cpnFetch(); gFlush(); }
+  perksFetch();
 }
 
 /* --- Для бизнеса: кабинет партнёра и «Моя компания в Helper» (GET /v1/partner/mine) --- */
@@ -4608,6 +4736,962 @@ function geoIntroSheet() {
     row('sliders', t('geo.offT'), t('geo.offS', {more: t('tab.more'), nearby: t('c.nearby')})) +
     '<div class="stack" style="margin-top:14px"><button class="btn block ink" data-act="geo-consent">' + t('geo.agree') + '</button><button class="btn block soft" data-act="sheet-close">' + t('geo.notNow') + '</button></div><p class="xsmall muted" style="text-align:center;margin:10px 0 0">' + t('geo.manualHint') + '</p>');
 }
+
+/* ===================== Игра водителя: километры Helper, уровень, серии, задания, значки, плюшки партнёров =====================
+   Контракт — 04_AUTOMATION/docs/GAME_API.md (правила — GAME_MODEL.md). В API валюта — points, в интерфейсе — «километры Helper»:
+   полностью «1 250 километров Helper», коротко «1 250 км Helper» или число со значком руля Helper (kmIco). Денежного эквивалента
+   нет нигде. Пробег машины («86 400 км», kmTxt) пишется без значка и без «Helper». Последнее состояние игры кэшируется для
+   офлайна; действия без сети засчитываются после синхронизации. Без аккаунта — прогресс на этом устройстве, в демо — пример.
+   Разработка: ?gamemock на localhost (или при подмене адреса API) — ответы сервера игры имитирует GMOCK (в конце блока). */
+const GAME_MOCK = (I18N_DEV || !!store.get(K_DEV)) && (/[?&]gamemock\b/.test(location.search) || store.get('helper.game.mock') === '1');
+const GK = GAME_MOCK ? '.mock' : ''; /* кэш имитации не смешивается с настоящим */
+const K_GAME = 'helper.game' + GK + '.v1', K_GMETA = 'helper.gmeta' + GK + '.v1', K_PERKS = 'helper.perks' + GK + '.v1', K_CPN = 'helper.cpn' + GK + '.v1', K_GQ = 'helper.gameq' + GK + '.v1', K_CEL = 'helper.cel' + GK + '.v1', K_GMOCK = 'helper.gmock.v1';
+const kmFull = n => tn('u.kmh', Math.round(+n || 0));                 /* «1 250 километров Helper» */
+const kmShort = n => t('u.kmhS', {n: Math.round(+n || 0)});           /* «1 250 км Helper» */
+const kmSigned = n => (n < 0 ? '−' : '+') + kmShort(Math.abs(n));    /* «+20 км Helper» */
+/* число со значком руля Helper; для экранного диктора — полная форма */
+const kmIco = (n, cls) => '<span class="kmh ' + (cls || '') + '" role="img" aria-label="' + esc(kmFull(n)) + '"><span aria-hidden="true">' + fN(n) + '</span>' + markSVG(16, 'var(--teal-ink)', 'currentColor') + '</span>';
+const xpTxt = n => tn('game.xpN', Math.round(+n || 0));              /* «430 опыта» */
+const gOffline = () => navigator.onLine === false || SY.status === 'offline';
+let GS = jget(K_GAME), GM = jget(K_GMETA), PK = jget(K_PERKS), CP = jget(K_CPN), GQ = Object.assign({rates: [], events: []}, jget(K_GQ) || {}), CEL = jget(K_CEL);
+const gWho = () => logged() ? acctWho() : '';
+const gSrv = () => logged() && GS && GS.who === acctWho() && GS.me ? GS : null;
+const gMeta = () => GM && GM.d && GM.lang === LANG ? GM.d : null;
+const gApi = (path, o) => GAME_MOCK ? GMOCK.api(path, o || {}) : api(path, o);
+
+/* --- уровни, значки, действия: справочник сервера (GET /v1/game/meta), без сети — значения GAME_MODEL.md --- */
+const G_LVL = [[1, 'novice', 0, 1, 0, false], [2, 'driver', 100, 1, 2, false], [3, 'active', 400, 1, 5, true], [4, 'expert', 1200, 1.1, 10, true], [5, 'master', 3000, 1.2, 10, true], [6, 'legend', 7000, 1.3, 10, true]];
+const gUnl = n => t('game.unl.' + n).split('|').filter(Boolean);
+function gLevels() {
+  const m = gMeta();
+  if (m && Array.isArray(m.levels) && m.levels.length) return m.levels.map(l => ({n: +l.n, key: l.key, title: l.title || t('game.lvl.' + l.n), from: +l.xp_from || 0, to: l.xp_to == null ? null : +l.xp_to, mult: +l.multiplier || 1, inv: l.invites_base, freeze: !!l.freeze, unlocks: Array.isArray(l.unlocks) && l.unlocks.length ? l.unlocks : gUnl(+l.n)}));
+  return G_LVL.map((x, i) => ({n: x[0], key: x[1], title: t('game.lvl.' + x[0]), from: x[2], to: i < G_LVL.length - 1 ? G_LVL[i + 1][2] : null, mult: x[3], inv: x[4], freeze: x[5], unlocks: gUnl(x[0])}));
+}
+const gLevelN = n => gLevels().find(l => l.n === +n) || null;
+function gLevelFor(xp) { const L = gLevels(); let r = L[0]; L.forEach(l => { if (xp >= l.from) r = l; }); return r; }
+const G_BADGES = ['start', 'first_car', 'scanner', 'first_service', 'records_10', 'streak_8', 'km_10000', 'winter_ready', 'summer_ready', 'explorer', 'regular', 'critic', 'scout_lead', 'scout', 'friend', 'ambassador', 'premium', 'legend'];
+const G_BICON = {start: 'flag', first_car: 'car', scanner: 'camera', first_service: 'wrench', records_10: 'journal', streak_8: 'flame', km_10000: 'gauge', winter_ready: 'snow', summer_ready: 'sun', explorer: 'pin', regular: 'store', critic: 'star', scout_lead: 'target', scout: 'building', friend: 'users', ambassador: 'send', premium: 'loyal', legend: 'medal'};
+const bIcon = b => (b && b.icon && I[b.icon] ? b.icon : G_BICON[b && b.key] || 'medal');
+/* [ключ, опыт, км, действие в приложении] — таблица «Как накатать километры» без сети (GAME_MODEL.md §2) */
+const G_ACTS = [['car', 50, 20, 'car-add'], ['scan', 10, 0, 'car-add'], ['record', 15, 5, 'rec-new'], ['fuel', 3, 1, 'fuel-new'], ['odo', 10, 3, 'odo'], ['visit', 30, 20, 'hid'], ['perk', 10, 0, 'gq-perks'], ['rate', 5, 2, 'gq-rate'], ['recommend', 20, 50, 'biz-rec'], ['partner_joined', 100, 500, 'biz-share'], ['friend', 50, 50, 'ref'], ['friend_paying', 30, 300, 'ref'], ['quest', null, null, '']];
+function gActs() {
+  const m = gMeta();
+  if (m && Array.isArray(m.actions) && m.actions.length) return m.actions.map(a => ({key: a.key, title: a.title || t('game.act.' + a.key), xp: a.xp, km: a.points, limit: /^[—–-]?$/.test(String(a.limit_text || '').trim()) ? '' : a.limit_text, act: G_ACT_KEY[a.key] || gActFor(a.key)}));
+  return G_ACTS.map(a => ({key: a[0], title: t('game.act.' + a[0]), xp: a[1], km: a[2], limit: t('game.actL.' + a[0]), act: a[3]}));
+}
+const G_ACT_KEY = {visit: 'hid', partner_joined: 'biz-share', friend_activated: 'ref', friend_paying: 'ref'};
+/* ключ действия / шага задания → действие приложения: запись, пробег, плюшки, партнёр… */
+const G_STEP = [[/scan/, 'car-add'], [/remind|notif/, 'gq-remind'], [/nearby|near|find_partner|^partners$/, 'gq-perks'], [/^car|car_add|first_car|add_car/, 'car-add'], [/pressure/, 'gq-partner'],
+  [/odo|mileage|probeg/, 'odo'], [/fuel|refuel/, 'fuel-new'], [/rate|rating|review|critic/, 'gq-rate'], [/perk|book|coupon/, 'gq-perks'],
+  [/visit|partner|sponsor/, 'gq-partner'], [/invite|friend|referral|ambassador/, 'ref'], [/recommend|scout/, 'biz-rec'],
+  [/pressure|tire|wheel|battery|akb|coolant|antifreeze|washer|\bac\b|^ac|aircon|oil|brake|filter|record|service|maint|diagnost|inspection/, 'gq-rec']];
+function gActFor(key) { const k = String(key || '').toLowerCase(); const x = G_STEP.find(r => r[0].test(k)); return x ? x[1] : ''; }
+const G_RECCAT = [[/pressure|tire|wheel/, 'tires'], [/battery|akb/, 'battery'], [/coolant|antifreeze/, 'coolant'], [/washer|wiper/, 'wipers'], [/\bac\b|^ac|aircon/, 'ac'], [/oil/, 'oil'], [/brake/, 'pads'], [/filter/, 'air']];
+const gRecCat = key => { const k = String(key || '').toLowerCase(); const x = G_RECCAT.find(r => r[0].test(k)); return x ? x[1] : ''; };
+
+/* --- загрузка: справочник, профиль игры, задания, значки, визиты; кэш — для офлайна --- */
+let gmP = null, gP = null, gTry = 0, gMissing = false, gAgain = false;
+function gMetaFetch(force) {
+  if (gmP) return gmP;
+  if (!force && GM && GM.lang === LANG && Date.now() - GM.at < 300000) return Promise.resolve(gMeta());
+  const lang = LANG;
+  gmP = gApi('/v1/game/meta', {auth: false}).then(d => {
+    if (!d || lang !== LANG || !Array.isArray(d.levels)) return gMeta();
+    const before = GM && JSON.stringify(GM.d);
+    GM = {at: Date.now(), lang, d}; jset(K_GMETA, GM);
+    if (JSON.stringify(d) !== before) liveRender(['bonus', 'home', 'perks']);
+    return d;
+  }, () => gMeta()).finally(() => { gmP = null; });
+  return gmP;
+}
+function gameFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  if (gP) { if (force) gAgain = true; return gP; }
+  const s = gSrv();
+  if (!force && ((s && s.lang === LANG && Date.now() - s.at < 60000) || Date.now() - gTry < 15000)) return Promise.resolve(s);
+  gTry = Date.now();
+  const who = acctWho(), lang = LANG;
+  gP = (async () => {
+    let me = null;
+    try { me = await gApi('/v1/game/me'); } catch (e) { if (e.status === 404) gMissing = true; return gSrv(); }
+    gMissing = false;
+    if (!me || !logged() || acctWho() !== who) return gSrv();
+    const opt = p => gApi(p).catch(() => null);
+    const res = await Promise.all([opt('/v1/game/quests'), opt('/v1/game/badges'), opt('/v1/me/visits?limit=20')]);
+    if (!logged() || acctWho() !== who) return gSrv();
+    const prev = gSrv(), q = res[0], b = res[1], v = res[2];
+    GS = {who, at: Date.now(), lang, me, quests: q && Array.isArray(q.items) ? q.items : prev && prev.lang === lang ? prev.quests : null,
+      badges: b && Array.isArray(b.items) ? b.items : prev && prev.lang === lang ? prev.badges : null,
+      visits: v && Array.isArray(v.items) ? v.items.slice(0, 20) : prev ? prev.visits || [] : []};
+    jset(K_GAME, GS);
+    if (me.helper_id && LS && LS.who === who && !LS.helper_id) { LS.helper_id = me.helper_id; jset(K_LOY, LS); }
+    if (Array.isArray(me.notices) && me.notices.length) syncNotices(me.notices, true);
+    gCelDiff();
+    const pick = x => x ? JSON.stringify([x.me, x.quests, x.badges, x.visits]) : '';
+    if (pick(prev) !== pick(GS)) liveRender(['home', 'bonus', 'perks']);
+    return GS;
+  })().finally(() => { gP = null; if (gAgain) { gAgain = false; setTimeout(() => gameFetch(true), 50); } else if (CQ.length) setTimeout(celPump, 100); });
+  return gP;
+}
+/* ответ синхронизации: game {xp, level {n, title}, points} — сразу в кэш, полный профиль — следом */
+function gSyncGame(g) {
+  const s = gSrv(); if (!s || !g) return;
+  const me = s.me, lv = g.level || {};
+  let ch = false;
+  if (g.points != null && +g.points !== +me.points) { me.points = +g.points; ch = true; }
+  if (g.xp != null && +g.xp !== +me.xp) { me.xp = +g.xp; ch = true; }
+  if (lv.n && me.level && +lv.n !== +me.level.n) ch = true;
+  if (!ch) return;
+  jset(K_GAME, GS);
+  gameFetch(true);
+  liveRender(['home', 'bonus', 'perks']);
+}
+
+/* --- модель для экрана: сервер → пример (демо) → прогресс на этом устройстве --- */
+function gView() {
+  const s = gSrv();
+  if (s) return gFromSrv(s, 'srv');
+  if (logged() && GAME_MOCK) return gLocal();
+  if (S.demo) return gFromSrv(GMOCK.snapshot(), 'sample');
+  return gLocal();
+}
+function gFromSrv(s, src) {
+  const me = s.me || {}, L = gLevels(), lv = me.level || {}, n = +lv.n || gLevelFor(+me.xp || 0).n, base = gLevelN(n) || L[0];
+  const stale = s.lang && s.lang !== LANG; /* кэш на другом языке — названия из справочника, пока не пришёл свежий профиль */
+  const lvl = Object.assign({}, base, {title: (!stale && lv.title) || base.title, from: lv.xp_from != null ? +lv.xp_from : base.from, to: lv.xp_to !== undefined ? (lv.xp_to == null ? null : +lv.xp_to) : base.to,
+    mult: +lv.multiplier || base.mult, freeze: lv.freeze != null ? !!lv.freeze : base.freeze, unlocks: !stale && Array.isArray(lv.unlocks) && lv.unlocks.length ? lv.unlocks : base.unlocks});
+  const xp = +me.xp || 0;
+  const nx = me.next_level ? Object.assign({}, gLevelN(me.next_level.n) || {}, {n: +me.next_level.n, title: (!stale && me.next_level.title) || (gLevelN(me.next_level.n) || {}).title || t('game.lvl.' + me.next_level.n), from: +me.next_level.xp_from}) : null;
+  const toNext = lv.xp_to_next != null ? +lv.xp_to_next : nx ? Math.max(0, nx.from - xp) : null;
+  const prog = lv.progress != null ? clamp(+lv.progress, 0, 1) : nx ? clamp((xp - lvl.from) / Math.max(1, nx.from - lvl.from), 0, 1) : 1;
+  const earned = {}; (me.badges || []).forEach(b => { if (b && b.key) earned[b.key] = b; });
+  let badges;
+  if (Array.isArray(s.badges) && s.badges.length) badges = s.badges.map(b => ({key: b.key, title: b.title, desc: b.description || '', icon: b.icon, earned: !!b.earned || !!earned[b.key], at: b.earned_at || (earned[b.key] && earned[b.key].earned_at) || null, prog: b.progress || null}));
+  else {
+    const cat = (gMeta() && gMeta().badges) || G_BADGES.map(k => ({key: k, title: t('game.b.' + k), description: t('game.bd.' + k)}));
+    badges = cat.map(b => ({key: b.key, title: b.title, desc: b.description || '', icon: b.icon, earned: !!earned[b.key], at: earned[b.key] ? earned[b.key].earned_at : null, prog: null}));
+    Object.keys(earned).forEach(k => { if (!badges.some(b => b.key === k)) badges.push({key: k, title: earned[k].title, desc: '', icon: earned[k].icon, earned: true, at: earned[k].earned_at}); });
+  }
+  badges.sort((a, b) => (b.earned - a.earned) || (a.earned && b.earned ? String(b.at || '').localeCompare(String(a.at || '')) : 0));
+  const quests = (Array.isArray(s.quests) ? s.quests : Array.isArray(me.quests) ? me.quests : []).filter(q => q && q.status !== 'expired' && q.status !== 'claimed');
+  const toRate = (s.visits || []).filter(v => v && v.can_rate && !v.rated && !GQ.rates.some(r => String(r.visit_id) === String(v.id)));
+  const mu = me.multipliers || {};
+  return {src, km: +me.points || 0, exp: +me.expiring_30d || 0, xp, lvl, next: nx, toNext, prog, mult: mu, streaks: me.streaks || null, badges,
+    earnedN: me.badges_earned != null ? +me.badges_earned : badges.filter(b => b.earned).length, totalN: me.badges_total != null ? +me.badges_total : badges.length,
+    quests: gQuestSort(quests), toRate, at: s.at};
+}
+const G_QORD = {onboarding: 0, sponsor: 1, weekly: 2, seasonal: 3, city: 4};
+const qOrd = q => G_QORD[q.kind] != null ? G_QORD[q.kind] : 5;
+const gQuestSort = qs => qs.slice().sort((a, b) => ((a.status === 'completed' && a.claim === 'manual' ? -1 : 0) - (b.status === 'completed' && b.claim === 'manual' ? -1 : 0)) || (qOrd(a) - qOrd(b)));
+/* без аккаунта: опыт и километры за действия на этом устройстве (те же значения, что на сервере), задание «Первые шаги» */
+const G_LOCAL_XP = {car: 50, rec: 15, fuel: 3, odo: 10, ref: 50, visit: 30, rate: 5};
+function gLocalOnb() {
+  const real = S.cars.filter(c => !c.demo), car = real[0];
+  const steps = [
+    ['car_scanned', real.length > 0, 'car-add'],
+    ['service_record', S.records.some(r => !r.baseline && r.carId !== 'demo'), 'rec-new'],
+    ['mileage', !!car && ((car.odoLog || []).length > 1 || !!S.loyalty.lastOdo), 'odo'],
+    ['reminders_on', !!S.flags.remindOn, 'gq-remind'],
+    ['partners_nearby', !!S.flags.partnersSeen, 'gq-perks']
+  ].map(x => ({key: x[0], title: t('game.onb.' + x[0]), count: 1, done: x[1] ? 1 : 0, complete: x[1]}));
+  const done = steps.filter(x => x.complete).length;
+  return {id: 'onboarding', key: 'onboarding', kind: 'onboarding', title: t('game.onbTitle'), description: t('game.onbDesc'), steps, progress: done / steps.length, status: done === steps.length ? 'completed' : 'active', claim: 'auto', rewards: {xp: 0, points: 100, badge: {key: 'start', title: t('game.b.start')}}, local: true};
+}
+function gLocal() {
+  /* с аккаунтом, пока профиль игры не загружен: баланс и опыт — из /v1/loyalty */
+  const ls = logged() ? loySrv() : null, hist = S.loyalty.hist || [];
+  const xp = ls && ls.xp != null ? +ls.xp : hist.reduce((a, h) => a + (h.p > 0 ? G_LOCAL_XP[h.k] || 0 : 0), 0);
+  const lvl = gLevelFor(xp), L = gLevels(), nx = L.find(l => l.n === lvl.n + 1) || null;
+  const real = S.cars.filter(c => !c.demo), recs = S.records.filter(r => !r.baseline && r.carId !== 'demo').length;
+  const got = {first_car: real.length > 0, scanner: real.some(c => c.scanned), first_service: recs > 0, records_10: recs >= 10};
+  const badges = G_BADGES.map(k => ({key: k, title: t('game.b.' + k), desc: t('game.bd.' + k), earned: !!got[k], at: null}));
+  badges.sort((a, b) => b.earned - a.earned);
+  const onb = gLocalOnb();
+  return {src: 'local', km: ls ? +ls.balance || 0 : balance(), exp: ls ? +ls.expiring_30d || 0 : 0, xp, lvl, next: nx, toNext: nx ? Math.max(0, nx.from - xp) : null, prog: nx ? clamp((xp - lvl.from) / Math.max(1, nx.from - lvl.from), 0, 1) : 1,
+    mult: {}, streaks: null, badges, earnedN: badges.filter(b => b.earned).length, totalN: badges.length, quests: onb.status === 'completed' ? [] : [onb], toRate: [], at: 0};
+}
+
+/* --- плюшки партнёров: GET /v1/perks (без координат: расстояние и сортировка — на телефоне, как у акций) --- */
+let pkP = null, pkTry = 0;
+function perksFetch(force) {
+  if (pkP) return pkP;
+  const who = gWho();
+  if (!force && PK && PK.who === who && PK.lang === LANG && (Date.now() - (PK.at || 0) < 300000 || Date.now() - pkTry < 30000)) return Promise.resolve(PK);
+  pkTry = Date.now();
+  const lang = LANG;
+  pkP = (async () => {
+    let d = null;
+    try { d = await gApi('/v1/perks'); } catch (e) { if (e.status === 404 && !(PK && PK.ok)) PK = {who, lang, at: Date.now(), ok: false, missing: true, items: [], helper: []}; return PK; }
+    if (!d || lang !== LANG || gWho() !== who) return PK;
+    const key = x => x ? JSON.stringify([x.items, x.helper, x.points, x.level]) : '';
+    const before = key(PK);
+    PK = {who, lang, at: Date.now(), ok: true, points: d.points == null ? null : +d.points, level: d.level || null, helper: Array.isArray(d.helper) ? d.helper.map(pkNorm) : [], items: Array.isArray(d.items) ? d.items.filter(p => p && p.id != null).slice(0, 300).map(pkNorm) : []};
+    jset(K_PERKS, PK);
+    if (key(PK) !== before) liveRender(['bonus', 'perks', 'home']);
+    return PK;
+  })().finally(() => { pkP = null; });
+  return pkP;
+}
+/* причина недоступности: unavailable / unavailable_text (GAME_API.md §5; прежние имена reason / reason_text — тоже) */
+const pkNorm = p => Object.assign({}, p, {reason: p.unavailable !== undefined ? p.unavailable : p.reason || null, reason_text: p.unavailable_text !== undefined ? p.unavailable_text : p.reason_text || null});
+/* каталог для экрана: сервер; в демо без аккаунта и пустом каталоге — пример */
+function perksAll() {
+  const ok = PK && PK.ok && PK.who === gWho() ? PK : null;
+  if (ok && (ok.items.length || logged())) return {items: ok.items, helper: ok.helper, sample: false};
+  if (!logged() && S.demo) { const m = GMOCK.catalog(); return {items: m.items, helper: m.helper, sample: true}; }
+  return {items: ok ? ok.items : [], helper: ok ? ok.helper : [], sample: false};
+}
+const perkById = id => { const A2 = perksAll(); return A2.items.concat(A2.helper).find(p => String(p.id) === String(id)) || null; };
+const PERK_IC = {service: 'wrench', gift: 'gift', priority: 'fast', upgrade: 'up'};
+function perkNear(p, src) { let best = null; (p.locations || []).forEach(l => { if (!src || !isFinite(+l.lat) || !isFinite(+l.lon)) return; const d = distKm(src.lat, src.lon, +l.lat, +l.lon); if (!best || d < best.d) best = {d, l}; }); return best; }
+/* «счастливые часы»: расписание плюшки сейчас (время устройства; сервер присылает happy_hours_now) */
+function perkHappy(p) {
+  if (p.happy_hours_now != null) return !!p.happy_hours_now;
+  const s = p.schedule; if (!s || !s.from || !s.to) return null;
+  const d = new Date(), wd = d.getDay() || 7, hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
+  return (!Array.isArray(s.days) || !s.days.length || s.days.indexOf(wd) >= 0) && hm >= s.from && hm < s.to;
+}
+/* причина недоступности → текст: сервер (reason_text) или наш по коду */
+function perkWhy(p, V) {
+  if (p.available) return '';
+  if (p.reason_text) return p.reason_text;
+  const r = p.reason || (!logged() ? 'login' : '');
+  if (r === 'level') return t('perk.why.level', {level: p.min_level_title || (gLevelN(p.min_level) || {}).title || p.min_level});
+  if (r === 'points') return t('perk.why.points', {km: kmShort(Math.max(0, (+p.points || 0) - ((V && V.km) || 0)))});
+  if (r === 'cooldown') return p.next_available_at ? t('perk.why.cooldownUntil', {date: fDt(p.next_available_at)}) : t('perk.why.cooldown');
+  return r ? t('perk.why.' + r) : '';
+}
+function perksList() {
+  const A2 = perksAll(), src = geoSrc(), f = ui.pkf || 'all', pid = ui.pkPartner;
+  const out = A2.items.filter(p => (f === 'all' || p.category === f) && (!pid || String(p.partner_id) === String(pid))).map((p, i) => { const n = perkNear(p, src); return {p, i, d: n ? n.d : null}; });
+  if (src) out.sort((a, b) => (b.p.available - a.p.available) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i));
+  return out;
+}
+
+/* --- мои купоны (брони плюшек и купоны акций): GET /v1/me/coupons?status=all; без него — купоны из /v1/loyalty --- */
+let cpP = null, cpTry = 0;
+function cpnFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  if (cpP) return cpP;
+  const who = acctWho();
+  if (!force && CP && CP.who === who && (Date.now() - CP.at < 60000 || Date.now() - cpTry < 15000)) return Promise.resolve(CP);
+  cpTry = Date.now();
+  cpP = (async () => {
+    let d = null;
+    try { d = await gApi('/v1/me/coupons?status=all'); } catch (e) { if (e.status === 404) { CP = {who, at: Date.now(), missing: true, items: []}; jset(K_CPN, CP); } return CP; }
+    if (!d || !Array.isArray(d.items) || acctWho() !== who) return CP;
+    const prev = CP && CP.who === who ? CP.items : [], before = JSON.stringify(prev);
+    CP = {who, at: Date.now(), items: d.items.slice(0, 100)};
+    jset(K_CPN, CP);
+    /* бронь погашена у партнёра, пока приложение было открыто, — тост и оценка визита */
+    CP.items.forEach(c => { const o = prev.find(x => x.code === c.code); if (o && o.status === 'active' && c.status === 'redeemed') cpnRedeemed(c); });
+    if (JSON.stringify(CP.items) !== before) liveRender(['bonus', 'home', 'perks']);
+    return CP;
+  })().finally(() => { cpP = null; });
+  return cpP;
+}
+const cpnLive = c => c && c.code && (c.status ? c.status === 'active' : true) && !(c.expires_at && tsParse(c.expires_at) < Date.now());
+function cpnMine() {
+  const who = gWho();
+  if (CP && CP.who === who && !CP.missing) return CP.items.filter(cpnLive);
+  const s = loySrv(); return s && Array.isArray(s.coupons) ? s.coupons.filter(cpnLive) : [];
+}
+function cpnRedeemed(c) {
+  if (codeClose(true)) brightBack();
+  celPush({type: 'banner', icon: 'gift', title: t('perk.redeemedT', {title: c.title || ''}), sub: c.company || ''});
+  if (c.can_rate && c.visit_id) celPush({type: 'rate', v: {id: c.visit_id, company: c.company}});
+  gameFetch(true);
+}
+/* пока купон открыт на весь экран — раз в 6 с проверяем, не выдал ли партнёр плюшку */
+let cpWatchT = null;
+function cpnWatch(code) {
+  clearInterval(cpWatchT);
+  if (!logged() || !code) return;
+  cpWatchT = setInterval(() => { const el = $('#codefs'); if (!el || el.dataset.code !== code || document.hidden) { if (!el || el.dataset.code !== code) clearInterval(cpWatchT); return; } cpnFetch(true); }, 6000);
+}
+
+/* --- события телефона для заданий: POST /v1/game/events (без сети — очередь) --- */
+function gEvent(type, ref) {
+  const k = type + ':' + (ref || '');
+  if ((GQ.sent || []).indexOf(k) >= 0 || GQ.events.some(e => e.type + ':' + (e.ref || '') === k)) return;
+  GQ.events.push(ref ? {type, ref: String(ref)} : {type}); jset(K_GQ, GQ);
+  gFlush();
+}
+let gqBusy = false;
+async function gFlush() {
+  if (!logged() || gqBusy || gOffline()) return;
+  if (!GQ.events.length && !GQ.rates.length) return;
+  gqBusy = true;
+  try {
+    if (GQ.events.length) {
+      const batch = GQ.events.slice(0, 20);
+      try {
+        const d = await gApi('/v1/game/events', {body: {events: batch}});
+        GQ.events = GQ.events.slice(batch.length); GQ.sent = (GQ.sent || []).concat(batch.map(e => e.type + ':' + (e.ref || ''))).slice(-50); jset(K_GQ, GQ);
+        if (d && Array.isArray(d.notices)) syncNotices(d.notices, true);
+      } catch (e) { if (e.status === 404 || e.status === 400) { GQ.events = []; jset(K_GQ, GQ); } }
+    }
+    const rs = GQ.rates.slice();
+    for (const r of rs) {
+      try { const d = await gApi('/v1/visits/' + encodeURIComponent(r.visit_id) + '/rate', {body: {stars: r.stars, tags: r.tags, text: r.text || undefined}}); rateDone(d, true); }
+      catch (e) { if (e.code === 'offline' || e.code === 'no_api' || e.status >= 500) break; }
+      GQ.rates = GQ.rates.filter(x => x !== r); jset(K_GQ, GQ);
+    }
+  } finally { gqBusy = false; }
+  gameFetch(true);
+}
+/* «Включите напоминания»: в приложении — разрешение на уведомления, на сайте — напоминания в Telegram-боте */
+function gRemindOn() { if (!S.flags.remindOn) { S.flags.remindOn = true; save(); liveRender(['bonus', 'home']); } if (logged()) gEvent('reminders_on'); }
+function gPartnersSeen() { if (!S.flags.partnersSeen) { S.flags.partnersSeen = true; save(); } gEvent('partners_nearby'); }
+
+/* --- уведомления игры (notices из /v1/sync и /v1/game/me) → поздравления по очереди, по одному --- */
+let APP_BG = false;
+const CQ = [];
+let celOn = false;
+function celInit() { if (!CEL || CEL.who !== gWho()) { const V = gSrv() ? gView() : null; CEL = {who: gWho(), lvl: V ? V.lvl.n : 0, badges: V ? V.badges.filter(b => b.earned).map(b => b.key) : [], init: !V}; jset(K_CEL, CEL); } return CEL; }
+/* первый профиль после входа — точка отсчёта (без салюта за прошлые заслуги); дальше — рост уровня и новые значки, если уведомление не пришло */
+function gCelDiff() {
+  const s = gSrv(); if (!s) return;
+  const V = gFromSrv(s, 'srv');
+  if (!CEL || CEL.who !== gWho() || CEL.init) { CEL = {who: gWho(), lvl: V.lvl.n, badges: V.badges.filter(b => b.earned).map(b => b.key)}; jset(K_CEL, CEL); return; }
+  if (V.lvl.n > CEL.lvl) celLevelQ({n: V.lvl.n, title: V.lvl.title});
+  V.badges.filter(b => b.earned && CEL.badges.indexOf(b.key) < 0).slice(0, 3).forEach(b => celBadgeQ(b));
+}
+/* уровень и значок отмечаются «показанными» только когда поздравление действительно на экране: закрыли приложение раньше —
+   покажем при следующем запуске (gCelDiff сравнит профиль с CEL) */
+function celLevelQ(lv) {
+  celInit();
+  if (!lv || +lv.n <= CEL.lvl || CQ.some(x => x.type === 'level' && x.n >= +lv.n)) return;
+  celPush({type: 'level', n: +lv.n, title: lv.title});
+}
+function celBadgeQ(b, msg) {
+  celInit();
+  if (!b || !b.key || CEL.badges.indexOf(b.key) >= 0 || CQ.some(x => x.badge === b.key)) return;
+  celPush({type: 'banner', icon: bIcon(b), title: msg || t('cel.badge', {title: b.title || t('game.b.' + b.key)}), sub: t('cel.badgeSub'), act: 'badge', id: b.key, badge: b.key});
+}
+function celSeen(x) {
+  celInit();
+  if (x.type === 'level' && x.n > CEL.lvl) CEL.lvl = x.n;
+  else if (x.badge && CEL.badges.indexOf(x.badge) < 0) CEL.badges.push(x.badge);
+  else return;
+  jset(K_CEL, CEL);
+}
+/* true — уведомление игровое (обработано здесь) */
+function gNotice(n) {
+  const k = n.kind, rw = [n.points ? kmSigned(+n.points) : '', n.xp ? '+' + xpTxt(+n.xp) : ''].filter(Boolean).join(' · ');
+  if (k === 'level_up') { celLevelQ(n.level || {}); return true; }
+  if (k === 'badge') { celBadgeQ(n.badge || {}, n.message); return true; }
+  if (k === 'quest_completed') { const q = n.quest || {}; celPush({type: 'banner', icon: 'flag', title: n.message || t('cel.quest', {title: q.title || ''}), sub: q.claim === 'manual' ? t('cel.questClaim') : n.message ? '' : rw, act: q.claim === 'manual' ? 'quest' : '', id: q.id}); return true; }
+  if (k === 'streak') { const st = n.streak || {}; celPush({type: 'banner', icon: st.kind === 'care' ? 'chest' : 'flame', title: n.message || tn(st.kind === 'care' ? 'cel.streakCare' : 'cel.streakWeeks', +st.count || 0), sub: n.message ? '' : rw}); return true; }
+  if (k === 'chest') { celPush({type: 'banner', icon: 'chest', title: n.message || t('cel.chest'), sub: n.message ? '' : rw}); return true; }
+  if (k === 'visit') {
+    const v = n.visit || {};
+    celPush({type: 'banner', icon: 'store', title: n.message || t('cel.visit', {company: v.company || ''}), sub: n.message ? '' : rw});
+    if (v.id && v.can_rate !== false) celPush({type: 'rate', v: {id: v.id, company: v.company}});
+    cpnFetch(true);
+    return true;
+  }
+  if (k === 'coupon_refund') { celPush({type: 'banner', icon: 'gift', title: n.message || t('cel.refund'), sub: n.message ? '' : rw}); cpnFetch(true); return true; }
+  return false;
+}
+const RATE_ASKED = {};
+function celPush(x) {
+  if (x.type === 'rate') { const id = String(x.v && x.v.id); if (RATE_ASKED[id] || GQ.rates.some(r => String(r.visit_id) === id)) return; RATE_ASKED[id] = 1; }
+  CQ.push(x); setTimeout(celPump, 60);
+}
+function celPump() {
+  if (celOn || !CQ.length) return;
+  if (document.hidden || APP_BG) { CQ.forEach(x => { if (!x.notified) { x.notified = true; celNotify(x); } }); return; }
+  if (!S || ui.onb) return;
+  const x = CQ[0];
+  if (x.type === 'rate') {
+    if (!$('#sheet').hidden || $('#codefs') || $('#celeb')) return;
+    if (gP) return; /* профиль игры обновляется — сначала узнаем, не оценён ли визит (например, на другом устройстве) */
+    CQ.shift();
+    const s = gSrv(), v = s && (s.visits || []).find(y => String(y.id) === String(x.v.id));
+    if (v && (v.rated || v.can_rate === false)) { setTimeout(celPump, 50); return; }
+    rateSheet(x.v); return;
+  }
+  CQ.shift(); celOn = true; celSeen(x);
+  const next = () => { celOn = false; setTimeout(celPump, 400); };
+  if (x.type === 'level') return celLevel(x, next);
+  gBanner(x, next);
+}
+/* в фоне — локальное уведомление (iOS / Android), в приложении — поздравление при возвращении */
+let celNid = 0;
+async function celNotify(x) {
+  const LN = CAP && NP.LocalNotifications; if (!LN) return;
+  const title = x.type === 'level' ? t('cel.levelPush', {n: x.n, title: x.title || ''}) : x.type === 'rate' ? t('rate.push', {company: (x.v && x.v.company) || t('offer.partner')}) : x.title;
+  const body = x.type === 'level' ? t('cel.levelPushSub') : x.type === 'rate' ? t('rate.pushSub') : (x.sub || '');
+  try { const pm = await LN.checkPermissions(); if (!pm || pm.display !== 'granted') return; celNid = (celNid + 1) % 200; await LN.schedule({notifications: [{id: 9700 + celNid, title, body, schedule: {at: new Date(Date.now() + 1000), allowWhileIdle: true}, extra: {tab: 'bonus'}}]}); } catch (e) {}
+}
+function gBanner(x, next) {
+  const old = $('#gbanner'); if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'gbanner'; el.className = 'gbanner'; el.setAttribute('role', 'status');
+  setHTML(el, '<span class="gi">' + ic(x.icon || 'medal', 'sm') + '</span><button class="body" data-act="gbanner-open" data-k="' + esc(x.act || '') + '" data-id="' + esc(x.id || '') + '"><span class="t">' + esc(x.title || '') + '</span>' + (x.sub ? '<span class="s">' + esc(x.sub) + '</span>' : '') + '</button><button class="iconbtn" data-act="gbanner-close" aria-label="' + esc(t('c.close')) + '">' + ic('close', 'sm') + '</button>');
+  document.body.appendChild(el);
+  let closed = false;
+  const fin = () => { if (closed) return; closed = true; if (el.parentNode) el.remove(); next(); };
+  el._fin = fin;
+  setTimeout(fin, 5200);
+}
+function celLevel(x, next) {
+  const lv = gLevelN(x.n) || {n: x.n, title: x.title, unlocks: gUnl(x.n)}, title = lv.title || x.title; /* название — на текущем языке (справочник) */
+  const el = document.createElement('div');
+  el.id = 'celeb'; el.className = 'celeb'; el.tabIndex = -1; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-labelledby', 'cel-t');
+  setHTML(el, '<div class="celeb-in"><button class="x" data-act="cel-close" aria-label="' + esc(t('c.close')) + '">' + ic('close') + '</button>' +
+    '<div class="rings" aria-hidden="true"><i></i><i></i><i></i><span class="lvl-badge xl">' + fN(x.n) + '</span></div>' +
+    '<p class="ey">' + t('cel.levelEy', {n: x.n}) + '</p><h2 id="cel-t">' + esc(title) + '</h2><p class="lead">' + t('cel.levelLead') + '</p>' +
+    ((lv.unlocks || []).length ? '<p class="eyebrow" style="margin-top:8px">' + t('cel.unlocks') + '</p><ul>' + lv.unlocks.map(u => '<li><span class="ic-circle ok" style="width:30px;height:30px">' + ic('check', 'xs') + '</span><span>' + esc(u) + '</span></li>').join('') + '</ul>' : '') +
+    '<button class="btn ink" data-act="cel-close">' + t('cel.ok') + '</button></div>');
+  el._fin = () => { el.remove(); if ($('#sheet').hidden && !$('#codefs')) document.body.style.overflow = ''; next(); };
+  document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  try { el.focus({preventScroll: true}); } catch (e) {}
+}
+function celClose() { const el = $('#celeb'); if (!el) return false; el._fin(); return true; }
+document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(celPump, 500); });
+
+/* --- оценка визита: 1–5 звёзд, теги, текст (POST /v1/visits/{id}/rate); без сети — отправится после синхронизации --- */
+const RATE_TAGS = ['fast', 'polite', 'clean', 'price', 'quality', 'slow', 'rude', 'dirty'];
+function rateTags(stars) {
+  const m = gMeta(), all = m && Array.isArray(m.rating_tags) && m.rating_tags.length ? m.rating_tags.map(x => ({key: x.key, title: x.title})) : RATE_TAGS.map(k => ({key: k, title: t('rate.tag.' + k)}));
+  const neg = {slow: 1, rude: 1, dirty: 1};
+  return all.filter(x => !neg[x.key] || (stars && stars <= 3));
+}
+function rateSheet(v) {
+  if (!v || !v.id) return;
+  ui.rate = {id: v.id, company: v.company || '', stars: 0, tags: []};
+  const A2 = (gMeta() && (gMeta().actions || []).find(a => a.key === 'rate')) || {xp: 5, points: 2};
+  openSheet(t('rate.title'), '<p class="muted" style="margin:0;text-align:center">' + esc(v.company || t('offer.partner')) + '</p>' +
+    '<div class="stars" role="group" aria-label="' + esc(t('rate.starsAria')) + '">' + [1, 2, 3, 4, 5].map(n => '<button type="button" data-act="rate-star" data-n="' + n + '" aria-pressed="false" aria-label="' + esc(tn('rate.nStars', n)) + '">' + ic('star') + '</button>').join('') + '</div>' +
+    '<p class="small muted" id="rate-cap" style="text-align:center;margin:0 0 12px;min-height:20px">' + t('rate.pick') + '</p>' +
+    '<div class="opt-grid" id="rate-tags" role="group" aria-label="' + esc(t('rate.tagsAria')) + '">' + rateTagsHtml() + '</div>' +
+    '<div class="field" style="margin-top:14px"><label for="rate-text">' + t('rate.text') + '</label><textarea id="rate-text" class="input" maxlength="500" placeholder="' + esc(t('rate.textPh')) + '"></textarea></div>' +
+    '<p class="small" style="margin:12px 0 0">' + t('rate.reward', {km: kmShort(+A2.points || 2), xp: xpTxt(+A2.xp || 5)}) + '</p>' +
+    '<div class="stack" style="margin-top:14px"><button class="btn block ink" data-act="rate-send" id="rate-send" disabled>' + t('rate.send') + '</button><button class="btn block soft" data-act="sheet-close">' + t('rate.later') + '</button></div>' +
+    '<p class="xsmall muted" style="margin:10px 0 0">' + t('rate.privacy') + '</p>');
+}
+const rateTagsHtml = () => rateTags(ui.rate && ui.rate.stars).map(x => '<button type="button" class="opt" data-act="rate-tag" data-k="' + esc(x.key) + '" aria-pressed="' + (ui.rate && ui.rate.tags.indexOf(x.key) >= 0) + '">' + esc(x.title) + '</button>').join('');
+function rateStar(n) {
+  const r = ui.rate; if (!r) return;
+  r.stars = n;
+  $$('.stars button').forEach(b => { const on = +b.dataset.n <= n; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(+b.dataset.n === n)); });
+  const c = $('#rate-cap'); if (c) c.textContent = t('rate.cap.' + n);
+  const neg = {slow: 1, rude: 1, dirty: 1}; if (n > 3) r.tags = r.tags.filter(k => !neg[k]);
+  const g = $('#rate-tags'); if (g) setHTML(g, rateTagsHtml());
+  const b = $('#rate-send'); if (b) b.disabled = false;
+}
+async function rateSend() {
+  const r = ui.rate; if (!r || !r.stars) return;
+  const text = (val('rate-text') || '').trim().slice(0, 500), body = {stars: r.stars, tags: r.tags.slice(), text: text || undefined};
+  const queue = () => { GQ.rates = GQ.rates.filter(x => String(x.visit_id) !== String(r.id)).concat([{visit_id: r.id, stars: r.stars, tags: body.tags, text, at: Date.now()}]); jset(K_GQ, GQ); closeSheet(); ui.rate = null; toast(t('rate.queued')); liveRender(['bonus']); };
+  if (gOffline()) return queue();
+  const b = $('#rate-send'); if (b) { b.disabled = true; b.textContent = t('busy.wait'); }
+  try { const d = await gApi('/v1/visits/' + encodeURIComponent(r.id) + '/rate', {body}); closeSheet(); ui.rate = null; rateDone(d); }
+  catch (e) {
+    if (e.code === 'offline' || e.code === 'no_api') return queue();
+    if (b) { b.disabled = false; b.textContent = t('rate.send'); }
+    toast(e.message);
+    if (e.code === 'already_rated' || e.code === 'rate_expired' || e.status === 404) { closeSheet(); ui.rate = null; gameFetch(true); }
+  }
+}
+function rateDone(d, quiet) {
+  const a = (d && d.awarded) || {};
+  if (d && d.points != null && gSrv()) { GS.me.points = +d.points; jset(K_GAME, GS); }
+  if (!quiet) toast(t('rate.thanks') + ([a.points ? kmSigned(+a.points) : '', a.xp ? '+' + xpTxt(+a.xp) : ''].filter(Boolean).length ? ' · ' + [a.points ? kmSigned(+a.points) : '', a.xp ? '+' + xpTxt(+a.xp) : ''].filter(Boolean).join(' · ') : ''));
+  if (d && Array.isArray(d.notices)) syncNotices(d.notices, true);
+  gameFetch(true); loyFetch(true);
+}
+
+/* ================= экран «Моя игра» (вкладка bonus) ================= */
+function gRefresh() { if (logged()) { gameFetch(); cpnFetch(); gFlush(); } gMetaFetch(); perksFetch(); }
+function pageGame() {
+  sweepCoupons();
+  setTimeout(gRefresh, 0);
+  const V = gView();
+  let h = topbar(t('game.title'), {sub: t('game.sub')});
+  h += gHero(V);
+  if (!logged()) h += gAuthCard(V);
+  h += gRateCards(V);
+  h += gStreaks(V);
+  h += gQuests(V);
+  h += gPerksPreview(V);
+  h += gCoupons();
+  h += '<div class="section">' + hidCard() + '</div>';
+  h += gBadges(V);
+  h += gEarn();
+  h += recMineSection();
+  h += gHistory();
+  h += '<p class="xsmall muted" style="margin-top:18px">' + t('game.legal') + '</p>';
+  return h;
+}
+const gSampleBadge = V => V.src === 'sample' ? ' <span class="badge warn" style="vertical-align:2px">' + t('bonus.example') + '</span>' : '';
+/* мелкий текст: без сети / не отправлено — засчитается после синхронизации; кэш — «на время» */
+function gSyncNote(V) {
+  if (!logged()) return '';
+  const pend = syncDirty() || GQ.rates.length || GQ.events.length;
+  if (gOffline()) return '<p class="g-note">' + ic('sync', 'xs') + '<span>' + t('game.offline') + (V && V.at ? ' ' + t('game.asOf', {time: fUntilD(new Date(V.at).toISOString())}) : '') + '</span></p>';
+  if (pend) return '<p class="g-note">' + ic('sync', 'xs') + '<span>' + t('game.pending') + '</span></p>';
+  return '';
+}
+function gHero(V) {
+  const lv = V.lvl, nx = V.next, pct = Math.round(V.prog * 100);
+  const mt = (+V.mult.level || 1) * (+V.mult.mileage_streak || 1) * (+V.mult.total_mileage || 1);
+  let h = '<section class="g-hero" aria-label="' + esc(t('game.levelAria', {n: lv.n, title: lv.title})) + '"><div class="corner-ring" style="width:210px;height:210px;right:-80px;top:-100px;border-color:var(--teal)"></div><div class="corner-ring" style="width:120px;height:120px;right:-24px;top:-44px"></div>';
+  h += '<div class="lvl"><span class="lvl-badge" aria-hidden="true">' + fN(lv.n) + '</span><div style="min-width:0"><p class="eyebrow">' + t('game.levelN', {n: lv.n}) + gSampleBadge(V) + '</p><p class="lvl-name">' + esc(lv.title) + '</p></div></div>';
+  h += '<div class="xpbar" role="progressbar" aria-label="' + esc(t('game.xp')) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + Math.max(2, pct) + '%"></i></div>';
+  h += '<div class="xpline"><span>' + esc(xpTxt(V.xp)) + '</span><span>' + (nx ? t('game.toNext', {xp: xpTxt(V.toNext || 0), level: esc(nx.title)}) : t('game.maxLevel')) + '</span></div>';
+  h += '<div class="g-stats"><button class="g-stat" data-act="go" data-p="perks"><span class="k">' + markSVG(14, 'var(--teal-ink)', 'currentColor') + t('game.kmLabel') + '</span><span class="v">' + kmIco(V.km, 'lg') + '</span><span class="s">' + (V.exp > 0 ? t('bonus.expiring', {pts: kmShort(V.exp)}) : t('game.kmSpend')) + '</span></button>' +
+    '<button class="g-stat" data-act="gbadges"><span class="k">' + ic('medal', 'xs') + t('game.badges') + '</span><span class="v num">' + fN(V.earnedN) + '<span class="kmh-u" style="font-size:14px"> / ' + fN(V.totalN) + '</span></span><span class="s">' + (mt > 1 ? t('game.multNow', {x: NFX.format(Math.round(mt * 100) / 100)}) : t('game.badgesSub')) + '</span></button></div>';
+  if (V.src === 'local') h += '<p class="g-note">' + ic('info', 'xs') + '<span>' + t(!logged() ? 'game.localNote' : gMissing ? 'game.soon' : navigator.onLine === false ? 'game.offlineFirst' : 'game.loading') + '</span></p>';
+  if (V.src === 'sample') h += '<p class="g-note">' + ic('info', 'xs') + '<span>' + t('game.sampleNote') + '</span></p>';
+  h += gSyncNote(V);
+  return h + '</section>';
+}
+function gAuthCard() {
+  return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle ink">' + ic('user', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('game.authT') + '</p><p class="small muted" style="margin:2px 0 12px">' + t('game.authS') + '</p><div class="btn-row"><button class="btn sm ink" data-act="acct-register">' + t('c.register') + '</button><button class="btn sm soft" data-act="acct-login">' + t('c.login') + '</button></div></div></div></div>';
+}
+function gRateCards(V) {
+  const q = GQ.rates.length ? '<p class="g-note">' + ic('sync', 'xs') + '<span>' + tn('rate.queuedN', GQ.rates.length) + '</span></p>' : '';
+  if (!V.toRate.length) return q;
+  return '<section class="section"><div class="group">' + V.toRate.slice(0, 3).map(v => '<button class="item" data-act="rate" data-id="' + esc(v.id) + '" data-co="' + esc(v.company || '') + '"><span class="ic-circle" style="background:var(--soon-bg);color:var(--soon-t)">' + ic('star', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + t('rate.cardT', {company: esc(v.company || t('offer.partner'))}) + '</span><span class="s">' + (v.rate_until ? t('rate.until', {date: fDt(v.rate_until)}) + ' · ' : '') + t('rate.cardS') + '</span></span>' + ic('chevR', 'sm chev') + '</button>').join('') + '</div>' + q + '</section>';
+}
+function gStreaks(V) {
+  const st = V.streaks;
+  if (!st || (!st.mileage && !st.care)) return V.src === 'local' && !logged() ? '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.streaks') + '</h2></div><div class="soft-lock" style="cursor:default">' + '<span class="ic-circle">' + ic('flame', 'sm') + '</span><span class="body" style="flex:1"><span class="t" style="display:block">' + t('game.streaksLocalT') + '</span><span class="s">' + t('game.streaksLocalS') + '</span></span></div></section>' : '';
+  const m = st.mileage || {}, c = st.care || {};
+  const w = +m.weeks || 0, done = !!m.this_week_done;
+  let segs = '';
+  for (let i = 7; i >= 0; i--) { const cov = done ? i < w : i >= 1 && i <= w; segs += '<i class="' + (cov ? 'on' : i === 0 ? 'now' : '') + '"></i>'; }
+  const need = Math.max(0, (+m.bonus_from_weeks || 4) - w);
+  const frz = V.lvl.freeze === false ? '<span class="frz off">' + ic('snow', 'xs') + t('game.frzFrom', {level: esc((gLevelN(3) || {}).title || '')}) + '</span>' : m.freeze_used_this_month ? '<span class="frz off">' + ic('snow', 'xs') + t('game.frzUsed') + '</span>' : m.freeze_available ? '<span class="frz">' + ic('snow', 'xs') + t('game.frzOk') + '</span>' : '';
+  let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.streaks') + '</h2></div><div class="streaks">';
+  h += '<button class="streak" data-act="odo" style="text-align:left"><span class="top"><span class="fl' + (w ? '' : ' off') + '">' + ic('flame', 'sm') + '</span><span class="n">' + fN(w) + '</span></span><span class="u">' + tn('game.weeksRow', w) + '</span><span class="weeks" aria-hidden="true">' + segs + '</span>' +
+    '<span class="xsmall muted" style="line-height:1.35">' + (m.bonus_active ? t('game.bonusOn', {x: NFX.format(+m.bonus_multiplier || 1.5)}) : t('game.bonusIn', {n: tn('game.nWeeks', need), x: NFX.format(+m.bonus_multiplier || 1.5)})) + '</span>' +
+    '<span class="xsmall" style="font-weight:600;line-height:1.35">' + (done ? t('game.weekDone') : m.deadline ? t('game.weekTodo', {date: fDsT(m.deadline)}) : t('game.weekTodoNow')) + '</span>' + frz + '</button>';
+  const every = +c.chest_every || 3, left = clamp(+c.months_to_chest || every, 1, every);
+  let dots = ''; for (let i = 0; i < every; i++) dots += '<i class="' + (i < every - left ? 'on' : i === every - left && !c.this_month_done ? 'now' : '') + '"></i>';
+  const ch = c.chest || {};
+  h += '<button class="streak" data-act="rec-new" style="text-align:left"><span class="top"><span class="fl care">' + ic('chest', 'sm') + '</span><span class="n">' + fN(+c.months || 0) + '</span></span><span class="u">' + tn('game.monthsRow', +c.months || 0) + '</span><span class="weeks care" aria-hidden="true">' + dots + '</span>' +
+    '<span class="xsmall muted" style="line-height:1.35">' + t('game.chestIn', {n: tn('game.nMonths', left), km: kmShort(+ch.points || 0), xp: xpTxt(+ch.xp || 0)}) + '</span>' +
+    '<span class="xsmall" style="font-weight:600;line-height:1.35">' + (c.this_month_done ? t('game.monthDone') : t('game.monthTodo')) + '</span></button>';
+  return h + '</div></section>';
+}
+const G_QKIND = {onboarding: 'game.qk.onboarding', weekly: 'game.qk.weekly', seasonal: 'game.qk.seasonal', sponsor: 'game.qk.sponsor', city: 'game.qk.city'};
+function gQuestCard(q) {
+  const steps = Array.isArray(q.steps) ? q.steps : [], pct = Math.round(clamp(+q.progress || 0, 0, 1) * 100), done = q.status === 'completed' || q.status === 'claimed';
+  let kind = t(G_QKIND[q.kind] || 'game.qk.other');
+  if (q.kind === 'sponsor' && q.sponsor && q.sponsor.company) kind += ' · ' + esc(q.sponsor.company);
+  if (q.kind === 'city' && q.city && q.city.name) kind += ' · ' + esc(q.city.name);
+  const range = q.kind === 'seasonal' && (q.starts_at || q.ends_at) ? (q.starts_at ? fDsT(q.starts_at, true) : '') + ' – ' + (q.ends_at ? fDsT(q.ends_at) : '') : q.ends_at && q.kind !== 'onboarding' ? t('game.qUntil', {date: fDsT(q.ends_at)}) : '';
+  const rw = q.rewards || {};
+  const kindShow = kind !== esc(q.title || '') || range;
+  let h = '<div class="quest' + (done ? ' done' : '') + '"><div class="qh"><div style="min-width:0">' + (kindShow ? '<p class="qk">' + kind + (range ? ' · <span class="num">' + esc(range) + '</span>' : '') + '</p>' : '') + '<p class="qt">' + esc(q.title || '') + '</p>' + (q.description ? '<p class="qd">' + esc(q.description) + '</p>' : '') + '</div><span class="qp">' + (done ? ic('check', 'xs') : pct + '%') + '</span></div>';
+  h += '<span class="bar" style="display:block"><i style="width:' + Math.max(done ? 100 : 3, pct) + '%"></i></span>';
+  if (q.kind === 'city' && q.city) h += '<p class="xsmall muted num" style="margin:6px 0 0">' + t('game.cityProg', {done: fN(+q.city.done || 0), goal: fN(+q.city.goal || 0), n: fN(+q.city.participants || 0)}) + '</p>';
+  const chips = [];
+  if (+rw.points) chips.push('<span>+' + kmIco(+rw.points) + '</span>');
+  if (+rw.xp) chips.push('<span>+' + esc(xpTxt(+rw.xp)) + '</span>');
+  if (rw.badge && (rw.badge.title || rw.badge.key)) chips.push('<span>' + ic(bIcon(rw.badge), 'xs') + esc(rw.badge.title || t('game.b.' + rw.badge.key)) + '</span>');
+  if (rw.perk && rw.perk.title) chips.push('<span>' + ic('gift', 'xs') + esc(rw.perk.title) + (rw.perk.company ? ' · ' + esc(rw.perk.company) : '') + '</span>');
+  if (chips.length) h += '<div class="rw">' + chips.join('') + '</div>';
+  if (q.status === 'completed' && q.claim === 'manual') h += '<button class="btn block ink" style="margin:12px 0 8px" data-act="quest-claim" data-id="' + esc(q.id) + '">' + ic('gift', 'sm') + t('game.claim') + '</button>';
+  if (q.local && !logged()) h += '<p class="xsmall muted" style="margin:8px 0 0">' + t('game.onbLocal') + '</p>';
+  if (steps.length) h += '<div class="qsteps">' + steps.map(s => {
+    const act = s.complete ? '' : gActFor(s.key), cnt = +s.count > 1 ? '<span class="cnt">' + fN(+s.done || 0) + '/' + fN(+s.count) + '</span>' : '';
+    const inner = '<span class="ck">' + ic('check', 'xs') + '</span><span class="tx">' + esc(s.title || t('game.onb.' + s.key)) + '</span>' + cnt;
+    if (!act) return '<div class="qstep' + (s.complete ? ' done' : '') + '">' + inner + '</div>';
+    return '<button class="qstep" data-act="' + act + '" data-k="' + esc(s.key) + '" data-cat="' + gRecCat(s.key) + '" data-pid="' + esc(q.sponsor && q.sponsor.partner_id != null ? q.sponsor.partner_id : '') + '">' + inner + '<span class="go">' + ic('chevR', 'sm') + '</span></button>';
+  }).join('') + '</div>';
+  else h += '<div style="height:8px"></div>';
+  return h + '</div>';
+}
+const fDsT = (v, start) => { const tt = tsParse(v); return isFinite(tt) ? fDs(iso(new Date(start ? tt : tt - 1000))) : ''; }; /* срок «до 00:00 понедельника» — это воскресенье */
+function gQuests(V) {
+  if (!V.quests.length) return logged() && !gSrv() ? '' : '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.quests') + '</h2></div><div class="card tint"><p class="small" style="margin:0">' + t('game.noQuests') + '</p></div></section>';
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.quests') + '</h2><span class="xsmall muted">' + tn('game.nActive', V.quests.filter(q => q.status === 'active').length) + '</span></div>' + V.quests.map(gQuestCard).join('') + '</section>';
+}
+function gBadges(V) {
+  const B = V.badges; if (!B.length) return '';
+  const shown = ui.allBadges ? B : B.slice(0, 8);
+  let h = '<section class="section" id="g-badges"><div class="section-head"><h2 class="eyebrow">' + t('game.badges') + '</h2><span class="xsmall muted num">' + t('game.badgesOf', {n: fN(V.earnedN), total: fN(V.totalN)}) + '</span></div><div class="badges">';
+  h += shown.map(b => '<button class="bdg' + (b.earned ? '' : ' off') + '" data-act="badge" data-id="' + esc(b.key) + '"><span class="bi">' + ic(b.earned ? bIcon(b) : 'lock', b.earned ? '' : 'sm') + '</span><span class="bn">' + esc(b.title || t('game.b.' + b.key)) + '</span></button>').join('');
+  h += '</div>';
+  if (B.length > 8) h += '<button class="btn soft block" style="margin-top:12px" data-act="all-badges">' + (ui.allBadges ? t('bonus.collapse') : t('game.allBadges', {n: B.length})) + '</button>';
+  return h + '</section>';
+}
+function badgeSheet(key) {
+  const V = gView(), b = V.badges.find(x => x.key === key); if (!b) return;
+  const pr = b.prog && +b.prog.target ? '<p class="small num" style="margin:10px 0 0">' + t('game.bProg', {n: fN(+b.prog.current || 0), total: fN(+b.prog.target)}) + '</p><span class="bar" style="display:block"><i style="width:' + Math.round(clamp((+b.prog.current || 0) / +b.prog.target, 0, 1) * 100) + '%;background:var(--teal-ink)"></i></span>' : '';
+  openSheet(esc(b.title || t('game.b.' + b.key)), '<div style="text-align:center"><span class="bdg' + (b.earned ? '' : ' off') + '" style="display:inline-flex"><span class="bi" style="width:84px;height:84px">' + ic(b.earned ? bIcon(b) : 'lock') + '</span></span><p style="margin:12px 0 0;line-height:1.5">' + esc(b.desc || t('game.bd.' + b.key)) + '</p>' +
+    '<p class="small muted" style="margin:8px 0 0">' + (b.earned ? (b.at ? t('game.bEarnedAt', {date: fDt(b.at)}) : t('game.bEarned')) : t('game.bLocked')) + '</p></div>' + pr);
+}
+function gEarn() {
+  const L = gActs();
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.howEarn') + '</h2></div><div class="card" style="padding:12px 14px 4px"><table class="earn-t"><thead><tr><th>' + t('game.colAction') + '</th><th>' + t('game.colXp') + '</th><th>' + markSVG(12, 'var(--teal-ink)', 'currentColor').replace('<svg', '<svg style="display:inline-block;vertical-align:-1px;margin-right:3px"') + t('game.colKm') + '</th></tr></thead><tbody>' +
+    L.map(a => '<tr><td>' + (a.act ? '<button class="textbtn" style="padding:0;font-size:13px;text-align:left" data-act="' + a.act + '" data-k="' + esc(a.key) + '">' + esc(a.title) + '</button>' : esc(a.title)) + (a.limit ? '<small>' + esc(a.limit) + '</small>' : '') + '</td><td>' + (a.xp == null ? '—' : a.xp ? '+' + fN(a.xp) : '—') + '</td><td>' + (a.km == null ? '—' : a.km ? '+' + fN(a.km) : '—') + '</td></tr>').join('') +
+    '</tbody></table></div><p class="xsmall muted" style="margin:8px 2px 0">' + t('game.earnNote') + '</p></section>';
+}
+function gHistory() {
+  const srv = loySrv(), L = LOY();
+  const hs = srv ? (srv.history || []).map(x => { const tt = tsParse(x.created_at); return {t: (x.title || x.reason || t('bonus.op')) + (x.company ? ' · ' + x.company : ''), d: isFinite(tt) ? iso(new Date(tt)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0}; })
+    : L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0)).map(h => h.tk ? Object.assign({}, h, {t: histText(h.tk, h.tp)}) : h);
+  if (!hs.length) return '';
+  const shown = ui.allHist ? hs : hs.slice(0, 6);
+  let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.history') + '</h2><span class="xsmall muted">' + tn('bonus.ops', hs.length) + '</span></div><div class="group">';
+  h += shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + (x.d ? fD(x.d) : '') + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '"><span class="kmh" role="img" aria-label="' + esc((x.p > 0 ? '+' : '−') + kmFull(Math.abs(x.p))) + '"><span aria-hidden="true">' + (x.p > 0 ? '+' : '−') + fN(Math.abs(x.p)) + '</span>' + markSVG(14, 'var(--teal-ink)', 'currentColor') + '</span></span></div>').join('');
+  h += '</div>';
+  if (hs.length > 6) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-hist">' + (ui.allHist ? t('bonus.collapse') : t('bonus.showAll')) + '</button>';
+  return h + '</section>';
+}
+
+/* ================= «Плюшки партнёров»: каталог, карточка, бронь → купон с QR, отмена брони ================= */
+const PLVL = {bronze: 1, silver: 1, gold: 1, platinum: 1};
+function perkMeta(p, d) {
+  const pa = p.partner || {}, lv = pa.level || {}, r = pa.rating;
+  const bits = [];
+  if (lv.key || lv.title) bits.push('<span class="plvl ' + (PLVL[lv.key] ? lv.key : '') + '">' + esc(lv.title || lv.key) + '</span>');
+  if (r && r.avg != null && +r.count) bits.push('<span class="rate" aria-label="' + esc(t('perk.ratingAria', {avg: f1(+r.avg), n: +r.count})) + '">' + ic('star') + f1(+r.avg) + '<span class="muted" style="font-weight:500">(' + fN(+r.count) + ')</span></span>');
+  if (pa.partner_of_month) bits.push('<span class="plvl gold">' + t('perk.pom') + '</span>');
+  if (d != null) bits.push('<span class="num">' + esc(fKm(d)) + '</span>');
+  return bits.join('');
+}
+function perkTags(p, V) {
+  const tags = [], hh = perkHappy(p);
+  if (p.schedule && hh) tags.push('<span class="ptag hh">' + ic('clock', 'xs') + t('perk.happyNow', {to: esc(p.schedule.to || '')}) + '</span>');
+  else if (p.schedule && hh === false) tags.push('<span class="ptag">' + ic('clock', 'xs') + esc(p.schedule_text || t('perk.happyAt', {from: p.schedule.from, to: p.schedule.to})) + '</span>');
+  if (p.stock_left_today != null) tags.push('<span class="ptag' + (+p.stock_left_today <= 3 ? ' low' : '') + '">' + (+p.stock_left_today > 0 ? tn('perk.stockToday', +p.stock_left_today) : t('perk.stockOut')) + '</span>');
+  if (+p.min_level > 1 && (p.reason === 'level' || !V || V.lvl.n < +p.min_level)) tags.push('<span class="ptag lock">' + ic('lock', 'xs') + t('perk.fromLevel', {level: esc(p.min_level_title || (gLevelN(p.min_level) || {}).title || p.min_level)}) + '</span>');
+  return tags.join('');
+}
+function perkCard(x, V, sample) {
+  const p = x.p, lock = !p.available && (p.reason === 'level' || p.reason === 'stock');
+  return '<button class="perk' + (lock ? ' locked' : '') + '" data-act="perk" data-id="' + esc(p.id) + '"><span class="ph"><span class="pk">' + ic(PERK_IC[p.kind] || 'gift', 'sm') + '</span><span class="pc"><span class="pco">' + esc(p.company || '') + '</span><span class="pm">' + esc(p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + (p.category_title ? ' · ' + esc(p.category_title) : '') + '</span></span>' + (sample ? '<span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span>' +
+    '<span class="pt">' + esc(p.title || '') + '</span>' + (perkMeta(p, x.d) ? '<span class="pm">' + perkMeta(p, x.d) + '</span>' : '') +
+    '<span class="pf"><span class="price">' + kmIco(+p.points || 0) + '</span><span class="tags">' + perkTags(p, V) + '</span></span></button>';
+}
+/* плюшка Helper «Месяц Premium» (сервер: helper[]; без аккаунта — обмен километров этого устройства) */
+function helperPerks(V) {
+  const A2 = perksAll();
+  if (logged() && A2.helper.length) return A2.helper;
+  const cost = (gMeta() && gMeta().premium && +gMeta().premium.points) || 300, ok = V.km >= cost;
+  return [{id: 'premium', kind: 'helper', title: t('perk.premT'), description: t('perk.premD', {days: 30}), points: cost, days: 30, available: ok, reason: ok ? null : 'points', local: !logged()}];
+}
+function helperCard(p, V) {
+  return '<button class="perk" data-act="perk" data-id="' + esc(p.id) + '"><span class="ph"><span class="pk helper">' + markSVG(22, 'var(--teal)', 'var(--on-ink)') + '</span><span class="pc"><span class="pco">Helper</span><span class="pm">' + t('perk.kind.helper') + '</span></span></span><span class="pt">' + esc(p.title || t('perk.premT')) + '</span><span class="pm">' + esc(p.description || t('perk.premD', {days: +p.days || 30})) + '</span><span class="pf"><span class="price">' + kmIco(+p.points || 300) + '</span><span class="tags">' + (!p.available && p.reason ? '<span class="ptag">' + esc(perkWhy(p, V)) + '</span>' : '') + '</span></span></button>';
+}
+function gPerksPreview(V) {
+  const A2 = perksAll(), src = geoSrc();
+  const list = A2.items.map((p, i) => { const n = perkNear(p, src); return {p, i, d: n ? n.d : null}; })
+    .sort((a, b) => (b.p.available - a.p.available) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i)).slice(0, 4);
+  let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('perk.title') + '</h2><button class="link" data-act="go" data-p="perks">' + t('c.all') + ic('chevR', 'xs') + '</button></div>';
+  if (list.length) h += '<div class="pstrip">' + list.map(x => perkCard(x, V, A2.sample)).join('') + '</div>';
+  else h += '<div class="card tint oempty"><span class="ic-circle">' + ic('gift', 'sm') + '</span><p class="small" style="margin:0">' + t(PK && PK.ok ? 'perk.emptyShort' : navigator.onLine === false ? 'perk.offline' : 'perk.emptyShort') + '</p></div>';
+  return h + '</section>';
+}
+function pagePerks() {
+  setTimeout(() => { perksFetch(); gMetaFetch(); if (logged()) { gameFetch(); cpnFetch(); } }, 0);
+  const V = gView(), A2 = perksAll(), src = geoSrc(), g = ui.geo, L = perksList();
+  let h = topbar(t('perk.title'), {back: true});
+  h += '<div class="card tint row between" style="margin-top:10px;gap:10px"><span class="row" style="gap:10px;min-width:0"><span class="lvl-badge sm" aria-hidden="true">' + fN(V.lvl.n) + '</span><span style="min-width:0"><span class="xsmall muted" style="display:block">' + t('game.levelN', {n: V.lvl.n}) + '</span><span style="font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(V.lvl.title) + '</span></span></span><span style="text-align:right"><span class="xsmall muted" style="display:block">' + t('perk.youHave') + '</span><b style="font-size:20px;font-weight:600">' + kmIco(V.km) + '</b></span></div>';
+  /* ближние — выше: согласие и выбор района — как в «Предложениях рядом» */
+  if (!S.geo.consent) h += '<button class="soft-lock section" style="margin-top:12px" data-act="geo-intro"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body" style="flex:1"><span class="t" style="display:block">' + t('perk.nearT') + '</span><span class="s">' + t('perk.nearS') + '</span></span>' + ic('chevR', 'sm') + '</button>';
+  else {
+    if (!S.geo.area && !g.pos && !g.status) setTimeout(locate, 0);
+    h += '<div class="chips" role="group" aria-label="' + esc(t('nearby.cityArea')) + '" style="margin-top:12px"><button class="chip" data-act="geo-here" aria-pressed="' + (!S.geo.area && !!g.pos) + '">' + ic('target', 'xs') + t('nearby.myLoc') + '</button>' + Object.keys(AREAS).map(k => '<button class="chip" data-act="geo-area" data-id="' + k + '" aria-pressed="' + (S.geo.area === k) + '">' + AREAS[k][0] + '</button>').join('') + '</div>';
+  }
+  const cats = []; A2.items.forEach(p => { if (p.category && !cats.some(c => c[0] === p.category)) cats.push([p.category, p.category_title || p.category]); });
+  if (cats.length > 1) h += '<div class="chips" role="group" aria-label="' + esc(t('perk.catAria')) + '" style="margin-top:8px">' + [['all', t('c.all')]].concat(cats).map(c => '<button class="chip" data-act="pkf" data-f="' + esc(c[0]) + '" aria-pressed="' + ((ui.pkf || 'all') === c[0]) + '">' + esc(c[1]) + '</button>').join('') + '</div>';
+  if (ui.pkPartner) { const pp = A2.items.find(p => String(p.partner_id) === String(ui.pkPartner)); h += '<div class="chips" style="margin-top:8px"><button class="chip" data-act="pk-partner-clear" aria-pressed="true">' + esc(pp ? pp.company : t('offer.partner')) + ic('close', 'xs') + '</button></div>'; }
+  h += '<section class="section" style="margin-top:14px"><div class="section-head"><h2 class="eyebrow">' + t('perk.helperOwn') + '</h2></div><div class="stack">' + helperPerks(V).map(p => helperCard(p, V)).join('') + '</div></section>';
+  h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('perk.partners') + '</h2>' + (src && L.length ? '<span class="xsmall muted">' + esc(src.label) + '</span>' : L.length ? '<span class="xsmall muted">' + tn('perk.count', L.length) + '</span>' : '') + '</div>';
+  if (L.length) { h += '<div class="stack">' + L.map(x => perkCard(x, V, A2.sample)).join('') + '</div>'; if (src) h += '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>'; if (A2.items.length && !A2.sample) setTimeout(gPartnersSeen, 0); }
+  else h += emptyState('gift', t('perk.emptyT'), !(PK && PK.ok) && navigator.onLine === false ? t('perk.offline') : t('perk.emptyS'), '<button class="btn sm soft" data-act="biz-rec">' + ic('pin', 'xs') + t('rec.btn') + '</button>');
+  h += '</section><p class="xsmall muted" style="margin-top:14px">' + t('perk.legal') + '</p>';
+  return h;
+}
+function perkSheet(id) {
+  const V = gView();
+  const p = String(id) === 'premium' ? helperPerks(V)[0] : perkById(id);
+  if (!p) return toast(t('perk.gone'));
+  const helper = String(p.id) === 'premium' || p.kind === 'helper', sample = String(p.id).indexOf('demo-') === 0;
+  const src = geoSrc();
+  let b = '';
+  if (!helper) b += '<p class="small muted" style="margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">' + (p.category_title ? esc(p.category_title) + ' ' : '') + perkMeta(p, null) + (sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</p>';
+  b += '<div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle' + (helper ? ' ink' : '') + '" style="width:48px;height:48px">' + (helper ? markSVG(26, 'var(--teal)', 'var(--on-ink)') : ic(PERK_IC[p.kind] || 'gift')) + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(p.title || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(helper ? t('perk.kind.helper') : p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + '</p></div><span class="price" style="font-weight:300;font-size:26px;flex:none">' + kmIco(+p.points || 0) + '</span></div>';
+  if (p.description) b += '<p style="margin:12px 0 0;line-height:1.55">' + esc(p.description) + '</p>';
+  if (!helper) {
+    const tags = perkTags(p, V); if (tags) b += '<div class="row wrap" style="gap:6px;margin-top:12px">' + tags + '</div>';
+    const info = [];
+    if (p.schedule_text || p.schedule) info.push([ic('clock'), t('perk.schedule', {when: esc(p.schedule_text || (p.schedule.from + '–' + p.schedule.to))})]);
+    info.push([ic('qr'), t('perk.couponDays', {n: tn('game.nDays', +p.coupon_days || 7)})]);
+    if (+p.cooldown_days) info.push([ic('calendar'), t('perk.cooldown', {n: tn('game.nDays', +p.cooldown_days)})]);
+    b += '<div class="tip" style="margin-top:14px;flex-direction:column;gap:8px">' + info.map(x => '<span class="row" style="gap:10px;align-items:flex-start">' + x[0] + '<span class="small">' + x[1] + '</span></span>').join('') + '</div>';
+    const locs = (p.locations || []).map(l => ({l, d: src && isFinite(+l.lat) ? distKm(src.lat, src.lon, +l.lat, +l.lon) : null})).sort((a, c) => (a.d == null ? 1e9 : a.d) - (c.d == null ? 1e9 : c.d));
+    if (locs.length) b += '<p class="eyebrow" style="margin:18px 0 0">' + t(locs.length > 1 ? 'offer.addresses' : 'offer.address') + '</p>' + locs.map((x, i) => '<div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.l.title || p.company) + (x.d != null ? ' <span class="small muted num">· ' + fKm(x.d) + '</span>' : '') + '</span><span class="s" style="display:block">' + esc(x.l.address || '') + '</span>' + (x.l.hours ? '<span class="s" style="display:block">' + t('offer.hours', {hours: esc(x.l.hours)}) + '</span>' : '') + '</span>' + (isFinite(+x.l.lat) && isFinite(+x.l.lon) ? '<button class="btn sm soft" data-act="perk-route" data-id="' + esc(p.id) + '" data-i="' + i + '" data-lid="' + esc(x.l.id) + '">' + t('offer.route') + '</button>' : '') + '</div>').join('');
+  }
+  b += '<div class="stack" style="margin-top:16px">';
+  const why = perkWhy(p, V), mine = !helper && cpnMine().find(c => String(c.perk_id) === String(p.id));
+  if (mine) b += '<button class="btn block ink" data-act="cpn-open" data-code="' + esc(mine.code) + '">' + ic('qr', 'sm') + t('perk.showCoupon') + '</button>';
+  else if (!logged() && !helper && !sample) b += '<button class="btn block ink" data-act="perk-login" data-id="' + esc(p.id) + '">' + t('perk.loginToBook') + '</button>';
+  else if (p.available || (sample && V.km >= +p.points)) b += '<button class="btn block ink" data-act="perk-book" data-id="' + esc(p.id) + '"><span>' + t('perk.bookFor') + '</span>' + kmIco(+p.points || 0) + '</button>';
+  else b += '<button class="btn block soft" disabled>' + esc(why || t('perk.unavailable')) + '</button>';
+  b += '</div>';
+  b += '<p class="xsmall muted" style="margin:12px 0 0">' + (helper ? t('perk.premNote') : t('perk.bookNote')) + '</p>';
+  openSheet(esc(helper ? t('perk.premT') : p.company || t('perk.title')), b);
+}
+function perkBook(id) {
+  const V = gView(), helper = String(id) === 'premium';
+  const p = helper ? helperPerks(V)[0] : perkById(id); if (!p) return;
+  const sample = String(p.id).indexOf('demo-') === 0;
+  if (!logged() && !helper && !sample) { ui.after = () => { if (!ui.onb) perkSheet(id); }; ui.authWhy = t('perk.authWhy'); return authSheet('register', {why: ui.authWhy}); }
+  const cost = +p.points || 0;
+  const go = async () => {
+    if (helper && p.local) return perkPremLocal(cost);
+    if (sample) { const c = GMOCK.bookLocal(p); liveRender(['bonus', 'perks']); return cpnShow(c); }
+    toast(t('perk.booking'));
+    let d;
+    try { d = await gApi(helper ? '/v1/perks/premium/book' : '/v1/perks/' + encodeURIComponent(p.id) + '/book', {body: {}}); }
+    catch (e) {
+      if (e.code === 'coupon_active') { await cpnFetch(true); const ex = cpnMine().find(c => String(c.perk_id) === String(p.id)); if (ex) return cpnShow(ex); }
+      toast(e.message); perksFetch(true); return;
+    }
+    if (d.points != null) gSetPoints(+d.points);
+    if (helper) { premFetch(); toast(d.premium && d.premium.expires_at ? t('perk.premDone', {date: fDt(d.premium.expires_at)}) : t('perk.premDoneShort')); render(); }
+    else {
+      const c = d.coupon || {};
+      if (!c.code) return toast(t('offer.couponFail'));
+      if (logged()) { CP = CP && CP.who === acctWho() ? CP : {who: acctWho(), at: 0, items: []}; CP.items = [c].concat(CP.items.filter(x => x.code !== c.code)); jset(K_CPN, CP); }
+      render(); cpnShow(c);
+    }
+    perksFetch(true); gameFetch(true); cpnFetch(true); loyFetch(true);
+  };
+  if (!sample && !(helper && p.local) && V.src !== 'local' && V.km < cost) return toast(t('offer.needPts', {pts: kmShort(cost), bal: kmShort(V.km)}));
+  confirmSheet({title: t('perk.bookQ', {km: kmFull(cost)}), text: helper ? t('perk.premQ', {days: +p.days || 30}) : t('perk.bookText', {title: esc(p.title), company: esc(p.company || ''), days: tn('game.nDays', +p.coupon_days || 7)}), ok: t('perk.bookOk'), danger: false, onOk: go, onCancel: () => perkSheet(id)});
+}
+/* без аккаунта: «Месяц Premium» за километры этого устройства (прежний обмен) */
+function perkPremLocal(cost) {
+  if (balance() < cost) return toast(t('offer.needPts', {pts: kmShort(cost), bal: kmShort(balance())}));
+  if (isStoreSrc(S.premium.source) && locPrem()) return toast(t('cpn.premStore', {src: SRC_N[S.premium.source]}));
+  award('spend', -cost, 'loy.h.premium30'); extendPremium(30); save(); render(); toast(t('cpn.premUntil', {date: fD(S.premium.until)}));
+}
+function gSetPoints(n) {
+  if (gSrv()) { GS.me.points = n; jset(K_GAME, GS); }
+  if (PK && PK.ok) { PK.points = n; jset(K_PERKS, PK); }
+  if (loySrv()) { LS.balance = n; jset(K_LOY, LS); }
+}
+/* купон брони на весь экран: QR HELPER-COUPON:<код>, срок, «счастливые часы», «Отменить бронь» */
+function cpnShow(c) {
+  if (!c || !c.code) return;
+  closeSheet();
+  const perk = c.perk_id != null || (c.kind && c.kind !== 'discount');
+  const until = c.expires_at ? fUntilD(c.expires_at) : '';
+  const note = [until ? t('hcode.couponUntil', {date: until}) : t('hcode.singleUse'), c.schedule_text ? t('perk.schedule', {when: c.schedule_text}) : ''].filter(Boolean).join(' ');
+  const acts = c.can_cancel ? '<button class="btn line" data-act="cpn-cancel" data-code="' + esc(c.code) + '">' + t('perk.cancel') + '</button>' : '';
+  codeFull({title: perk ? t('perk.couponTitle') : t('hcode.coupon'), sub: [c.title, c.company].filter(Boolean).join(' · '), qr: c.qr || 'HELPER-COUPON:' + c.code, bar: c.code, big: c.code, hint: perk ? t('perk.couponHint') : t('hcode.couponHint'), note: note + (c.sample ? ' ' + t('perk.sampleCoupon') : ''), extra: acts, code: c.code});
+  if (!c.sample) cpnWatch(c.code);
+}
+function cpnCancel(code) {
+  const c = cpnMine().find(x => x.code === code) || (CP && CP.items || []).find(x => x.code === code) || GMOCK.local().coupons.find(x => x.code === code);
+  if (!c) return;
+  confirmSheet({title: t('perk.cancelQ'), text: t('perk.cancelText', {km: kmFull(+c.points || 0), title: esc(c.title || '')}), ok: t('perk.cancelOk'), onOk: async () => {
+    if (c.sample) { GMOCK.cancelLocal(code); toast(t('perk.cancelled', {km: kmShort(+c.points || 0)})); render(); return; }
+    try { const d = await gApi('/v1/me/coupons/' + encodeURIComponent(code), {method: 'DELETE'}); if (d.points != null) gSetPoints(+d.points); if (CP && CP.items) { CP.items = CP.items.map(x => x.code === code ? Object.assign({}, x, {status: 'cancelled'}) : x); jset(K_CPN, CP); } toast(t('perk.cancelled', {km: kmShort(+d.refunded || +c.points || 0)})); }
+    catch (e) { toast(e.message); }
+    render(); cpnFetch(true); perksFetch(true); gameFetch(true); loyFetch(true);
+  }, onCancel: () => cpnShow(c)});
+}
+function gCoupons() {
+  const list = cpnMine().concat(!logged() ? GMOCK.local().coupons.filter(cpnLive) : []);
+  const loc = LOY().coupons.filter(c => !c.used && c.exp > Date.now()).sort((a, b) => a.exp - b.exp);
+  if (!list.length && !loc.length) return '';
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('cpn.mine') + '</h2><span class="xsmall muted">' + t('cpn.showQr') + '</span></div><div class="group">' +
+    list.map(c => '<button class="item" data-act="cpn-open" data-code="' + esc(c.code) + '"><span class="ic-circle ink">' + ic('qr', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(c.title || t('cpn.partner')) + (c.sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span><span class="s">' + esc([c.company, t('cpn.code', {code: String(c.code)})].filter(Boolean).join(' · ')) + '</span></span><span class="end">' + (c.expires_at ? '<span class="status st-soon">' + fUntil(c.expires_at) + '</span>' : '') + '</span></button>').join('') +
+    loc.map(c => { const k = COUPON_BY[c.cid]; if (!k) return ''; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · ' + t('cpn.code', {code: c.code}) + ' · ' + t('bonus.example') + '</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div></section>';
+}
+
+/* ================= главная: полоска игры — уровень, километры, серия, следующий шаг задания ================= */
+function gNextStep(V) {
+  for (const q of V.quests) {
+    if (q.status === 'completed' && q.claim === 'manual') return {title: t('game.claimStep', {title: q.title}), act: 'tab', attrs: 'data-tab="bonus"'};
+    const s = (q.steps || []).find(x => !x.complete);
+    if (s) { const act = gActFor(s.key); return {title: s.title || t('game.onb.' + s.key), act: act || 'tab', attrs: act ? 'data-k="' + esc(s.key) + '" data-cat="' + gRecCat(s.key) + '" data-pid="' + esc(q.sponsor && q.sponsor.partner_id != null ? q.sponsor.partner_id : '') + '"' : 'data-tab="bonus"'}; }
+  }
+  const m = V.streaks && V.streaks.mileage;
+  if (m && !m.this_week_done) return {title: t('game.stepOdo'), act: 'odo', attrs: ''};
+  if (V.toRate.length) return {title: t('rate.cardT', {company: V.toRate[0].company || t('offer.partner')}), act: 'rate', attrs: 'data-id="' + esc(V.toRate[0].id) + '" data-co="' + esc(V.toRate[0].company || '') + '"'};
+  return {title: t('game.stepPerks'), act: 'go', attrs: 'data-p="perks"'};
+}
+function gameStrip() {
+  const V = gView(), m = V.streaks && V.streaks.mileage, nx = gNextStep(V);
+  if (logged() && !gSrv()) setTimeout(() => gameFetch(), 0);
+  return '<div class="gstrip"><button class="r1" data-act="tab" data-tab="bonus" style="width:100%;text-align:left" aria-label="' + esc(t('game.stripAria', {title: V.lvl.title, km: kmFull(V.km)})) + '"><span class="lvl-badge sm" aria-hidden="true">' + fN(V.lvl.n) + '</span><span class="ln">' + esc(V.lvl.title) + gSampleBadge(V) + '</span><span class="sp"></span><span class="kv">' + kmIco(V.km) + '</span>' + (m ? '<span class="kv" title="' + esc(tn('game.weeksRow', +m.weeks || 0)) + '">' + ic('flame', 'xs') + fN(+m.weeks || 0) + '</span>' : '') + '</button>' +
+    '<button class="r2" data-act="' + nx.act + '" ' + nx.attrs + ' style="width:100%;text-align:left"><span class="tx">' + t('game.next') + ' <b>' + esc(nx.title) + '</b></span>' + ic('chevR', 'xs') + '</button></div>';
+}
+
+/* ================= действия игры ================= */
+function gRemindAct() {
+  closeSheet();
+  const LN = CAP && NP.LocalNotifications;
+  if (LN) {
+    Promise.resolve(LN.checkPermissions()).then(pm => pm && pm.display === 'granted' ? pm : LN.requestPermissions()).then(pm => {
+      if (pm && pm.display === 'granted') { gRemindOn(); nativeSchedule(); toast(t('game.remindOn')); } else toast(t('game.remindDenied'));
+    }).catch(() => toast(t('game.remindDenied')));
+    return;
+  }
+  const tg = A.user && A.user.telegram && A.user.telegram.linked;
+  if (tg) { gRemindOn(); return toast(t('game.remindOn')); }
+  openSheet(t('game.remindT'), '<p class="muted" style="margin:0 0 14px;line-height:1.5">' + t('game.remindS', {bot: TG_BOT}) + '</p><div class="stack">' + (logged() ? '<button class="btn block ink" data-act="acct-tg">' + ic('send', 'sm') + t('account.tgLink') + '</button>' : '<button class="btn block ink" data-act="acct-register">' + t('c.register') + '</button>') + '<button class="btn block soft" data-act="sheet-close">' + t('geo.notNow') + '</button></div>');
+}
+async function questClaim(id) {
+  try {
+    const d = await gApi('/v1/game/quests/' + encodeURIComponent(id) + '/claim', {body: {}});
+    const a = d.awarded || {};
+    if (d.points != null) gSetPoints(+d.points);
+    toast(t('game.claimed') + ' · ' + [a.points ? kmSigned(+a.points) : '', a.xp ? '+' + xpTxt(+a.xp) : ''].filter(Boolean).join(' · '));
+    if (a.badge) celBadgeQ(a.badge);
+    if (Array.isArray(d.notices)) syncNotices(d.notices, true);
+  } catch (e) { toast(e.message); }
+  gameFetch(true);
+}
+const GAME_ACT = {
+  'gq-perks': () => { closeSheet(); ui.pkPartner = null; go('perks'); },
+  'gq-partner': el => { closeSheet(); ui.pkPartner = el.dataset.pid || null; go('perks'); },
+  'gq-rec': el => { closeSheet(); if (!S.cars.length) return startOnb('first'); recSheet(null, CATS[el.dataset.cat] ? el.dataset.cat : undefined); },
+  'gq-remind': () => gRemindAct(),
+  'gq-rate': () => { const V = gView(); if (V.toRate.length) return rateSheet(V.toRate[0]); toast(t('rate.none')); },
+  gbadges: () => { const el = $('#g-badges'); if (el) try { el.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch (e) { el.scrollIntoView(); } },
+  badge: el => badgeSheet(el.dataset.id),
+  'all-badges': () => { ui.allBadges = !ui.allBadges; render(); },
+  'quest-claim': el => questClaim(el.dataset.id),
+  perk: el => perkSheet(el.dataset.id),
+  'perk-book': el => perkBook(el.dataset.id),
+  'perk-login': el => perkBook(el.dataset.id),
+  'perk-route': el => { const p = perkById(el.dataset.id); if (!p) return; const l = (p.locations || []).find(x => String(x.id) === el.dataset.lid) || (p.locations || [])[+el.dataset.i || 0]; if (l) openRoute(Object.assign({title: p.company}, l)); },
+  pkf: el => { ui.pkf = el.dataset.f; render(); },
+  'pk-partner-clear': () => { ui.pkPartner = null; render(); },
+  'cpn-open': el => { const code = el.dataset.code, c = cpnMine().find(x => x.code === code) || GMOCK.local().coupons.find(x => x.code === code); if (c) cpnShow(c); },
+  'cpn-cancel': el => { const code = el.dataset.code; codeClose(); cpnCancel(code); },
+  rate: el => rateSheet({id: el.dataset.id, company: el.dataset.co}),
+  'rate-star': el => rateStar(+el.dataset.n),
+  'rate-tag': el => { const r = ui.rate; if (!r) return; const k = el.dataset.k, i = r.tags.indexOf(k); if (i >= 0) r.tags.splice(i, 1); else r.tags.push(k); el.setAttribute('aria-pressed', String(i < 0)); },
+  'rate-send': () => { if (ui.rate && String(ui.rate.id).indexOf('demo-') === 0) { GMOCK.rateLocal(ui.rate.id); closeSheet(); ui.rate = null; toast(t('rate.thanks') + ' · ' + t('bonus.example')); return render(); } rateSend(); },
+  'cel-close': () => celClose(),
+  'gbanner-close': () => { const b = $('#gbanner'); if (b && b._fin) b._fin(); },
+  'gbanner-open': el => { const b = $('#gbanner'), k = el.dataset.k, id = el.dataset.id; if (b && b._fin) b._fin(); if (ui.onb) return; if (k === 'badge') { setTab('bonus'); setTimeout(() => badgeSheet(id), 250); } else setTab('bonus'); }
+};
+
+/* ================= GMOCK: пример (демо без аккаунта) и имитация сервера игры для разработки (?gamemock) =================
+   Формы ответов — как в GAME_API.md; тексты — из словаря (gs.*), числа — правила GAME_MODEL.md. */
+const GMOCK = (() => {
+  const T0 = () => new Date(), isoAt = d => d.toISOString().replace(/\.\d{3}Z$/, 'Z'), inDays = n => isoAt(new Date(Date.now() + n * 864e5));
+  const MEM = {coupons: [], rated: {}};
+  let M = null;
+  const st = () => { if (!M) M = Object.assign({points: 1250, xp: 430, coupons: [], rated: {}, notices: [], claimed: {}, events: {}, visits: [{id: 'mv1', partner_id: 2, ck: 'demo.shop.tires', at: inDays(-1), points: 20, xp: 30, can_rate: true, rated: false, rate_until: inDays(6)}]}, jget(K_GMOCK) || {}); return M; };
+  const persist = () => jset(K_GMOCK, M);
+  const lvlOf = xp => gLevelFor(xp);
+  function meta() {
+    return {ok: true, levels: G_LVL.map((x, i) => ({n: x[0], key: x[1], title: t('game.lvl.' + x[0]), xp_from: x[2], xp_to: i < 5 ? G_LVL[i + 1][2] : null, multiplier: x[3], invites_base: x[4], freeze: x[5], unlocks: gUnl(x[0])})),
+      actions: G_ACTS.map(a => ({key: a[0], title: t('game.act.' + a[0]), xp: a[1], points: a[2], limit_text: t('game.actL.' + a[0])})),
+      badges: G_BADGES.map(k => ({key: k, title: t('game.b.' + k), description: t('game.bd.' + k), icon: G_BICON[k]})),
+      rating_tags: RATE_TAGS.map(k => ({key: k, title: t('rate.tag.' + k)})), premium: {points: 300, days: 30, enabled: true}};
+  }
+  function streaks() {
+    return {mileage: {weeks: 3, best: 6, this_week_done: false, bonus_active: false, bonus_multiplier: 1.5, bonus_from_weeks: 4, badge_at_weeks: 8, freeze_available: true, freeze_used_this_month: false, deadline: inDays(Math.max(1, 7 - (T0().getDay() || 7)))},
+      care: {months: 2, best: 4, this_month_done: true, chest_every: 3, months_to_chest: 1, chest: {points: 50, xp: 30}, deadline: inDays(20)}};
+  }
+  function quests(sample) {
+    const y = T0().getFullYear(), onb = sample ? gLocalOnb() : null;
+    const q = (id, kind, key, steps, rw, extra) => Object.assign({id, key, kind, title: t('gs.q.' + key), description: t('gs.qd.' + key), icon: 'flag', steps: steps.map(s => ({key: s[0], title: t('gs.qs.' + s[0]), count: s[1], done: s[2], complete: s[2] >= s[1]})), claim: 'auto', rewards: rw, starts_at: null, ends_at: inDays(Math.max(1, 7 - (T0().getDay() || 7))), sponsor: null, city: null, completed_at: null, claimed_at: null}, extra || {});
+    const L = [
+      onb ? Object.assign(onb, {steps: onb.steps.map(s => Object.assign({}, s, s.key === 'partners_nearby' ? {} : {done: 1, complete: true}))}) : q('q-onb', 'onboarding', 'onboarding', [['car_scanned', 1, 1], ['service_record', 1, 1], ['mileage', 1, 1], ['reminders_on', 1, 0], ['partners_nearby', 1, 0]], {xp: 0, points: 100, badge: {key: 'start', title: t('game.b.start'), icon: 'flag'}, perk: null}, {ends_at: null}),
+      q('q-w1', 'weekly', 'oil', [['oil', 1, 0]], {xp: 20, points: 30, badge: null, perk: null}),
+      q('q-w2', 'weekly', 'fuel', [['fuel', 2, 1]], {xp: 10, points: 15, badge: null, perk: null}),
+      q('q-w3', 'weekly', 'rate', [['rate', 1, 0]], {xp: 10, points: 10, badge: null, perk: null}),
+      q('q-s1', 'seasonal', 'winter', [['tires', 1, 0], ['battery', 1, 1], ['coolant', 1, 0], ['washer', 1, 0]], {xp: 100, points: 150, badge: {key: 'winter_ready', title: t('game.b.winter_ready'), icon: 'snow'}, perk: null}, {starts_at: y + '-10-15T00:00:00Z', ends_at: (y + 1) + '-02-28T21:00:00Z'}),
+      q('q-p1', 'sponsor', 'pressure', [['partner_visit_pressure', 2, 0]], {xp: 20, points: 40, badge: null, perk: {id: 'demo-p2', title: t('gs.p2'), company: t('demo.shop.tires')}}, {sponsor: {partner_id: 2, company: t('demo.shop.tires')}, starts_at: y + '-11-01T00:00:00Z', ends_at: y + '-11-30T21:00:00Z'})
+    ];
+    L.forEach(x => { const s = x.steps; x.progress = s.reduce((a, z) => a + Math.min(1, (+z.done || 0) / (+z.count || 1)), 0) / s.length; x.status = x.status === 'completed' || x.progress >= 1 ? 'completed' : 'active'; });
+    return L;
+  }
+  function badges(earnedKeys) {
+    return G_BADGES.map(k => ({key: k, title: t('game.b.' + k), description: t('game.bd.' + k), icon: G_BICON[k], earned: earnedKeys.indexOf(k) >= 0, earned_at: earnedKeys.indexOf(k) >= 0 ? inDays(-10 - earnedKeys.indexOf(k) * 20) : null, progress: k === 'records_10' && earnedKeys.indexOf(k) < 0 ? {current: 6, target: 10} : k === 'critic' ? {current: 2, target: 10} : k === 'explorer' ? {current: 3, target: 5} : null}));
+  }
+  function me(points, xp, earned) {
+    const lv = lvlOf(xp), L = gLevels(), nx = L.find(l => l.n === lv.n + 1) || null;
+    const B = badges(earned).filter(b => b.earned);
+    return {ok: true, helper_id: 'HLP-DEMO00', points, points_text: kmFull(points), expiring_30d: 0, xp,
+      level: {n: lv.n, key: lv.key, title: lv.title, xp_from: lv.from, xp_to: lv.to, multiplier: lv.mult, invites_base: lv.inv, freeze: lv.freeze, unlocks: lv.unlocks, progress: nx ? clamp((xp - lv.from) / (nx.from - lv.from), 0, 1) : 1, xp_to_next: nx ? nx.from - xp : null},
+      next_level: nx ? {n: nx.n, key: nx.key, title: nx.title, xp_from: nx.from, xp_to: nx.to, multiplier: nx.mult, invites_base: nx.inv, freeze: nx.freeze, unlocks: nx.unlocks} : null,
+      multipliers: {level: lv.mult, mileage_streak: 1, total_mileage: 1}, ambassador: false, streaks: streaks(), badges: B.map(b => ({key: b.key, title: b.title, icon: b.icon, earned_at: b.earned_at})), badges_earned: B.length, badges_total: G_BADGES.length, quests: [], recent: [], notices: []};
+  }
+  const EARNED = ['start', 'first_car', 'first_service', 'friend', 'scanner'];
+  /* каталог-пример: демо-партнёры из «Предложений рядом» (SPOT_SRC) */
+  function catalog() {
+    const sp = i => SPOT_SRC[i], loc = (i, id) => ({id, title: sp(i).name || t(sp(i).n), address: SPOTS[i][3], lat: sp(i).lat, lon: sp(i).lon, hours: t('gs.hours')});
+    const P = (id, si, pid, cat, catT, kind, pts, lvl, extra) => Object.assign({id, partner_id: pid, company: sp(si).name || t(sp(si).n), category: cat, category_title: catT, partner: {level: {key: lvl[0], title: t('perk.plvl.' + lvl[0])}, badge_title: null, rating: lvl[1] ? {avg: lvl[1], count: lvl[2]} : null, partner_of_month: !!lvl[3]},
+      title: t('gs.' + id.replace('demo-', '')), description: t('gs.' + id.replace('demo-', '') + 'd'), kind, kind_title: t('perk.kind.' + kind), points: pts, min_level: 1, min_level_title: null, available: true, unavailable: null, unavailable_text: null, next_available_at: null,
+      stock_left_today: null, stock_left_month: null, schedule: null, schedule_text: null, happy_hours_now: null, coupon_days: 7, cooldown_days: 30, locations: [loc(si, id + '-l')], distance_m: null}, extra || {});
+    const items = [
+      P('demo-p1', 0, 1, 'wash', t('spot.type.wash'), 'gift', 150, ['silver', 4.7, 38], {stock_left_today: 5}),
+      P('demo-p2', 2, 2, 'tires', t('biz.cat.tires'), 'service', 200, ['gold', 4.9, 112, true], {schedule: {days: [1, 2, 3, 4, 5], from: '10:00', to: '16:00'}, schedule_text: t('gs.sched'), stock_left_today: 3}),
+      P('demo-p3', 1, 3, 'sto', t('c.sto'), 'service', 400, ['platinum', 4.8, 64], {min_level: 3, min_level_title: t('game.lvl.3')}),
+      P('demo-p4', 4, 4, 'sto', t('c.sto'), 'upgrade', 250, ['silver', 4.6, 21], {min_level: 4, min_level_title: t('game.lvl.4'), available: false, unavailable: 'level'}),
+      P('demo-p5', 3, 5, 'parts', t('spot.type.parts'), 'gift', 100, ['bronze', 0, 0], {stock_left_today: 12}),
+      P('demo-p6', 6, 6, 'sto', t('c.sto'), 'priority', 150, ['bronze', 4.4, 9])
+    ];
+    return {items: items.map(pkNorm), helper: [{id: 'premium', kind: 'helper', title: t('perk.premT'), description: t('perk.premD', {days: 30}), points: 300, days: 30, available: true, unavailable: null, unavailable_text: null}].map(pkNorm)};
+  }
+  /* пример для демо: опыт и километры — из истории демо-автомобиля, остальное — как у активного водителя */
+  function snapshot() {
+    const hist = S.loyalty.hist || [], xp = hist.reduce((a, h) => a + (h.p > 0 ? G_LOCAL_XP[h.k] || 0 : 0), 0);
+    return {me: me(balance(), xp, EARNED), quests: quests(true), badges: badges(EARNED), visits: [{id: 'demo-v1', company: t('demo.shop.wash'), can_rate: !MEM.rated['demo-v1'], rated: !!MEM.rated['demo-v1'], rate_until: inDays(5)}], at: 0};
+  }
+  function coupon(p, code, sample) {
+    return {code, qr: 'HELPER-COUPON:' + code, perk_id: p.id, title: p.title, kind: p.kind, kind_title: p.kind_title, partner_id: p.partner_id, company: p.company, points: +p.points, status: 'active', created_at: isoAt(T0()), expires_at: inDays(+p.coupon_days || 7), redeemed_at: null, schedule: p.schedule, schedule_text: p.schedule_text, locations: p.locations, can_cancel: true, visit_id: null, can_rate: false, sample: !!sample};
+  }
+  const code6 = () => Array.from({length: 6}, () => ALPH[Math.floor(Math.random() * 32)]).join('');
+  function bookLocal(p) { const c = coupon(p, code6(), true); MEM.coupons.unshift(c); award('spend', -(+p.points || 0), 'loy.h.perk', {perk: p.title}); save(); return c; }
+  function cancelLocal(code) { const c = MEM.coupons.find(x => x.code === code); if (!c || c.status !== 'active') return; c.status = 'cancelled'; award('refund', +c.points || 0, 'loy.h.perkRefund', {perk: c.title}); save(); }
+  const err = (s, code, msg) => { throw apiErr(s, code, msg || code); };
+  /* ответ — копия, как по сети (кэш приложения не должен делить объекты с «сервером») */
+  const mockApi = async (path, o) => JSON.parse(JSON.stringify(await mockApi0(path, o)));
+  async function mockApi0(path, o) {
+    await sleep(120);
+    const m = st(), meth = (o.method || (o.body !== undefined ? 'POST' : 'GET')).toUpperCase(), p = path.split('?')[0];
+    const cat = catalog(), lv = lvlOf(m.xp);
+    cat.items.forEach(x => { x.id = x.id.replace('demo-', 'mock-'); let r = null; if (+x.min_level > lv.n) r = 'level'; else if (m.points < x.points) r = 'points'; if (m.coupons.some(c => c.perk_id === x.id && c.status === 'active')) r = 'coupon_active'; x.available = !r; x.unavailable = r; delete x.reason; delete x.reason_text; });
+    if (p === '/v1/game/meta') return meta();
+    if (p === '/v1/game/me') { const r = me(m.points, m.xp, EARNED.concat(Object.keys(m.claimed).length ? ['explorer'] : [])); r.notices = m.notices.slice(-30); return r; }
+    if (p === '/v1/game/quests') return {ok: true, items: quests(false).map(q => m.claimed[q.id] ? Object.assign(q, {status: 'claimed'}) : q), week: '2026-W40', weekly_left: 1};
+    if (/^\/v1\/game\/quests\/[^/]+\/claim$/.test(p)) { const id = p.split('/')[4]; m.claimed[id] = 1; m.points += 100; persist(); return {ok: true, awarded: {xp: 0, points: 100, badge: null}, points: m.points, notices: []}; }
+    if (p === '/v1/game/badges') return {ok: true, items: badges(EARNED), earned: EARNED.length, total: G_BADGES.length};
+    if (p === '/v1/game/events') { (o.body.events || []).forEach(e => { m.events[e.type] = 1; }); persist(); return {ok: true, accepted: (o.body.events || []).length, notices: []}; }
+    if (p === '/v1/perks') return {ok: true, points: m.points, level: {n: lv.n, title: lv.title}, helper: [Object.assign(cat.helper[0], {available: m.points >= 300, unavailable: m.points >= 300 ? null : 'points', reason: undefined, reason_text: undefined})], items: cat.items};
+    if (p === '/v1/perks/premium/book') { if (m.points < 300) err(409, 'insufficient_points', t('offer.needPts', {pts: kmShort(300), bal: kmShort(m.points)})); m.points -= 300; persist(); return {ok: true, premium: {plan: 'bonus', expires_at: inDays(30), days: 30}, points: m.points}; }
+    if (/^\/v1\/perks\/[^/]+\/book$/.test(p)) {
+      const id = decodeURIComponent(p.split('/')[3]), x = cat.items.find(i => i.id === id);
+      if (!x) err(404, 'perk_not_found'); if (!x.available) err(409, x.unavailable === 'level' ? 'level_required' : x.unavailable === 'points' ? 'insufficient_points' : 'coupon_active', perkWhy(pkNorm(x), {km: m.points}) || t('perk.unavailable'));
+      m.points -= x.points; const c = coupon(x, code6()); m.coupons.unshift(c); persist(); return {ok: true, coupon: c, points: m.points};
+    }
+    if (p === '/v1/me/coupons') return {ok: true, items: m.coupons.slice(0, 50)};
+    if (/^\/v1\/me\/coupons\/[^/]+$/.test(p) && meth === 'DELETE') { const code = decodeURIComponent(p.split('/')[4]), c = m.coupons.find(x => x.code === code); if (!c) err(404, 'coupon_not_found'); if (c.status !== 'active') err(409, 'coupon_used'); c.status = 'cancelled'; c.can_cancel = false; m.points += c.points; persist(); return {ok: true, code, refunded: c.points, points: m.points}; }
+    if (p === '/v1/me/visits') return {ok: true, items: m.visits.map(v => Object.assign({}, v, v.ck ? {company: t(v.ck)} : {}))};
+    if (/^\/v1\/visits\/[^/]+\/rate$/.test(p)) { const id = decodeURIComponent(p.split('/')[3]), v = m.visits.find(x => String(x.id) === id); if (!v) err(404, 'visit_not_found'); if (v.rated) err(409, 'already_rated'); v.rated = true; v.can_rate = false; v.stars = o.body.stars; m.points += 2; m.xp += 5; persist(); return {ok: true, visit_id: id, stars: o.body.stars, awarded: {xp: 5, points: 2}, points: m.points, notices: []}; }
+    err(404, 'not_found', 'mock: ' + path);
+  }
+  /* разработка: имитация действий партнёра и сервера (консоль: __gameMock.redeem(), .levelUp(), .badge(), .quest(), .reset()) */
+  const dev = {
+    redeem(code) { const m = st(), c = code ? m.coupons.find(x => x.code === code) : m.coupons.find(x => x.status === 'active'); if (!c) return 'no active coupon'; const vid = 'mv' + Date.now(); c.status = 'redeemed'; c.can_cancel = false; c.redeemed_at = isoAt(T0()); c.visit_id = vid; c.can_rate = true; m.visits.unshift({id: vid, partner_id: c.partner_id, company: c.company, at: isoAt(T0()), points: 20, xp: 30, can_rate: true, rated: false, rate_until: inDays(7)}); m.points += 20; m.xp += 30; m.notices.push({id: 'game:v' + vid, kind: 'visit', at: isoAt(T0()), message: t('cel.visit', {company: c.company}), points: 20, xp: 30, visit: {id: vid, company: c.company, can_rate: true}}); persist(); cpnFetch(true); return c.code; },
+    levelUp() { const m = st(), lv = lvlOf(m.xp), nx = gLevels().find(l => l.n === lv.n + 1); if (!nx) return 'max'; m.xp = nx.from + 10; m.notices.push({id: 'game:l' + Date.now(), kind: 'level_up', at: isoAt(T0()), message: '', points: 0, xp: 0, level: {n: nx.n, title: nx.title}}); persist(); gameFetch(true); return nx.title; },
+    badge(k) { const m = st(); m.notices.push({id: 'game:b' + Date.now(), kind: 'badge', at: isoAt(T0()), message: '', badge: {key: k || 'critic', title: t('game.b.' + (k || 'critic'))}}); persist(); gameFetch(true); },
+    quest() { const m = st(); m.notices.push({id: 'game:q' + Date.now(), kind: 'quest_completed', at: isoAt(T0()), message: '', points: 30, xp: 20, quest: {id: 'q-w1', title: t('gs.q.oil'), claim: 'auto'}}); persist(); gameFetch(true); },
+    reset() { M = null; jset(K_GMOCK, null); }
+  };
+  if (GAME_MOCK) try { window.__gameMock = dev; } catch (e) {}
+  return {api: mockApi, snapshot, catalog, bookLocal, cancelLocal, rateLocal: id => { MEM.rated[id] = 1; }, local: () => MEM};
+})();
 
 /* ================= Кнопка «Назад» Android, возврат в приложение, скрытые настройки ================= */
 function appMin() { try { if (NP.App.minimizeApp) NP.App.minimizeApp(); else NP.App.exitApp(); } catch (e) { try { NP.App.exitApp(); } catch (x) {} } }
@@ -4664,9 +5748,11 @@ function finishOnb() {
   S.cars.push(car); S.activeCar = id; S.demo = S.cars.some(c => c.demo);
   const oil = parseNum(d.oil);
   if (oil != null && d.fuel !== 'ev') S.records.push({id: uid(), carId: id, date: T, odo: Math.round(oil), cat: 'oil', parts: 0, labor: 0, brand: '', shop: '', phone: '', note: t('onbx.oilNote'), ex: null, baseline: true});
-  const got = award('car', 10, 'loy.h.car', {car: carName(car)});
+  if (d.scanned) car.scanned = true;
+  const got = S.cars.filter(c => !c.demo).length <= 3 ? award('car', 20, 'loy.h.car', {car: carName(car)}) : 0;
+  if (car.scanned) gEvent('car_scanned', car.id);
   save(); ui.onb = null; ui.tab = 'home'; ui.stacks = emptyStacks(); ui.jf = 'all';
-  render(false); toast(t('onbx.carAdded', {car: carName(car)}) + ' · ' + ptsTxt(got));
+  render(false); toast(t('onbx.carAdded', {car: carName(car)}) + (got ? ' · ' + ptsTxt(got) : ''));
 }
 
 /* ================= forms ================= */
@@ -4726,8 +5812,9 @@ const FORMS = {
     if (!price || price <= 0 || price > 1000) return showErr('fuel-err', t('fv.price', {unit: fuelUnit(car)}));
     const data = {date, odo: Math.round(odo), liters: Math.round(liters * 100) / 100, price: Math.round(price * 100) / 100, full: $('#fuel-full').checked, station: val('fuel-station').trim()};
     const id = val('fuel-id');
-    if (id) Object.assign(S.fuel.find(x => x.id === id), data); else S.fuel.push(Object.assign({id: uid(), carId: car.id}, data));
-    bumpOdo(car, data.odo, date); save(); closeSheet(); render(); toast(id ? t('act.fuelUpdated') : t('act.fuelSaved'));
+    let got = 0;
+    if (id) Object.assign(S.fuel.find(x => x.id === id), data); else { S.fuel.push(Object.assign({id: uid(), carId: car.id}, data)); got = awardFuel(); }
+    bumpOdo(car, data.odo, date); save(); closeSheet(); render(); toast(id ? t('act.fuelUpdated') : t('act.fuelSaved') + (got ? ' · ' + ptsTxt(got) : ''));
   },
   doc() {
     const car = activeCar(), exp = val('doc-expires'), cost = parseNum(val('doc-cost')) || 0, T = todayISO();
@@ -4750,6 +5837,8 @@ const FORMS = {
     const eng = parseNum(val('car-engine'));
     Object.assign(c, {make, model, year, fuel: val('car-fuel'), engine: eng ? String(eng) : '', gearbox: val('car-gearbox'), drive: val('car-drive'), vin, plate: val('car-plate').trim().toUpperCase(), currency: val('car-currency')});
     if (val('car-color').trim()) c.color = val('car-color').trim();
+    if (ui.scannedCar && ui.scannedCar === c.id && !c.scanned) { c.scanned = true; gEvent('car_scanned', c.id); }
+    ui.scannedCar = null;
     if (Math.round(odo) !== c.odo) setOdo(c, Math.round(odo));
     save(); closeSheet(); render(); toast(t('act.carSaved'));
   },
@@ -4826,8 +5915,8 @@ FORMS.scan = function () {
   if (g('plate')) p.plate = g('plate').toUpperCase();
   if (g('color')) p.color = g('color');
   ui.scan = null;
-  if (ctx.where === 'onb') { if (ui.onb) { Object.assign(ui.onb.d, p); ui.onb.manual = true; } closeSheet(); render(false); toast(t('act.scanOnb')); }
-  else { carEditSheet(ctx.carId, Object.assign({}, ctx.pre, p)); toast(t('act.scanCar')); }
+  if (ctx.where === 'onb') { if (ui.onb) { Object.assign(ui.onb.d, p, {scanned: true}); ui.onb.manual = true; } closeSheet(); render(false); toast(t('act.scanOnb')); }
+  else { ui.scannedCar = ctx.carId || 'new'; carEditSheet(ctx.carId, Object.assign({}, ctx.pre, p)); toast(t('act.scanCar')); }
 };
 
 /* ================= actions ================= */
@@ -4961,7 +6050,7 @@ Object.assign(ACT, {
   /* Helper-код, купоны и акции партнёров */
   'hid-register': () => { ui.after = () => { if (!ui.onb) hidOpen(); }; ui.authWhy = t('act.hidWhy'); authSheet('register', {why: ui.authWhy}); },
   'code-close': () => codeClose(),
-  scoupon: el => { const s = loySrv(), c = s && (s.coupons || []).find(x => x.code === el.dataset.code); if (c) couponFull(c); },
+  scoupon: el => { const s = loySrv(), c = cpnMine().find(x => x.code === el.dataset.code) || (s && (s.coupons || []).find(x => x.code === el.dataset.code)); if (c) cpnShow(c); },
   offer: el => offerSheet(el.dataset.id),
   'offer-route': el => { const o = offerById(el.dataset.id); if (!o) return; const l = (o.locations || []).find(x => String(x.id) === el.dataset.lid) || (o.locations || [])[+el.dataset.i || 0]; if (l) openRoute(l); },
   'offer-coupon': el => offerCoupon(el.dataset.id),
@@ -4970,6 +6059,7 @@ Object.assign(ACT, {
   'banner-close': () => { const b = $('#obanner'); if (b) b.remove(); },
   'partner-cabinet': () => partnerCabinet()
 });
+Object.assign(ACT, GAME_ACT);
 
 /* ================= events ================= */
 function onClick(e) {
@@ -5057,6 +6147,7 @@ async function nativeScheduleNow() {
     let perm = await LN.checkPermissions();
     if (perm.display === 'prompt' || perm.display === 'prompt-with-rationale') { if (notifAsked) return; notifAsked = true; perm = await LN.requestPermissions(); }
     if (perm.display !== 'granted') return;
+    gRemindOn();
     const pend = await LN.getPending();
     const ours = (pend.notifications || []).filter(n => n.id >= NOTIF_BASE && n.id < NOTIF_BASE + 1000).map(n => ({id: n.id}));
     if (ours.length) await LN.cancel({notifications: ours});
@@ -5070,7 +6161,7 @@ function nativeInit() {
   try { document.documentElement.classList.add('native', IS_IOS ? 'ios' : 'android'); } catch (e) {}
   try { NP.SplashScreen && NP.SplashScreen.hide(); } catch (e) {}
   try { NP.LocalNotifications && NP.LocalNotifications.addListener('localNotificationActionPerformed', ev => { const x = (ev && ev.notification && ev.notification.extra) || {}; if (x.offer && !ui.onb) { setTab('home'); setTimeout(() => offerSheet(x.offer), 300); return; } if (x.tab) setTab(x.tab); }); } catch (e) {}
-  try { NP.App && NP.App.addListener('appStateChange', st => { if (st && st.isActive) { if (!ui.onb) render(); nativeSchedule(); storeSync(); onResume(); offResume(); } }); } catch (e) {}
+  try { NP.App && NP.App.addListener('appStateChange', st => { APP_BG = !(st && st.isActive); if (st && st.isActive) { if (!ui.onb) render(); nativeSchedule(); storeSync(); onResume(); offResume(); setTimeout(celPump, 600); } }); } catch (e) {}
   if (IS_AND) { try { NP.App && NP.App.addListener('backButton', onBack); } catch (e) {} }
   if (STORE) { try { STORE.addListener('entitlementsChanged', d => storeApply(d && d.entitlements)); } catch (e) {} storeSync(); storeLoad(); }
   /* внешние ссылки https — в системном браузере (Safari / Chrome) */
@@ -5114,10 +6205,11 @@ function setLang(l, o) {
   if (S.demo || (S.loyalty && S.loyalty.hist.some(h => h.tk))) save();
   render();
   nativeSchedule();
-  /* тексты с сервера (акции, названия тарифов, история баллов) — заново, на новом языке */
+  /* тексты с сервера (акции, названия тарифов, история километров) — заново, на новом языке */
   offersFetch(true);
   plansLoad();
-  if (logged()) loyFetch(true);
+  gMetaFetch(true); perksFetch(true);
+  if (logged()) { loyFetch(true); gameFetch(true); cpnFetch(true); }
   if (o.push !== false && logged()) api('/v1/me', {method: 'PATCH', body: {language: l}}).catch(() => {});
 }
 /* Вход в аккаунт / обновление профиля: язык аккаунта применяется, если на этом устройстве язык ещё не выбирали вручную */
@@ -5131,7 +6223,7 @@ function init() {
   S = load();
   if (!fresh) S.flags.acctIntro = true; /* у тех, кто уже пользовался приложением, приветствие аккаунта не показываем */
   inviteCapture(); /* ?ref=HLP-XXXXXX — приглашение друга (до первого рендера) */
-  cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); } offResume(); });
+  cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); gCelDiff(); } offResume(); });
   const hs = (location.hash || '').replace('#', '');
   if (TABS.some(tt => tt[0] === hs)) ui.tab = hs;
   else if (hs === 'guide' || hs === 'nearby' || hs === 'biz') { ui.tab = 'more'; ui.stacks.more = [{p: hs}]; }
