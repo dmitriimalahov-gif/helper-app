@@ -350,6 +350,13 @@ textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:
 .odo-input{font-weight:200;font-size:44px;height:74px;text-align:center;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .total{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;border-radius:12px;background:var(--teal-3)}
 .total .v{font-weight:300;font-size:24px;font-variant-numeric:tabular-nums}
+.total .tot-l{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.total .tot-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.total{align-items:center}
+.cur-sel{height:32px;padding:0 26px 0 10px;border-radius:999px;border:1px solid var(--line-2);background-color:var(--card);color:var(--ink);font-size:12.5px;font-weight:700;letter-spacing:.04em;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-2) 50%),linear-gradient(135deg,var(--ink-2) 50%,transparent 50%);background-position:calc(100% - 14px) 14px,calc(100% - 10px) 14px;background-size:4px 4px;background-repeat:no-repeat;cursor:pointer;flex:none}
+.cur-sel:focus{outline:none;border-color:var(--teal-ink);box-shadow:0 0 0 3px var(--teal-2)}
+.fx-conv{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.fx-cap{margin:10px 0 0;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .int-row{display:grid;grid-template-columns:1fr 92px 64px auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .int-row .input{height:40px;font-size:14px;padding:0 8px;text-align:center}
 .int-row .nm{font-size:13.5px;font-weight:600;line-height:1.25}
@@ -1503,7 +1510,7 @@ function makeDemo(keep) {
   const R = (dd, odo, cat, parts, labor, brand, shop, ex, note) => {
     const dl = {}, v = k => { if (!k || k.indexOf('demo.') !== 0) return k || ''; return t(k); };
     if (brand && brand.indexOf('demo.') === 0) dl.brand = brand; if (shop) dl.shop = shop; if (note) dl.note = note;
-    return {id: uid(), carId: 'demo', date: addDays(T, dd), odo, cat, parts, labor, brand: v(brand), shop: v(shop), phone: shop ? P1 : '', ex: ex || null, note: v(note), dl};
+    return {id: uid(), carId: 'demo', date: addDays(T, dd), odo, cat, parts, labor, currency: 'MDL', brand: v(brand), shop: v(shop), phone: shop ? P1 : '', ex: ex || null, note: v(note), dl};
   };
   const TS = {season: 'summer', w: 215, p: 55, r: 17};
   s.records = [
@@ -1535,10 +1542,10 @@ function makeDemo(keep) {
     let liters = partial ? Math.min(deficit, 18 + rnd() * 10) : deficit;
     liters = Math.round(liters * 100) / 100; deficit -= liters; if (!partial) deficit = 0;
     const price = Math.round((22.5 + (day + 538) / 520 * 2.3 + (rnd() - 0.5) * 0.5) * 100) / 100;
-    s.fuel.push({id: uid(), carId: 'demo', date, odo, liters, price, full: !partial, station: ''});
+    s.fuel.push({id: uid(), carId: 'demo', date, odo, liters, price, currency: 'MDL', full: !partial, station: ''});
     day += Math.max(8, Math.round(km / 50.5));
   }
-  const D = (type, exp, cost, number) => ({id: uid(), carId: 'demo', type, expires: exp, cost, issued: cost ? addDays(exp, -365) : null, number: number ? t(number) : '', note: '', dl: number ? {number} : {}});
+  const D = (type, exp, cost, number) => ({id: uid(), carId: 'demo', type, expires: exp, cost, currency: 'MDL', issued: cost ? addDays(exp, -365) : null, number: number ? t(number) : '', note: '', dl: number ? {number} : {}});
   /* история километров Helper: текст хранится вместе с ключом (tk) и параметрами (tp), чтобы переводиться при смене языка — см. histText() */
   const H = (dd, k, p, tk, tp) => ({id: uid(), d: addDays(T, dd), k, p, t: histText(tk, tp), tk, tp});
   const visit = shop => ({shop: '@' + shop});
@@ -1718,12 +1725,22 @@ function svcText(x) {
   return bits.join(' · ');
 }
 
-/* ================= money ================= */
+/* ================= money =================
+   Каждая денежная запись (ТО, заправка, документ) хранит currency — валюту, в которой сумма введена; car.currency — валюта
+   показа. Все суммы на экранах — в валюте показа, пересчёт на лету через EUR по курсу fxData() (блок «Курсы валют»):
+   сумма / rates[валюта записи] × rates[валюта показа]. Запись в валюте показа — точное исходное число; сохранённые суммы не меняются. */
+const entCur = (e, car) => e && CUR.indexOf(e.currency) >= 0 ? e.currency : (car && car.currency) || 'MDL';
+const toDisp = (n, e, car) => fxConv(n, entCur(e, car), car.currency);
+const recAmt = (r, car) => toDisp(recTotal(r), r, car);
+const fuelAmt = (f, car) => toDisp(f.liters * f.price, f, car);
+const fM = n => Math.abs((+n || 0) % 1) < 0.005 ? fN(n) : f2(n); /* 820 · 49,70 */
+const moneyIn = (n, cur) => fM(n) + ' ' + cur;
+const approxMark = (e, car) => entCur(e, car) !== car.currency ? '≈ ' : '';
 function expenseEntries(car) {
   const out = [];
-  carRecs(car.id).forEach(r => { const a = recTotal(r); if (a > 0) out.push({date: r.date, amt: a, g: expGroup(r.cat), kind: 'rec'}); });
-  carFuel(car.id).forEach(f => out.push({date: f.date, amt: f.liters * f.price, g: 'fuel', kind: 'fuel'}));
-  carDocs(car.id).forEach(d => { if (d.cost > 0) out.push({date: d.issued || d.expires, amt: d.cost, g: 'docs', kind: 'doc'}); });
+  carRecs(car.id).forEach(r => { const a = recAmt(r, car); if (a > 0) out.push({date: r.date, amt: a, g: expGroup(r.cat), kind: 'rec'}); });
+  carFuel(car.id).forEach(f => out.push({date: f.date, amt: fuelAmt(f, car), g: 'fuel', kind: 'fuel'}));
+  carDocs(car.id).forEach(d => { if (d.cost > 0) out.push({date: d.issued || d.expires, amt: toDisp(d.cost, d, car), g: 'docs', kind: 'doc'}); });
   return out;
 }
 function periodFrom(p) { const T = todayISO(); return p === 'month' ? addDays(T, -30) : p === 'year' ? addDays(T, -365) : null; }
@@ -2003,7 +2020,7 @@ function worksBody() {
   let recs = carRecs(car.id).slice().sort(byDateDesc);
   const all = recs.length;
   if (ui.jf !== 'all') recs = recs.filter(r => CATS[r.cat] && CATS[r.cat][1] === ui.jf);
-  const total = recs.reduce((a, r) => a + recTotal(r), 0);
+  const total = recs.reduce((a, r) => a + recAmt(r, car), 0);
   let h = '';
   h += '<div class="sumline"><div><div class="k">' + (ui.jf === 'all' ? t('works.total') : esc(GROUP_N[ui.jf])) + '</div><div class="v">' + recs.length + '</div></div><div><div class="k">' + t('works.spent') + '</div><div class="v">' + money(total, car) + '</div></div></div>';
   h += '<div class="chips" role="group" aria-label="' + t('works.filterAria') + '" style="margin-top:14px">' + [['all', t('c.all')]].concat(GROUPS).map(g => '<button class="chip" data-act="jf" data-f="' + g[0] + '" aria-pressed="' + (ui.jf === g[0]) + '">' + g[1] + '</button>').join('') + '</div>';
@@ -2014,12 +2031,12 @@ function worksBody() {
   const byM = {};
   recs.forEach(r => { const k = r.date.slice(0, 7); (byM[k] = byM[k] || []).push(r); });
   Object.keys(byM).sort().reverse().forEach(k => {
-    const arr = byM[k], sum = arr.reduce((a, r) => a + recTotal(r), 0);
+    const arr = byM[k], sum = arr.reduce((a, r) => a + recAmt(r, car), 0);
     h += '<div class="month"><h3>' + fMonth(k) + '</h3><span>' + (sum ? money(sum, car) : '') + '</span></div><div class="group">';
     h += arr.map(r => {
       const c = CATS[r.cat] || CATS.other;
       const sub = [fDs(r.date), r.odo != null ? kmTxt(r.odo) : '', r.baseline ? t('works.baseline') : r.brand].filter(Boolean).join(' · ');
-      return '<button class="item" data-act="rec" data-id="' + r.id + '"><span class="ic-circle">' + catIcon(r.cat, 28) + '</span><span class="body"><span class="t" style="display:block">' + esc(c[0]) + (r.cat === 'tires' && r.ex && r.ex.season ? ' · ' + SEASON[r.ex.season].toLowerCase() : '') + '</span><span class="s num" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(sub) + '</span></span><span class="end">' + (recTotal(r) ? '<b>' + fN(recTotal(r)) + '</b><span class="xsmall muted"> ' + car.currency + '</span>' : '<span class="xsmall muted">—</span>') + '</span></button>';
+      return '<button class="item" data-act="rec" data-id="' + r.id + '"><span class="ic-circle">' + catIcon(r.cat, 28) + '</span><span class="body"><span class="t" style="display:block">' + esc(c[0]) + (r.cat === 'tires' && r.ex && r.ex.season ? ' · ' + SEASON[r.ex.season].toLowerCase() : '') + '</span><span class="s num" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(sub) + '</span></span><span class="end">' + (recTotal(r) ? '<b>' + approxMark(r, car) + fN(recAmt(r, car)) + '</b><span class="xsmall muted"> ' + car.currency + '</span>' : '<span class="xsmall muted">—</span>') + '</span></button>';
     }).join('') + '</div>';
   });
   return h;
@@ -2039,7 +2056,7 @@ function costsBody() {
   let h = '<div class="chips" role="group" aria-label="' + t('costs.periodAria') + '" style="margin-top:14px">' + [['month', t('costs.month')], ['year', t('costs.year')], ['all', t('costs.allTime')]].map(p => '<button class="chip" data-act="period" data-p="' + p[0] + '" aria-pressed="' + (ui.period === p[0]) + '">' + p[1] + '</button>').join('') + '</div>';
   const fuelSum = byG.fuel || 0, docSum = byG.docs || 0, svcSum = total - fuelSum - docSum;
   h += '<div class="card section" style="margin-top:14px"><p class="eyebrow">' + spentLabel + '</p><div class="bignum" style="margin-top:8px">' + fN(total) + '<small>' + cur + '</small></div>' +
-    '<p class="small muted num" style="margin:10px 0 0">' + t('costs.split', {fuel: fN(fuelSum), svc: fN(svcSum), docs: fN(docSum)}) + '</p></div>';
+    '<p class="small muted num" style="margin:10px 0 0">' + t('costs.split', {fuel: fN(fuelSum), svc: fN(svcSum), docs: fN(docSum)}) + '</p><p class="fx-cap">' + esc(fxCaption()) + '</p></div>';
   /* premium analytics */
   const firstDate = from || (odoPoints(car)[0] || [T])[0];
   const km = Math.max(0, odoOn(car, T) - odoOn(car, firstDate));
@@ -2072,7 +2089,7 @@ function costsBody() {
   else {
     h += '<div class="group">' + shown.map(f => {
       const c = consMap[f.id];
-      return '<button class="item" data-act="fuel" data-id="' + f.id + '"><span class="ic-circle">' + ic('pump', 'sm') + '</span><span class="body"><span class="t num" style="display:block">' + f1(f.liters) + ' ' + unit + ' · ' + f2(f.price) + ' ' + cur + '/' + unit + '</span><span class="s num" style="display:block">' + fDs(f.date) + ' · ' + kmTxt(f.odo) + (f.full ? '' : ' · ' + t('costs.partial')) + (c ? ' · ' + f1(c) + ' ' + unit + '/100' : '') + '</span></span><span class="end"><b>' + fN(f.liters * f.price) + '</b><span class="xsmall muted"> ' + cur + '</span></span></button>';
+      return '<button class="item" data-act="fuel" data-id="' + f.id + '"><span class="ic-circle">' + ic('pump', 'sm') + '</span><span class="body"><span class="t num" style="display:block">' + f1(f.liters) + ' ' + unit + ' · ' + approxMark(f, car) + f2(toDisp(f.price, f, car)) + ' ' + cur + '/' + unit + '</span><span class="s num" style="display:block">' + fDs(f.date) + ' · ' + kmTxt(f.odo) + (f.full ? '' : ' · ' + t('costs.partial')) + (c ? ' · ' + f1(c) + ' ' + unit + '/100' : '') + '</span></span><span class="end"><b>' + approxMark(f, car) + fN(fuelAmt(f, car)) + '</b><span class="xsmall muted"> ' + cur + '</span></span></button>';
     }).join('') + '</div>';
     if (fl.length > 8) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-fuel">' + (ui.allFuel ? t('costs.collapse') : t('costs.showAll', {fills: tn('u.fills', fl.length)})) + '</button>';
   }
@@ -2215,7 +2232,7 @@ function reportData(car) {
   const score = list.length ? good / list.length * 100 : 0;
   const oils = recs.filter(r => r.cat === 'oil').sort((a, b) => a.odo - b.odo);
   let oilAvg = null; if (oils.length > 1) oilAvg = (oils[oils.length - 1].odo - oils[0].odo) / (oils.length - 1);
-  const invested = recs.reduce((a, r) => a + recTotal(r), 0);
+  const invested = recs.reduce((a, r) => a + recAmt(r, car), 0);
   const code = 'HLP-R-' + hash6(car.id + '|' + recs.map(r => r.date + r.odo + r.cat).join(';'));
   return {recs, list, good, score, oilAvg, invested, code, since: recs.length ? recs[recs.length - 1].date : null};
 }
@@ -2259,7 +2276,7 @@ function pageSettings() {
   const car = activeCar(), st = S.settings;
   let h = topbar(t('settings.title'), {back: true});
   h += '<div class="card section" style="margin-top:12px"><div class="row between"><div><p class="eyebrow">' + t('settings.sub') + '</p><p style="margin:6px 0 0;font-weight:600">' + (isPrem() ? 'Helper Premium' : t('c.free')) + '</p><p class="small muted num" style="margin:2px 0 0">' + esc(premStatusText()) + '</p></div>' + markSVG(40) + '</div><div class="btn-row" style="margin-top:12px"><button class="btn sm ' + (isPrem() ? 'soft' : '') + '" data-act="paywall">' + (isPrem() ? t('settings.manage') : t('c.tryPremium')) + '</button>' + (isPrem() ? (STORE && locPrem() && isStoreSrc(S.premium.source) ? '<button class="btn sm line" data-act="iap-manage">' + t('settings.manageSub') + '</button>' : !CAP && !logged() && locPrem() && !isStoreSrc(S.premium.source) ? '<button class="btn sm line" data-act="prem-off">' + t('settings.premOff') + '</button>' : '') : '') + '</div></div>';
-  h += '<div class="card section form"><div class="field"><label for="set-currency">' + t('settings.currencyFor', {car: esc(carName(car))}) + '</label><select id="set-currency" class="input">' + CUR.map(c => '<option' + (c === car.currency ? ' selected' : '') + '>' + c + '</option>').join('') + '</select><span class="hint">' + t('settings.currencyHint') + '</span></div>' +
+  h += '<div class="card section form"><div class="field"><label for="set-currency">' + t('settings.currencyFor', {car: esc(carName(car))}) + '</label><select id="set-currency" class="input">' + CUR.map(c => '<option' + (c === car.currency ? ' selected' : '') + '>' + c + '</option>').join('') + '</select><span class="hint">' + t('settings.currencyHint') + '<br>' + esc(fxCaption()) + '</span></div>' +
     '<div class="field"><span class="flabel">' + t('settings.theme') + '</span><div class="seg" role="group" aria-label="' + esc(t('settings.theme')) + '">' + [['auto', t('settings.themeAuto')], ['light', t('settings.themeLight')], ['dark', t('settings.themeDark')]].map(tt => '<button data-act="theme" data-v="' + tt[0] + '" aria-pressed="' + (themeGet() === tt[0]) + '">' + tt[1] + '</button>').join('') + '</div></div>' +
     '<div class="field" id="set-lang"><span class="flabel">' + t('lang.label') + '</span>' + langPicker(false) + '<span class="hint">' + t('lang.hint') + '</span></div>' +
     '<div class="field"><label for="set-remind">' + t('settings.remind') + '</label><select id="set-remind" class="input">' + [7, 15, 30].map(d => '<option value="' + d + '"' + (d === st.remindDays ? ' selected' : '') + '>' + t('settings.every', {days: fDays(d)}) + '</option>').join('') + '</select></div>' +
@@ -2736,6 +2753,83 @@ const MAX_CARS = 4, SYNC_KINDS = ['cars', 'records', 'fuel', 'docs'];
 const jget = k => { const v = store.get(k); if (!v) return null; try { return JSON.parse(v); } catch (e) { return null; } };
 const jset = (k, v) => { if (v == null) store.del(k); else store.set(k, JSON.stringify(v)); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+/* ===================== Курсы валют: GET /v1/fx (база EUR, rates — единиц валюты за 1 EUR) =====================
+   Загружаются при запуске и не чаще раза в 6 ч при наличии сети, хранятся на устройстве (helper.fx.v1); без сети — последние
+   сохранённые; ни разу не загружались — встроенный курс НБМ на 01.10.2026 (помечается «примерный курс»). Работает и без аккаунта. */
+const K_FX = 'helper.fx.v1', FX_TTL = 6 * 3600 * 1000;
+const FX_FALLBACK = {base: 'EUR', date: '2026-10-01', source: 'fallback', stale: true, rates: {EUR: 1, MDL: 20.1263, USD: 1.1358, RON: 5.2789}};
+const fxValid = d => !!(d && d.rates && typeof d.rates === 'object' && CUR.every(c => +d.rates[c] > 0));
+let FX = null, fxP = null;
+try { const c = jget(K_FX); if (fxValid(c)) FX = c; } catch (e) {}
+const fxData = () => FX || FX_FALLBACK;
+const fxApprox = () => { const f = fxData(); return f.source !== 'BNM' && f.source !== 'ECB' || !!f.stale; };
+function fxConv(n, from, to) {
+  n = +n || 0;
+  if (!from || !to || from === to) return n;
+  const R = fxData().rates;
+  return +R[from] > 0 && +R[to] > 0 ? n / R[from] * R[to] : n;
+}
+function fxFetch(force) {
+  if (fxP) return fxP;
+  if (!force && FX && FX.at && Date.now() - FX.at < FX_TTL) return Promise.resolve(FX);
+  if (navigator.onLine === false) return Promise.resolve(FX);
+  fxP = api('/v1/fx', {auth: false, timeout: 12000}).then(d => {
+    if (!fxValid(d)) return FX;
+    const was = JSON.stringify(fxData().rates) + fxData().date;
+    const rates = {}; CUR.forEach(c => { rates[c] = +d.rates[c]; });
+    FX = {base: 'EUR', date: String(d.date || '').slice(0, 10) || todayISO(), source: d.source === 'BNM' || d.source === 'ECB' ? d.source : 'fallback', stale: !!d.stale, rates, at: Date.now()};
+    jset(K_FX, FX);
+    if (JSON.stringify(FX.rates) + FX.date !== was) liveRender(['journal', 'report', 'settings']);
+    return FX;
+  }, () => FX).finally(() => { fxP = null; });
+  return fxP;
+}
+/* «Курс НБМ на 01.10.2026: 1 EUR = 20,13 MDL · 5,28 RON · 1,14 USD» (+ «примерный курс») */
+function fxCaption() {
+  const f = fxData(), R = f.rates, rates = ['MDL', 'RON', 'USD'].map(c => f2(R[c]) + ' ' + c).join(' · ');
+  const src = f.source === 'BNM' || f.source === 'ECB' ? t('fx.src.' + f.source) : '';
+  return src ? t('fx.caption', {src, date: fD(f.date), rates}) + (f.stale ? ' · ' + t('fx.approx') : '') : t('fx.captionApprox', {date: fD(f.date), rates});
+}
+/* после смены валюты показа: «Суммы пересчитаны в EUR по курсу НБМ на 01.10.2026» */
+function fxToast(cur) {
+  const f = fxData(), src = f.source === 'BNM' || f.source === 'ECB' ? t('fx.src.' + f.source) : '';
+  toast(src && !f.stale ? t('fx.toast', {cur, src, date: fD(f.date)}) : t('fx.toastApprox', {cur, date: fD(f.date)}));
+}
+/* Валюта записей: у записей, сделанных до пересчёта валют, её нет — один раз ставим текущую валюту их авто (до всего
+   остального), чтобы смена валюты авто пересчитывала суммы, а не меняла подпись. Отпечаток для синхронизации обновляется
+   без нового updatedAt: сервер для записей без валюты и так берёт валюту авто, а чужие правки не перезапишутся. */
+function curStamp(s, track) {
+  const cc = {}; s.cars.forEach(c => { cc[c.id] = CUR.indexOf(c.currency) >= 0 ? c.currency : 'MDL'; });
+  let n = 0;
+  ['records', 'fuel', 'docs'].forEach(k => (s[k] || []).forEach(e => {
+    if (!e || CUR.indexOf(e.currency) >= 0) return;
+    e.currency = cc[e.carId] || 'MDL'; n++;
+    if (track && SY.hash[k] && SY.hash[k][e.id] !== undefined && !isDemoEnt(k, e)) SY.hash[k][e.id] = hashOf(e);
+  }));
+  return n;
+}
+/* компактный выбор валюты записи рядом с суммами (по умолчанию — валюта показа авто) */
+const curSel = (id, cur) => '<select id="' + id + '" class="cur-sel" data-fx="1" aria-label="' + esc(t('fx.cur')) + '">' + CUR.map(c => '<option' + (c === cur ? ' selected' : '') + '>' + c + '</option>').join('') + '</select>';
+const fxConvLine = (n, cur, car) => cur !== car.currency && n ? '≈ ' + moneyIn(fxConv(n, cur, car.currency), car.currency) : '';
+/* формы ТО / заправки / документа: подписи полей, итог в валюте записи и «≈ в валюте показа» */
+function fxFormUpd() {
+  const car = activeCar(); if (!car) return;
+  const set = (sel, txt) => { const e = $(sel); if (e) e.textContent = txt; };
+  if ($('#rec-cur')) {
+    const cur = val('rec-cur'), sum = (parseNum(val('rec-parts')) || 0) + (parseNum(val('rec-labor')) || 0);
+    set('label[for="rec-parts"]', t('rec.partsCur', {cur})); set('label[for="rec-labor"]', t('rec.laborCur', {cur}));
+    set('#rec-total', moneyIn(sum, cur)); set('#rec-conv', fxConvLine(sum, cur, car));
+  }
+  if ($('#fuel-cur')) {
+    const cur = val('fuel-cur'), sum = (parseNum(val('fuel-liters')) || 0) * (parseNum(val('fuel-price')) || 0);
+    set('label[for="fuel-price"]', t('fill.pricePer', {unit: fuelUnit(car), cur}));
+    set('#fuel-total', moneyIn(Math.round(sum * 100) / 100, cur)); set('#fuel-conv', fxConvLine(sum, cur, car));
+  }
+  if ($('#doc-cur')) {
+    const cur = val('doc-cur'), sum = parseNum(val('doc-cost')) || 0;
+    set('label[for="doc-cost"]', t('docs.costCur', {cur})); set('#doc-conv', fxConvLine(sum, cur, car));
+  }
+}
 const hhmm = ms => { const d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
 function openExt(url) {
   try { if (CAP && NP.Browser) { NP.Browser.open({url}); return; } } catch (e) {}
@@ -3055,7 +3149,10 @@ function entIn(k, e) {
     x.engine = x.engine == null ? '' : String(x.engine); x.vin = x.vin || ''; x.plate = x.plate || '';
     x.make = x.make || '—'; x.model = x.model || '';
     delete x.demo;
-  } else if (k === 'records') {
+  }
+  /* записи с сервера без валюты (старые, бот) — в валюте своего авто */
+  if (k !== 'cars' && CUR.indexOf(x.currency) < 0) { const c = S.cars.find(cc => cc.id === x.carId) || activeCar(); x.currency = c && CUR.indexOf(c.currency) >= 0 ? c.currency : 'MDL'; }
+  if (k === 'records') {
     if (!CATS[x.cat]) x.cat = 'other';
     x.parts = +x.parts || 0; x.labor = +x.labor || 0;
     ['brand', 'shop', 'phone', 'note'].forEach(f => { if (x[f] == null) x[f] = ''; });
@@ -3446,7 +3543,7 @@ function svcSheet(id) { partSheet(id); }
 function recSheet(id, preset) {
   const car = activeCar(), r = id ? S.records.find(x => x.id === id) : null;
   const d = r || {cat: preset || 'oil', date: todayISO(), odo: car.odo, brand: '', parts: '', labor: '', shop: '', phone: '', note: '', ex: null};
-  const ex = d.ex || {}, cur = car.currency;
+  const ex = d.ex || {}, cur = r ? entCur(r, car) : car.currency;
   const shops = Array.from(new Set(S.records.map(x => x.shop).filter(Boolean)));
   const cats = GROUPS.map(g => '<optgroup label="' + g[1] + '">' + Object.keys(CATS).filter(k => CATS[k][1] === g[0]).map(k => '<option value="' + k + '"' + (k === d.cat ? ' selected' : '') + '>' + CATS[k][0] + '</option>').join('') + '</optgroup>').join('');
   const b = '<form class="form" data-form="rec" novalidate><input type="hidden" id="rec-id" value="' + (r ? r.id : '') + '">' +
@@ -3458,12 +3555,13 @@ function recSheet(id, preset) {
     '<div id="rec-x-wheels" class="grid2"' + (d.cat === 'wheels' ? '' : ' hidden') + '>' + fld('rec-wtype', t('rec.wtype'), sel('rec-wtype', WTYPE, ex.wtype || 'cast')) + fld('rec-wr', t('rec.radiusR'), inp('rec-wr', ex.r, 'inputmode="numeric" placeholder="16"')) + '</div>' +
     fld('rec-brand', t('rec.brand'), inp('rec-brand', d.brand, 'autocomplete="off" placeholder="' + t('rec.brandPh') + '"')) +
     '<div class="grid2">' + fld('rec-parts', t('rec.partsCur', {cur}), inp('rec-parts', d.parts, 'inputmode="decimal" placeholder="0"')) + fld('rec-labor', t('rec.laborCur', {cur}), inp('rec-labor', d.labor, 'inputmode="decimal" placeholder="0"')) + '</div>' +
-    '<div class="total"><span class="small muted">' + t('rec.total') + '</span><span class="v" id="rec-total">' + money((parseNum(d.parts) || 0) + (parseNum(d.labor) || 0), car) + '</span></div>' +
+    '<div class="total"><span class="tot-l"><span class="small muted">' + t('rec.total') + '</span>' + curSel('rec-cur', cur) + '</span><span class="tot-r"><span class="v" id="rec-total">' + moneyIn((parseNum(d.parts) || 0) + (parseNum(d.labor) || 0), cur) + '</span><span class="fx-conv" id="rec-conv"></span></span></div>' +
     '<div class="grid2">' + fld('rec-shop', t('c.sto'), inp('rec-shop', d.shop, 'list="dl-shops" autocomplete="off" placeholder="' + t('rec.shopPh') + '"') + '<datalist id="dl-shops">' + shops.map(s => '<option value="' + esc(s) + '">').join('') + '</datalist>') + fld('rec-phone', t('rec.shopPhone'), inp('rec-phone', d.phone, 'type="tel" inputmode="tel" placeholder="022 …"')) + '</div>' +
     '<div class="field"><label for="rec-note">' + t('rec.note') + '</label><textarea id="rec-note" class="input" rows="3" placeholder="' + t('rec.notePh') + '">' + esc(d.note) + '</textarea></div>' +
     errBox('rec-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (r ? '<button class="btn block danger" type="button" data-act="rec-del" data-id="' + r.id + '">' + ic('trash', 'sm') + t('rec.del') + '</button>' : '') + '</form>';
   openSheet(r ? t('rec.editTitle') : t('rec.newTitle'), b);
+  fxFormUpd();
 }
 function recDetail(id) {
   const r = S.records.find(x => x.id === id); if (!r) return;
@@ -3472,7 +3570,8 @@ function recDetail(id) {
   if (r.brand) dl += '<dt>' + t('rec.brand') + '</dt><dd>' + esc(r.brand) + '</dd>';
   if (r.cat === 'tires') { if (ex.season) dl += '<dt>' + t('rec.season') + '</dt><dd>' + SEASON[ex.season] + '</dd>'; if (ex.w) dl += '<dt>' + t('rec.size') + '</dt><dd>' + ex.w + '/' + (ex.p || '—') + ' R' + (ex.r || '—') + '</dd>'; if (ex.warranty) dl += '<dt>' + t('rec.warranty') + '</dt><dd>' + kmTxt(ex.warranty) + '</dd>'; }
   if (r.cat === 'wheels') { if (ex.wtype) dl += '<dt>' + t('rec.type') + '</dt><dd>' + WTYPE[ex.wtype] + '</dd>'; if (ex.r) dl += '<dt>' + t('rec.radius') + '</dt><dd>R' + ex.r + '</dd>'; }
-  dl += '<dt>' + t('rec.parts') + '</dt><dd>' + money(r.parts, car) + '</dd><dt>' + t('rec.labor') + '</dt><dd>' + money(r.labor, car) + '</dd><dt>' + t('rec.total') + '</dt><dd style="font-size:16px">' + money(recTotal(r), car) + '</dd>';
+  const ec = entCur(r, car), cv = n => ec !== car.currency && n ? '<span class="fx-conv" style="display:block">≈ ' + moneyIn(fxConv(n, ec, car.currency), car.currency) + '</span>' : '';
+  dl += '<dt>' + t('rec.parts') + '</dt><dd>' + moneyIn(r.parts || 0, ec) + cv(r.parts) + '</dd><dt>' + t('rec.labor') + '</dt><dd>' + moneyIn(r.labor || 0, ec) + cv(r.labor) + '</dd><dt>' + t('rec.total') + '</dt><dd style="font-size:16px">' + moneyIn(recTotal(r), ec) + cv(recTotal(r)) + '</dd>';
   if (r.shop) dl += '<dt>' + t('c.sto') + '</dt><dd>' + esc(r.shop) + '</dd>';
   let b = '<dl class="detail">' + dl + '</dl>';
   if (r.phone) b += '<div class="copyline" style="margin-top:12px"><span><span class="k" style="display:block">' + t('rec.shopPhone') + '</span><span class="v">' + esc(r.phone) + '</span></span><span style="flex:1"></span><button class="iconbtn" data-act="copy" data-text="' + esc(r.phone) + '" aria-label="' + t('rec.copyPhone') + '">' + ic('copy', 'sm') + '</button><a class="iconbtn" href="tel:' + esc(r.phone.replace(/[^\d+]/g, '')) + '" aria-label="' + t('rec.callShop') + '">' + ic('phone', 'sm') + '</a></div>';
@@ -3481,32 +3580,34 @@ function recDetail(id) {
   openSheet(esc(c[0]), b);
 }
 function fuelSheet(id) {
-  const car = activeCar(), f = id ? S.fuel.find(x => x.id === id) : null, unit = fuelUnit(car), cur = car.currency;
+  const car = activeCar(), f = id ? S.fuel.find(x => x.id === id) : null, unit = fuelUnit(car), cur = f ? entCur(f, car) : car.currency;
   const last = carFuel(car.id).sort(byDateDesc)[0];
-  const d = f || {date: todayISO(), odo: car.odo, liters: '', price: last ? last.price : '', full: true, station: ''};
+  const d = f || {date: todayISO(), odo: car.odo, liters: '', price: last ? Math.round(toDisp(last.price, last, car) * 100) / 100 : '', full: true, station: ''};
   const b = '<form class="form" data-form="fuel" novalidate><input type="hidden" id="fuel-id" value="' + (f ? f.id : '') + '">' +
     '<div class="grid2">' + fld('fuel-date', t('c.date'), inp('fuel-date', d.date, 'type="date" max="' + todayISO() + '"')) + fld('fuel-odo', t('c.odoKm'), inp('fuel-odo', d.odo, 'inputmode="numeric"')) + '</div>' +
     '<div class="grid2">' + fld('fuel-liters', (car.fuel === 'ev' ? t('c.kwh') : t('fill.liters')), inp('fuel-liters', d.liters === '' ? '' : String(d.liters).replace('.', ','), 'inputmode="decimal" placeholder="40"')) + fld('fuel-price', t('fill.pricePer', {unit, cur}), inp('fuel-price', d.price === '' ? '' : String(d.price).replace('.', ','), 'inputmode="decimal" placeholder="24,90"')) + '</div>' +
-    '<div class="total"><span class="small muted">' + t('fill.sum') + '</span><span class="v" id="fuel-total">' + money((parseNum(d.liters) || 0) * (parseNum(d.price) || 0), car) + '</span></div>' +
+    '<div class="total"><span class="tot-l"><span class="small muted">' + t('fill.sum') + '</span>' + curSel('fuel-cur', cur) + '</span><span class="tot-r"><span class="v" id="fuel-total">' + moneyIn(Math.round((parseNum(d.liters) || 0) * (parseNum(d.price) || 0) * 100) / 100, cur) + '</span><span class="fx-conv" id="fuel-conv"></span></span></div>' +
     '<label class="switch" for="fuel-full"><span><span style="font-weight:600;display:block">' + t('fill.full') + '</span><span class="hint">' + t('fill.fullHint') + '</span></span><input type="checkbox" id="fuel-full"' + (d.full ? ' checked' : '') + '></label>' +
     fld('fuel-station', t('fill.station'), inp('fuel-station', d.station, 'autocomplete="off" placeholder="' + t('c.optional') + '"')) +
     errBox('fuel-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (f ? '<button class="btn block danger" type="button" data-act="fuel-del" data-id="' + f.id + '">' + ic('trash', 'sm') + t('fill.del') + '</button>' : '') + '</form>';
   openSheet(f ? t('fill.title') : t('fill.newTitle'), b);
+  fxFormUpd();
 }
 function docSheet(id, type) {
   const car = activeCar(), dd = id ? S.docs.find(x => x.id === id) : null;
   const d = dd || {type: type || 'rca', number: '', expires: '', cost: '', note: ''};
-  const types = Object.fromEntries(Object.keys(DOCT).map(k => [k, DOCT[k][0]]));
+  const types = Object.fromEntries(Object.keys(DOCT).map(k => [k, DOCT[k][0]])), dcur = dd ? entCur(dd, car) : car.currency;
   let b = '<form class="form" data-form="doc" novalidate><input type="hidden" id="doc-id" value="' + (dd ? dd.id : '') + '">' +
     fld('doc-type', t('docs.doc'), sel('doc-type', types, d.type)) +
     fld('doc-expires', t('docs.expires'), inp('doc-expires', d.expires, 'type="date"')) +
     fld('doc-number', t('docs.number'), inp('doc-number', d.number, 'autocomplete="off" placeholder="' + t('c.optional') + '"')) +
-    fld('doc-cost', t('docs.costCur', {cur: car.currency}), inp('doc-cost', d.cost || '', 'inputmode="decimal" placeholder="0"'), t('docs.costHint', {cat: t('exp.docs')})) +
+    fld('doc-cost', t('docs.costCur', {cur: dcur}), '<div class="row" style="gap:8px">' + inp('doc-cost', d.cost || '', 'inputmode="decimal" placeholder="0" style="flex:1;min-width:0"') + curSel('doc-cur', dcur) + '</div><span class="fx-conv" id="doc-conv"></span>', t('docs.costHint', {cat: t('exp.docs')})) +
     errBox('doc-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (dd ? '<button class="btn block danger" type="button" data-act="doc-del" data-id="' + dd.id + '">' + ic('trash', 'sm') + t('c.delete') + '</button>' : '') + '</form>';
   if (!isPrem()) b = softLock(t('docs.lockT'), t('docs.lockS')) + '<div style="height:14px"></div>' + b;
   openSheet(dd ? DOCT[dd.type][0] : t('docs.newTitle'), b);
+  fxFormUpd();
 }
 function carActions(id) {
   const c = S.cars.find(x => x.id === id); if (!c) return;
@@ -5908,7 +6009,9 @@ function onBack() {
 }
 function webInit() {
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { onResume(); offResume(); } else offerFlush(); });
-  window.addEventListener('online', () => { if (logged()) syncNow(); offersFetch(); });
+  window.addEventListener('online', () => { if (logged()) syncNow(); offersFetch(); fxFetch(); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') fxFetch(); });
+  setInterval(() => fxFetch(), 30 * 60000); /* курсы — не чаще раза в 6 ч (fxFetch сам проверяет срок) */
   let lp = null;
   document.addEventListener('pointerdown', e => { clearTimeout(lp); const tt = e.target && e.target.closest && e.target.closest('#app-ver'); if (tt) lp = setTimeout(devApiPrompt, 1500); });
   ['pointerup', 'pointercancel'].forEach(n => document.addEventListener(n, () => clearTimeout(lp)));
@@ -5966,7 +6069,7 @@ function finishOnb() {
   if (d.color) car.color = d.color.trim();
   S.cars.push(car); S.activeCar = id; S.demo = S.cars.some(c => c.demo);
   const oil = parseNum(d.oil);
-  if (oil != null && d.fuel !== 'ev') S.records.push({id: uid(), carId: id, date: T, odo: Math.round(oil), cat: 'oil', parts: 0, labor: 0, brand: '', shop: '', phone: '', note: t('onbx.oilNote'), ex: null, baseline: true});
+  if (oil != null && d.fuel !== 'ev') S.records.push({id: uid(), carId: id, date: T, odo: Math.round(oil), cat: 'oil', parts: 0, labor: 0, currency: car.currency, brand: '', shop: '', phone: '', note: t('onbx.oilNote'), ex: null, baseline: true});
   if (d.scanned) car.scanned = true;
   const got = S.cars.filter(c => !c.demo).length <= 3 ? award('car', 20, 'loy.h.car', {car: carName(car)}) : 0;
   if (car.scanned) gEvent('car_scanned', car.id);
@@ -6013,7 +6116,7 @@ const FORMS = {
     let ex = null;
     if (cat === 'tires') ex = {season: val('rec-season'), w: parseNum(val('rec-w')), p: parseNum(val('rec-p')), r: parseNum(val('rec-r')), warranty: parseNum(val('rec-warranty'))};
     if (cat === 'wheels') ex = {wtype: val('rec-wtype'), r: parseNum(val('rec-wr'))};
-    const data = {cat, date, odo: Math.round(odo), parts, labor, brand: val('rec-brand').trim(), shop: val('rec-shop').trim(), phone: val('rec-phone').trim(), note: val('rec-note').trim(), ex};
+    const data = {cat, date, odo: Math.round(odo), parts, labor, currency: CUR.indexOf(val('rec-cur')) >= 0 ? val('rec-cur') : car.currency, brand: val('rec-brand').trim(), shop: val('rec-shop').trim(), phone: val('rec-phone').trim(), note: val('rec-note').trim(), ex};
     const id = val('rec-id');
     if (id) { const r = S.records.find(x => x.id === id); Object.assign(r, data); delete r.baseline; }
     let got = 0;
@@ -6030,7 +6133,7 @@ const FORMS = {
     if (odo == null || odo < 0) return showErr('fuel-err', t('fv.fuelOdo'));
     if (!liters || liters <= 0 || liters > 300) return showErr('fuel-err', t('fv.liters'));
     if (!price || price <= 0 || price > 1000) return showErr('fuel-err', t('fv.price', {unit: fuelUnit(car)}));
-    const data = {date, odo: Math.round(odo), liters: Math.round(liters * 100) / 100, price: Math.round(price * 100) / 100, full: $('#fuel-full').checked, station: val('fuel-station').trim()};
+    const data = {date, odo: Math.round(odo), liters: Math.round(liters * 100) / 100, price: Math.round(price * 100) / 100, currency: CUR.indexOf(val('fuel-cur')) >= 0 ? val('fuel-cur') : car.currency, full: $('#fuel-full').checked, station: val('fuel-station').trim()};
     const id = val('fuel-id');
     let got = 0;
     if (id) Object.assign(S.fuel.find(x => x.id === id), data); else { S.fuel.push(Object.assign({id: uid(), carId: car.id}, data)); got = awardFuel(); }
@@ -6041,7 +6144,7 @@ const FORMS = {
     if (!exp) return showErr('doc-err', t('fv.docExp'));
     if (cost < 0) return showErr('doc-err', t('fv.docCost'));
     const issued = addDays(exp, -365) <= T ? addDays(exp, -365) : T;
-    const data = {type: val('doc-type'), expires: exp, number: val('doc-number').trim(), cost, issued};
+    const data = {type: val('doc-type'), expires: exp, number: val('doc-number').trim(), cost, currency: CUR.indexOf(val('doc-cur')) >= 0 ? val('doc-cur') : car.currency, issued};
     const id = val('doc-id');
     if (id) Object.assign(S.docs.find(x => x.id === id), data); else S.docs.push(Object.assign({id: uid(), carId: car.id, note: ''}, data));
     save(); closeSheet(); render(); toast(diffDays(T, exp) >= 0 ? t('act.docSavedLeft', {left: approx(diffDays(T, exp))}) : t('act.docSavedExpired'));
@@ -6054,13 +6157,14 @@ const FORMS = {
     if (!year || year < 1950 || year > Y + 1) return showErr('car-err', t('fv.year', {max: String(Y + 1)}));
     if (odo == null || odo < 0) return showErr('car-err', t('fv.odo'));
     if (vin && !/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) return showErr('car-err', t('fv.vin'));
-    const eng = parseNum(val('car-engine'));
+    const eng = parseNum(val('car-engine')), curWas = c.currency;
     Object.assign(c, {make, model, year, fuel: val('car-fuel'), engine: eng ? String(eng) : '', gearbox: val('car-gearbox'), drive: val('car-drive'), vin, plate: val('car-plate').trim().toUpperCase(), currency: val('car-currency')});
     if (val('car-color').trim()) c.color = val('car-color').trim();
     if (ui.scannedCar && ui.scannedCar === c.id && !c.scanned) { c.scanned = true; gEvent('car_scanned', c.id); }
     ui.scannedCar = null;
     if (Math.round(odo) !== c.odo) setOdo(c, Math.round(odo));
-    save(); closeSheet(); render(); toast(t('act.carSaved'));
+    save(); closeSheet(); render();
+    if (c.currency !== curWas) fxToast(c.currency); else toast(t('act.carSaved'));
   },
   async code(f) {
     const r = checkCode(val('pw-code'));
@@ -6245,7 +6349,7 @@ const ACT = {
     if (!s || s.v !== 1 || !Array.isArray(s.cars) || !s.cars.length) return showErr('bk-err', t('fv.bkNot'));
     const bkN = {cars: tn('act.nCars', s.cars.length), recs: tn('u.records', (s.records || []).length)};
     confirmSheet({title: t('act.bkTitle'), text: logged() ? t('act.bkTextAcct', Object.assign({email: esc(acctEmail())}, bkN)) : t('act.bkText', bkN), ok: t('act.bkOk'), danger: false,
-      onOk: () => { S = normalize(s); save(); ui.stacks = emptyStacks(); ui.tab = 'home'; render(false); toast(t('act.bkDone')); }});
+      onOk: () => { S = normalize(s); curStamp(S, false); save(); ui.stacks = emptyStacks(); ui.tab = 'home'; render(false); toast(t('act.bkDone')); }});
   },
   'report-copy': () => copyText(reportText(activeCar()))
 };
@@ -6312,8 +6416,7 @@ function onClick(e) {
 function onInput(e) {
   const tt = e.target, id = tt.id;
   if (id === 'kb-search') { ui.kbq = tt.value; const r = $('#kb-results'); if (r) setHTML(r, guideResults()); return; }
-  if (id === 'rec-parts' || id === 'rec-labor') { $('#rec-total').textContent = money((parseNum(val('rec-parts')) || 0) + (parseNum(val('rec-labor')) || 0)); return; }
-  if (id === 'fuel-liters' || id === 'fuel-price') { $('#fuel-total').textContent = money((parseNum(val('fuel-liters')) || 0) * (parseNum(val('fuel-price')) || 0)); return; }
+  if (id === 'rec-parts' || id === 'rec-labor' || id === 'fuel-liters' || id === 'fuel-price' || id === 'doc-cost') { fxFormUpd(); return; }
   if (id && id.indexOf('onb-') === 0) captureOnb();
   const form = tt.closest && tt.closest('form'), err = form && form.querySelector('.err'); if (err) err.hidden = true;
 }
@@ -6321,7 +6424,8 @@ function onChange(e) {
   const tt = e.target, id = tt.id;
   if (id === 'rec-cat') { $('#rec-x-tires').hidden = tt.value !== 'tires'; $('#rec-x-wheels').hidden = tt.value !== 'wheels'; return; }
   if (id === 'sae-w' || id === 'sae-h') { ui.saeW = val('sae-w'); ui.saeH = val('sae-h'); setHTML($('#sae-out'), saeOut()); return; }
-  if (id === 'set-currency') { activeCar().currency = tt.value; save(); render(); toast(t('act.currency', {cur: tt.value})); return; }
+  if (tt.dataset && tt.dataset.fx) { fxFormUpd(); return; }
+  if (id === 'set-currency') { activeCar().currency = tt.value; save(); render(); fxToast(tt.value); return; }
   if (id === 'set-remind') { S.settings.remindDays = +tt.value; save(); return; }
   if (id === 'set-geo') { if (tt.checked) { S.geo.consent = true; S.geo.consentAt = todayISO(); } else { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; } save(); geoPush(); render(); toast(tt.checked ? t('act.geoOn') : t('act.geoOff')); return; }
   if (id === 'set-tow') { S.settings.tow = tt.value.trim(); save(); toast(t('act.towSaved')); return; }
@@ -6537,13 +6641,14 @@ function langFromAccount(u) {
 function init() {
   const fresh = !store.get(KEY);
   S = load();
+  if (curStamp(S, true)) { syncPersist(); store.set(KEY, JSON.stringify(S)); }
   /* тема раньше хранилась в настройках (они синхронизируются) — один раз переносим на устройство */
   try { if (!localStorage.getItem(THEME_KEY)) localStorage.setItem(THEME_KEY, S.settings.theme === 'light' || S.settings.theme === 'dark' ? S.settings.theme : 'auto'); } catch (e) {}
   themeApply();
   try { const mq = window.matchMedia && matchMedia('(prefers-color-scheme: dark)'), f = () => { if (themeGet() !== 'auto') return; themeApply(); gRedraw(); }; if (mq) { if (mq.addEventListener) mq.addEventListener('change', f); else if (mq.addListener) mq.addListener(f); } } catch (e) {}
   if (!fresh) S.flags.acctIntro = true; /* у тех, кто уже пользовался приложением, приветствие аккаунта не показываем */
   inviteCapture(); /* ?ref=HLP-XXXXXX — приглашение друга (до первого рендера) */
-  cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); gCelDiff(); } offResume(); });
+  cfgLoad().then(() => { plansLoad(); payReturn(); statusLoad(); inviteCheck(); fxFetch(); if (logged()) { resumeAt = Date.now(); syncNow(); acctMe(); refFetch(); gCelDiff(); } offResume(); });
   const hs = (location.hash || '').replace('#', '');
   if (TABS.some(tt => tt[0] === hs)) ui.tab = hs;
   else if (hs === 'guide' || hs === 'nearby' || hs === 'biz') { ui.tab = 'more'; ui.stacks.more = [{p: hs}]; }

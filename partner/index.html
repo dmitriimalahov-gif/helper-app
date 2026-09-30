@@ -588,6 +588,11 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .thm-btn:hover{color:var(--ink)}
 .thm-btn[aria-expanded="true"]{background:var(--ink);color:var(--on-ink)}
 .lsw-box.sm .thm-btn{width:32px;height:32px}
+.cur-sw{height:34px;padding:0 22px 0 10px;border:0;border-radius:999px;background-color:var(--surface);color:var(--ink-2);font-size:11.5px;font-weight:700;letter-spacing:.06em;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 12px) 15px,calc(100% - 8px) 15px;background-size:4px 4px;background-repeat:no-repeat;cursor:pointer;flex:none}
+.cur-sw:hover{color:var(--ink)}
+.lsw-box.sm .cur-sw{height:32px;font-size:10.5px;padding:0 18px 0 8px;background-position:calc(100% - 10px) 14px,calc(100% - 6px) 14px}
+.fx-conv{font-size:12.5px;opacity:.8;font-variant-numeric:tabular-nums}
+.fx-cap{font-size:11.5px;color:var(--ink-3);margin:8px 0 0;font-variant-numeric:tabular-nums}
 .thm-menu{position:fixed;z-index:200;min-width:196px;padding:6px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px;animation:thmIn .14s ease}
 .thm-menu button{display:flex;align-items:center;gap:10px;width:100%;height:42px;padding:0 12px;border-radius:11px;font-size:14px;font-weight:600;color:var(--ink);text-align:left}
 .thm-menu button:hover,.thm-menu button:focus-visible{background:var(--surface);outline:none}
@@ -916,8 +921,38 @@ function thmClose(refocus) {
   const o = thmOpen; thmOpen = null; o.undo(); o.m.remove();
   if (document.contains(o.btn)) { o.btn.setAttribute('aria-expanded', 'false'); if (refocus) try { o.btn.focus({preventScroll: true}); } catch (e) {} }
 }
-/* язык — рядом кнопка темы */
-const langSw = (cls, noThm) => '<span class="lsw-box' + (cls ? ' ' + cls : '') + '">' + (noThm ? '' : thmBtn()) + langOnly(cls) + '</span>';
+/* ===================== Валюта показа (на этом устройстве): MDL — валюта расчётов, EUR / RON / USD — ориентир по курсу =====================
+   Курсы — GET /v1/fx (база EUR, единиц за 1 EUR), кэш на устройстве, запасной — курс НБМ на 01.10.2026. Суммы, которые уходят
+   на сервер и в оплату, не меняются: пересчёт только для показа («500 MDL ≈ 24,84 EUR»). */
+const DCUR = ['MDL', 'EUR', 'RON', 'USD'], K_DCUR = 'helper.partner.cur.v1', K_PFX = 'helper.partner.fx.v1', FX_TTL = 6 * 3600 * 1000;
+const FX_FALLBACK = {base: 'EUR', date: '2026-10-01', source: 'fallback', stale: true, rates: {EUR: 1, MDL: 20.1263, USD: 1.1358, RON: 5.2789}};
+const fxValid = d => !!(d && d.rates && typeof d.rates === 'object' && DCUR.every(c => +d.rates[c] > 0));
+let PFX = null, pfxP = null, dcurMem = null;
+{ const c = jget(K_PFX); if (fxValid(c)) PFX = c; }
+const fxData = () => PFX || FX_FALLBACK;
+const dispCur = () => { const v = store.get(K_DCUR) || dcurMem; return DCUR.indexOf(v) >= 0 ? v : 'MDL'; };
+function fxConv(n, from, to) { n = +n || 0; if (!from || !to || from === to) return n; const R = fxData().rates; return +R[from] > 0 && +R[to] > 0 ? n / R[from] * R[to] : n; }
+function fxFetch(force) {
+  if (pfxP) return pfxP;
+  if (!force && PFX && PFX.at && Date.now() - PFX.at < FX_TTL) return Promise.resolve(PFX);
+  pfxP = api('/v1/fx', {auth: false, timeout: 12000}).then(d => {
+    if (!fxValid(d)) return PFX;
+    const was = JSON.stringify(fxData().rates), rates = {}; DCUR.forEach(c => { rates[c] = +d.rates[c]; });
+    PFX = {base: 'EUR', date: String(d.date || '').slice(0, 10), source: d.source === 'BNM' || d.source === 'ECB' ? d.source : 'fallback', stale: !!d.stale, rates, at: Date.now()};
+    jset(K_PFX, PFX);
+    if (JSON.stringify(rates) !== was && dispCur() !== cur() && !sheetOpen() && !CB_OPEN) render();
+    return PFX;
+  }, () => PFX).finally(() => { pfxP = null; });
+  return pfxP;
+}
+function fxCaption() {
+  const f = fxData(), R = f.rates, rates = ['MDL', 'RON', 'USD'].map(c => NF2.format(R[c]) + ' ' + c).join(' · ');
+  const d = f.date ? fDate(f.date + 'T12:00:00') : '—', src = f.source === 'BNM' || f.source === 'ECB' ? tx('fx.src.' + f.source) : '';
+  return src ? tx('fx.caption', {src, date: d, rates}) + (f.stale ? ' · ' + tx('fx.approx') : '') : tx('fx.captionApprox', {date: d, rates});
+}
+const curSw = () => '<select class="cur-sw" data-ch="dcur" aria-label="' + esc(tx('fx.disp')) + '" title="' + esc(tx('fx.disp')) + '">' + DCUR.map(c => '<option' + (c === dispCur() ? ' selected' : '') + '>' + c + '</option>').join('') + '</select>';
+/* язык — рядом кнопка темы и валюта показа */
+const langSw = (cls, noThm) => '<span class="lsw-box' + (cls ? ' ' + cls : '') + '">' + (noThm ? '' : thmBtn() + curSw()) + langOnly(cls) + '</span>';
 const langOnly = cls => '<div class="lsw' + (cls ? ' ' + cls : '') + '" role="group" aria-label="' + esc(tx('lang.aria')) + '">' + LANGS.map((l, i) => (i ? '<i aria-hidden="true"></i>' : '') + '<button type="button" data-act="lang" data-l="' + l + '" lang="' + l + '" title="' + LNAME[l] + '" aria-label="' + LNAME[l] + '" aria-pressed="' + (l === LANG) + '">' + l.toUpperCase() + '</button>').join('') + '</div>';
 
 /* ================= formatting (Intl) ================= */
@@ -935,13 +970,19 @@ const fNum = n => NF1.format(+n || 0);
    (partner.currency — валюта страны, на будущее: мультивалютность). Когда сервер начнёт отдавать
    billing_currency, подпись возьмётся из него. */
 const cur = () => { const c = st.partner && st.partner.billing_currency; return /^[A-Z]{3}$/.test(c || '') ? c : 'MDL'; };
-function money(n, frac) {
-  const v = +n || 0, c = cur(), k = 'm' + c + frac;
+function money(n, frac, cc) {
+  const v = +n || 0, c = cc || cur(), k = 'm' + c + frac;
   try { DFC[k] = DFC[k] || new Intl.NumberFormat(LOCN, {style: 'currency', currency: c, currencyDisplay: 'code', minimumFractionDigits: frac, maximumFractionDigits: frac}); return DFC[k].format(v); }
   catch (e) { return (frac ? NF2 : NF).format(v) + ' ' + c; }
 }
-const fMoney = n => money(n, 2);
-const fMDL = n => money(n, Math.abs((+n || 0) % 1) < 0.005 ? 0 : 2);
+/* «500 MDL ≈ 24,84 EUR»: сумма в валюте расчётов (её и списывают) + ориентир в валюте показа, если она другая */
+const dispOf = n => { const d = dispCur(), c = cur(); return d === c ? '' : money(fxConv(n, c, d), 2, d); };
+const withDisp = (n, s) => { const x = dispOf(n); return x ? s + ' ≈ ' + x : s; };
+const fMoney = n => withDisp(n, money(n, 2));
+const fMDL = n => withDisp(n, money(n, Math.abs((+n || 0) % 1) < 0.005 ? 0 : 2));
+/* строка под крупной суммой и подсказка «оплата в MDL» у полей ввода */
+const dispLine = n => { const x = dispOf(n); return x ? '<p class="fx-conv" style="margin:4px 0 0">≈ ' + x + '</p>' : ''; };
+const payNote = () => dispCur() === cur() ? '' : '<p class="hint" style="margin:8px 0 0">' + tx('fx.payIn', {cur: cur(), disp: dispCur()}) + '</p>';
 const pad = n => String(n).padStart(2, '0');
 const toD = iso => { if (!iso) return null; const d = new Date(iso); return isNaN(d) ? null : d; };
 const dtf = (o, l) => { const k = (l || LANG) + JSON.stringify(o); return DFC[k] || (DFC[k] = new Intl.DateTimeFormat(LOCALE[l || LANG], o)); };
@@ -977,7 +1018,14 @@ Object.assign(TX, {
   'device': ['Helper для бизнеса · браузер', 'Helper pentru business · browser', 'Helper for Business · browser'],
   'lang.aria': ['Язык', 'Limba', 'Language'],
   'lang.ui': ['Язык интерфейса', 'Limba interfeței', 'Interface language'],
-  'lang.uiTheme': ['Язык и тема', 'Limba și tema', 'Language and theme'],
+  'lang.uiTheme': ['Язык, тема и валюта', 'Limba, tema și moneda', 'Language, theme and currency'],
+  'fx.disp': ['Валюта показа', 'Moneda de afișare', 'Display currency'],
+  'fx.payIn': ['Оплата и списания — в {cur}; суммы в {disp} — ориентировочно по курсу', 'Plata și debitările — în {cur}; sumele în {disp} sunt orientative, la curs', 'Payments and charges are in {cur}; amounts in {disp} are indicative, at the exchange rate'],
+  'fx.caption': ['Курс {src} на {date}: 1 EUR = {rates}', 'Cursul {src} din {date}: 1 EUR = {rates}', '{src} rate on {date}: 1 EUR = {rates}'],
+  'fx.captionApprox': ['Примерный курс на {date}: 1 EUR = {rates}', 'Curs aproximativ din {date}: 1 EUR = {rates}', 'Approximate rate on {date}: 1 EUR = {rates}'],
+  'fx.approx': ['примерный курс', 'curs aproximativ', 'approximate rate'],
+  'fx.src.BNM': ['НБМ', 'BNM', 'NBM'],
+  'fx.src.ECB': ['ЕЦБ', 'BCE', 'ECB'],
   'thm.label': ['Тема', 'Temă', 'Theme'],
   'thm.auto': ['Системная', 'Sistem', 'System'],
   'thm.light': ['Светлая', 'Luminoasă', 'Light'],
@@ -4080,7 +4128,7 @@ VIEWS.home = async (v, r, alive) => {
       '<div class="todo" style="margin-top:12px">' + todo.map(x => '<a href="' + x.href + '" class="' + (x.done ? 'done' : '') + '"><span class="ck">' + ic('check', 'xs') + '</span><span class="grow"><span class="tt" style="display:block">' + tx('todo.' + x.k + '.t') + '</span><span class="td">' + tx('todo.' + x.k + '.d') + '</span></span>' + ic('chevR', 'sm') + '</a>').join('') + '</div></section>';
   }
   h += '<div class="grid-2">' +
-    '<a class="card ink bal-card" href="#/billing" style="text-decoration:none;display:block">' + rings() + '<p class="eyebrow" style="color:inherit;opacity:.7">' + tx('bal.title') + '</p><div class="bignum" style="margin-top:10px">' + fNum(p.balance_mdl) + '<small>' + cur() + '</small></div>' +
+    '<a class="card ink bal-card" href="#/billing" style="text-decoration:none;display:block">' + rings() + '<p class="eyebrow" style="color:inherit;opacity:.7">' + tx('bal.title') + '</p><div class="bignum" style="margin-top:10px">' + fNum(p.balance_mdl) + '<small>' + cur() + '</small></div>' + dispLine(p.balance_mdl) +
       '<p class="small" style="margin:12px 0 0;font-weight:600">' + tx('bal.only') + '</p><p class="small muted" style="margin:2px 0 0">' + tx('bal.only.d') + '</p>' +
       (game ? '<p class="small muted" style="margin:8px 0 0">' + ic('bell', 'xs').replace('class="ico xs"', 'class="ico xs" style="display:inline;vertical-align:-3px;margin-right:4px"') + esc(quotaText(fg, lv)) + '</p>' : '') +
       '<span class="btn sm" style="margin-top:16px">' + ic('plus', 'sm') + tx('bal.topup') + '</span></a>' +
@@ -4588,7 +4636,7 @@ function edStepHTML() {
   return '<div class="card" style="padding:6px 16px"><label class="switch" for="ed-feed"><span><span class="lbl">' + tx('ch.feed') + '</span><span>' + tx('ch.feed.d') + (pr.views_1000_mdl != null ? ' · ' + tx('camp.per.views', {p: fMoney(pr.views_1000_mdl)}) : '') + '</span></span><input type="checkbox" id="ed-feed"' + (e.channels.feed ? ' checked' : '') + ' data-ch="ed-ch" data-f="feed"></label></div>' +
     '<div class="card" style="padding:6px 16px"><label class="switch" for="ed-push"><span><span class="lbl">' + tx('ch.push') + '</span><span>' + tx('ch.push.d') + (pr.geo_push_mdl != null ? ' · ' + tx('camp.per.push', {p: fMoney(pr.geo_push_mdl)}) : '') + '</span></span><input type="checkbox" id="ed-push"' + (e.channels.geo_push ? ' checked' : '') + ' data-ch="ed-ch" data-f="geo_push"></label></div>' +
     (st.game ? '<p class="hint" style="margin:-6px 0 0">' + ic('bell', 'xs').replace('class="ico xs"', 'class="ico xs" style="display:inline;vertical-align:-3px;margin-right:4px"') + esc(quotaText(st.game.benefits && st.game.benefits.free_geo_push)) + '</p>' : '') +
-    fld('ed-budget', tx('ed.budget') + ' ' + opt0(), '<div class="input-unit"><input class="input" id="ed-budget" inputmode="decimal" value="' + esc(e.budget_mdl) + '" placeholder="' + esc(tx('ed.budget.ph')) + '" data-in="ed-f" data-f="budget_mdl"><span class="u">' + cur() + '</span></div>', tx('ed.budget.hint', {sum: fMDL(st.partner.balance_mdl)})) +
+    fld('ed-budget', tx('ed.budget') + ' ' + opt0(), '<div class="input-unit"><input class="input" id="ed-budget" inputmode="decimal" value="' + esc(e.budget_mdl) + '" placeholder="' + esc(tx('ed.budget.ph')) + '" data-in="ed-f" data-f="budget_mdl"><span class="u">' + cur() + '</span></div>' + payNote(), tx('ed.budget.hint', {sum: fMDL(st.partner.balance_mdl)})) +
     '<div id="ed-est">' + edEst() + '</div>';
 }
 function edEst() {
@@ -5290,12 +5338,12 @@ VIEWS.billing = async (v, r, alive) => {
   if (r.q.topup === 'success') h += '<div class="banner ok" id="topup-banner"><span class="ic">' + ic('check') + '</span><div><div class="t">' + tx('bill.ok.t') + '</div><div class="s">' + tx('bill.ok.d') + '</div></div></div>';
   if (r.q.topup === 'cancel') h += '<div class="banner"><span class="ic">' + ic('info') + '</span><div><div class="t">' + tx('bill.cancel.t') + '</div><div class="s">' + tx('bill.cancel.d') + '</div></div></div>';
   h += '<div class="cols"><div class="stack" style="gap:16px">' +
-    '<div class="card ink bal-card pad-lg">' + rings() + '<p class="eyebrow" style="color:inherit;opacity:.7">' + tx('bill.cur') + '</p><div class="bignum" style="margin-top:10px" id="bal-num">' + fNum(d.balance_mdl) + '<small>' + cur() + '</small></div><p class="small" style="margin:12px 0 0;font-weight:600">' + tx('bal.only') + '</p><p class="small muted" style="margin:2px 0 0">' + tx('bal.only.d') + '</p></div>' +
+    '<div class="card ink bal-card pad-lg">' + rings() + '<p class="eyebrow" style="color:inherit;opacity:.7">' + tx('bill.cur') + '</p><div class="bignum" style="margin-top:10px" id="bal-num">' + fNum(d.balance_mdl) + '<small>' + cur() + '</small></div>' + dispLine(d.balance_mdl) + '<p class="small" style="margin:12px 0 0;font-weight:600">' + tx('bal.only') + '</p><p class="small muted" style="margin:2px 0 0">' + tx('bal.only.d') + '</p></div>' +
     quotaCard(d.free_geo_push || (game && game.benefits && game.benefits.free_geo_push), game && game.level) +
     '<section class="card pad-lg"><h3>' + tx('bal.topup') + '</h3><div class="presets" role="group" aria-label="' + esc(tx('bill.sum')) + '" style="margin-top:14px">' + presets.map(a => '<button type="button" class="preset" data-act="top-preset" data-a="' + a + '" aria-pressed="' + (+a === +TOP.amount) + '">' + fN(a) + '</button>').join('') + '</div>' +
-      '<div class="field" style="margin-top:14px"><label for="top-amt">' + tx('bill.sum') + '</label><div class="input-unit"><input class="input" id="top-amt" inputmode="decimal" value="' + esc(TOP.amount) + '" data-in="top-amt"><span class="u">' + cur() + '</span></div></div>' + errBox('top-err') +
+      '<div class="field" style="margin-top:14px"><label for="top-amt">' + tx('bill.sum') + '</label><div class="input-unit"><input class="input" id="top-amt" inputmode="decimal" value="' + esc(TOP.amount) + '" data-in="top-amt"><span class="u">' + cur() + '</span></div><span class="fx-conv" id="top-conv">' + (dispOf(TOP.amount) ? '≈ ' + dispOf(TOP.amount) : '') + '</span>' + payNote() + '</div>' + errBox('top-err') +
       '<div class="btn-row" style="margin-top:16px"><button class="btn ink" data-act="topup"' + (cardOk ? '' : ' disabled title="' + esc(tx('bill.card.off')) + '"') + '>' + ic('card', 'sm') + tx('bill.card') + '</button><button class="btn soft" data-act="invoice">' + ic('doc', 'sm') + tx('bill.invoice') + '</button></div>' +
-      (d.payment_mode === 'test' ? '<p style="margin:12px 0 0"><span class="badge">' + tx('bill.test') + '</span></p>' : '') + (cardOk ? '' : '<p class="hint" style="margin:12px 0 0;color:var(--soon-t)">' + tx('bill.card.off.d') + '</p>') + '<p class="hint" style="margin:12px 0 0">' + tx('bill.note', {min: fMDL(TOP.min)}) + '</p></section>' +
+      (d.payment_mode === 'test' ? '<p style="margin:12px 0 0"><span class="badge">' + tx('bill.test') + '</span></p>' : '') + (cardOk ? '' : '<p class="hint" style="margin:12px 0 0;color:var(--soon-t)">' + tx('bill.card.off.d') + '</p>') + '<p class="hint" style="margin:12px 0 0">' + tx('bill.note', {min: fMDL(TOP.min)}) + '</p>' + (dispCur() !== cur() ? '<p class="fx-cap">' + esc(fxCaption()) + '</p>' : '') + '</section>' +
     (pk.length ? '<section class="card pad-lg"><h3>' + tx('bill.packages') + '</h3><div class="stack" style="gap:10px;margin-top:12px">' + pk.map(p => '<div class="row" style="align-items:flex-start"><div class="grow"><div style="font-weight:600">' + esc(srvT(p.title, has('pkg.' + p.key) ? tx('pkg.' + p.key) : '')) + '</div>' + (p.desc ? '<div class="small muted">' + esc(srvT(p.desc, has('pkg.' + p.key + '.d') ? tx('pkg.' + p.key + '.d') : '')) + '</div>' : '') + '</div><b class="tnum" style="white-space:nowrap">' + (p.price_mdl ? fMDL(p.price_mdl) + (p.unit ? ' ' + esc(srvT(p.unit, has('pkg.' + p.key + '.u') ? tx('pkg.' + p.key + '.u') : '')) : '') : tx('free')) + '</b></div>').join('') + '</div></section>' : '') +
   '</div><section><div class="section-head"><h2>' + tx('bill.invoices') + '</h2></div>' +
     (inv.length ? '<div class="group">' + inv.map(x => { const s = INVS[x.status] || [null, 'st-none']; const pp = purposeT(x); return '<div class="item"><span class="ic-circle">' + ic('doc', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.invoice_no || tx('bill.inv')) + '</span><span class="s">' + (x.method === 'card' ? tx('bill.m.card') + ' · ' : x.method === 'bank' ? tx('bill.m.bank') + ' · ' : '') + esc(pp) + (pp ? ' · ' : '') + fDate(x.created_at) + (x.paid_at ? ' · ' + tx('bill.paid', {d: fDate(x.paid_at)}) : '') + '</span></span><span class="end"><b>' + fMDL(x.amount_mdl) + '</b><span class="status ' + s[1] + '" style="margin-top:4px">' + esc(s[0] ? tx(s[0]) : x.status) + '</span></span></div>'; }).join('') + '</div>'
@@ -5319,8 +5367,17 @@ VIEWS.billing = async (v, r, alive) => {
     }
   }
 };
-ACTS['top-preset'] = el => { TOP.amount = +el.dataset.a; $('#top-amt').value = TOP.amount; $$('.preset').forEach(b => b.setAttribute('aria-pressed', b === el)); };
-INPUTS['top-amt'] = el => { TOP.amount = parseAmount(el.value); $$('.preset').forEach(b => b.setAttribute('aria-pressed', +b.dataset.a === TOP.amount)); };
+const topConv = () => { const e = $('#top-conv'); if (e) e.textContent = dispOf(TOP.amount) && TOP.amount ? '≈ ' + dispOf(TOP.amount) : ''; };
+ACTS['top-preset'] = el => { TOP.amount = +el.dataset.a; $('#top-amt').value = TOP.amount; $$('.preset').forEach(b => b.setAttribute('aria-pressed', b === el)); topConv(); };
+INPUTS['top-amt'] = el => { TOP.amount = parseAmount(el.value); $$('.preset').forEach(b => b.setAttribute('aria-pressed', +b.dataset.a === TOP.amount)); topConv(); };
+/* валюта показа: сохранить на устройстве и перерисовать (открыт лист — после его закрытия) */
+CHANGES.dcur = el => {
+  if (DCUR.indexOf(el.value) < 0) return;
+  dcurMem = el.value; store.set(K_DCUR, el.value);
+  $$('.cur-sw').forEach(s => { s.value = el.value; });
+  if (el.value !== cur()) fxFetch();
+  if (sheetOpen() || CB_OPEN) THEME_STALE = true; else render();
+};
 function topAmount() { const a = parseAmount(val('top-amt')); const mn = TOP.min || M().topup_min, mx = TOP.max || M().topup_max; if (!(a >= mn)) { showErr('top-err', tx('bill.min', {sum: fMDL(mn)})); return 0; } if (a > mx) { showErr('top-err', tx('bill.max', {sum: fMDL(mx)})); return 0; } showErr('top-err', ''); return a; }
 ACTS.topup = async el => {
   const a = topAmount(); if (!a) return;
@@ -5620,6 +5677,8 @@ function fixDriverCache() {
 setTimeout(fixDriverCache, 3000); setTimeout(fixDriverCache, 12000);
 loadMeta().catch(() => {});
 loadGameMeta().catch(() => {});
+fxFetch().catch(() => {});
+setInterval(() => { if (navigator.onLine !== false) fxFetch().catch(() => {}); }, 30 * 60000);
 if (!specialHash()) render();
 })();
 </script>
