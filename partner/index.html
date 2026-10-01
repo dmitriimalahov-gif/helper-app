@@ -216,10 +216,14 @@ h1,h2,h3{text-wrap:balance}
 .ph-row select.input{flex:0 0 auto;width:auto;min-width:112px;padding-right:34px}
 .ph-cc1{flex:none;height:48px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:inline-flex;align-items:center;font-weight:600}
 #pp-num{flex:1;min-width:0;font-variant-numeric:tabular-nums}
-#pp-code{font-size:24px;letter-spacing:.42em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .42em)}
+#pp-code,#pev-code{font-size:24px;letter-spacing:.42em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .42em)}
 .ph-sent{margin:0 0 12px;padding:12px 14px;border-radius:var(--r-md);background:var(--teal-3);font-size:14px;line-height:1.45}
 .ph-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px}
 .ph-links .textbtn{display:inline-flex;align-items:center;gap:6px}
+.ev-ok{color:var(--ok-t);font-weight:600}
+.ev-no{color:var(--soon-t);font-weight:600}
+.g-card{display:flex;align-items:center;gap:12px}
+.g-card .gl{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none;box-shadow:0 0 0 1px var(--line)}
 .ph-links .textbtn:disabled{color:var(--ink-3);cursor:default}
 
 /* ---------- cards / lists ---------- */
@@ -554,6 +558,13 @@ input[type=range]{width:100%;accent-color:var(--teal-ink);height:28px}
 .pkc-f li .ico{color:var(--teal-ink);margin-top:1px;flex:none}
 .pkc .btn{margin-top:4px}
 .pk-mk{display:inline-flex}
+/* «Помесячно | За год −15 %» */
+.pk-sws{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pk-per{display:inline-flex}
+.pk-per .sv{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--ok-bg);color:var(--ok-t);font-size:11px;font-weight:700;vertical-align:1px}
+.pk-per button[aria-pressed="true"] .sv{background:var(--teal);color:var(--on-teal)}
+.pkc-eq{font-size:13px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-top:-4px}
+.pk-reg-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:10px}
 .pk-sec{margin-top:30px}
 .pk-sec>h3{font-size:18px;font-weight:600;margin:0 0 12px}
 .pk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
@@ -565,6 +576,7 @@ input[type=range]{width:100%;accent-color:var(--teal-ink);height:28px}
 .pkm .n{font-weight:600;font-size:14.5px}
 .pkm .p{font-weight:300;font-size:19px;font-variant-numeric:tabular-nums;line-height:1.2}
 .pkm .p small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.pkm .p small.eq{color:var(--teal-ink);margin-top:1px}
 .pkm .t{font-size:11.5px;color:var(--ink-2);line-height:1.35}
 .pkm .hlb{position:absolute;top:-10px;right:10px;height:20px;padding:0 8px;border-radius:999px;background:var(--teal);color:var(--on-teal);font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center}
 .pk-adds{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
@@ -1055,7 +1067,7 @@ const K = {
   acct: 'helper.partner.acct.v1', pid: 'helper.partner.pid', api: 'helper.partner.api', cfg: 'helper.partner.cfg.v2' /* только подписанный config */,
   join: 'helper.partner.join', reg: 'helper.partner.reg.v1', lang: 'helper.partner.lang', dref: 'helper.partner.dref.v1' /* ?ref=HLP-XXXXXX — водитель, рекомендовавший компанию */,
   meta: l => 'helper.partner.meta.v2.' + l, gmeta: l => 'helper.partner.gmeta.v1.' + l, geoC: l => 'helper.partner.geo.countries.v1.' + l,
-  loc: p => 'helper.partner.loc.' + p, todo: p => 'helper.partner.todo.' + p
+  loc: p => 'helper.partner.loc.' + p, todo: p => 'helper.partner.todo.' + p, evhide: 'helper.partner.evhide.v1'
 };
 const TG_BOT = 'https://t.me/HelperAutoMD_bot';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -1490,6 +1502,14 @@ Object.assign(TX, {
   'plan.lead': ['Начните бесплатно — пакет можно сменить в любой момент. Платные пакеты подключает менеджер Helper, оплата — после подтверждения.', 'Începeți gratuit — pachetul se poate schimba oricând. Pachetele plătite le activează managerul Helper, plata — după confirmare.', 'Start for free — you can change your plan at any time. A Helper manager activates paid plans; you pay after confirmation.'],
   'plan.popular': ['Популярный', 'Popular', 'Popular'],
   'plan.perMonth': ['/мес', '/lună', '/mo'],
+  'plan.perYear': ['/год', '/an', '/yr'],
+  'plan.monthly': ['Помесячно', 'Lunar', 'Monthly'],
+  'plan.yearly': ['За год', 'Anual', 'Yearly'],
+  'plan.per.aria': ['Период оплаты', 'Perioada de plată', 'Billing period'],
+  'plan.eqMonth': ['≈ {sum}/мес', '≈ {sum}/lună', '≈ {sum}/mo'],
+  'plan.period.month': ['оплата помесячно', 'plată lunară', 'billed monthly'],
+  'plan.period.year': ['оплата за год', 'plată anuală', 'billed yearly'],
+  'plan.all': ['Все пакеты', 'Toate pachetele', 'All plans'],
   'plan.inherits': ['Всё из пакета «{name}», плюс:', 'Tot din pachetul „{name}”, plus:', 'Everything in “{name}”, plus:'],
   'plan.choose': ['Выбрать пакет', 'Alegeți pachetul', 'Choose plan'],
   'plan.free': ['Подключить бесплатно', 'Conectați-vă gratuit', 'Join for free'],
@@ -1644,6 +1664,42 @@ Object.assign(TX, {
   'li.busy': ['Входим…', 'Se conectează…', 'Signing in…'],
   'li.done': ['Вы вошли: {email}', 'Ați intrat: {email}', 'Signed in: {email}'],
   'pa.tab': ['Телефон', 'Telefon', 'Phone'],
+  'rg.g.acct': ['Аккаунт Google', 'Cont Google', 'Google account'],
+  'rg.g.other': ['Другой способ', 'Altă metodă', 'Another way'],
+  'rg.g.expired': ['Подтверждение Google устарело — нажмите «Продолжить с Google» ещё раз.', 'Confirmarea Google a expirat — apăsați din nou „Continuați cu Google”.', 'The Google confirmation has expired — tap “Continue with Google” again.'],
+  'news.opt': ['Получать новости и предложения Helper', 'Doresc să primesc noutăți și oferte Helper', 'Send me Helper news and offers'],
+  'news.title': ['Новости и предложения', 'Noutăți și oferte', 'News and offers'],
+  'news.hint': ['Письма о новинках Helper и предложениях. Уведомления о работе кабинета и счетах приходят в любом случае.', 'E-mailuri despre noutățile Helper și oferte. Notificările despre panou și facturi vin oricum.', 'E-mails about Helper news and offers. Notices about your dashboard and invoices keep coming either way.'],
+  'news.on': ['Будем присылать новости и предложения', 'Vă vom trimite noutăți și oferte', 'We’ll send you news and offers'],
+  'news.off': ['Новости и предложения отключены', 'Noutățile și ofertele sunt dezactivate', 'News and offers turned off'],
+  'em.cardT': ['Подтвердите e-mail — мы отправили код', 'Confirmați e-mailul — v-am trimis un cod', 'Confirm your e-mail — we’ve sent a code'],
+  'em.cardS': ['Код в письме на {email}. Подтверждённый адрес поможет восстановить доступ к кабинету.', 'Codul este în e-mailul trimis la {email}. O adresă confirmată vă ajută să recuperați accesul la panou.', 'The code is in the e-mail sent to {email}. A confirmed address helps you recover access to the dashboard.'],
+  'em.enter': ['Ввести код', 'Introduceți codul', 'Enter code'],
+  'em.hide': ['Скрыть', 'Ascundeți', 'Hide'],
+  'em.hidden': ['Подтвердить e-mail можно в «Настройках»', 'Puteți confirma e-mailul din „Setări”', 'You can confirm your e-mail in Settings'],
+  'em.title': ['Подтверждение e-mail', 'Confirmarea e-mailului', 'Confirm your e-mail'],
+  'em.sending': ['Отправляем письмо с кодом…', 'Trimitem e-mailul cu codul…', 'Sending the e-mail with a code…'],
+  'em.sent': ['Код отправлен на {email}', 'Codul a fost trimis la {email}', 'Code sent to {email}'],
+  'em.spam': ['Нет письма? Проверьте «Спам».', 'Nu e e-mailul? Verificați „Spam”.', 'No e-mail? Check your spam folder.'],
+  'em.resend': ['Отправить код снова', 'Trimiteți codul din nou', 'Send the code again'],
+  'em.resent': ['Отправили новый код', 'Am trimis un cod nou', 'We’ve sent a new code'],
+  'em.mailOff': ['Сейчас не получается отправить письмо. Попробуйте позже.', 'Acum nu putem trimite e-mailul. Încercați mai târziu.', 'We can’t send the e-mail right now. Try again later.'],
+  'em.done': ['E-mail подтверждён', 'E-mailul a fost confirmat', 'E-mail confirmed'],
+  'em.ok': ['Подтверждён', 'Confirmat', 'Confirmed'],
+  'em.no': ['Не подтверждён', 'Neconfirmat', 'Not confirmed'],
+  'em.do': ['Подтвердить', 'Confirmați', 'Confirm'],
+  'pwr.title': ['Старый пароль удалён', 'Parola veche a fost ștearsă', 'Old password removed'],
+  'pwr.text': ['Для безопасности старый пароль удалён — входите через Google или задайте новый пароль через «Забыли пароль?».', 'Pentru siguranță, parola veche a fost ștearsă — intrați prin Google sau setați o parolă nouă prin „Ați uitat parola?”.', 'For security, the old password was removed — sign in with Google or set a new password via “Forgot password?”.'],
+  'pwr.ok': ['Понятно', 'Am înțeles', 'Got it'],
+  'tgp.linked': ['привязан', 'conectat', 'linked'],
+  'tgp.no': ['не привязан', 'neconectat', 'not linked'],
+  'tgp.link': ['Привязать', 'Conectați', 'Link'],
+  'tgp.unlink': ['Отвязать Telegram', 'Deconectați Telegram', 'Unlink Telegram'],
+  'tgp.q': ['Отвязать Telegram?', 'Deconectați Telegram?', 'Unlink Telegram?'],
+  'tgp.qd': ['Бот Helper перестанет присылать уведомления этому аккаунту. Кабинет и данные останутся — привязать заново можно в любой момент.', 'Botul Helper nu va mai trimite notificări acestui cont. Panoul și datele rămân — puteți conecta din nou oricând.', 'The Helper bot will stop sending notifications to this account. The dashboard and data stay — you can link it again at any time.'],
+  'tgp.done': ['Telegram отвязан', 'Telegram a fost deconectat', 'Telegram unlinked'],
+  'tgp.last': ['Сначала добавьте телефон, e-mail с паролем или Google — иначе вы не сможете войти', 'Adăugați mai întâi un telefon, un e-mail cu parolă sau Google — altfel nu veți putea intra', 'First add a phone, an e-mail with a password or Google — otherwise you won’t be able to sign in'],
+  'pwr.textTg': ['Для безопасности старый пароль удалён и Telegram отвязан — входите через Google, задайте новый пароль через «Забыли пароль?» и при желании привяжите Telegram заново в аккаунте.', 'Pentru siguranță, parola veche a fost ștearsă și Telegram a fost deconectat — intrați prin Google, setați o parolă nouă prin „Ați uitat parola?” și, dacă doriți, conectați din nou Telegram din cont.', 'For security, the old password was removed and Telegram was unlinked — sign in with Google, set a new password via “Forgot password?” and, if you like, link Telegram again in your account.'],
   'pa.tabReg': ['По телефону', 'Prin telefon', 'By phone'],
   'pa.via': ['Способ входа', 'Metoda de autentificare', 'Sign-in method'],
   'pa.label': ['Номер телефона', 'Numărul de telefon', 'Phone number'],
@@ -2610,6 +2666,7 @@ const I = {
   home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
   scan: '<path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5"/><path d="M8 8h3v3H8zM13 8h3v3h-3zM8 13h3v3H8zM13 13h1.5v1.5H13zM15.5 15.5H16V16h-.5z"/>',
   phone: '<path d="M5.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 6.7 6.7l1.3-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 4 5.6 1.5 1.5 0 0 1 5.5 4z"/>',
+  lock: '<rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5M12 14.5v2"/>',
   qr: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1"/>',
   megaphone: '<path d="M4 10.5v3a1 1 0 0 0 1 1h2.5l8 4.5v-15l-8 4.5H5a1 1 0 0 0-1 1z"/><path d="M7.5 14.5 9 20h2.5L10 14.5M18.5 9.3a3.5 3.5 0 0 1 0 5.4"/>',
   pin: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/>',
@@ -3609,6 +3666,7 @@ async function gLogin(box) {
 }
 async function gCallback(r) {
   if (!r || !r.credential) return;
+  if (UI.gReg && st.route.name === 'register' && !$('#sheets #g-box')) return gRegDone(r.credential);
   const slot = $('#g-box .gslot');
   if (slot) slot.classList.add('busy');
   showErr('li-err', '');
@@ -3623,7 +3681,144 @@ async function gCallback(r) {
   }
   if (!setTokens(d)) return showErr('li-err', tx('e.no_tokens'));
   loginDone();
+  if (d.password_reset) setTimeout(() => pwResetSheet(!!d.telegram_unlinked), 450); /* e-mail не был подтверждён: старый пароль удалён, другие сеансы закрыты */
 }
+const G_LOGO = '<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+/* имя и почта из удостоверения Google (JWT) — подставить «Имя» и показать, каким аккаунтом регистрируемся */
+function gJwt(cred) {
+  try { const p = JSON.parse(decodeURIComponent(escape(atob(String(cred).split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))))); return {name: String(p.name || [p.given_name, p.family_name].filter(Boolean).join(' ') || '').trim().slice(0, 60), email: String(p.email || '')}; } catch (e) { return {name: '', email: ''}; }
+}
+async function gRegMount(box) {
+  if (!box || logged()) return;
+  UI.gReg = true;
+  const cid = await gCid();
+  if (!cid || !box.isConnected) return;
+  let id;
+  try { id = await gisLoad(); } catch (e) { return; }
+  if (!box.isConnected) return;
+  box.innerHTML = '<div class="or-div" aria-hidden="true"><span>' + tx('li.or') + '</span></div><div class="gslot"></div>';
+  box.hidden = false;
+  if (gisInit !== cid) { id.initialize({client_id: cid, callback: gCallback, auto_select: false, cancel_on_tap_outside: true, context: 'signup', ux_mode: 'popup', itp_support: true}); gisInit = cid; }
+  const slot = box.querySelector('.gslot'), a = document.documentElement.getAttribute('data-theme');
+  const dark = a ? a === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  try { id.renderButton(slot, {type: 'standard', theme: dark ? 'filled_black' : 'outline', size: 'large', shape: 'pill', text: 'continue_with', logo_alignment: 'center', width: Math.max(200, Math.min(400, Math.round(slot.getBoundingClientRect().width) || 320)), locale: LANG}); } catch (e) {}
+}
+function gRegDone(cred) {
+  const R = regState(), j = gJwt(cred);
+  R.gcred = {cred, at: Date.now(), email: j.email, name: j.name}; R.via = 'google';
+  const typed = $('#rg-contact') ? val('rg-contact').trim() : R.contact_name;
+  R.contact_name = typed || j.name || R.contact_name; regSave();
+  render();
+}
+ACTS['rg-g-redo'] = () => { const R = regState(); R.gcred = null; R.via = ''; render(); };
+/* e-mail аккаунта в настройках: «Подтверждён» / «Не подтверждён · Подтвердить» (статус — если сервер его знает) */
+/* Telegram аккаунта: привязан — «Отвязать» (нельзя, если это единственный способ входа), нет — «Привязать» (ссылка на бота) */
+const tgOnlyP = () => { const u = A.user || {}; if (UI.tgLast) return true; return !u.email && !(u.phone && u.phone_verified !== false) && !(u.google || u.google_linked || u.has_google); };
+function acctTgHTML() {
+  const u = A.user || {}, tg = u.telegram || {};
+  if (!logged()) return '';
+  const last = tg.linked && tgOnlyP();
+  return '<div class="row between wrap" style="margin-top:12px;gap:8px;padding-top:12px;border-top:1px solid var(--line)"><div style="min-width:0"><div class="small muted">Telegram</div><div style="font-weight:500">' + (tg.linked ? tx('tgp.linked') + (tg.username ? ' · @' + esc(tg.username) : '') : tx('tgp.no')) + '</div></div>' +
+    (tg.linked ? '<button type="button" class="btn sm soft" data-act="tgp-unlink"' + (last ? ' disabled' : '') + '>' + ic('close', 'sm') + tx('tgp.unlink') + '</button>' : '<button type="button" class="btn sm soft" data-act="tgp-link">' + ic('send', 'sm') + tx('tgp.link') + '</button>') + '</div>' +
+    (last ? '<p class="hint" style="margin:6px 0 0">' + tx('tgp.last') + '</p>' : '');
+}
+ACTS['tgp-unlink'] = async () => {
+  if (!await confirmSheet({title: tx('tgp.q'), text: tx('tgp.qd'), ok: tx('tgp.unlink'), danger: true})) return;
+  let d;
+  try { d = await api('/v1/me/telegram', {method: 'DELETE'}); }
+  catch (e) { if (e.code === 'last_login_method') { UI.tgLast = true; render(); return toast(tx('tgp.last'), 6000); } return toast(e.message, 5000); }
+  A.user = d && d.user ? d.user : Object.assign({}, A.user || {}, {telegram: {linked: false}}); acctSave();
+  toast(tx('tgp.done')); render();
+};
+ACTS['tgp-link'] = async el => {
+  const done = busy(el, tx('busy.save'));
+  try { const d = await api('/v1/me/telegram/link', {body: {}}); done(); A.meAt = 0; if (d && d.url) window.open(d.url, '_blank', 'noopener'); }
+  catch (e) { done(); toast(e.message, 5000); }
+};
+function acctMailHTML() {
+  const u = A.user || {};
+  if (!u.email) return acctTgHTML();
+  const st0 = u.email_verified === true ? '<span class="ev-ok">' + tx('em.ok') + '</span>' : u.email_verified === false ? '<span class="ev-no">' + tx('em.no') + '</span>' : '';
+  return '<div class="row between wrap" style="margin-top:14px;gap:8px;padding-top:12px;border-top:1px solid var(--line)"><div style="min-width:0"><div class="small muted">E-mail</div><div class="break" style="font-weight:500">' + esc(u.email) + (st0 ? ' · ' + st0 : '') + '</div></div>' +
+    (u.email_verified === false ? '<button type="button" class="btn sm soft" data-act="pev-open">' + ic('check', 'sm') + tx('em.do') + '</button>' : '') + '</div>' + acctTgHTML();
+}
+function pwResetSheet(tg) {
+  openSheet(tx('pwr.title'), '<div class="row" style="gap:12px;align-items:flex-start;margin-bottom:16px"><span class="ic-circle">' + ic('lock', 'sm') + '</span><p style="margin:0;line-height:1.55">' + tx(tg ? 'pwr.textTg' : 'pwr.text') + '</p></div><button class="btn block ink" data-act="sheet-close">' + tx('pwr.ok') + '</button>');
+}
+/* ---------- аккаунт: свежие данные (/v1/me), подтверждение e-mail кодом, «Новости и предложения» ---------- */
+async function meLoad() {
+  if (!logged()) return null;
+  try { const d = await api('/v1/me', {timeout: 8000}); if (d && d.user) { A.user = Object.assign({}, A.user || {}, d.user); acctSave(); } return d; } catch (e) { return null; }
+}
+let PEV = null, pevT = null;
+const pevNeed = () => logged() && !!(A.user && A.user.email) && A.user.email_verified === false;
+function pevCard() {
+  if (!pevNeed() || store.get(K.evhide) === A.user.email) return '';
+  return '<section class="card tint pev-card" style="margin-bottom:22px"><div class="row" style="align-items:flex-start;gap:14px"><span class="ic-circle teal">' + ic('send', 'sm') + '</span><div class="grow"><div style="font-weight:600">' + tx('em.cardT') + '</div><p class="small muted break" style="margin:4px 0 0">' + tx('em.cardS', {email: esc(A.user.email)}) + '</p>' +
+    '<button class="btn sm ink" style="margin-top:12px" data-act="pev-open">' + tx('em.enter') + '</button></div><button class="iconbtn" data-act="pev-hide" aria-label="' + esc(tx('em.hide')) + '">' + ic('close', 'sm') + '</button></div></section>';
+}
+function pevBox(msg) {
+  if (msg) return '<p class="muted" style="margin:0 0 16px;line-height:1.5">' + msg + '</p><button class="btn block soft" data-act="sheet-close">' + tx('close') + '</button>';
+  return '<p class="ph-sent break" role="status">' + tx('em.sent', {email: '<b>' + esc(A.user.email) + '</b>'}) + '</p>' +
+    '<form class="form" data-form="pev-verify" novalidate>' + fld('pev-code', tx('pa.code'), inp('pev-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••" data-in="pev-code"')) + errBox('pev-err') +
+    '<button class="btn ink block" type="submit">' + tx('pa.verify') + '</button></form><div class="ph-links"><span class="small muted" style="padding:6px 0">' + tx('em.spam') + '</span><button type="button" class="textbtn" id="pev-resend" data-act="pev-resend"></button></div>';
+}
+function pevPaintT() {
+  const b = $('#pev-resend'); if (!b || !PEV) { if (!b) { clearInterval(pevT); pevT = null; } return; }
+  const left = (PEV.resendAt || 0) - Date.now();
+  b.disabled = left > 0; b.textContent = left > 0 ? tx('pa.resendIn', {time: mmssLeft(left)}) : tx('em.resend');
+}
+function pevPaint(msg) {
+  const b = $('#pev-box'); if (!b) return;
+  b.innerHTML = pevBox(msg); pevPaintT(); if (!pevT) pevT = setInterval(pevPaintT, 1000);
+  const i = $('#pev-code'); if (i) setTimeout(() => { try { i.focus({preventScroll: true}); } catch (e) {} }, 60);
+}
+function pevSheet() {
+  if (!pevNeed()) return;
+  const fresh = PEV && PEV.sent && Date.now() - PEV.sent < 14 * 60000;
+  openSheet(tx('em.title'), '<div id="pev-box">' + (fresh ? pevBox() : '<p class="muted" style="margin:0">' + tx('em.sending') + '</p>') + '</div>');
+  if (fresh) pevPaint(); else pevStart(false);
+}
+async function pevStart(again) {
+  let d;
+  try { d = await api('/v1/me/email/verify/start', {body: {}}); }
+  catch (e) {
+    if (e.code === 'rate_limited') { const s = +(e.data && e.data.retry_after) || 60; PEV = Object.assign({sent: Date.now()}, PEV || {}, {resendAt: Date.now() + s * 1000}); pevPaint(); return showErr('pev-err', e.message); }
+    if (e.code === 'already_verified') { A.user = Object.assign({}, A.user || {}, {email_verified: true}); acctSave(); PEV = null; closeSheet(true); toast(tx('em.done')); return render(); }
+    if (e.code === 'mail_disabled' || e.code === 'mail_failed') return again && $('#pev-code') ? showErr('pev-err', tx('em.mailOff')) : pevPaint(tx('em.mailOff'));
+    return again && $('#pev-code') ? showErr('pev-err', e.message) : pevPaint(esc(e.message));
+  }
+  PEV = {sent: Date.now(), resendAt: Date.now() + (+d.resend_in || 60) * 1000};
+  if (again && $('#pev-code')) { pevPaintT(); toast(tx('em.resent')); } else pevPaint();
+}
+async function pevVerify(f) {
+  const code = val('pev-code').replace(/\D/g, '');
+  if (code.length !== 6) return showErr('pev-err', tx('pa.code6'));
+  const done = busy(f.querySelector('[type=submit]'), tx('pa.verifying'));
+  let d;
+  try { d = await api('/v1/me/email/verify', {body: {code}}); }
+  catch (e) {
+    done();
+    const i = $('#pev-code'); if (i) { i.value = ''; try { i.focus(); } catch (x) {} }
+    if (e.code === 'code_invalid') return showErr('pev-err', e.data && e.data.attempts_left != null ? tx('pa.wrong', {n: e.data.attempts_left}) : e.message);
+    if (e.code === 'code_expired' || e.code === 'too_many_attempts') { if (PEV) PEV.resendAt = 0; pevPaintT(); return showErr('pev-err', tx(e.code === 'code_expired' ? 'pa.expired' : 'pa.tooMany')); }
+    return showErr('pev-err', e.message);
+  }
+  done();
+  A.user = Object.assign({}, A.user || {}, d && d.user ? d.user : {}, {email_verified: true}); acctSave();
+  PEV = null; closeSheet(true); toast(tx('em.done')); render();
+}
+ACTS['pev-open'] = () => pevSheet();
+ACTS['pev-resend'] = () => { if (PEV && Date.now() < (PEV.resendAt || 0)) return; pevStart(true); };
+ACTS['pev-hide'] = () => { if (A.user && A.user.email) store.set(K.evhide, A.user.email); const c = $('.pev-card'); if (c) c.remove(); toast(tx('em.hidden')); };
+INPUTS['pev-code'] = el => { const v = el.value.replace(/\D/g, '').slice(0, 6); if (el.value !== v) el.value = v; if (v.length === 6 && !(PEV && PEV.busy)) { PEV = PEV || {}; PEV.busy = true; Promise.resolve(pevVerify(el.closest('form'))).finally(() => { if (PEV) PEV.busy = false; }); } };
+CHANGES['s-news'] = async el => {
+  const on = !!el.checked; el.disabled = true;
+  try { const d = await api('/v1/me', {method: 'PATCH', body: {news: on}}); A.user = Object.assign({}, A.user || {}, d && d.user ? d.user : {}, {news: on}); acctSave(); toast(tx(on ? 'news.on' : 'news.off')); }
+  catch (e) { el.checked = !on; toast(e.message, 5000); }
+  el.disabled = false;
+};
+CHANGES['reg-news'] = el => { regState().news = el.checked; regSave(); };
 FORMS.login = async f => {
   const email = val('li-email').trim().toLowerCase(), pw = val('li-pass');
   if (!EMAIL_RE.test(email)) return showErr('li-err', tx('v.email'));
@@ -4323,7 +4518,7 @@ function regState() {
   }
   return REG;
 }
-function regSave() { if (!REG) return; const c = Object.assign({}, REG); delete c.password; delete c.phone_token; delete c.phone_acct; jset(K.reg, c); }
+function regSave() { if (!REG) return; const c = Object.assign({}, REG); delete c.password; delete c.phone_token; delete c.phone_acct; delete c.gcred; jset(K.reg, c); }
 /* IDNO (Молдова, 13 цифр) / CUI (Румыния) / налоговый номер — сервер принимает 2–13 цифр */
 const idnoOK = (cc, v) => { v = String(v || '').replace(/[\s-]/g, '').toUpperCase(); if (cc === 'MD') return /^\d{13}$/.test(v); if (cc === 'RO') return /^(RO)?\d{2,10}$/.test(v); return /^\d{2,13}$/.test(v); };
 const idnoLabel = cc => cc === 'MD' ? 'IDNO' : cc === 'RO' ? 'CUI' : tx('f.taxid');
@@ -4341,7 +4536,8 @@ function regValid(n) {
   if (n >= 2) {
     const nm = R.contact_name.trim();
     if (nm.length < 2 || nm.length > 60) return [2, tx('v.rgname')];
-    if (!logged() && phOn() && R.via !== 'email') { if (!R.phone_token) return [2, tx('v.phoneAcct')]; }
+    if (!logged() && R.gcred) { /* Google — без пароля и кода */ }
+    else if (!logged() && phOn() && R.via !== 'email') { if (!R.phone_token) return [2, tx('v.phoneAcct')]; }
     else if (!logged()) {
       if (!EMAIL_RE.test(R.email.trim())) return [2, tx('v.email')];
       if ((R.password || '').length < 8) return [2, tx('v.pass8')];
@@ -4444,12 +4640,16 @@ async function pageRegister(r, alive) {
     h += '<h1 class="wiz-title">' + tx('reg.2.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.2.p') + '</p>' +
       '<form class="form" id="reg2f" data-form="reg2" novalidate>' +
       fld('rg-contact', tx('rg.name'), inp('rg-contact', R.contact_name, 'autocomplete="name" maxlength="60" placeholder="' + esc(tx('f.contact.ph')) + '" autofocus data-in="reg-f" data-f="contact_name"'), tx('rg.name.hint'));
-    const viaPh = !logged() && phOn() && R.via !== 'email';
-    if (viaPh) {
+    const viaG = !logged() && !!R.gcred, viaPh = !logged() && !viaG && phOn() && R.via !== 'email';
+    if (viaG) {
+      /* «Продолжить с Google»: аккаунт Helper — по этому Google (есть — компания привяжется к нему) */
+      h += '</form><div class="card tint" style="margin-top:16px"><div class="g-card"><span class="gl">' + G_LOGO + '</span><div class="grow" style="min-width:0"><div class="small muted">' + tx('rg.g.acct') + '</div><div style="font-weight:600" class="break">' + esc(R.gcred.email || R.gcred.name || 'Google') + '</div></div><button type="button" class="textbtn" data-act="rg-g-redo">' + tx('rg.g.other') + '</button></div></div>' +
+        errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit" form="reg2f">' + tx('next') + ic('chevR', 'sm') + '</button></div>';
+    } else if (viaPh) {
       /* по телефону: код → phone_token (новый номер) или вход в существующий аккаунт; «Далее» — вне форм кода (form="reg2f") */
       if (!PPH || PPH.purpose !== 'reg') PPH = {purpose: 'reg', step: 'num'};
       h += '</form><div class="seg" role="group" aria-label="' + esc(tx('pa.via')) + '" style="margin:16px 0"><button type="button" data-act="rg-via" data-v="phone" aria-pressed="true">' + ic('phone', 'sm') + tx('pa.tabReg') + '</button><button type="button" data-act="rg-via" data-v="email" aria-pressed="false">' + ic('send', 'sm') + 'E-mail</button></div>' +
-        (R.phone_token ? '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('check', 'sm') + '</span><div class="grow"><div style="font-weight:600">' + tx('pa.ok', {phone: '<span style="white-space:nowrap">' + esc(phShow(R.phone_acct, true)) + '</span>'}) + '</div></div><button type="button" class="textbtn" data-act="rg-ph-redo">' + tx('pa.change') + '</button></div></div>' : '<div id="pph-box">' + pphHTML() + '</div>') +
+        (R.phone_token ? '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('check', 'sm') + '</span><div class="grow"><div style="font-weight:600">' + tx('pa.ok', {phone: '<span style="white-space:nowrap">' + esc(phShow(R.phone_acct, true)) + '</span>'}) + '</div></div><button type="button" class="textbtn" data-act="rg-ph-redo">' + tx('pa.change') + '</button></div></div>' : '<div id="pph-box">' + pphHTML() + '</div>') + (R.phone_token ? '' : '<div class="gwrap" id="rg-g" hidden></div>') +
         errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit" form="reg2f">' + tx('next') + ic('chevR', 'sm') + '</button></div>';
     } else if (logged()) {
       h += '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('user', 'sm') + '</span><div class="grow"><div class="small muted">' + tx('reg.2.bound') + '</div><div style="font-weight:600" class="break">' + esc(acctName() || tx('reg.2.cur')) + '</div></div></div></div>' +
@@ -4458,9 +4658,9 @@ async function pageRegister(r, alive) {
       h += (phOn() ? '<div class="seg" role="group" aria-label="' + esc(tx('pa.via')) + '"><button type="button" data-act="rg-via" data-v="phone" aria-pressed="false">' + ic('phone', 'sm') + tx('pa.tabReg') + '</button><button type="button" data-act="rg-via" data-v="email" aria-pressed="true">' + ic('send', 'sm') + 'E-mail</button></div>' : '') +
         fld('rg-email', tx('f.email.login'), inp('rg-email', R.email, 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@company.md" data-in="reg-f" data-f="email"')) +
         fld('rg-pass', tx('f.password'), inp('rg-pass', '', 'type="password" autocomplete="new-password"'), tx('reg.2.pass')) +
-        '<button type="button" class="btn line block" data-act="reg-have-acct">' + ic('user', 'sm') + tx('have.acct') + '</button>';
+        '<button type="button" class="btn line block" data-act="reg-have-acct">' + ic('user', 'sm') + tx('have.acct') + '</button>' + '<div class="gwrap" id="rg-g" hidden></div>';
     }
-    if (!viaPh) h += errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit">' + tx('next') + ic('chevR', 'sm') + '</button></div></form>';
+    if (!viaPh && !viaG) h += errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit">' + tx('next') + ic('chevR', 'sm') + '</button></div></form>';
   } else if (step === 3) {
     if (!R.loc.title) R.loc.title = R.company;
     h += '<h1 class="wiz-title">' + tx('reg.3.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.3.p') + '</p>' +
@@ -4474,11 +4674,12 @@ async function pageRegister(r, alive) {
     const terms = m.terms_url ? '<a href="' + esc(m.terms_url) + '" target="_blank" rel="noopener noreferrer">' + tx('reg.4.terms') + '</a>' : tx('reg.4.terms');
     h += '<h1 class="wiz-title">' + tx('reg.4.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.4.p') + '</p>' +
       '<form class="form" data-form="reg4" novalidate>' +
-      '<div class="card" style="padding:18px 18px 16px"><h3 style="margin:0">' + tx('plan.reg.h') + '</h3><p class="hint" style="margin:6px 0 0">' + tx('plan.reg.p') + '</p><div id="pk-reg">' + loaderHTML() + '</div></div>' +
+      '<div class="card" style="padding:18px 18px 16px"><div class="pk-reg-h"><div><h3 style="margin:0">' + tx('plan.reg.h') + '</h3><p class="hint" style="margin:6px 0 0">' + tx('plan.reg.p') + '</p></div><span id="pk-reg-sw"></span></div><div id="pk-reg">' + loaderHTML() + '</div></div>' +
       gameExplainHTML() +
       pricesHTML() +
       '<div class="card" style="padding:14px 16px"><dl class="detail"><dt>' + tx('geo.country') + '</dt><dd>' + esc(placeText({country: R.place.country})) + '</dd><dt>' + tx('geo.city') + '</dt><dd>' + esc(R.place.cityName || R.place.city) + '</dd><dt>' + tx('f.phone') + '</dt><dd class="tnum">' + esc(phoneE164(R.ph)) + '</dd><dt>' + tx('lang.co') + '</dt><dd>' + LNAME[LANG] + '</dd></dl><p class="hint" style="margin:10px 0 0">' + tx('reg.4.lang') + '</p></div>' +
       '<label class="check"><input type="checkbox" id="rg-accept"' + (R.accept ? ' checked' : '') + ' data-ch="reg-accept"><span>' + tx('reg.4.accept', {terms, company: esc(R.company)}) + '</span></label>' +
+      (logged() ? '' : '<label class="check"><input type="checkbox" id="rg-news"' + (R.news ? ' checked' : '') + ' data-ch="reg-news"><span>' + tx('news.opt') + '</span></label>') +
       errBox('rg-err') +
       '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/3" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit">' + tx('reg.4.btn') + '</button></div></form>';
   }
@@ -4497,6 +4698,7 @@ async function pageRegister(r, alive) {
   }
   if (step === 4) pkRegFill();
   if (step === 2 && $('#pph-box')) pphMount(!(PPH && PPH.step === 'code'));
+  if (step === 2) { if ($('#rg-g')) gRegMount($('#rg-g')); else UI.gReg = !!$('[data-act="rg-g-redo"]'); } else UI.gReg = false;
   if (step === 3) {
     rpPlaceNote();
     let center = null;
@@ -4543,6 +4745,18 @@ const pkBig = n => { const v = +n || 0; return Math.abs(v % 1) < 0.005 ? fN(v) :
 const pkMoney = (n, cc) => { const v = +n || 0; return money(v, Math.abs(v % 1) < 0.005 ? 0 : 2, cc); };
 const pkConv = (n, cc) => { const d0 = dispCur(); return d0 !== cc && +n > 0 ? '≈ ' + money(fxConv(+n, cc, d0), 0, d0) : ''; };
 const pkPer = p => p.period === 'month' ? tx('plan.perMonth') : '';
+/* оплата за год: сервер отдаёт periods ["month","year"] и у пакетов price_year / list_price_year / year_discount_pct */
+const pkHasYear = d => !!(d && Array.isArray(d.periods) && d.periods.indexOf('year') >= 0 && (d.packages || []).some(p => +p.price_year > 0));
+const pkYearDisc = d => +d.annual_discount_pct || Math.max.apply(null, [0].concat((d.packages || []).map(p => +p.year_discount_pct || 0))) || 15;
+function pkPrice(p, per) {
+  if (per === 'year' && +p.price_year > 0) return {v: +p.price_year, list: +p.list_price_year || 0, disc: +p.year_discount_pct || 0, unit: tx('plan.perYear'), year: true, note: p.price_note_year || ''};
+  return {v: +p.price || 0, list: +p.list_price || 0, disc: +p.discount_pct || 0, unit: pkPer(p), year: false};
+}
+function pkPerSw(d, sel, scope) {
+  if (!pkHasYear(d)) return '';
+  return '<div class="seg inline pk-per" role="group" aria-label="' + esc(tx('plan.per.aria')) + '">' + ['month', 'year'].map(v => '<button type="button" data-act="pk-per" data-scope="' + scope + '" data-v="' + v + '" aria-pressed="' + ((sel || 'month') === v) + '">' + (v === 'month' ? tx('plan.monthly') : tx('plan.yearly') + '<span class="sv">' + tx('plan.disc', {n: fN(pkYearDisc(d))}) + '</span>') + '</button>').join('') + '</div>';
+}
+const pkPerOf = (d, sel) => pkHasYear(d) && sel === 'year' ? 'year' : 'month';
 function pkChip() {
   const k = st.pkg || {}, rq = k.requested || null;
   return '<span class="pk-chip' + (rq ? ' req' : '') + '">' + esc(rq ? tx('plan.req.chip', {name: pkName(rq, PKGS[pkMarket()] && PKGS[pkMarket()].d)}) : pkName(k.key || 'start', PKGS[pkMarket()] && PKGS[pkMarket()].d)) + '</span>';
@@ -4556,14 +4770,16 @@ function pkCard(p, d, o) {
   if (cur) h += '<span class="pkc-rib cur">' + ic('check', 'xs') + tx('plan.cur') + '</span>'; else if (p.highlight) h += '<span class="pkc-rib">' + ic('star', 'xs') + tx('plan.popular') + '</span>';
   h += '<div class="pkc-h"><span class="ic-circle teal">' + ic(PKG_IC[p.key] || 'medal', 'sm') + '</span><span class="pkc-n">' + nm + '</span></div>';
   h += '<p class="pkc-t">' + esc(p.tagline || '') + '</p>';
-  h += '<div class="pkc-price"><span class="v">' + pkBig(p.price) + '</span><span class="u">' + esc(cc) + pkPer(p) + '</span></div>';
-  h += '<div class="pkc-old">' + (+p.list_price > +p.price ? '<s>' + esc(pkMoney(p.list_price, cc)) + '</s>' : '') + (+p.discount_pct > 0 ? '<span class="pkc-disc">' + tx('plan.disc', {n: fN(p.discount_pct)}) + '</span>' : '') + '</div>';
-  const cv = pkConv(p.price, cc); if (cv) h += '<div class="pkc-conv">' + esc(cv) + pkPer(p) + '</div>';
+  const pr = pkPrice(p, pkPerOf(d, o.per));
+  h += '<div class="pkc-price"><span class="v">' + pkBig(pr.v) + '</span><span class="u">' + esc(cc) + pr.unit + '</span></div>';
+  h += '<div class="pkc-old">' + (pr.list > pr.v ? '<s>' + esc(pkMoney(pr.list, cc)) + '</s>' : '') + (pr.disc > 0 ? '<span class="pkc-disc">' + tx('plan.disc', {n: fN(pr.disc)}) + '</span>' : '') + '</div>';
+  if (pr.year) h += '<div class="pkc-eq">' + esc(tx('plan.eqMonth', {sum: pkMoney(Math.round(pr.v / 12), cc)})) + '</div>';
+  const cv = pkConv(pr.v, cc); if (cv) h += '<div class="pkc-conv">' + esc(cv) + pr.unit + '</div>';
   if (p.price_note && !paid) h += '<p class="pkc-note">' + esc(p.price_note) + '</p>'; /* у платных период и скидка уже видны в цене */
   if (prev) h += '<p class="pkc-inh">' + tx('plan.inherits', {name: esc(prev.name || pkName(prev.key))}) + '</p>';
   const feats = (p.features || []).filter(f => !(prev && /^(Всё из|Tot din|Everything in)\s/i.test(String(f).trim()))); /* строку наследования сервер присылает первой — у нас она своя */
   h += '<ul class="pkc-f">' + feats.map(f => '<li>' + ic('check', 'sm') + '<span>' + esc(f) + '</span></li>').join('') + '</ul>';
-  if (o.mode === 'land') h += '<button type="button" class="btn block ' + (p.highlight ? 'ink' : paid ? 'soft' : 'line') + '" data-act="pk-choose" data-k="' + esc(p.key) + '">' + esc(p.cta || tx(paid ? 'plan.choose' : 'plan.free')) + '</button>';
+  if (o.mode === 'land') h += '<button type="button" class="btn block ' + (p.highlight ? 'ink' : paid ? 'soft' : 'line') + '" data-act="pk-choose" data-k="' + esc(p.key) + '" data-per="' + pkPerOf(d, o.per) + '">' + esc(p.cta || tx(paid ? 'plan.choose' : 'plan.free')) + '</button>';
   else if (o.mode === 'cab') {
     if (cur) h += '<button type="button" class="btn block soft" disabled>' + ic('check', 'sm') + tx('plan.cur') + '</button>';
     else if (req) h += '<button type="button" class="btn block soft" disabled>' + ic('clock', 'sm') + tx('plan.req.sent') + '</button>';
@@ -4572,9 +4788,10 @@ function pkCard(p, d, o) {
   return h + '</article>';
 }
 /* компактный выбор (регистрация) */
-function pkMini(p, d, sel) {
+function pkMini(p, d, sel, per) {
+  const pr = pkPrice(p, pkPerOf(d, per));
   return '<button type="button" class="pkm" role="radio" aria-checked="' + (p.key === sel) + '" data-act="pk-pick" data-k="' + esc(p.key) + '">' + (p.highlight ? '<span class="hlb">' + tx('plan.popular') + '</span>' : '') +
-    '<span class="ic-circle teal">' + ic(PKG_IC[p.key] || 'medal', 'xs') + '</span><span class="n">' + esc(p.name || pkName(p.key)) + '</span><span class="p">' + pkBig(p.price) + ' <small>' + esc(d.currency || 'MDL') + pkPer(p) + '</small></span>' + (p.tagline ? '<span class="t">' + esc(p.tagline) + '</span>' : '') + '</button>';
+    '<span class="ic-circle teal">' + ic(PKG_IC[p.key] || 'medal', 'xs') + '</span><span class="n">' + esc(p.name || pkName(p.key)) + '</span><span class="p">' + pkBig(pr.v) + ' <small>' + esc(d.currency || 'MDL') + pr.unit + '</small>' + (pr.year ? '<small class="eq">' + esc(tx('plan.eqMonth', {sum: pkMoney(Math.round(pr.v / 12), d.currency || 'MDL')})) + '</small>' : '') + '</span>' + (p.tagline ? '<span class="t">' + esc(p.tagline) + '</span>' : '') + '</button>';
 }
 /* «Для сетей и брендов», сравнение, примечания */
 function pkExtras(d, o) {
@@ -4598,7 +4815,7 @@ function pkLandHTML() {
   if (!UI.pkMarket) UI.pkMarket = 'MD';
   return '<section class="pkgs" id="packages" aria-labelledby="pk-h">' + rings('', 'width:440px;right:-210px;top:-60px') +
     '<div class="pk-top"><div><p class="eyebrow">' + tx('plan.e') + '</p><h2 id="pk-h">' + tx('plan.h') + '</h2><p class="lead">' + tx('plan.lead') + '</p></div>' +
-    '<div class="seg inline pk-mk" role="group" aria-label="' + esc(tx('plan.market')) + '">' + ['MD', 'RO'].map(m => '<button type="button" data-act="pk-market" data-v="' + m + '" aria-pressed="' + (UI.pkMarket === m) + '">' + flagOf(m) + ' ' + esc(countryName(m)) + '</button>').join('') + '</div></div>' +
+    '<div class="pk-sws"><div class="seg inline pk-mk" role="group" aria-label="' + esc(tx('plan.market')) + '">' + ['MD', 'RO'].map(m => '<button type="button" data-act="pk-market" data-v="' + m + '" aria-pressed="' + (UI.pkMarket === m) + '">' + flagOf(m) + ' ' + esc(countryName(m)) + '</button>').join('') + '</div><span id="pk-per-land"></span></div></div>' +
     '<div id="pk-land">' + loaderHTML() + '</div></section>';
 }
 async function pkLandFill() {
@@ -4607,7 +4824,8 @@ async function pkLandFill() {
   let d;
   try { d = await pkgsLoad(mk); } catch (e) { const el = $('#pk-land'); if (el) el.innerHTML = '<div class="card tint"><p class="small" style="margin:0">' + esc(tx('plan.err')) + '</p></div>'; return; }
   const el = $('#pk-land'); if (!el || (UI.pkMarket || 'MD') !== mk) return;
-  el.innerHTML = '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'land'})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
+  el.innerHTML = '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'land', per: UI.pkPer})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
+  const sw = $('#pk-per-land'); if (sw) sw.innerHTML = pkPerSw(d, UI.pkPer, 'land');
 }
 /* регистрация: выбор пакета на последнем шаге */
 async function pkRegFill() {
@@ -4617,15 +4835,19 @@ async function pkRegFill() {
   try { d = await pkgsLoad(mk); } catch (e) { const el = $('#pk-reg'); if (el) el.innerHTML = '<p class="small muted" style="margin:10px 0 0">' + esc(tx('plan.err')) + '</p>'; return; }
   const el = $('#pk-reg'); if (!el) return;
   if (!d.packages.some(p => p.key === R.pkg)) R.pkg = 'start';
-  el.innerHTML = '<div class="pk-pick" role="radiogroup" aria-label="' + esc(tx('plan.reg.h')) + '">' + d.packages.map(p => pkMini(p, d, R.pkg)).join('') + '</div>';
+  if (!pkHasYear(d)) R.pkPer = 'month';
+  const sw = $('#pk-reg-sw'); if (sw) sw.innerHTML = pkPerSw(d, R.pkPer, 'reg');
+  el.innerHTML = '<div class="pk-pick" role="radiogroup" aria-label="' + esc(tx('plan.reg.h')) + '">' + d.packages.map(p => pkMini(p, d, R.pkg, R.pkPer)).join('') + '</div>';
 }
 function pkConfirm(key) {
   const d = PKGS[pkMarket()] && PKGS[pkMarket()].d, p = d && d.packages.find(x => x.key === key);
   if (!p) return;
-  const paid = +p.price > 0, nm = esc(p.name || pkName(p.key)), cv = pkConv(p.price, d.currency);
-  openSheet(tx('plan.confirm.h', {name: p.name || pkName(p.key)}), '<div class="pkc-price"><span class="v" style="font-size:38px">' + pkBig(p.price) + '</span><span class="u">' + esc(d.currency || 'MDL') + pkPer(p) + '</span></div>' + (cv ? '<p class="small muted tnum" style="margin:4px 0 0">' + esc(cv) + pkPer(p) + '</p>' : '') +
+  const per = pkPerOf(d, UI.pkPer), pr = pkPrice(p, per), paid = +p.price > 0, nm = esc(p.name || pkName(p.key)), cv = pkConv(pr.v, d.currency);
+  openSheet(tx('plan.confirm.h', {name: p.name || pkName(p.key)}), '<div class="pkc-price"><span class="v" style="font-size:38px">' + pkBig(pr.v) + '</span><span class="u">' + esc(d.currency || 'MDL') + pr.unit + '</span></div>' +
+    (pr.year ? '<p class="small tnum" style="margin:4px 0 0;font-weight:600">' + esc(tx('plan.eqMonth', {sum: pkMoney(Math.round(pr.v / 12), d.currency)})) + (pr.list > pr.v ? ' · <s class="muted">' + esc(pkMoney(pr.list, d.currency)) + '</s>' : '') + '</p>' : '') +
+    (cv ? '<p class="small muted tnum" style="margin:4px 0 0">' + esc(cv) + pr.unit + '</p>' : '') + (pr.year && pr.note ? '<p class="hint" style="margin:8px 0 0">' + esc(pr.note) + '</p>' : '') +
     '<p class="muted" style="line-height:1.55;margin:14px 0 16px">' + tx(paid ? 'plan.confirm.paid' : 'plan.confirm.free', {name: nm}) + '</p>' +
-    '<form class="form" data-form="pk-req" novalidate><input type="hidden" id="pk-k" value="' + esc(p.key) + '">' +
+    '<form class="form" data-form="pk-req" novalidate><input type="hidden" id="pk-k" value="' + esc(p.key) + '">' + (pkHasYear(d) ? '<input type="hidden" id="pk-per" value="' + per + '">' : '') +
     (paid ? fld('pk-comment', tx('plan.comment') + ' ' + opt0(), '<textarea class="input" id="pk-comment" rows="2" maxlength="500" placeholder="' + esc(tx('plan.comment.ph')) + '"></textarea>') : '') +
     errBox('pk-err') + '<button class="btn ink block" type="submit">' + (paid ? ic('send', 'sm') + tx('plan.send') : tx('plan.toStart', {name: nm})) + '</button></form>');
 }
@@ -4672,8 +4894,12 @@ FORMS.reg4 = async f => {
     country: R.place.country, city: String(R.place.city || '').trim(), lang: LANG};
   if (!R.place.other && R.place.city_id != null && R.place.city_id !== '') body.city_id = R.place.city_id;
   if (R.website) body.website = /^https?:\/\//i.test(R.website) ? R.website : 'https://' + R.website;
-  if (!logged() && R.phone_token && R.via !== 'email') { body.phone_token = R.phone_token; body.name = R.contact_name; }
+  if (!logged() && R.gcred) {
+    if (Date.now() - R.gcred.at > 50 * 60000) { R.gcred = null; go('register/2'); setTimeout(() => showErr('rg-err', tx('rg.g.expired')), 160); return; }
+    body.google_credential = R.gcred.cred; body.name = R.contact_name;
+  } else if (!logged() && R.phone_token && R.via !== 'email') { body.phone_token = R.phone_token; body.name = R.contact_name; }
   else if (!logged()) { body.email = R.email; body.password = R.password; body.name = R.contact_name; }
+  if (!logged()) body.news = !!R.news;
   if (!R.skipLoc && R.loc.placed) {
     body.location = {title: R.loc.title || R.company, address: R.loc.address, lat: R.loc.lat, lon: R.loc.lon, radius_m: +R.loc.radius_m || m.radius.default};
     const lc = R.loc.country || R.place.country, lcity = R.loc.city || (lc === R.place.country ? R.place.city : '');
@@ -4687,7 +4913,8 @@ FORMS.reg4 = async f => {
   try { d = await api('/v1/partner/register', {body}); }
   catch (e) {
     done();
-    const phTok = /phone_token/.test(e.code || '') || e.code === 'phone_taken';
+    const phTok = /phone_token/.test(e.code || '') || e.code === 'phone_taken', gBad = /^google_/.test(e.code || '');
+    if (gBad) { REG.gcred = null; go('register/2'); setTimeout(() => showErr('rg-err', e.code === 'google_bad_token' ? tx('rg.g.expired') : e.code === 'google_email_unverified' ? tx('g.unverified') : e.message), 160); return; }
     const toStep = ['bad_idno', 'bad_category', 'already_registered', 'bad_phone', 'bad_country', 'bad_city'].indexOf(e.code) >= 0 ? 1 : ['email_taken', 'invalid_email', 'weak_password', 'bad_name'].indexOf(e.code) >= 0 || phTok ? 2 : 0;
     if (toStep) {
       if (toStep === 2) REG.password = '';
@@ -4701,6 +4928,8 @@ FORMS.reg4 = async f => {
   }
   done();
   if (d.tokens) setTokens(d.tokens);
+  if (d.email_verification_sent) PEV = {sent: Date.now(), resendAt: Date.now() + 60000};
+  if (d.password_reset) setTimeout(() => pwResetSheet(!!d.telegram_unlinked), 900);
   const p = d.partner || {}, pkSel = R.pkg || 'start', pkD = PKGS[pkMarketOf(R.place.country)];
   REG = null; store.del(K.reg); REG_GEO.auto = false;
   st.pid = +p.id; store.set(K.pid, p.id);
@@ -4709,7 +4938,7 @@ FORMS.reg4 = async f => {
   let doneMsg = tx('reg.done');
   if (pkSel !== 'start' && p.id) {
     /* платный пакет из регистрации — сразу заявка менеджеру (оплата после подтверждения) */
-    try { const r2 = await api('/v1/partner/' + p.id + '/package', {body: {key: pkSel}}); if (r2.package) st.pkg = r2.package; doneMsg = tx('plan.reg.done', {name: pkName(pkSel, pkD && pkD.d)}); }
+    try { const pb = {key: pkSel}; if (pkD && pkHasYear(pkD.d)) pb.period = R.pkPer === 'year' ? 'year' : 'month'; const r2 = await api('/v1/partner/' + p.id + '/package', {body: pb}); if (r2.package) st.pkg = r2.package; doneMsg = tx('plan.reg.done', {name: pkName(pkSel, pkD && pkD.d)}); }
     catch (e) { doneMsg = tx('reg.done') + ' ' + e.message; }
   }
   toast(doneMsg, 6000);
@@ -4721,7 +4950,14 @@ FORMS.reg4 = async f => {
 ACTS['sheet-close'] = () => closeSheet();
 ACTS['pk-scroll'] = () => { const s = $('#packages'); if (s) s.scrollIntoView({behavior: 'smooth', block: 'start'}); };
 ACTS['pk-market'] = el => { UI.pkMarket = el.dataset.v; $$('[data-act="pk-market"]').forEach(b => b.setAttribute('aria-pressed', b === el)); const l = $('#pk-land'); if (l) l.innerHTML = loaderHTML(); pkLandFill(); };
-ACTS['pk-choose'] = el => { const R = regState(); R.pkg = el.dataset.k; if (!R.place.country && UI.pkMarket) R.place.country = UI.pkMarket; regSave(); go('register'); };
+ACTS['pk-per'] = el => {
+  const v = el.dataset.v === 'year' ? 'year' : 'month', sc = el.dataset.scope;
+  $$('[data-act="pk-per"][data-scope="' + sc + '"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+  if (sc === 'reg') { const R = regState(); R.pkPer = v; regSave(); pkRegFill(); return; }
+  UI.pkPer = v;
+  if (sc === 'land') pkLandFill(); else { $('#root').dataset.shell = ''; render(); }
+};
+ACTS['pk-choose'] = el => { const R = regState(); R.pkg = el.dataset.k; R.pkPer = el.dataset.per === 'year' ? 'year' : 'month'; if (!R.place.country && UI.pkMarket) R.place.country = UI.pkMarket; regSave(); go('register'); };
 ACTS['pk-pick'] = el => { const R = regState(); R.pkg = el.dataset.k; regSave(); $$('[data-act="pk-pick"]').forEach(b => b.setAttribute('aria-checked', b === el)); };
 ACTS['pk-change'] = el => pkConfirm(el.dataset.k);
 ACTS['pk-cancel'] = async el => {
@@ -4733,6 +4969,7 @@ ACTS['pk-cancel'] = async el => {
 };
 FORMS['pk-req'] = async f => {
   const body = {key: val('pk-k')}, c = val('pk-comment').trim(); if (c) body.comment = c;
+  if (val('pk-per')) body.period = val('pk-per');
   const done = busy(f.querySelector('[type=submit]'), tx('busy.save'));
   let d;
   try { d = await P('/package', {body}); } catch (e) { done(); return showErr('pk-err', e.message); }
@@ -4846,6 +5083,7 @@ VIEWS.home = async (v, r, alive) => {
   const q0 = game && (game.quests || []).find(q => q.status === 'active');
   let h = phead(esc(catTitle(p.category, p.category_title)) + ' · ' + pStatus(p), esc(p.company), null,
     '<a class="btn ink" href="#/kassa">' + ic('scan', 'sm') + tx('nav.kassa.short') + '</a><a class="btn soft" href="#/perk-edit/new">' + ic('plus', 'sm') + tx('pk.new') + '</a>');
+  h += pevCard();
   if (!hideTodo) {
     const all = nDone === todo.length;
     h += '<section class="card pad-lg" style="margin-bottom:22px"><div class="row" style="align-items:flex-start;gap:16px">' + progRing(nDone, todo.length) +
@@ -6097,16 +6335,19 @@ VIEWS.package = async (v, r, alive) => {
   let d;
   try { d = await pkgsLoad(pkMarket()); } catch (e) { if (alive()) v.innerHTML = phead(navT('package'), tx('plan.cur.h'), null) + errorHTML(e); return; }
   if (!alive()) return;
-  const cp = d.packages.find(x => x.key === cur) || null;
+  const cp = d.packages.find(x => x.key === cur) || null, kper = k.period === 'year' ? 'year' : 'month', cpr = cp ? pkPrice(cp, kper) : null;
+  if (!UI.pkPer) UI.pkPer = kper;
   let h = phead(navT('package'), tx('plan.cur.h'), null);
   h += '<section class="card pad-lg pk-curcard">' + rings('', 'width:260px;right:-110px;top:-120px') +
     '<div class="row" style="gap:14px;align-items:flex-start"><span class="ic-circle teal" style="width:52px;height:52px">' + ic(PKG_IC[cur] || 'medal') + '</span><div class="grow">' +
     '<p class="eyebrow">' + tx('plan.cur') + '</p><div style="font-weight:600;font-size:24px;margin-top:4px;line-height:1.2">' + esc(pkName(cur, d)) + ' <span class="badge" style="vertical-align:4px">' + tx('plan.active') + '</span></div>' +
-    (cp ? '<p class="small muted tnum" style="margin:6px 0 0">' + esc(pkMoney(cp.price, d.currency)) + pkPer(cp) + (pkConv(cp.price, d.currency) ? ' · ' + esc(pkConv(cp.price, d.currency)) : '') + (k.until ? ' · ' + tx('plan.until', {date: fDate(k.until)}) : '') + '</p>' : (k.until ? '<p class="small muted" style="margin:6px 0 0">' + tx('plan.until', {date: fDate(k.until)}) + '</p>' : '')) +
+    (cp ? '<p class="small muted tnum" style="margin:6px 0 0">' + esc(pkMoney(cpr.v, d.currency)) + cpr.unit + (cpr.year ? ' (' + esc(tx('plan.eqMonth', {sum: pkMoney(Math.round(cpr.v / 12), d.currency)})) + ')' : '') + (pkConv(cpr.v, d.currency) ? ' · ' + esc(pkConv(cpr.v, d.currency)) : '') + (+cp.price > 0 && k.period ? ' · ' + tx(kper === 'year' ? 'plan.period.year' : 'plan.period.month') : '') + (k.until ? ' · ' + tx('plan.until', {date: fDate(k.until)}) : '') + '</p>' : (k.until ? '<p class="small muted" style="margin:6px 0 0">' + tx('plan.until', {date: fDate(k.until)}) + '</p>' : '')) +
     '</div></div>' +
-    (rq ? '<div class="banner teal" style="margin:16px 0 0"><span class="ic">' + ic('clock') + '</span><div><div class="t">' + tx('plan.req', {name: esc(pkName(rq, d))}) + '</div>' + (ro ? '' : '<button class="btn sm soft" style="margin-top:10px" data-act="pk-cancel">' + ic('close', 'sm') + tx('plan.req.cancel') + '</button>') + '</div></div>' : '') +
+    (rq ? '<div class="banner teal" style="margin:16px 0 0"><span class="ic">' + ic('clock') + '</span><div><div class="t">' + tx('plan.req', {name: esc(pkName(rq, d))}) + (k.requested_period && pkHasYear(d) ? ' · ' + tx(k.requested_period === 'year' ? 'plan.period.year' : 'plan.period.month') : '') + '</div>' + (ro ? '' : '<button class="btn sm soft" style="margin-top:10px" data-act="pk-cancel">' + ic('close', 'sm') + tx('plan.req.cancel') + '</button>') + '</div></div>' : '') +
     (ro ? '<p class="hint" style="margin:14px 0 0">' + tx('plan.readonly') + '</p>' : '') + '</section>';
-  h += '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'cab', cur, req: rq, ro})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
+  const psw = pkPerSw(d, UI.pkPer, 'cab');
+  if (psw) h += '<div class="row between wrap" style="gap:10px;margin:0 0 14px"><h2 style="margin:0;font-size:18px">' + tx('plan.all') + '</h2>' + psw + '</div>';
+  h += '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'cab', cur, req: rq, ro, per: UI.pkPer})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
   v.innerHTML = h;
 };
 VIEWS.billing = async (v, r, alive) => {
@@ -6191,6 +6432,7 @@ ACTS['inv-text-copy'] = async () => toast(await copyText(INV.text) ? tx('bill.re
 const SET = {dk: 'none', place: null, ph: null, logoPrev: null, logoPid: null, mePrev: null};
 VIEWS.settings = async (v, r, alive) => {
   const p = st.partner;
+  if (!A.meAt || Date.now() - A.meAt > 60000) { A.meAt = Date.now(); await meLoad(); if (!alive()) return; }
   if (SET.logoPid !== st.pid) { SET.logoPrev = null; SET.logoPid = st.pid; } /* выбранный, но ещё не с сервера логотип — только этой компании */
   if (!st.meta) { try { await loadMeta(); } catch (e) {} if (!alive()) return; }
   const m = M();
@@ -6225,9 +6467,10 @@ VIEWS.settings = async (v, r, alive) => {
       '<div class="field"><span class="flabel">' + tx('set.disc') + '</span><div class="row wrap" style="gap:10px"><div class="seg inline" role="group"><button type="button" data-act="s-dk" data-k="none" aria-pressed="' + (dk === 'none') + '">' + tx('set.disc.none') + '</button><button type="button" data-act="s-dk" data-k="percent" aria-pressed="' + (dk === 'percent') + '">%</button><button type="button" data-act="s-dk" data-k="fixed" aria-pressed="' + (dk === 'fixed') + '">' + cur() + '</button></div><input class="input" id="s-dv" inputmode="decimal" style="flex:1;min-width:120px" value="' + esc(p.discount_value || '') + '" aria-label="' + esc(tx('ed.disc')) + '"' + (dk === 'none' ? ' hidden' : '') + '></div></div>' +
       errBox('sb-err') + '<button class="btn ink" type="submit">' + tx('save') + '</button></form>' +
   '</div>' + pvBoxHTML() + '<div class="stack set-rest" style="gap:18px">' +
-    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="mu-prev sm" id="me-prev">' + esc(acctInit()) + pImg(myPhoto(), 56) + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctName()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
+    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="mu-prev sm" id="me-prev">' + esc(acctInit()) + pImg(myPhoto(), 56) + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctName()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' + acctMailHTML() +
       '<div class="row wrap" style="gap:8px;margin-top:12px"><label class="btn sm soft">' + ic('camera', 'sm') + tx('media.photoUp') + '<input type="file" accept="image/*" class="vh" data-ch="me-photo" id="me-file"></label><button type="button" class="btn sm line" data-act="me-photo-del" id="me-del"' + (myPhoto() ? '' : ' hidden') + '>' + ic('trash', 'sm') + tx('media.del') + '</button></div>' +
       '<div class="mu-bar" id="me-bar" hidden><i></i></div>' + errBox('me-err') + '<p class="hint" style="margin:8px 0 0">' + tx('media.photoHint') + '</p>' +
+      '<label class="switch" for="s-news" style="margin-top:14px"><span><span class="lbl">' + tx('news.title') + '</span><span>' + tx('news.hint') + '</span></span><input type="checkbox" id="s-news" data-ch="s-news"' + (A.user && A.user.news ? ' checked' : '') + '></label>' +
       '<div class="row between wrap" style="margin-top:16px;gap:10px"><span class="small muted">' + tx('lang.uiTheme') + '</span>' + langSw() + '</div>' +
       '<button class="btn line block" style="margin-top:16px" data-act="logout">' + ic('logout', 'sm') + tx('logout') + '</button></section>' +
     '<section class="card pad-lg"><h3>' + tx('set.cos') + '</h3>' + (others.length ? '<div class="group" style="margin-top:12px">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '<p class="small muted" style="margin:8px 0 0">' + tx('set.only') + '</p>') +

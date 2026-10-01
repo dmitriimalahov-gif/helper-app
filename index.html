@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1314" media="(prefers-color-scheme: dark)">
 <script>/* тема до первой отрисовки (без вспышки): helper.theme.v1 = auto | light | dark — выбор на этом устройстве */
-(function(){try{var t=localStorage.getItem('helper.theme.v1');if(!t){var m=/"theme":"(light|dark)"/.exec(localStorage.getItem('helper.app.v1')||'');t=m?m[1]:'auto'}if(t!=='light'&&t!=='dark')return;document.documentElement.setAttribute('data-theme',t);var c=t==='dark'?'#0E1314':'#FFFFFF',ms=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<ms.length;i++)ms[i].setAttribute('content',c)}catch(e){}})();</script>
+(function(){try{var t=localStorage.getItem('helper.theme.v1');if(!t){var m=/"theme":"(light|dark)"/.exec(localStorage.getItem('helper.app.v1')||'');t=m?m[1]:'auto'}if(t!=='light'&&t!=='dark'){var g=sessionStorage.getItem('hlp_tg_scheme'),q=/tgWebAppThemeParams=([^&]*)/.exec(location.hash+'&'+location.search);if(!g&&q){var b=(JSON.parse(decodeURIComponent(q[1])).bg_color||'').replace('#','');if(b.length===6){g=(0.299*parseInt(b.slice(0,2),16)+0.587*parseInt(b.slice(2,4),16)+0.114*parseInt(b.slice(4,6),16))<128?'dark':'light';sessionStorage.setItem('hlp_tg_scheme',g)}}if(g!=='light'&&g!=='dark')return;t=g}document.documentElement.setAttribute('data-theme',t);var c=t==='dark'?'#0E1314':'#FFFFFF',ms=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<ms.length;i++)ms[i].setAttribute('content',c)}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -179,10 +179,18 @@ svg{display:block}
 select.input.ph-cc{flex:0 0 auto;width:auto;min-width:112px;padding-right:34px}
 .ph-cc1{flex:none;height:48px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:inline-flex;align-items:center;font-weight:600;font-variant-numeric:tabular-nums}
 #ph-num{flex:1;min-width:0;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-#ph-code{font-size:24px;letter-spacing:.42em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .42em)}
+#ph-code,#ev-code{font-size:24px;letter-spacing:.42em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .42em)}
 .ph-sent{margin:0 0 12px;padding:12px 14px;border-radius:var(--r-md);background:var(--teal-3);font-size:14px;line-height:1.45}
 .ph-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px}
 .ph-links .textbtn{display:inline-flex;align-items:center;gap:6px}
+/* галочка в формах (согласие на новости) */
+.check{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.check input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--line-2);flex:none;margin:0;display:grid;place-items:center;cursor:pointer;background:var(--bg)}
+.check input:checked{background:var(--ink);border-color:var(--ink)}
+.check input:checked::after{content:"";width:6px;height:11px;border:solid var(--on-ink);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.check input:focus-visible{outline:2px solid var(--teal-ink);outline-offset:2px}
+.ev-ok{color:var(--ok-t,var(--ok));font-weight:600}
+.ev-no{color:var(--soon-t,var(--ink-2));font-weight:600}
 .ph-links .textbtn:disabled{color:var(--ink-3);cursor:default}
 
 /* ---------- cards / lists ---------- */
@@ -1996,6 +2004,7 @@ function pageHome() {
   h += '<p class="subtitle num">' + esc(carSub(car)) + (car.demo ? ' <span class="badge" style="margin-left:4px;vertical-align:1px">' + t('home.demoBadge') + '</span>' : '') + '</p>';
   if (S.demo) h += '<button class="demo-banner" data-act="demo-exit"><span class="body" style="flex:1"><span class="t" style="display:block">' + t('home.demoTitle') + '</span><span class="s">' + t('home.demoText') + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
   h += acctSaveCard() || hidCard();
+  h += evCard();
   h += gameStrip();
   if (isPrem()) {
     carDocs(car.id).forEach(d => {
@@ -2449,6 +2458,7 @@ function barSVG(text, h, label) {
 function mmss(exp) { const left = exp - Date.now(); if (left <= 0) return t('c.expired'); return t('cpn.left', {time: Math.floor(left / 60000) + ':' + pad(Math.floor(left % 60000 / 1000))}); }
 function tick() {
   if (PHS && PHS.step === 'code') phResendPaint();
+  if (EVS && $('#ev-resend')) evResendPaint();
   const els = $$('[data-exp]'); if (!els.length) return;
   els.forEach(e => { const tt = mmss(+e.dataset.exp); e.textContent = tt; if (tt === t('c.expired')) e.className = 'status st-none'; });
 }
@@ -3099,6 +3109,7 @@ async function afterAuth(d, kind) {
   const wp = kind === 'register' ? Math.round(+d.welcome_points || 0) : 0, wn = (d.user && (d.user.display_name || d.user.name)) || ui.regName || '';
   ui.regName = '';
   if (wp > 0) celWelcome(wp, wn); else toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctName()}));
+  if (ui.pwInfo || d.password_reset) { const tg = !!(ui.pwInfoTg || d.telegram_unlinked); ui.pwInfo = false; ui.pwInfoTg = false; setTimeout(() => pwResetSheet(tg), 450); }
   acctMe(); loyFetch(true); refFetch(true); if (S.geo.consent) geoPush();
   gameFetch(true); cpnFetch(true); perksFetch(true); gFlush();
   await syncNow();
@@ -3414,7 +3425,8 @@ function storeLoad(force) {
     ((r && r.products) || []).forEach(p => { if (p && prodParse(p.id)) m[p.id] = p; });
     iap.products = Object.keys(m).length ? m : null;
     iap.err = iap.products ? '' : (r && r.message) || '';
-  }, e => { iap.products = null; iap.err = (e && e.message) || ''; }).then(() => { iap.loading = null; pwRefresh(); return iap.products; });
+    iap.unavail = !iap.products && !!(r && r.error); /* Google Play / App Store недоступен (эмулятор, нет сервисов, нет входа) */
+  }, e => { iap.products = null; iap.err = (e && e.message) || ''; iap.unavail = !!(e && e.code === 'UNAVAILABLE'); }).then(() => { iap.loading = null; pwRefresh(); return iap.products; });
   pwRefresh();
   return iap.loading;
 }
@@ -3450,8 +3462,11 @@ function storeApply(ents) {
 }
 async function storeSync(force) {
   if (!STORE || !S || iap.busy) return;
+  /* магазин недоступен — не проверять подписки (ожидаемо: без сервисов Google Play); при возврате в приложение — проверить снова */
+  if (iap.unavail && !force) { if (!iap.loading) storeLoad(true).then(() => { if (!iap.unavail) storeSync(); }); return; }
   if (force && A.sentTx) { A.sentTx = {}; acctSave(); }
-  try { const r = await STORE.currentEntitlements({lang: LANG}); storeApply(r && r.entitlements); } catch (e) { /* Play/App Store недоступен — Premium не снимаем */ }
+  try { const r = await STORE.currentEntitlements({lang: LANG}); storeApply(r && r.entitlements); }
+  catch (e) { /* Play/App Store недоступен — Premium не снимаем */ if (e && e.code === 'UNAVAILABLE') iap.unavail = true; else console.warn('[store] ' + ((e && (e.message || e.code)) || String(e))); }
 }
 /* Покупка → на сервер (когда вошли): App Store — подписанная транзакция (JWS), Google Play — purchaseToken */
 async function storeSend(ents) {
@@ -4340,11 +4355,16 @@ function pageAccount() {
   h += '<div class="card section"><p class="eyebrow">' + t('account.sync') + '</p><p class="small num" style="margin:6px 0 0;font-weight:600" data-sync-text>' + esc(syncText()) + '</p>' + (SY.notice ? '<p class="small muted" style="margin:6px 0 0">' + esc(SY.notice) + '</p>' : '') + '<p class="xsmall muted" style="margin:6px 0 0">' + t('account.syncText') + '</p><button class="btn block soft" style="margin-top:12px" data-act="acct-sync">' + ic('sync', 'sm') + t('account.syncNow') + '</button></div>';
   h += '<div class="card section"><p class="eyebrow">Premium</p><p style="margin:6px 0 0;font-weight:600">' + (isPrem() ? 'Helper Premium' : t('c.free')) + '</p><p class="small muted num" style="margin:2px 0 0">' + (isPrem() ? esc(premStatusText()) : t('account.premHint', {max: MAX_CARS})) + '</p><button class="btn block soft" style="margin-top:12px" data-act="paywall">' + (isPrem() ? t('account.planManage') : trialCta()) + '</button></div>';
   h += '<div class="card section"><p class="eyebrow">Telegram</p>' + (tg.linked
-    ? '<p class="small" style="margin:6px 0 0">' + t('account.tgLinked', {bot: TG_BOT, user: tg.username ? ' (@' + esc(tg.username) + ')' : ''}) + '</p>'
+    ? '<p class="small" style="margin:6px 0 0">' + t('account.tgLinked', {bot: TG_BOT, user: tg.username ? ' (@' + esc(tg.username) + ')' : ''}) + '</p>' +
+      '<button class="btn block soft" style="margin-top:12px" data-act="acct-tg-unlink"' + (tgOnly() ? ' disabled' : '') + '>' + ic('close', 'sm') + t('tg.unlink') + '</button>' + (tgOnly() ? '<p class="hint" style="margin:8px 0 0">' + t('tg.lastMethod') + '</p>' : '')
     : '<p class="small muted" style="margin:6px 0 0">' + t('account.tgHint', {bot: TG_BOT}) + '</p><button class="btn block soft" style="margin-top:12px" data-act="acct-tg">' + ic('send', 'sm') + t('account.tgLink') + '</button>') + '</div>';
   const row = (act, icn, tt, s) => '<button class="item" data-act="' + act + '"><span class="ic-circle">' + ic(icn, 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tt + '</span>' + (s ? '<span class="s">' + s + '</span>' : '') + '</span>' + ic('chevR', 'sm chev') + '</button>';
   const phRow = u.phone ? row('acct-phone', 'phone', t('ph.row'), esc(phShow(u.phone)) + (u.phone_verified !== false ? ' · ' + t('ph.verified') : '')) : phOn() ? row('acct-phone-add', 'phone', t('ph.add'), t('ph.addHint')) : '';
-  h += '<div class="group section">' + row('acct-name', 'user', t('acct.name'), nm ? esc(nm) : t('acct.nameAdd')) + phRow + (u.has_password === false ? (u.email ? row('acct-setpass', 'lock', t('account.setPass'), t('account.setPassHint')) : '') : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
+  /* e-mail: «Подтверждён» или «Не подтверждён · Подтвердить» (статус — только если сервер его знает) */
+  const evSt = u.email_verified === true ? ' · <span class="ev-ok">' + t('ev.ok') + '</span>' : u.email_verified === false ? ' · <span class="ev-no">' + t('ev.no') + '</span> · <span style="color:var(--teal-ink);font-weight:600">' + t('ev.do') + '</span>' : '';
+  const emRow = u.email ? (u.email_verified === false ? row('ev-open', 'send', 'E-mail', esc(u.email) + evSt) : '<div class="item"><span class="ic-circle">' + ic('send', 'sm') + '</span><span class="body"><span class="t" style="display:block">E-mail</span><span class="s" style="word-break:break-all">' + esc(u.email) + evSt + '</span></span></div>') : '';
+  h += '<div class="group section">' + row('acct-name', 'user', t('acct.name'), nm ? esc(nm) : t('acct.nameAdd')) + emRow + phRow + (u.has_password === false ? (u.email ? row('acct-setpass', 'lock', t('account.setPass'), t('account.setPassHint')) : '') : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
+  h += '<div class="card section"><label class="switch" for="set-news"><span><span style="font-weight:600;display:block">' + t('news.title') + '</span><span class="hint">' + t('news.hint') + '</span></span><input type="checkbox" id="set-news"' + (u.news ? ' checked' : '') + '></label></div>';
   h += '<div class="card section"><p class="eyebrow">' + t('account.delTitle') + '</p><p class="small muted" style="margin:6px 0 12px">' + t('account.delText') + '</p><button class="btn block danger" data-act="acct-delete">' + ic('trash', 'sm') + t('account.delete') + '</button></div>';
   return h;
 }
@@ -4379,7 +4399,7 @@ function authSheet(mode, o) {
     const bad = !!(INV && INV.check && !INV.check.valid), code = INV && INV.code && !bad ? INV.code : '', lock = !!(code && INV.check && INV.check.valid);
     const rf = needRef && !(pd && code) ? fld('au-ref', t('inv.codeLabel'), inp('au-ref', code, 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40" placeholder="HLP-XXXXXX"' + (lock ? ' readonly' : '')) +
       (lock ? '<button type="button" class="textbtn" data-act="au-ref-edit" style="align-self:flex-start;padding:2px">' + t('inv.otherCode') + '</button>' : ''), t('inv.codeHint')) : '';
-    openSheet(title, why + inviteBanner() + seg + '<form class="form" data-form="register" novalidate>' + nameFld() + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + rf + errBox('au-err') + down + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
+    openSheet(title, why + inviteBanner() + seg + '<form class="form" data-form="register" novalidate>' + nameFld() + em + fld('au-pass', t('auth.password'), inp('au-pass', '', 'type="password" autocomplete="new-password"'), t('auth.passHintReg')) + rf + newsChk('au-news') + errBox('au-err') + down + '<button class="btn block ink" type="submit">' + t('c.register') + '</button>' +
       authLegal() + '</form>' + gSlot('register', true) +
       '<div class="stack" style="margin-top:8px;align-items:center"><button class="textbtn" data-act="acct-login" data-keep="1">' + t('auth.haveAccount') + '</button></div>');
   } else {
@@ -4389,6 +4409,9 @@ function authSheet(mode, o) {
 }
 /* «Имя» — обязательно в каждой регистрации (телефон, e-mail; у Google — из профиля Google) */
 const nameFld = (v, id) => fld(id || 'au-name', t('auth.name'), inp(id || 'au-name', v != null ? v : ui.authName || '', 'autocomplete="name" autocapitalize="words" maxlength="60" placeholder="' + esc(t('auth.namePh')) + '"'));
+/* согласие на новости — всегда без галочки по умолчанию; напоминания об авто от него не зависят */
+const newsChk = (id, on) => '<label class="check" for="' + id + '"><input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '><span>' + t('news.opt') + '</span></label>';
+const newsVal = id => { const e = $('#' + id); return !!(e && e.checked); };
 const nameOk = s => { s = String(s || '').trim(); return s.length >= 2 && s.length <= 60; };
 const authLegal = () => '<p class="xsmall muted" style="margin:0">' + t('auth.legal', {terms: '<a href="' + TERMS_APP_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.termsLink') + '</a>', privacy: '<a href="' + PRIVACY_URL + '" target="_blank" rel="noopener noreferrer">' + t('auth.privacyLink') + '</a>'}) + '</p>';
 const authDownHTML = () => '<div class="card tint" id="au-down" role="alert" hidden><p class="small" style="margin:0 0 10px">' + t('api.down') + '</p><button type="button" class="btn sm ink" data-act="au-retry">' + ic('sync', 'xs') + t('c.retry') + '</button></div>';
@@ -4435,7 +4458,7 @@ function phStepHTML() {
   const P = PHS || {step: 'num'};
   if (P.step === 'code') {
     return '<p class="ph-sent" role="status">' + t(P.channel === 'telegram' ? 'ph.sentTg' : 'ph.sentSms', {phone: '<b class="num" style="white-space:nowrap">' + esc(phShow(P.phone, true)) + '</b>'}) + '</p>' +
-      '<form class="form" data-form="ph-verify" novalidate>' + (phNeedName() && P.mode !== 'register' ? '<p class="small muted" style="margin:0">' + t('ph.newAcct') + '</p>' + nameFld(P.name) : '') + fld('ph-code', t('ph.code'), inp('ph-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••"')) + errBox('au-err') + authDownHTML() +
+      '<form class="form" data-form="ph-verify" novalidate>' + (phNeedName() && P.mode !== 'register' ? '<p class="small muted" style="margin:0">' + t('ph.newAcct') + '</p>' + nameFld(P.name) + newsChk('ph-news', P.news) : '') + fld('ph-code', t('ph.code'), inp('ph-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••"')) + errBox('au-err') + authDownHTML() +
       '<button class="btn block ink" type="submit">' + t('ph.verify') + '</button></form>' +
       '<div class="ph-links"><button type="button" class="textbtn" data-act="ph-change">' + ic('edit', 'xs') + ' ' + t('ph.change') + '</button><button type="button" class="textbtn" id="ph-resend" data-act="ph-resend"></button></div>';
   }
@@ -4443,7 +4466,7 @@ function phStepHTML() {
   const ccCtl = l.length > 1 ? '<select id="ph-cc" class="input ph-cc" aria-label="' + esc(t('ph.country')) + '">' + l.map(c => '<option value="' + c + '"' + (c === cc ? ' selected' : '') + '>' + phFlag(c) + ' +' + PHC[c].dial + '</option>').join('') + '</select>'
     : '<span class="ph-cc1">' + phFlag(cc) + ' +' + PHC[cc].dial + '</span><input type="hidden" id="ph-cc" value="' + cc + '">';
   return '<form class="form" data-form="ph-start" novalidate>' + (P.mode === 'register' ? nameFld(P.name) : '') + '<div class="field"><label for="ph-num">' + t('ph.label') + '</label><div class="ph-row">' + ccCtl +
-    '<input id="ph-num" class="input" type="tel" inputmode="tel" autocomplete="tel" value="' + esc(phFmt(cc, nat)) + '" placeholder="' + esc(PHC[cc].ex) + '"></div><span class="hint">' + t(P.mode === 'me' ? 'ph.hintMe' : 'ph.hint') + '</span></div>' +
+    '<input id="ph-num" class="input" type="tel" inputmode="tel" autocomplete="tel" value="' + esc(phFmt(cc, nat)) + '" placeholder="' + esc(PHC[cc].ex) + '"></div><span class="hint">' + t(P.mode === 'me' ? 'ph.hintMe' : 'ph.hint') + '</span></div>' + (P.mode === 'register' ? newsChk('ph-news', P.news) : '') +
     errBox('au-err') + authDownHTML() + '<button class="btn block ink" type="submit">' + t('ph.get') + '</button>' + (P.mode === 'register' ? authLegal() : '') + '</form>';
 }
 /* имя нужно, если по коду создастся аккаунт: регистрация или вход с новым номером */
@@ -4485,6 +4508,7 @@ async function phStart(f) {
   if (!PHS) return;
   if (f && $('#ph-num')) { const cc = val('ph-cc') || phDefaultCc(); PHS.cc = cc; PHS.nat = phNat(cc, val('ph-num')); }
   if (f && $('#au-name')) PHS.name = val('au-name').trim();
+  if ($('#ph-news')) PHS.news = newsVal('ph-news');
   if (PHS.mode === 'register' && !nameOk(PHS.name)) { const i = $('#au-name'); if (i) try { i.focus(); } catch (x) {} return showErr('au-err', t('auth.nameBad')); }
   const cc = PHS.cc || phDefaultCc(), nat = PHS.nat || '';
   if (!phValid(cc, nat)) return showErr('au-err', t('ph.badNum', {example: PHC[cc].ex}));
@@ -4516,10 +4540,11 @@ async function phVerify(f) {
   if (!PHS || !PHS.phone) return;
   const code = val('ph-code').replace(/\D/g, '');
   if ($('#au-name')) PHS.name = val('au-name').trim();
+  if ($('#ph-news')) PHS.news = newsVal('ph-news');
   if (phNeedName() && !nameOk(PHS.name)) { const i = $('#au-name'); if (i) try { i.focus(); } catch (x) {} return showErr('au-err', t('auth.nameBad')); }
   if (code.length !== 6) return showErr('au-err', t('ph.code6'));
   const me = PHS.mode === 'me', body = {phone: PHS.phone, code};
-  if (!me) { body.purpose = 'auto'; body.lang = LANG; body.device = devName(); if (PHS.ref) body.ref = PHS.ref; if (PHS.name) body.name = PHS.name; }
+  if (!me) { body.purpose = 'auto'; body.lang = LANG; body.device = devName(); if (PHS.ref) body.ref = PHS.ref; if (PHS.name) body.name = PHS.name; if (phNeedName()) body.news = !!PHS.news; }
   const done = formBusy(f, t('ph.verifying'));
   authDown(false);
   let d;
@@ -4559,12 +4584,93 @@ function phMeSheet() {
   openSheet(t(A.user && A.user.phone ? 'ph.changeRow' : 'ph.add'), '<div id="ph-box">' + phStepHTML() + '</div>');
   phMount();
 }
+/* Telegram — единственный способ входа (нет e-mail с паролем, подтверждённого телефона, Google): отвязать нельзя */
+const tgOnly = () => { const u = A.user || {}; if (ui.tgLast === acctWho()) return true; return !u.email && !(u.phone && u.phone_verified !== false) && !(u.google || u.google_linked || u.has_google); };
 const phLast = () => { const u = A.user || {}; return !u.email && !u.google && !u.google_linked && !u.has_google; }; /* телефон — единственный способ входа */
 function phAcctSheet() {
   const u = A.user || {}, last = phLast();
   openSheet(t('ph.row'), '<p style="margin:0 0 4px;font-weight:600;font-size:18px" class="num">' + esc(phShow(u.phone)) + '</p><p class="small muted" style="margin:0 0 16px">' + (u.phone_verified !== false ? t('ph.verified') : '') + '</p>' +
     '<div class="stack"><button class="btn block soft" data-act="acct-phone-add">' + ic('edit', 'sm') + t('ph.changeRow') + '</button><button class="btn block danger" data-act="acct-phone-del"' + (last ? ' disabled' : '') + '>' + ic('trash', 'sm') + t('ph.remove') + '</button>' +
     (last ? '<p class="hint" style="margin:0">' + t('ph.lastMethod') + '</p>' : '') + '</div>');
+}
+/* ===================== Подтверждение e-mail кодом из письма =====================
+   POST /v1/me/email/verify/start → {ttl, resend_in} (503 mail_disabled, 429 retry_after, 400 no_email);
+   POST /v1/me/email/verify {code} → {email_verified}. После регистрации по e-mail — мягкая карточка на главной (скрывается). */
+const K_EVD = 'helper.evhide.v1';
+let EVS = null; /* {sent, resendAt, busy} */
+const evNeed = () => logged() && !!(A.user && A.user.email) && A.user.email_verified === false;
+function evCard() {
+  if (!evNeed() || jget(K_EVD) === A.user.email) return '';
+  return '<div class="card tint ev-card" style="margin-top:14px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('send', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('ev.cardT') + '</p><p class="small muted" style="margin:2px 0 0">' + t('ev.cardS', {email: '<span style="overflow-wrap:anywhere">' + esc(A.user.email) + '</span>'}) + '</p>' +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn sm ink" data-act="ev-open">' + t('ev.enter') + '</button></div></div><button class="iconbtn" data-act="ev-hide" aria-label="' + esc(t('ev.hide')) + '" style="margin:-6px -6px 0 0">' + ic('close', 'sm') + '</button></div></div>';
+}
+function evBoxHTML(msg) {
+  if (msg) return '<p class="muted" style="margin:0 0 16px;line-height:1.5">' + msg + '</p><button class="btn block soft" data-act="sheet-close">' + t('c.close') + '</button>';
+  return '<p class="ph-sent" role="status">' + t('ev.sent', {email: '<b style="overflow-wrap:anywhere">' + esc(A.user.email) + '</b>'}) + '</p>' +
+    '<form class="form" data-form="ev-verify" novalidate>' + fld('ev-code', t('ph.code'), inp('ev-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••"')) + errBox('ev-err') +
+    '<button class="btn block ink" type="submit">' + t('ph.verify') + '</button></form>' +
+    '<div class="ph-links"><span class="small muted" style="padding:8px 0">' + t('ev.spam') + '</span><button type="button" class="textbtn" id="ev-resend" data-act="ev-resend"></button></div>';
+}
+function evResendPaint() {
+  const b = $('#ev-resend'); if (!b || !EVS) return;
+  const left = (EVS.resendAt || 0) - Date.now();
+  b.disabled = left > 0; b.textContent = left > 0 ? t('ph.resendIn', {time: mmssLeft(left)}) : t('ev.resend');
+}
+function evPaint(msg) {
+  const box = $('#ev-box'); if (!box) return;
+  setHTML(box, evBoxHTML(msg)); evResendPaint();
+  const i = $('#ev-code'); if (i) setTimeout(() => { try { i.focus({preventScroll: true}); } catch (e) {} }, 80);
+}
+/* лист кода: письмо уже ушло (регистрация, недавний запрос) — сразу поле кода, иначе сначала отправить */
+function evSheet() {
+  if (!evNeed()) return;
+  const fresh = EVS && EVS.sent && Date.now() - EVS.sent < 14 * 60000;
+  openSheet(t('ev.title'), '<div id="ev-box">' + (fresh ? evBoxHTML() : '<p class="muted" style="margin:0">' + t('ev.sending') + '</p>') + '</div>');
+  if (fresh) evPaint(); else evStart(false);
+}
+async function evStart(again) {
+  let d;
+  try { d = await api('/v1/me/email/verify/start', {body: {}}); }
+  catch (e) {
+    if (e.code === 'rate_limited') { const s = +(e.data && e.data.retry_after) || 60; EVS = Object.assign({sent: Date.now()}, EVS || {}, {resendAt: Date.now() + s * 1000}); evPaint(); return showErr('ev-err', e.message); }
+    if (e.code === 'already_verified') { A.user = Object.assign({}, A.user || {}, {email_verified: true}); acctSave(); EVS = null; closeSheet(); render(); return toast(t('ev.done')); }
+    if (e.code === 'mail_disabled' || e.code === 'mail_failed') return again && $('#ev-code') ? showErr('ev-err', t('ev.mailOff')) : evPaint(t('ev.mailOff'));
+    if (e.code === 'no_email') return evPaint(e.message);
+    if (srvDown(e)) return again ? showErr('ev-err', t('api.down')) : evPaint(t('api.down'));
+    return again ? showErr('ev-err', e.message) : evPaint(esc(e.message));
+  }
+  EVS = {sent: Date.now(), resendAt: Date.now() + (+d.resend_in || 60) * 1000};
+  if (again && $('#ev-code')) { evResendPaint(); toast(t('ev.resent')); } else evPaint();
+}
+async function evVerify(f) {
+  const code = val('ev-code').replace(/\D/g, '');
+  if (code.length !== 6) return showErr('ev-err', t('ph.code6'));
+  const done = formBusy(f, t('ph.verifying'));
+  let d;
+  try { d = await api('/v1/me/email/verify', {body: {code}}); }
+  catch (e) {
+    done();
+    const i = $('#ev-code'); if (i) { i.value = ''; try { i.focus({preventScroll: true}); } catch (x) {} }
+    if (e.code === 'code_invalid') return showErr('ev-err', e.data && e.data.attempts_left != null ? t('ph.wrong', {n: fN(+e.data.attempts_left)}) : e.message);
+    if (e.code === 'code_expired' || e.code === 'too_many_attempts') { if (EVS) EVS.resendAt = 0; evResendPaint(); return showErr('ev-err', t(e.code === 'code_expired' ? 'ph.expired' : 'ph.tooMany')); }
+    if (srvDown(e)) return showErr('ev-err', t('api.down'));
+    return showErr('ev-err', e.message);
+  }
+  done();
+  A.user = Object.assign({}, A.user || {}, d && d.user ? d.user : {}, {email_verified: true}); acctSave();
+  EVS = null; closeSheet(); render(); toast(t('ev.done'));
+}
+/* вход через Google удалил старый пароль (e-mail не был подтверждён) — объяснить, как входить дальше */
+function pwResetSheet(tg) {
+  openSheet(t('pwr.title'), '<div class="row" style="gap:12px;align-items:flex-start;margin-bottom:16px"><span class="ic-circle">' + ic('lock', 'sm') + '</span><p style="margin:0;line-height:1.55">' + t(tg ? 'pwr.textTg' : 'pwr.text') + '</p></div><button class="btn block ink" data-act="sheet-close">' + t('pwr.ok') + '</button>');
+}
+/* «Новости и предложения» — PATCH /v1/me {news}; напоминания об авто не зависят */
+async function newsSave(el) {
+  const on = !!el.checked;
+  el.disabled = true;
+  try { const d = await api('/v1/me', {method: 'PATCH', body: {news: on}}); A.user = Object.assign({}, A.user || {}, d && d.user ? d.user : {}, {news: on}); acctSave(); toast(t(on ? 'news.on' : 'news.off')); }
+  catch (e) { el.checked = !on; toast(e.message); }
+  el.disabled = false;
 }
 async function authSubmit(f, kind) {
   const email = val('au-email').trim().toLowerCase(), pw = val('au-pass'), name = val('au-name').trim();
@@ -4578,7 +4684,7 @@ async function authSubmit(f, kind) {
   if (kind === 'register' && closedMode() && !ref) return showErr('au-err', t('inv.codeRequired'));
   const done = formBusy(f, t(kind === 'register' ? 'busy.register' : 'busy.login'));
   let d;
-  const body = kind === 'register' ? {email, password: pw, name, device: devName(), language: LANG} : {email, password: pw, device: devName()};
+  const body = kind === 'register' ? {email, password: pw, name, news: newsVal('au-news'), device: devName(), language: LANG} : {email, password: pw, device: devName()};
   if (ref) body.ref = ref;
   authDown(false);
   try { d = await api('/v1/auth/' + kind, {body, auth: false}); }
@@ -4601,7 +4707,7 @@ async function authSubmit(f, kind) {
     return showErr('au-err', e.code === 'email_taken' ? e.message + ' ' + t('auth.takenHint') : e.message);
   }
   done();
-  if (kind === 'register') { ui.regName = name; inviteClear(); statusLoad(true); }
+  if (kind === 'register') { ui.regName = name; inviteClear(); statusLoad(true); if (d.email_verification_sent) EVS = {sent: Date.now(), resendAt: Date.now() + 60000}; }
   await afterAuth(d, kind);
 }
 /* нет связи с сервером Helper: нет сети, нет адреса API, туннель/прокси отвечает 5xx */
@@ -4737,6 +4843,7 @@ async function gAuth(ref, f) {
   if (code) body.ref = code;
   const nm = ($('#gr-name') && val('gr-name').trim()) || ($('#au-name') && val('au-name').trim()) || gJwtName(gCred.cred);
   if (nameOk(nm)) body.name = nm;
+  if ($('#gr-news') || $('#au-news')) body.news = newsVal('gr-news') || newsVal('au-news');
   $$('.g-err').forEach(x => { x.hidden = true; });
   const slots = $$('.gslot');
   slots.forEach(x => x.classList.add('busy'));
@@ -4761,6 +4868,7 @@ async function gAuth(ref, f) {
   gCred = null;
   ui.regName = body.name || '';
   if (d.created) { inviteClear(); statusLoad(true); }
+  if (d.password_reset) { ui.pwInfo = true; ui.pwInfoTg = !!d.telegram_unlinked; } /* у аккаунта с неподтверждённым e-mail старый пароль удалён, другие сеансы закрыты */
   await afterAuth(d, d.created ? 'register' : 'login');
 }
 /* имя из удостоверения Google (JWT, поле name) — подставить в «Имя» */
@@ -4771,7 +4879,7 @@ function gInviteSheet(err) {
   const bad = !!(INV && INV.check && !INV.check.valid), code = INV && INV.code && !bad ? INV.code : '';
   const nm = ui.authName || (gCred ? gJwtName(gCred.cred) : '');
   openSheet(t('inv.codeLabel'), '<p class="muted" style="margin:0 0 14px;line-height:1.5">' + t('auth.gInviteS') + '</p>' + (INV && INV.code ? inviteBanner() : closedCardText()) +
-    '<form class="form" data-form="g-ref" novalidate>' + nameFld(nm, 'gr-name') + fld('gr-code', t('inv.codeLabel'), inp('gr-code', code, 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40" placeholder="HLP-XXXXXX"'), t('inv.codeHint')) + errBox('gr-err') +
+    '<form class="form" data-form="g-ref" novalidate>' + nameFld(nm, 'gr-name') + newsChk('gr-news') + fld('gr-code', t('inv.codeLabel'), inp('gr-code', code, 'autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="40" placeholder="HLP-XXXXXX"'), t('inv.codeHint')) + errBox('gr-err') +
     '<button class="btn block ink" type="submit">' + t('auth.gContinue') + '</button></form>');
   if (err) showErr('gr-err', err);
   setTimeout(() => { const i = $('#gr-code'); if (i && !i.value) try { i.focus(); } catch (e) {} }, 80);
@@ -6419,7 +6527,8 @@ function webInit() {
   let lp = null;
   document.addEventListener('pointerdown', e => { clearTimeout(lp); const tt = e.target && e.target.closest && e.target.closest('#app-ver'); if (tt) lp = setTimeout(devApiPrompt, 1500); });
   ['pointerup', 'pointercancel'].forEach(n => document.addEventListener(n, () => clearTimeout(lp)));
-  if (IN_TG && !CAP && !(window.Telegram && window.Telegram.WebApp)) { try { const s = document.createElement('script'); s.src = 'https://telegram.org/js/telegram-web-app.js'; s.async = true; document.head.appendChild(s); } catch (e) {} }
+  if (IN_TG && !CAP && !(window.Telegram && window.Telegram.WebApp)) { try { const s = document.createElement('script'); s.src = 'https://telegram.org/js/telegram-web-app.js'; s.async = true; s.onload = tgThemeHook; document.head.appendChild(s); } catch (e) {} }
+  else tgThemeHook();
 }
 function corpSheet() {
   openSheet(t('plan.corp'), '<p class="muted" style="margin:0 0 14px">' + t('corp.lead') + '</p>' +
@@ -6588,6 +6697,7 @@ Object.assign(FORMS, LOYAL_FORMS);
 Object.assign(FORMS, {
   login(f) { return authSubmit(f, 'login'); },
   'ph-start'(f) { return phStart(f); },
+  'ev-verify'(f) { return evVerify(f); },
   async 'acct-name'(f) {
     const name = val('nm-name').trim();
     if (!nameOk(name)) return showErr('nm-err', t('auth.nameBad'));
@@ -6806,6 +6916,9 @@ Object.assign(ACT, {
   'ph-change': () => { if (!PHS) return; phAbort(); PHS.step = 'num'; phRender(); },
   'ph-resend': () => { if (PHS && Date.now() >= (PHS.resendAt || 0)) phStart(null); },
   'acct-phone': () => phAcctSheet(),
+  'ev-open': () => evSheet(),
+  'ev-resend': () => { if (EVS && Date.now() < (EVS.resendAt || 0)) return; evStart(true); },
+  'ev-hide': () => { if (A.user && A.user.email) jset(K_EVD, A.user.email); const c = $('.ev-card'); if (c) c.remove(); toast(t('ev.hidden')); },
   'acct-name': () => { const u = A.user || {}; openSheet(t('acct.name'), '<form class="form" data-form="acct-name" novalidate>' + nameFld(u.display_name || '', 'nm-name') + '<p class="hint" style="margin:-6px 0 0">' + t('acct.nameHint') + '</p>' + errBox('nm-err') + '<button class="btn block ink" type="submit">' + t('c.save') + '</button></form>'); setTimeout(() => { const i = $('#nm-name'); if (i) try { i.focus(); } catch (e) {} }, 80); },
   'acct-phone-add': () => { PHS = null; phMeSheet(); },
   'acct-phone-del': () => confirmSheet({title: t('ph.removeQ', {phone: esc(phShow(A.user && A.user.phone))}), text: t('ph.removeText'), ok: t('ph.remove'), onOk: async () => {
@@ -6826,6 +6939,13 @@ Object.assign(ACT, {
     });
   },
   'acct-tg': () => acctTg(),
+  'acct-tg-unlink': () => confirmSheet({title: t('tg.unlinkQ'), text: t('tg.unlinkText'), ok: t('tg.unlink'), onOk: async () => {
+    let d;
+    try { d = await api('/v1/me/telegram', {method: 'DELETE'}); }
+    catch (e) { if (e.code === 'last_login_method') { ui.tgLast = acctWho(); render(); return toast(t('tg.lastMethod')); } return toast(e.message); }
+    if (d && d.user) A.user = d.user; else if (A.user) A.user = Object.assign({}, A.user, {telegram: {linked: false}});
+    acctSave(); render(); toast(t('tg.unlinked'));
+  }}),
   'acct-pass': () => passSheet(),
   'acct-setpass': () => { ui.authEmail = acctEmail(); forgotSheet(); },
   'acct-export': () => acctExport(),
@@ -6863,6 +6983,7 @@ function onInput(e) {
   const tt = e.target, id = tt.id;
   if (id === 'kb-search') { ui.kbq = tt.value; const r = $('#kb-results'); if (r) setHTML(r, guideResults()); return; }
   if (id === 'rec-parts' || id === 'rec-labor' || id === 'fuel-liters' || id === 'fuel-price' || id === 'doc-cost') { fxFormUpd(); return; }
+  if (id === 'ev-code') { const v = tt.value.replace(/\D/g, '').slice(0, 6); if (tt.value !== v) tt.value = v; const e0 = $('#ev-err'); if (e0) e0.hidden = true; if (v.length === 6 && !(EVS && EVS.busy)) { EVS = EVS || {}; EVS.busy = true; Promise.resolve(evVerify(tt.closest('form'))).finally(() => { if (EVS) EVS.busy = false; }); } return; }
   if (id === 'au-name') { ui.authName = tt.value; if (PHS) PHS.name = tt.value.trim(); }
   if (id === 'ph-num') { const cc = val('ph-cc') || phDefaultCc(), v = phFmt(cc, phNat(cc, tt.value)); if (tt.value !== v) tt.value = v; }
   if (id === 'ph-code') { const v = tt.value.replace(/\D/g, '').slice(0, 6); if (tt.value !== v) tt.value = v; const f0 = tt.closest('form'), e0 = f0 && f0.querySelector('.err'); if (e0) e0.hidden = true; if (v.length === 6 && PHS && !PHS.busy) { const f = f0; PHS.busy = true; Promise.resolve(FORMS['ph-verify'](f)).finally(() => { if (PHS) PHS.busy = false; }); } return; }
@@ -6871,6 +6992,7 @@ function onInput(e) {
 }
 function onChange(e) {
   const tt = e.target, id = tt.id;
+  if (id === 'set-news') { newsSave(tt); return; }
   if (id === 'rec-cat') { $('#rec-x-tires').hidden = tt.value !== 'tires'; $('#rec-x-wheels').hidden = tt.value !== 'wheels'; return; }
   if (id === 'sae-w' || id === 'sae-h') { ui.saeW = val('sae-w'); ui.saeH = val('sae-h'); setHTML($('#sae-out'), saeOut()); return; }
   if (tt.dataset && tt.dataset.fx) { fxFormUpd(); return; }
@@ -6958,7 +7080,7 @@ function nativeInit() {
   try { NP.LocalNotifications && NP.LocalNotifications.addListener('localNotificationActionPerformed', ev => { const x = (ev && ev.notification && ev.notification.extra) || {}; if (x.offer && !ui.onb) { setTab('home'); setTimeout(() => offerSheet(x.offer), 300); return; } if (x.tab) setTab(x.tab); }); } catch (e) {}
   try { NP.App && NP.App.addListener('appStateChange', st => { APP_BG = !(st && st.isActive); if (st && st.isActive) { if (!ui.onb) render(); nativeSchedule(); storeSync(); onResume(); offResume(); setTimeout(celPump, 600); } }); } catch (e) {}
   if (IS_AND) { try { NP.App && NP.App.addListener('backButton', onBack); } catch (e) {} }
-  if (STORE) { try { STORE.addListener('entitlementsChanged', d => storeApply(d && d.entitlements)); } catch (e) {} storeSync(); storeLoad(); }
+  if (STORE) { try { Promise.resolve(STORE.addListener('entitlementsChanged', d => storeApply(d && d.entitlements))).catch(() => {}); } catch (e) {} storeLoad().then(() => storeSync()); }
   /* внешние ссылки https — в системном браузере (Safari / Chrome) */
   document.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a[href^="http"]');
@@ -6993,20 +7115,47 @@ const THM_CK = '<svg class="ico sm ck" viewBox="0 0 24 24" aria-hidden="true"><p
 let themeMem = null, themeSig = '', thmOpen = null;
 const themeGet = () => { let v = themeMem; try { v = localStorage.getItem(THEME_KEY) || v; } catch (e) {} return THEMES.indexOf(v) >= 0 ? v : 'auto'; };
 const osDark = () => !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
-const themeDark = () => { const v = themeGet(); return v === 'dark' || (v === 'auto' && osDark()); };
+/* Telegram Mini App: «Системная» — тема Telegram (WebApp.colorScheme; до загрузки SDK — по tgWebAppThemeParams.bg_color) */
+function tgScheme() {
+  if (!IN_TG) return '';
+  try {
+    const W = window.Telegram && window.Telegram.WebApp;
+    if (W && (W.colorScheme === 'dark' || W.colorScheme === 'light')) { sessionStorage.setItem('hlp_tg_scheme', W.colorScheme); return W.colorScheme; }
+    const s = sessionStorage.getItem('hlp_tg_scheme'); if (s === 'dark' || s === 'light') return s;
+  } catch (e) {}
+  return '';
+}
+const themeDark = () => { const v = themeGet(), tg = v === 'auto' ? tgScheme() : ''; return v === 'dark' || (v === 'auto' && (tg ? tg === 'dark' : osDark())); };
+function tgThemeHook() {
+  const W = window.Telegram && window.Telegram.WebApp;
+  if (!IN_TG || !W || W.__hlpTheme) return;
+  W.__hlpTheme = true;
+  try { W.onEvent('themeChanged', () => { themeApply(); gRedraw(); }); } catch (e) {}
+  themeApply();
+}
 /* data-theme на <html>, цвет строки состояния браузера (theme-color) и нативного StatusBar (Capacitor, если плагин есть) */
 function themeApply() {
-  const v = themeGet(), dark = themeDark(), r = document.documentElement, sig = v + ':' + dark;
-  if (v === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', v);
+  const v = themeGet(), dark = themeDark(), r = document.documentElement, tg = v === 'auto' ? tgScheme() : '', sig = v + ':' + dark + ':' + tg;
+  if (v === 'auto' && !tg) r.removeAttribute('data-theme'); else r.setAttribute('data-theme', tg || v);
+  try { const W = IN_TG && window.Telegram && window.Telegram.WebApp; if (W) { const c = dark ? THEME_BG.dark : THEME_BG.light; if (W.setHeaderColor) W.setHeaderColor(c); if (W.setBackgroundColor) W.setBackgroundColor(c); } } catch (e) {}
   if (sig === themeSig) return;
   themeSig = sig;
-  $$('meta[name="theme-color"]').forEach(m => { const md = m.getAttribute('media') || ''; m.setAttribute('content', v === 'auto' ? (/dark/.test(md) ? THEME_BG.dark : THEME_BG.light) : THEME_BG[v]); });
+  $$('meta[name="theme-color"]').forEach(m => { const md = m.getAttribute('media') || ''; m.setAttribute('content', v === 'auto' && !tg ? (/dark/.test(md) ? THEME_BG.dark : THEME_BG.light) : THEME_BG[dark ? 'dark' : 'light']); });
   try {
     const SB = CAP && NP.StatusBar;
     if (SB && SB.setStyle) {
       Promise.resolve(SB.setStyle({style: dark ? 'DARK' : 'LIGHT'})).catch(() => {});
       if (IS_AND && SB.setBackgroundColor) Promise.resolve(SB.setBackgroundColor({color: dark ? THEME_BG.dark : THEME_BG.light})).catch(() => {});
     }
+  } catch (e) {}
+  sysBars(dark);
+}
+/* Android 15+ (targetSdk 35+) не красит полосу статуса через StatusBar — нативный плагин HelperSystemBars:
+   цвет = фон страницы текущей темы (как в <meta name="theme-color">), dark — светлые значки */
+function sysBars(dark) {
+  try {
+    const HB = CAP && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HelperSystemBars;
+    if (HB && typeof HB.set === 'function') Promise.resolve(HB.set({color: dark ? THEME_BG.dark : THEME_BG.light, dark: !!dark})).catch(() => {});
   } catch (e) {}
 }
 /* кнопки Google рисует GIS в своих iframe — после смены темы нарисовать заново */
