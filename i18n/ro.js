@@ -269,6 +269,7 @@
     "home.nextSvc": "Proxima revizie",
     "home.markDone": "Marcați revizia",
     "home.odoBtn": "Actualizați km",
+    "home.fuelBtn": "Alimentare auto",
     "home.odoCheckT": "Să verificăm kilometrajul",
     "home.odoCheckS": "Ultima actualizare — {when}. Kilometraj exact înseamnă mementouri exacte.",
     "home.odoCheckSBonus": "Ultima actualizare — {when}. Kilometraj exact înseamnă mementouri exacte, iar pentru actualizare primiți +3 km Helper.",

@@ -2018,7 +2018,7 @@ function pageHome() {
       '<div class="g-top"><div class="g-eyebrow">' + t('home.nextSvc') + '</div><div class="g-label">' + esc(label) + '</div></div>' +
       '<div class="g-bot"><div class="g-num">' + big + '</div><div class="g-unit">' + unit + '</div></div></div>' +
       '<div class="hero-meta"><span class="status ' + stCls(x.status) + '">' + ST_LABEL[x.status] + '</span><span class="small muted num">' + meta.join(' · ') + '</span></div>' +
-      '<div class="hero-actions"><button class="btn" data-act="svc-done" data-cat="' + x.item.cats[0] + '">' + ic('check', 'sm') + t('home.markDone') + '</button><button class="btn soft" data-act="odo">' + ic('gauge', 'sm') + t('home.odoBtn') + '</button></div></section>';
+      '<div class="hero-actions"><button class="btn" data-act="svc-done" data-cat="' + x.item.cats[0] + '">' + ic('check', 'sm') + t('home.markDone') + '</button><button class="btn soft" data-act="fuel-new">' + ic('pump', 'sm') + t('home.fuelBtn') + '</button></div></section>'; /* пробег обновляется в карточке «Пробег» ниже */
   }
   if (stale) {
     h += '<div class="card tint section" style="margin-top:20px"><div class="remind"><span class="ic-circle ink">' + ic('gauge', 'sm') + '</span><div style="flex:1"><p style="margin:0;font-weight:600">' + t('home.odoCheckT') + '</p><p class="small muted" style="margin:2px 0 12px">' + t(odoBonusIn() ? 'home.odoCheckS' : 'home.odoCheckSBonus', {when: relDays(-staleDays)}) + '</p>' +

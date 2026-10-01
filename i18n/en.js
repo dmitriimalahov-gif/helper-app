@@ -264,6 +264,7 @@
     "home.nextSvc": "Next service",
     "home.markDone": "Log service",
     "home.odoBtn": "Update mileage",
+    "home.fuelBtn": "Refuel",
     "home.odoCheckT": "Let’s check your mileage",
     "home.odoCheckS": "Last updated {when}. Accurate mileage means accurate reminders.",
     "home.odoCheckSBonus": "Last updated {when}. Accurate mileage means accurate reminders — and updating earns you +3 Helper km.",
