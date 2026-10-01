@@ -210,6 +210,17 @@ h1,h2,h3{text-wrap:balance}
 .seg button{height:36px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink-2);padding:0 10px;white-space:nowrap}
 .seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .seg.inline{display:inline-grid}
+.seg button .ico{display:inline-block;vertical-align:-4px;margin-right:6px}
+/* вход по телефону */
+.ph-row{display:flex;gap:8px}
+.ph-row select.input{flex:0 0 auto;width:auto;min-width:112px;padding-right:34px}
+.ph-cc1{flex:none;height:48px;padding:0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:inline-flex;align-items:center;font-weight:600}
+#pp-num{flex:1;min-width:0;font-variant-numeric:tabular-nums}
+#pp-code{font-size:24px;letter-spacing:.42em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .42em)}
+.ph-sent{margin:0 0 12px;padding:12px 14px;border-radius:var(--r-md);background:var(--teal-3);font-size:14px;line-height:1.45}
+.ph-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px}
+.ph-links .textbtn{display:inline-flex;align-items:center;gap:6px}
+.ph-links .textbtn:disabled{color:var(--ink-3);cursor:default}
 
 /* ---------- cards / lists ---------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;position:relative}
@@ -291,6 +302,15 @@ textarea.input{height:auto;min-height:96px;padding:12px 14px;line-height:1.45;re
 .input-unit{position:relative}
 .input-unit .u{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--ink-2);font-weight:600;font-size:14px;pointer-events:none}
 .input-unit .input{padding-right:64px}
+/* цена плюшки: − [ 25 км ] + */
+.pts-step{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.pts-step .input-unit{flex:1;max-width:220px}
+.pts-step .input{text-align:center;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;padding-left:64px}
+.pts-step input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.pts-step input[type=number]::-webkit-inner-spin-button,.pts-step input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.pts-step .iconbtn{width:48px;height:48px;border:1px solid var(--line)}
+.pts-step .iconbtn:disabled{opacity:.4;cursor:default}
+.input[aria-invalid="true"]{border-color:var(--bad)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:420px){.grid2.stack-sm{grid-template-columns:1fr}}
 .hint{font-size:12px;color:var(--ink-3);line-height:1.45}
@@ -1623,6 +1643,30 @@ Object.assign(TX, {
   'li.note.bot': ['Telegram-боте', 'botul Telegram', 'Telegram bot'],
   'li.busy': ['Входим…', 'Se conectează…', 'Signing in…'],
   'li.done': ['Вы вошли: {email}', 'Ați intrat: {email}', 'Signed in: {email}'],
+  'pa.tab': ['Телефон', 'Telefon', 'Phone'],
+  'pa.tabReg': ['По телефону', 'Prin telefon', 'By phone'],
+  'pa.via': ['Способ входа', 'Metoda de autentificare', 'Sign-in method'],
+  'pa.label': ['Номер телефона', 'Numărul de telefon', 'Phone number'],
+  'pa.country': ['Страна', 'Țara', 'Country'],
+  'pa.hint': ['Пришлём 6-значный код в Telegram или по SMS', 'Vă trimitem un cod din 6 cifre în Telegram sau prin SMS', 'We’ll send a 6-digit code via Telegram or SMS'],
+  'pa.get': ['Получить код', 'Primiți codul', 'Get code'],
+  'pa.sending': ['Отправляем код…', 'Trimitem codul…', 'Sending the code…'],
+  'pa.sentSms': ['Код отправлен на {phone} по SMS', 'Codul a fost trimis la {phone} prin SMS', 'Code sent to {phone} by SMS'],
+  'pa.sentTg': ['Код отправлен на {phone} в Telegram', 'Codul a fost trimis la {phone} în Telegram', 'Code sent to {phone} in Telegram'],
+  'pa.code': ['Код подтверждения', 'Codul de confirmare', 'Confirmation code'],
+  'pa.code6': ['Введите 6-значный код', 'Introduceți codul din 6 cifre', 'Enter the 6-digit code'],
+  'pa.verify': ['Подтвердить', 'Confirmați', 'Confirm'],
+  'pa.verifying': ['Проверяем…', 'Verificăm…', 'Checking…'],
+  'pa.change': ['Изменить номер', 'Schimbați numărul', 'Change number'],
+  'pa.resend': ['Отправить код снова', 'Trimiteți codul din nou', 'Send the code again'],
+  'pa.resendIn': ['Отправить снова через {time}', 'Retrimitere peste {time}', 'Resend in {time}'],
+  'pa.badNum': ['Проверьте номер — например, {example}', 'Verificați numărul — de exemplu, {example}', 'Check the number — for example, {example}'],
+  'pa.wrong': ['Неверный код. Осталось попыток: {n}', 'Cod greșit. Încercări rămase: {n}', 'Wrong code. Attempts left: {n}'],
+  'pa.expired': ['Код истёк — отправьте новый', 'Codul a expirat — trimiteți unul nou', 'The code has expired — send a new one'],
+  'pa.tooMany': ['Слишком много попыток — запросите новый код', 'Prea multe încercări — cereți un cod nou', 'Too many attempts — request a new code'],
+  'pa.notFound': ['Номер не найден — зарегистрируйте компанию', 'Numărul nu a fost găsit — înregistrați compania', 'Number not found — register your business'],
+  'pa.ok': ['Номер подтверждён: {phone}', 'Numărul a fost confirmat: {phone}', 'Number confirmed: {phone}'],
+  'pa.useEmail': ['Не приходит код? Войдите по e-mail.', 'Nu vine codul? Intrați cu e-mailul.', 'No code? Sign in with e-mail.'],
   'li.or': ['или', 'sau', 'or'],
   'g.bad': ['Не удалось войти через Google. Попробуйте ещё раз или войдите по e-mail.', 'Autentificarea cu Google nu a reușit. Încercați din nou sau intrați cu e-mailul.', 'Couldn’t sign in with Google. Try again or sign in with your e-mail.'],
   'g.unverified': ['Почта в аккаунте Google не подтверждена. Подтвердите её в Google или войдите по e-mail и паролю.', 'Adresa de e-mail din contul Google nu este confirmată. Confirmați-o în Google sau intrați cu e-mail și parolă.', 'The e-mail in your Google account isn’t verified. Verify it in Google or sign in with e-mail and password.'],
@@ -1747,6 +1791,10 @@ Object.assign(TX, {
   'reg.2.other': ['Использовать другой аккаунт', 'Folosește alt cont', 'Use another account'],
   'f.email.login': ['E-mail для входа', 'E-mail pentru autentificare', 'Sign-in e-mail'],
   'reg.2.pass': ['Не короче 8 символов. Простые пароли не подойдут.', 'Cel puțin 8 caractere. Parolele simple nu sunt acceptate.', 'At least 8 characters. Simple passwords won’t be accepted.'],
+  'rg.name': ['Имя', 'Numele', 'Name'],
+  'rg.name.hint': ['Так к вам будут обращаться в Helper — это и контактное лицо компании', 'Așa vă vom adresa în Helper — este și persoana de contact a companiei', 'How Helper will address you — also the company’s contact person'],
+  'v.rgname': ['Укажите имя — от 2 до 60 символов', 'Indicați numele — între 2 și 60 de caractere', 'Enter a name — 2 to 60 characters'],
+  'v.phoneAcct': ['Подтвердите номер телефона кодом из SMS или Telegram', 'Confirmați numărul de telefon cu codul din SMS sau Telegram', 'Confirm the phone number with the code from SMS or Telegram'],
   'v.contact': ['Укажите контактное лицо', 'Indicați persoana de contact', 'Enter the contact person'],
   'reg.3.h': ['Где вас найти', 'Unde vă găsesc clienții', 'Where to find you'],
   'reg.3.p': ['Точка — место, где клиенты отмечают визиты и получают плюшки и куда ведут ваши акции. Позже можно добавить ещё точки.', 'Locația este locul unde clienții își înregistrează vizitele și primesc beneficii și unde îi conduc campaniile dvs. Ulterior puteți adăuga și alte locații.', 'A location is where customers record visits and get perks, and where your campaigns lead. You can add more locations later.'],
@@ -2243,7 +2291,19 @@ Object.assign(TX, {
   'e.coupon_cancelled': ['Клиент отменил эту бронь — купон недействителен.', 'Clientul a anulat această rezervare — cuponul nu mai este valabil.', 'The customer cancelled this booking — the coupon is no longer valid.'],
   'e.outside_schedule': ['Эта плюшка действует только в счастливые часы по расписанию — сейчас выдать её нельзя.', 'Acest beneficiu este valabil doar în orele fericite din program — acum nu poate fi acordat.', 'This perk is only valid during its scheduled happy hours — it can’t be given right now.'],
   'e.perk_not_found': ['Плюшка не найдена.', 'Beneficiul nu a fost găsit.', 'Perk not found.'],
-  'e.price_out_of_range': ['Цена в километрах Helper — вне рекомендованного коридора для этого вида плюшки.', 'Prețul în kilometri Helper este în afara intervalului recomandat pentru acest tip de beneficiu.', 'The price in Helper kilometres is outside the recommended range for this perk type.'],
+  'e.price_out_of_range': ['Цена плюшки — от 5 до 50 км Helper.', 'Prețul beneficiului — de la 5 la 50 km Helper.', 'A perk costs 5 to 50 Helper km.'],
+  'e.bad_points': ['Цена плюшки — от 5 до 50 км Helper.', 'Prețul beneficiului — de la 5 la 50 km Helper.', 'A perk costs 5 to 50 Helper km.'],
+  'e.bad_name': ['Укажите имя — от 2 до 60 символов.', 'Indicați numele — între 2 și 60 de caractere.', 'Enter a name — 2 to 60 characters.'],
+  'e.code_invalid': ['Неверный код.', 'Cod greșit.', 'Wrong code.'],
+  'e.code_expired': ['Код истёк — отправьте новый.', 'Codul a expirat — trimiteți unul nou.', 'The code has expired — send a new one.'],
+  'e.too_many_attempts': ['Слишком много попыток — запросите новый код.', 'Prea multe încercări — cereți un cod nou.', 'Too many attempts — request a new code.'],
+  'e.not_mobile': ['Нужен номер мобильного телефона.', 'Este nevoie de un număr de mobil.', 'A mobile number is required.'],
+  'e.country_not_supported': ['Вход по телефону пока работает для Молдовы и Румынии.', 'Autentificarea prin telefon funcționează deocamdată pentru Moldova și România.', 'Phone sign-in currently works for Moldova and Romania.'],
+  'e.sms_cap_reached': ['Сейчас не можем отправить SMS.', 'Acum nu putem trimite SMS.', 'We can’t send an SMS right now.'],
+  'e.sms_failed': ['SMS не отправилось.', 'SMS-ul nu a fost trimis.', 'The SMS wasn’t sent.'],
+  'e.phone_disabled': ['Вход по телефону временно выключен — войдите по e-mail.', 'Autentificarea prin telefon este oprită temporar — intrați cu e-mailul.', 'Phone sign-in is temporarily off — use e-mail.'],
+  'e.phone_taken': ['Этот номер уже привязан к другому аккаунту Helper.', 'Acest număr este deja legat de alt cont Helper.', 'This number is already linked to another Helper account.'],
+  'e.phone_token_invalid': ['Подтверждение номера устарело — получите новый код.', 'Confirmarea numărului a expirat — cereți un cod nou.', 'The number confirmation has expired — get a new code.'],
   'e.bad_schedule': ['Проверьте расписание: выберите дни, а время начала должно быть раньше окончания.', 'Verificați programul: alegeți zilele, iar ora de început trebuie să fie înaintea celei de sfârșit.', 'Check the schedule: choose the days, and the start time must be before the end time.'],
   'e.bad_kind': ['Выберите вид плюшки: услуга, подарок, без очереди или бесплатная опция.', 'Alegeți tipul beneficiului: serviciu, cadou, fără coadă sau opțiune gratuită.', 'Choose the perk type: service, gift, priority or free extra.'],
   'e.perk_status': ['Это действие недоступно для плюшки в текущем статусе. Обновите страницу.', 'Această acțiune nu este disponibilă pentru beneficiu în statutul actual. Reîncărcați pagina.', 'This action isn’t available for the perk in its current status. Reload the page.'],
@@ -2408,7 +2468,12 @@ Object.assign(TX, {
   'pk.f.desc': ['Описание', 'Descriere', 'Description'],
   'pk.desc.ph': ['Что именно получит водитель: «Проверим и подкачаем все 4 колеса за 5 минут».', 'Ce primește exact șoferul: «Verificăm și umflăm toate cele 4 roți în 5 minute».', 'What exactly the driver gets: “We check and inflate all 4 tyres in 5 minutes”.'],
   'pk.price': ['Цена в километрах Helper', 'Prețul în kilometri Helper', 'Price in Helper kilometres'],
-  'pk.price.hint': ['Рекомендованный коридор для вида «{kind}»: {a}–{b} км Helper. У километров нет денежной стоимости.', 'Intervalul recomandat pentru tipul «{kind}»: {a}–{b} km Helper. Kilometrii nu au valoare bănească.', 'Recommended range for “{kind}”: {a}–{b} Helper km. Kilometres have no monetary value.'],
+  'pk.price.hint': ['От {a} до {b} км Helper. У километров нет денежной стоимости.', 'De la {a} la {b} km Helper. Kilometrii nu au valoare bănească.', 'From {a} to {b} Helper km. Kilometres have no monetary value.'],
+  'pk.price.less': ['Дешевле на 1 км', 'Mai ieftin cu 1 km', '1 km cheaper'],
+  'pk.price.more': ['Дороже на 1 км', 'Mai scump cu 1 km', '1 km more'],
+  'pk.modnote': ['Пометка модератора Helper', 'Notă de la moderatorul Helper', 'Note from the Helper moderator'],
+  'pk.clamped': ['Цена снижена: {from} → {to}', 'Preț redus: {from} → {to}', 'Price lowered: {from} → {to}'],
+  'pk.clamped.d': ['Теперь плюшки стоят от {a} до {b} км Helper — Helper снизил цену до максимума. Проверьте и сохраните.', 'Acum beneficiile costă între {a} și {b} km Helper — Helper a redus prețul la maximum. Verificați și salvați.', 'Perks now cost {a} to {b} Helper km — Helper lowered the price to the maximum. Check it and save.'],
   'pk.level': ['Минимальный уровень водителя', 'Nivelul minim al șoferului', 'Minimum driver level'],
   'pk.level.hint': ['Плюшки для высоких уровней мотивируют водителей расти в игре.', 'Beneficiile pentru nivelurile înalte îi motivează pe șoferi să avanseze în joc.', 'Perks for higher levels motivate drivers to level up.'],
   'pk.lvl.opt': ['{n} · {t}', '{n} · {t}', '{n} · {t}'],
@@ -2466,7 +2531,7 @@ Object.assign(TX, {
   'pkv.title': ['Напишите название плюшки — от 3 до 80 символов', 'Scrieți denumirea beneficiului — între 3 și 80 de caractere', 'Write the perk title — 3 to 80 characters'],
   'pkv.desc': ['Описание — не длиннее 500 символов', 'Descrierea — cel mult 500 de caractere', 'The description must be at most 500 characters'],
   'pkv.tr': ['Перевод {lang}: название от 3 до 80 символов — или очистите поля перевода', 'Traducerea {lang}: denumirea între 3 și 80 de caractere — sau goliți câmpurile traducerii', '{lang} translation: the title must be 3–80 characters — or clear the translation fields'],
-  'pkv.price': ['Выберите цену в коридоре {a}–{b} км Helper', 'Alegeți prețul în intervalul {a}–{b} km Helper', 'Choose a price within {a}–{b} Helper km'],
+  'pkv.price': ['Цена — от {a} до {b} км Helper', 'Prețul — de la {a} la {b} km Helper', 'The price must be {a} to {b} Helper km'],
   'pkv.stock': ['Лимит — целое число от 1 до 10 000 или пусто', 'Limita — un număr întreg între 1 și 10 000 sau gol', 'The limit must be a whole number from 1 to 10,000, or empty'],
   'pkv.stock.order': ['Лимит в месяц не может быть меньше лимита в день', 'Limita lunară nu poate fi mai mică decât cea zilnică', 'The monthly limit can’t be lower than the daily limit'],
   'pkv.days': ['Выберите хотя бы один день счастливых часов', 'Alegeți cel puțin o zi pentru orele fericite', 'Choose at least one day for happy hours'],
@@ -2544,6 +2609,7 @@ Object.assign(TX, {
 const I = {
   home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
   scan: '<path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5"/><path d="M8 8h3v3H8zM13 8h3v3h-3zM8 13h3v3H8zM13 13h1.5v1.5H13zM15.5 15.5H16V16h-.5z"/>',
+  phone: '<path d="M5.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 6.7 6.7l1.3-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 4 5.6 1.5 1.5 0 0 1 5.5 4z"/>',
   qr: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1"/>',
   megaphone: '<path d="M4 10.5v3a1 1 0 0 0 1 1h2.5l8 4.5v-15l-8 4.5H5a1 1 0 0 0-1 1z"/><path d="M7.5 14.5 9 20h2.5L10 14.5M18.5 9.3a3.5 3.5 0 0 1 0 5.4"/>',
   pin: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/>',
@@ -2555,6 +2621,7 @@ const I = {
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 13.6a7.7 7.7 0 0 0 0-3.2l2-1.5-2-3.4-2.3.9a7.6 7.6 0 0 0-2.8-1.6L14 2.5h-4l-.3 2.3a7.6 7.6 0 0 0-2.8 1.6l-2.3-.9-2 3.4 2 1.5a7.7 7.7 0 0 0 0 3.2l-2 1.5 2 3.4 2.3-.9a7.6 7.6 0 0 0 2.8 1.6l.3 2.3h4l.3-2.3a7.6 7.6 0 0 0 2.8-1.6l2.3.9 2-3.4z"/>',
   more: '<circle cx="6.5" cy="6.5" r="2.3"/><circle cx="17.5" cy="6.5" r="2.3"/><circle cx="6.5" cy="17.5" r="2.3"/><circle cx="17.5" cy="17.5" r="2.3"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
   chevR: '<path d="m9.5 6 6 6-6 6"/>', chevL: '<path d="m14.5 6-6 6 6 6"/>', chevD: '<path d="m6 9.5 6 6 6-6"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
@@ -2853,6 +2920,9 @@ function setTokens(d) {
   return true;
 }
 const acctEmail = () => (A.user && A.user.email) || '';
+/* подпись аккаунта: e-mail, а у аккаунта без e-mail (вход по телефону) — номер */
+const acctName = () => acctEmail() || (A.user && A.user.phone ? phShow(A.user.phone) : '');
+const acctInit = () => initials((A.user && (A.user.display_name || A.user.name)) || acctEmail() || 'Helper');
 /* ошибки: ru — текст сервера; ro/en — текст сервера, если он на латинице, иначе локальный перевод по коду ошибки */
 function humanErr(d, status) {
   const code = d && d.error;
@@ -3234,17 +3304,17 @@ function shellHTML() {
     '<aside class="side" aria-label="' + esc(tx('shell.menu')) + '"><a class="logo-wrap" href="#/' + defaultRoute() + '">' + logoHTML() + logoSub() + '</a>' +
       '<button class="side-co" data-act="account"><span class="av">' + esc(initials(p.company)) + pImg(p.logo_url, 36) + '</span><span class="grow"><span class="t" style="display:block">' + esc(p.company) + '</span><span class="s">' + esc(roleTitle(role())) + (multi ? ' · ' + tx('shell.switch') : '') + '</span>' + (st.pkg ? '<span style="display:block;margin-top:4px">' + pkChip() + '</span>' : '') + '</span>' + ic('chevD', 'xs') + '</button>' +
       '<nav class="nav">' + nav.map(n => '<a href="#/' + n.r + '" data-nav="' + n.r + '">' + ic(n.ic, 'sm') + navT(n.r) + '</a>').join('') + '</nav>' +
-      '<div class="side-foot"><span class="who" title="' + esc(acctEmail()) + '"><span class="av">' + esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 24) + '</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">' + esc(acctEmail()) + '</span></span><button class="textbtn" data-act="logout" style="justify-content:flex-start">' + ic('logout', 'sm') + tx('logout') + '</button></div>' +
+      '<div class="side-foot"><span class="who" title="' + esc(acctName()) + '"><span class="av">' + esc(acctInit()) + pImg(myPhoto(), 24) + '</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">' + esc(acctName()) + '</span></span><button class="textbtn" data-act="logout" style="justify-content:flex-start">' + ic('logout', 'sm') + tx('logout') + '</button></div>' +
     '</aside>' +
     '<main class="main' + (cashier ? ' notab' : '') + '" id="main"><div class="lang-float">' + langSw() + '</div><div class="mtop"><a href="#/' + defaultRoute() + '" aria-label="' + esc(tx('app.name')) + '">' + logoHTML() + '</a>' + langSw('sm') + '<button class="co-btn" data-act="account" aria-label="' + esc(tx('acct.title')) + '"><span>' + esc(p.company) + '</span><span class="av">' + esc(initials(p.company)) + pImg(myPhoto() || p.logo_url, 28) + '</span></button></div>' +
       '<div id="gb"></div><div id="view"></div></main>' +
     (cashier ? '' : '<nav class="tabbar" aria-label="' + esc(tx('shell.tabs')) + '">' + TABS.map(tb => { const n = NAV.find(x => x.r === tb) || {r: 'more', ic: 'more'}; return '<a class="tab" href="#/' + n.r + '" data-tab="' + n.r + '"><span class="pill">' + ic(n.ic) + '</span>' + tx(n.r === 'kassa' ? 'nav.kassa.short' : 'nav.' + n.r) + '</a>'; }).join('') + '</nav>') +
   '</div>';
 }
-const chromeKey = () => { const p = st.partner || {}, k = st.pkg || {}; return [st.pid, role(), p.company, st.mine.length, acctEmail(), LANG, p.logo_url || '', myPhoto(), k.key || '', k.requested || ''].join('|'); };
+const chromeKey = () => { const p = st.partner || {}, k = st.pkg || {}; return [st.pid, role(), p.company, st.mine.length, acctName(), LANG, p.logo_url || '', myPhoto(), k.key || '', k.requested || ''].join('|'); };
 /* логотип / фото сменились — обновить аватары на месте (без перерисовки страницы с формами) */
 function chromeAvatars() {
-  const p = st.partner || {}, me = initials((A.user && A.user.name) || acctEmail());
+  const p = st.partner || {}, me = acctInit();
   $$('.side-co .av').forEach(e => { e.innerHTML = esc(initials(p.company)) + pImg(p.logo_url, 36); });
   $$('.co-btn .av').forEach(e => { e.innerHTML = esc(initials(p.company)) + pImg(myPhoto() || p.logo_url, 28); });
   $$('.side-foot .who .av').forEach(e => { e.innerHTML = esc(me) + pImg(myPhoto(), 24); });
@@ -3280,7 +3350,7 @@ function accountSheet() {
   openSheet(tx('acct.title'),
     '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal av" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + pImg(p.logo_url, 48) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + (st.pkg ? ' <a href="#/package" style="text-decoration:none">' + pkChip() + '</a>' : '') + '</div></div></div>' +
     (others.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.others') + '</p><div class="group">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + ' · ' + esc(pstT(x.status, x.status_title)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '') +
-    '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle av">' + ic('user', 'sm') + pImg(myPhoto(), 38) + '</span><span class="body"><span class="t" style="display:block">' + esc(acctEmail() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
+    '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle av">' + ic('user', 'sm') + pImg(myPhoto(), 38) + '</span><span class="body"><span class="t" style="display:block">' + esc(acctName() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
     '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
     (canManage() ? '<a class="item" href="#/settings"><span class="ic-circle">' + ic('gear', 'sm') + '</span><span class="body"><span class="t">' + tx('acct.settings') + '</span></span>' + ic('chevR', 'sm') + '</a>' : '') +
     '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t">' + tx('logout') + '</span></span></button></div>');
@@ -3315,7 +3385,7 @@ function phoneHTML(c, o) {
       '<div class="ph-title">' + esc(title) + '</div><div class="ph-text">' + esc(text) + '</div>' +
       (c.reward_title ? '<div class="ph-meta" style="color:#1F6E69;font-weight:600">' + ic('gift', 'xs') + ' ' + esc(c.reward_title) + '</div>' : '') +
       '<div class="ph-meta">' + meta + '</div><div class="ph-btn">' + cta + '</div></div>' +
-    '<div class="ph-card ghost"><div class="ph-head"><span class="ph-logo">AZ</span><div><div class="n">' + T('pv.g.name') + '</div><div class="c">' + T('pv.g.cat', {d: fDist(1200, l)}) + '</div></div><span class="ph-badge">' + esc(kmT(100, l)) + '</span></div><div class="ph-title">' + T('pv.g.title') + '</div></div>' +
+    '<div class="ph-card ghost"><div class="ph-head"><span class="ph-logo">AZ</span><div><div class="n">' + T('pv.g.name') + '</div><div class="c">' + T('pv.g.cat', {d: fDist(1200, l)}) + '</div></div><span class="ph-badge">' + esc(kmT(15, l)) + '</span></div><div class="ph-title">' + T('pv.g.title') + '</div></div>' +
     '<div class="ph-tab"><span><i>' + ic('home', 'sm') + '</i></span><span class="on"><i>' + ic('pin', 'sm') + '</i></span><span><i>' + ic('loyal', 'sm') + '</i></span><span><i>' + ic('more', 'sm') + '</i></span></div>' +
   '</div></div>';
 }
@@ -3353,27 +3423,151 @@ function pageLanding(openLogin) {
 const UI = {afterLogin: null};
 function loginSheet(o) {
   o = o || {};
+  UI.liO = o;
+  const via = phOn() && UI.liVia !== 'email' ? 'phone' : 'email';
+  if (via === 'phone' && (!PPH || PPH.purpose !== 'login')) PPH = {purpose: 'login', step: 'num'};
+  const seg = phOn() ? '<div class="seg" role="group" aria-label="' + esc(tx('pa.via')) + '" style="margin:0 0 12px"><button type="button" data-act="li-via" data-v="phone" aria-pressed="' + (via === 'phone') + '">' + ic('phone', 'sm') + tx('pa.tab') + '</button><button type="button" data-act="li-via" data-v="email" aria-pressed="' + (via === 'email') + '">' + ic('send', 'sm') + 'E-mail</button></div>' : '';
   openSheet(tx('li.title'),
-    (o.why ? '<div class="banner teal" style="margin-top:0"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0">' + esc(o.why) + '</div></div>' : '') +
-    '<div class="gwrap" id="g-box" hidden></div>' +
+    (o.why ? '<div class="banner teal" style="margin-top:0"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0">' + esc(o.why) + '</div></div>' : '') + seg +
+    (via === 'phone' ? '<div id="pph-box">' + pphHTML() + '</div><div class="gwrap" id="g-box" hidden></div>' : '<div class="gwrap" id="g-box" hidden></div>' +
     '<form class="form" data-form="login" novalidate style="margin-top:6px">' +
       fld('li-email', tx('f.email'), inp('li-email', o.email || '', 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@company.md" autofocus')) +
       fld('li-pass', tx('f.password'), inp('li-pass', '', 'type="password" autocomplete="current-password"')) +
       errBox('li-err') +
       '<button class="btn ink block" type="submit">' + tx('login') + '</button>' +
-    '</form>' +
-    '<div class="stack" style="align-items:center;margin-top:10px;gap:2px"><button class="textbtn" data-act="forgot">' + tx('li.forgot') + '</button>' + (o.noReg ? '' : '<a class="textbtn" href="#/register">' + tx('land.cta.reg') + '</a>') + '</div>' +
+    '</form>') +
+    '<div class="stack" style="align-items:center;margin-top:10px;gap:2px">' + (via === 'phone' ? '' : '<button class="textbtn" data-act="forgot">' + tx('li.forgot') + '</button>') + (o.noReg ? '' : '<a class="textbtn" href="#/register">' + tx('land.cta.reg') + '</a>') + '</div>' +
     '<p class="hint" style="text-align:center;margin:10px 0 0">' + tx('li.note', {bot: '<a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('li.note.bot') + '</a>'}) + '</p>',
-    {onClose: () => { UI.afterLogin = null; if (st.route.name === 'login') go('', true); }});
+    {onClose: () => { UI.afterLogin = null; PPH = null; if (st.route.name === 'login') go('', true); }});
   gLogin($('#g-box'));
+  pphMount();
+  /* статус сервера ещё не загружен — вход по телефону включён: открыть лист заново с телефоном */
+  if (!PSTAT) srvStatus().then(() => { if (phOn() && $('form[data-form="login"]') && !UI.liVia && !val('li-email')) loginSheet(UI.liO || {}); });
 }
+/* ---------- вход / регистрация по телефону (код в Telegram или по SMS): /v1/auth/phone/start|verify ----------
+   вход — purpose auto (новый номер → «Номер не найден — зарегистрируйте компанию»); мастер регистрации — purpose partner:
+   новый номер → phone_token, который уходит в /v1/partner/register вместо e-mail и пароля */
+let PSTAT = null, PSTP = null, PPH = null, pphT = null;
+function srvStatus() {
+  if (PSTAT) return Promise.resolve(PSTAT);
+  if (!PSTP) PSTP = api('/v1/status', {auth: false}).then(d => { PSTAT = d || {}; return PSTAT; }, () => { PSTP = null; return {}; });
+  return PSTP;
+}
+const phOn = () => !!(PSTAT && PSTAT.phone_auth && PSTAT.phone_auth.enabled);
+const PHC = {MD: {dial: '373', len: 8, g: [3, 3, 3], ex: '069 123 456'}, RO: {dial: '40', len: 9, g: [4, 3, 3], ex: '0712 345 678'}};
+const phCountries = () => { const p = PSTAT && PSTAT.phone_auth, l = (p && Array.isArray(p.countries) ? p.countries : ['MD', 'RO']).filter(c => PHC[c]); return l.length ? l : ['MD']; };
+function phNat(cc, raw) {
+  const c = PHC[cc], s = String(raw || '').trim();
+  let d = s.replace(/\D/g, '');
+  if (s.charAt(0) === '+' || d.indexOf('00' + c.dial) === 0) { d = d.replace(/^00/, ''); if (d.indexOf(c.dial) === 0) d = d.slice(c.dial.length); }
+  else if (d.indexOf(c.dial) === 0 && d.length > c.len + 1) d = d.slice(c.dial.length);
+  if (d && d.charAt(0) !== '0') d = '0' + d;
+  return d.slice(0, c.len + 1);
+}
+function phFmt(cc, nat) { const out = []; let i = 0; PHC[cc].g.forEach(n => { if (i < nat.length) out.push(nat.slice(i, i + n)); i += n; }); return out.join(' '); }
+function phShow(e164, mask) {
+  const s = String(e164 || ''), cc = Object.keys(PHC).find(k => s.indexOf('+' + PHC[k].dial) === 0);
+  if (!cc) return s;
+  const n = s.slice(1 + PHC[cc].dial.length);
+  return mask ? '+' + PHC[cc].dial + ' ' + n.slice(0, 2) + ' *** ' + n.slice(-3) : '+' + PHC[cc].dial + ' ' + phFmt(cc, '0' + n).slice(1);
+}
+const mmssLeft = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+function pphHTML() {
+  const P = PPH || {step: 'num'};
+  if (P.step === 'found') return '<div class="banner" style="margin-top:0"><span class="ic">' + ic('info') + '</span><div><div class="t">' + tx('pa.notFound') + '</div><button type="button" class="btn sm ink" style="margin-top:10px" data-act="pph-reg">' + tx('land.cta.reg') + '</button></div></div><button type="button" class="textbtn" data-act="pph-change">' + tx('pa.change') + '</button>';
+  if (P.step === 'code') return '<p class="ph-sent" role="status">' + tx(P.channel === 'telegram' ? 'pa.sentTg' : 'pa.sentSms', {phone: '<b style="white-space:nowrap">' + esc(phShow(P.phone, true)) + '</b>'}) + '</p>' +
+    '<form class="form" data-form="pph-verify" novalidate>' + fld('pp-code', tx('pa.code'), inp('pp-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••" data-in="pp-code"')) + errBox('pp-err') +
+    '<button class="btn ink block" type="submit">' + tx('pa.verify') + '</button></form><div class="ph-links"><button type="button" class="textbtn" data-act="pph-change">' + tx('pa.change') + '</button><button type="button" class="textbtn" id="pp-resend" data-act="pph-resend"></button></div>';
+  const l = phCountries(), cc = P.cc && l.indexOf(P.cc) >= 0 ? P.cc : (l.indexOf('MD') >= 0 ? 'MD' : l[0]);
+  const ccCtl = l.length > 1 ? '<select id="pp-cc" class="input" data-ch="pp-cc" aria-label="' + esc(tx('pa.country')) + '">' + l.map(c => '<option value="' + c + '"' + (c === cc ? ' selected' : '') + '>' + flagOf(c) + ' +' + PHC[c].dial + '</option>').join('') + '</select>' : '<span class="ph-cc1">' + flagOf(cc) + ' +' + PHC[cc].dial + '</span><input type="hidden" id="pp-cc" value="' + cc + '">';
+  return '<form class="form" data-form="pph-start" novalidate><div class="field"><label for="pp-num">' + tx('pa.label') + '</label><div class="ph-row">' + ccCtl + '<input id="pp-num" class="input" type="tel" inputmode="tel" autocomplete="tel" data-in="pp-num" value="' + esc(phFmt(cc, P.nat || '')) + '" placeholder="' + esc(PHC[cc].ex) + '"></div><span class="hint">' + tx('pa.hint') + '</span></div>' +
+    errBox('pp-err') + '<button class="btn ink block" type="submit">' + tx('pa.get') + '</button></form>';
+}
+function pphPaint() {
+  const b = $('#pp-resend'); if (!b || !PPH) { if (!b) { clearInterval(pphT); pphT = null; } return; }
+  const left = (PPH.resendAt || 0) - Date.now();
+  b.disabled = left > 0; b.textContent = left > 0 ? tx('pa.resendIn', {time: mmssLeft(left)}) : tx('pa.resend');
+}
+function pphMount(noFocus) {
+  if (PPH && PPH.step === 'code') { pphPaint(); if (!pphT) pphT = setInterval(pphPaint, 1000); }
+  if (noFocus) return;
+  const f = $(PPH && PPH.step === 'code' ? '#pp-code' : '#pp-num'); if (f) setTimeout(() => { try { f.focus({preventScroll: true}); } catch (e) {} }, 60);
+}
+function pphRender() { const b = $('#pph-box'); if (b) { b.innerHTML = pphHTML(); pphMount(); } }
+async function pphStart(f) {
+  if (!PPH) return;
+  if ($('#pp-num')) { const cc = val('pp-cc') || 'MD'; PPH.cc = cc; PPH.nat = phNat(cc, val('pp-num')); }
+  const cc = PPH.cc || 'MD', nat = PPH.nat || '';
+  if (!(nat.length === PHC[cc].len + 1)) return showErr('pp-err', tx('pa.badNum', {example: PHC[cc].ex}));
+  const done = f ? busy(f.querySelector('[type=submit]'), tx('pa.sending')) : () => {};
+  let d;
+  try { d = await api('/v1/auth/phone/start', {body: {phone: '+' + PHC[cc].dial + nat.slice(1), country: cc, purpose: 'partner', lang: LANG}, auth: false}); }
+  catch (e) {
+    done();
+    if (PPH.purpose === 'login' && /^invite_/.test(e.code || '')) { PPH.step = 'found'; return pphRender(); }
+    if (e.code === 'phone_disabled') { if (PSTAT) PSTAT.phone_auth = {enabled: false}; PPH = null; if (st.route.name === 'register') return render(); UI.liVia = 'email'; return loginSheet(UI.liO || {}); }
+    if (e.code === 'rate_limited' && e.data && e.data.retry_after) return showErr('pp-err', e.message + ' ' + tx('pa.resendIn', {time: mmssLeft(e.data.retry_after * 1000)}));
+    return showErr('pp-err', e.message + (e.code === 'sms_cap_reached' || e.code === 'sms_failed' ? ' ' + tx('pa.useEmail') : ''));
+  }
+  done();
+  Object.assign(PPH, {step: 'code', phone: d.phone, channel: d.channel === 'telegram' ? 'telegram' : 'sms', resendAt: Date.now() + (+d.resend_in || 60) * 1000});
+  pphRender();
+}
+async function pphVerify(f) {
+  if (!PPH || !PPH.phone) return;
+  const code = val('pp-code').replace(/\D/g, '');
+  if (code.length !== 6) return showErr('pp-err', tx('pa.code6'));
+  const done = busy(f.querySelector('[type=submit]'), tx('pa.verifying'));
+  let d;
+  try { d = await api('/v1/auth/phone/verify', {body: {phone: PPH.phone, code, purpose: 'partner', lang: LANG, device: tx('device')}, auth: false}); }
+  catch (e) {
+    done();
+    const i = $('#pp-code'); if (i) { i.value = ''; try { i.focus(); } catch (x) {} }
+    if (e.code === 'code_invalid') return showErr('pp-err', e.data && e.data.attempts_left != null ? tx('pa.wrong', {n: e.data.attempts_left}) : e.message);
+    if (e.code === 'code_expired' || e.code === 'too_many_attempts') { PPH.resendAt = 0; pphPaint(); return showErr('pp-err', tx(e.code === 'code_expired' ? 'pa.expired' : 'pa.tooMany')); }
+    if (PPH.purpose === 'login' && /^invite_/.test(e.code || '')) { PPH.step = 'found'; return pphRender(); }
+    return showErr('pp-err', e.message);
+  }
+  done();
+  if (d.phone_token) {
+    /* номер без аккаунта: подтверждение уже есть — в мастер регистрации (шаг «Контакт» без повторного кода) */
+    const R = regState(), fromLogin = PPH.purpose === 'login';
+    R.phone_token = d.phone_token; R.phone_acct = d.phone || PPH.phone; R.via = 'phone'; PPH = null;
+    regPhonePrefill(R);
+    if (!fromLogin) return render();
+    UI.afterLogin = null; closeSheet(true);
+    toast(tx('pa.notFound'), 6000);
+    return go('register');
+  }
+  PPH = null;
+  if (!setTokens(d)) return showErr('pp-err', tx('e.no_tokens'));
+  if (st.route.name === 'register') { st.partner = null; return render(); }
+  loginDone();
+}
+/* телефон компании на шаге 1 — подтверждённый номер, если поле ещё пустое */
+function regPhonePrefill(R) {
+  const s = String(R.phone_acct || ''), cc = Object.keys(PHC).find(k => s.indexOf('+' + PHC[k].dial) === 0);
+  if (!cc || (R.ph && R.ph.nat)) return;
+  R.ph = Object.assign({}, R.ph || {}, {dial: cc, nat: s.slice(1 + PHC[cc].dial.length), dm: false});
+  regSave();
+}
+const regPhoneOk = R => R.phone_token && !logged() ? '<div class="card tint" style="margin:0 0 18px"><div class="row"><span class="ic-circle teal">' + ic('check', 'sm') + '</span><p class="small" style="margin:0;font-weight:600">' + tx('pa.ok', {phone: '<span style="white-space:nowrap">' + esc(phShow(R.phone_acct, true)) + '</span>'}) + '</p></div></div>' : '';
+ACTS['li-via'] = el => { UI.liVia = el.dataset.v; PPH = null; loginSheet(UI.liO || {}); };
+ACTS['pph-reg'] = () => { closeSheet(true); UI.afterLogin = null; PPH = null; go('register'); };
+ACTS['pph-change'] = () => { if (!PPH) return; PPH.step = 'num'; pphRender(); };
+ACTS['pph-resend'] = () => { if (PPH && Date.now() >= (PPH.resendAt || 0)) pphStart(null); };
+ACTS['rg-via'] = el => { const R = regState(); R.via = el.dataset.v; PPH = null; render(); };
+ACTS['rg-ph-redo'] = () => { const R = regState(); R.phone_token = null; R.phone_acct = null; render(); };
+INPUTS['pp-num'] = el => { const cc = val('pp-cc') || 'MD', v = phFmt(cc, phNat(cc, el.value)); if (el.value !== v) el.value = v; };
+INPUTS['pp-code'] = el => { const v = el.value.replace(/\D/g, '').slice(0, 6); if (el.value !== v) el.value = v; if (v.length === 6 && PPH && !PPH.busy) { PPH.busy = true; Promise.resolve(pphVerify(el.closest('form'))).finally(() => { if (PPH) PPH.busy = false; }); } };
+CHANGES['pp-cc'] = el => { const n = $('#pp-num'); if (n) { n.placeholder = PHC[el.value].ex; n.value = phFmt(el.value, phNat(el.value, n.value)); } };
 const FORMS = {};
 /* вход выполнен (пароль или Google): токены сохранены — дальше как обычно */
 function loginDone() {
   st.partner = null; st.cache = {};
   const cb = UI.afterLogin; UI.afterLogin = null;
   closeSheet(true);
-  toast(tx('li.done', {email: acctEmail()}));
+  toast(acctName() ? tx('li.done', {email: acctName()}) : tx('li.title'));
   if (cb) return cb();
   go('', true);
 }
@@ -3384,7 +3578,7 @@ function loginDone() {
 const GIS_SRC = 'https://accounts.google.com/gsi/client';
 let gisP = null, gisInit = '', gStP = null;
 function gCid() {
-  if (!gStP) gStP = api('/v1/status', {auth: false}).then(d => (d && typeof d.google_client_id === 'string' && d.google_client_id.trim()) || '', () => { gStP = null; return ''; });
+  if (!gStP) gStP = srvStatus().then(d => (d && typeof d.google_client_id === 'string' && d.google_client_id.trim()) || '');
   return gStP;
 }
 function gisLoad() {
@@ -3443,6 +3637,8 @@ FORMS.login = async f => {
   if (!setTokens(d)) return showErr('li-err', tx('e.no_tokens'));
   loginDone();
 };
+FORMS['pph-start'] = f => pphStart(f);
+FORMS['pph-verify'] = f => { if (!PPH || PPH.busy) return; PPH.busy = true; return Promise.resolve(pphVerify(f)).finally(() => { if (PPH) PPH.busy = false; }); };
 function forgotSheet(email) {
   openSheet(tx('fg.title'), '<form class="form" data-form="forgot" novalidate><p class="small muted" style="margin:0">' + tx('fg.text') + '</p>' +
     fld('fg-email', tx('f.email'), inp('fg-email', email || '', 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" autofocus')) + errBox('fg-err') +
@@ -3499,7 +3695,7 @@ async function magicLogin(token) {
     const d = await api('/v1/auth/magic', {body: {token}, auth: false});
     if (!setTokens(d)) throw apiErr(0, 'no_tokens', tx('e.no_tokens'));
     st.partner = null; st.cache = {};
-    toast(tx('li.done', {email: acctEmail()}));
+    toast(tx('li.done', {email: acctName()}));
     go('', true);
   } catch (e) {
     go('', true);
@@ -3549,7 +3745,7 @@ function pageNoCompany() {
   docTitle(tx('noco.h'));
   $('#root').innerHTML = '<div class="page-narrow">' + pubHead('<button class="btn sm soft" data-act="logout">' + tx('logout') + '</button>') +
     rings('', 'width:340px;right:-170px;top:-60px') +
-    '<p class="eyebrow" style="margin-top:18px">' + esc(acctEmail()) + '</p><h1 class="wiz-title">' + tx('noco.h') + '</h1>' +
+    '<p class="eyebrow" style="margin-top:18px">' + esc(acctName()) + '</p><h1 class="wiz-title">' + tx('noco.h') + '</h1>' +
     '<p class="muted" style="line-height:1.6;margin:0 0 22px">' + tx('noco.p') + '</p>' +
     '<a class="btn ink block xl" href="#/register">' + tx('land.cta.reg') + '</a>' +
     '<div class="card" style="margin-top:22px"><h3 style="margin-bottom:12px">' + tx('noco.code') + '</h3><form class="form" data-form="join-code" novalidate>' + fld('jc-code', tx('noco.code.l'), inp('jc-code', '', 'autocapitalize="off" spellcheck="false" placeholder="https://…/partner/#join=…"')) + errBox('jc-err') + '<button class="btn soft block" type="submit">' + tx('noco.join') + '</button></form></div></div>';
@@ -3569,7 +3765,7 @@ function pagePick() {
   $('#root').dataset.shell = '';
   docTitle(tx('pick.h'));
   $('#root').innerHTML = '<div class="page-narrow">' + pubHead('<button class="btn sm soft" data-act="logout">' + tx('logout') + '</button>') +
-    '<p class="eyebrow" style="margin-top:18px">' + esc(acctEmail()) + '</p><h1 class="wiz-title">' + tx('pick.h') + '</h1><p class="muted" style="margin:0 0 20px">' + tx('pick.p') + '</p>' +
+    '<p class="eyebrow" style="margin-top:18px">' + esc(acctName()) + '</p><h1 class="wiz-title">' + tx('pick.h') + '</h1><p class="muted" style="margin:0 0 20px">' + tx('pick.p') + '</p>' +
     '<div class="group">' + st.mine.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle teal" style="font-weight:700;font-size:13px">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + ' · ' + esc(pstT(x.status, x.status_title)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' +
     '<a class="btn soft block" style="margin-top:18px" href="#/register">' + ic('plus', 'sm') + tx('pick.more') + '</a></div>';
 }
@@ -4127,7 +4323,7 @@ function regState() {
   }
   return REG;
 }
-function regSave() { if (!REG) return; const c = Object.assign({}, REG); delete c.password; jset(K.reg, c); }
+function regSave() { if (!REG) return; const c = Object.assign({}, REG); delete c.password; delete c.phone_token; delete c.phone_acct; jset(K.reg, c); }
 /* IDNO (Молдова, 13 цифр) / CUI (Румыния) / налоговый номер — сервер принимает 2–13 цифр */
 const idnoOK = (cc, v) => { v = String(v || '').replace(/[\s-]/g, '').toUpperCase(); if (cc === 'MD') return /^\d{13}$/.test(v); if (cc === 'RO') return /^(RO)?\d{2,10}$/.test(v); return /^\d{2,13}$/.test(v); };
 const idnoLabel = cc => cc === 'MD' ? 'IDNO' : cc === 'RO' ? 'CUI' : tx('f.taxid');
@@ -4143,8 +4339,10 @@ function regValid(n) {
     if (R.website && !/^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test(R.website.trim())) return [1, tx('v.website')];
   }
   if (n >= 2) {
-    if (R.contact_name.trim().length < 2) return [2, tx('v.contact')];
-    if (!logged()) {
+    const nm = R.contact_name.trim();
+    if (nm.length < 2 || nm.length > 60) return [2, tx('v.rgname')];
+    if (!logged() && phOn() && R.via !== 'email') { if (!R.phone_token) return [2, tx('v.phoneAcct')]; }
+    else if (!logged()) {
       if (!EMAIL_RE.test(R.email.trim())) return [2, tx('v.email')];
       if ((R.password || '').length < 8) return [2, tx('v.pass8')];
     }
@@ -4215,7 +4413,7 @@ async function pageRegister(r, alive) {
   $('#root').dataset.shell = '';
   const R = regState();
   let step = clamp(parseInt(r.params[0], 10) || 1, 1, 4);
-  if (step > 1) { await geoCountries(); if (!alive()) return; }
+  if (step > 1) { await Promise.all([geoCountries(), srvStatus()]); if (!alive()) return; }
   const bad = step > 1 ? regValid(step - 1) : null;
   if (bad) { step = bad[0]; }
   if (String(step) !== (r.params[0] || '1')) { try { history.replaceState(null, '', location.pathname + location.search + '#/register/' + step); } catch (e) {} }
@@ -4231,7 +4429,7 @@ async function pageRegister(r, alive) {
   if (step === 1) {
     const cc = R.place.country;
     h += '<h1 class="wiz-title">' + tx('reg.1.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.1.p') + '</p>' +
-      (store.get(K.dref) ? '<div class="card tint" style="margin:0 0 18px"><p class="small" style="margin:0">' + tx('reg.driverRef') + '</p></div>' : '') +
+      regPhoneOk(R) + (store.get(K.dref) ? '<div class="card tint" style="margin:0 0 18px"><p class="small" style="margin:0">' + tx('reg.driverRef') + '</p></div>' : '') +
       '<form class="form" data-form="reg1" novalidate>' +
       fld('rg-company', tx('f.company'), inp('rg-company', R.company, 'autocomplete="organization" placeholder="' + esc(tx('f.company.ph')) + '" maxlength="120" autofocus data-in="reg-f" data-f="company"')) +
       fld('rg-category', tx('f.category'), sel('rg-category', [['', tx('f.category.ph'), true]].concat(m.categories.map(c => [c.key, c.title])), R.category, 'data-ch="reg-f" data-f="category"')) +
@@ -4244,17 +4442,25 @@ async function pageRegister(r, alive) {
       '<div class="wiz-foot"><button class="btn ink xl" type="submit">' + tx('next') + ic('chevR', 'sm') + '</button></div></form>';
   } else if (step === 2) {
     h += '<h1 class="wiz-title">' + tx('reg.2.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.2.p') + '</p>' +
-      '<form class="form" data-form="reg2" novalidate>' +
-      fld('rg-contact', tx('f.contact'), inp('rg-contact', R.contact_name, 'autocomplete="name" placeholder="' + esc(tx('f.contact.ph')) + '" autofocus data-in="reg-f" data-f="contact_name"'));
-    if (logged()) {
-      h += '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('user', 'sm') + '</span><div class="grow"><div class="small muted">' + tx('reg.2.bound') + '</div><div style="font-weight:600" class="break">' + esc(acctEmail() || tx('reg.2.cur')) + '</div></div></div></div>' +
+      '<form class="form" id="reg2f" data-form="reg2" novalidate>' +
+      fld('rg-contact', tx('rg.name'), inp('rg-contact', R.contact_name, 'autocomplete="name" maxlength="60" placeholder="' + esc(tx('f.contact.ph')) + '" autofocus data-in="reg-f" data-f="contact_name"'), tx('rg.name.hint'));
+    const viaPh = !logged() && phOn() && R.via !== 'email';
+    if (viaPh) {
+      /* по телефону: код → phone_token (новый номер) или вход в существующий аккаунт; «Далее» — вне форм кода (form="reg2f") */
+      if (!PPH || PPH.purpose !== 'reg') PPH = {purpose: 'reg', step: 'num'};
+      h += '</form><div class="seg" role="group" aria-label="' + esc(tx('pa.via')) + '" style="margin:16px 0"><button type="button" data-act="rg-via" data-v="phone" aria-pressed="true">' + ic('phone', 'sm') + tx('pa.tabReg') + '</button><button type="button" data-act="rg-via" data-v="email" aria-pressed="false">' + ic('send', 'sm') + 'E-mail</button></div>' +
+        (R.phone_token ? '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('check', 'sm') + '</span><div class="grow"><div style="font-weight:600">' + tx('pa.ok', {phone: '<span style="white-space:nowrap">' + esc(phShow(R.phone_acct, true)) + '</span>'}) + '</div></div><button type="button" class="textbtn" data-act="rg-ph-redo">' + tx('pa.change') + '</button></div></div>' : '<div id="pph-box">' + pphHTML() + '</div>') +
+        errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit" form="reg2f">' + tx('next') + ic('chevR', 'sm') + '</button></div>';
+    } else if (logged()) {
+      h += '<div class="card tint"><div class="row"><span class="ic-circle teal">' + ic('user', 'sm') + '</span><div class="grow"><div class="small muted">' + tx('reg.2.bound') + '</div><div style="font-weight:600" class="break">' + esc(acctName() || tx('reg.2.cur')) + '</div></div></div></div>' +
         '<button type="button" class="textbtn" data-act="reg-other-acct">' + tx('reg.2.other') + '</button>';
     } else {
-      h += fld('rg-email', tx('f.email.login'), inp('rg-email', R.email, 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@company.md" data-in="reg-f" data-f="email"')) +
+      h += (phOn() ? '<div class="seg" role="group" aria-label="' + esc(tx('pa.via')) + '"><button type="button" data-act="rg-via" data-v="phone" aria-pressed="false">' + ic('phone', 'sm') + tx('pa.tabReg') + '</button><button type="button" data-act="rg-via" data-v="email" aria-pressed="true">' + ic('send', 'sm') + 'E-mail</button></div>' : '') +
+        fld('rg-email', tx('f.email.login'), inp('rg-email', R.email, 'type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@company.md" data-in="reg-f" data-f="email"')) +
         fld('rg-pass', tx('f.password'), inp('rg-pass', '', 'type="password" autocomplete="new-password"'), tx('reg.2.pass')) +
         '<button type="button" class="btn line block" data-act="reg-have-acct">' + ic('user', 'sm') + tx('have.acct') + '</button>';
     }
-    h += errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit">' + tx('next') + ic('chevR', 'sm') + '</button></div></form>';
+    if (!viaPh) h += errBox('rg-err') + '<div class="wiz-foot"><a class="btn soft back-btn" href="#/register/1" aria-label="' + esc(tx('back')) + '">' + ic('chevL', 'sm') + '</a><button class="btn ink xl" type="submit">' + tx('next') + ic('chevR', 'sm') + '</button></div></form>';
   } else if (step === 3) {
     if (!R.loc.title) R.loc.title = R.company;
     h += '<h1 class="wiz-title">' + tx('reg.3.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.3.p') + '</p>' +
@@ -4290,6 +4496,7 @@ async function pageRegister(r, alive) {
     } else if (R.geo) regNote(ic('locate', 'xs') + '<span>' + esc(tx('geo.note.ok', {place: placeText(R.place)})) + '</span>');
   }
   if (step === 4) pkRegFill();
+  if (step === 2 && $('#pph-box')) pphMount(!(PPH && PPH.step === 'code'));
   if (step === 3) {
     rpPlaceNote();
     let center = null;
@@ -4442,7 +4649,7 @@ FORMS.reg1 = f => {
 FORMS.reg2 = f => {
   const R = regState();
   R.contact_name = val('rg-contact').trim();
-  if (!logged()) { R.email = val('rg-email').trim().toLowerCase(); R.password = val('rg-pass'); }
+  if (!logged() && $('#rg-email')) { R.email = val('rg-email').trim().toLowerCase(); R.password = val('rg-pass'); }
   regSave();
   const bad = regValid(2); if (bad) return showErr('rg-err', bad[1]);
   go('register/3');
@@ -4465,7 +4672,8 @@ FORMS.reg4 = async f => {
     country: R.place.country, city: String(R.place.city || '').trim(), lang: LANG};
   if (!R.place.other && R.place.city_id != null && R.place.city_id !== '') body.city_id = R.place.city_id;
   if (R.website) body.website = /^https?:\/\//i.test(R.website) ? R.website : 'https://' + R.website;
-  if (!logged()) { body.email = R.email; body.password = R.password; body.name = R.contact_name; }
+  if (!logged() && R.phone_token && R.via !== 'email') { body.phone_token = R.phone_token; body.name = R.contact_name; }
+  else if (!logged()) { body.email = R.email; body.password = R.password; body.name = R.contact_name; }
   if (!R.skipLoc && R.loc.placed) {
     body.location = {title: R.loc.title || R.company, address: R.loc.address, lat: R.loc.lat, lon: R.loc.lon, radius_m: +R.loc.radius_m || m.radius.default};
     const lc = R.loc.country || R.place.country, lcity = R.loc.city || (lc === R.place.country ? R.place.city : '');
@@ -4479,9 +4687,11 @@ FORMS.reg4 = async f => {
   try { d = await api('/v1/partner/register', {body}); }
   catch (e) {
     done();
-    const toStep = ['bad_idno', 'bad_category', 'already_registered', 'bad_phone', 'bad_country', 'bad_city'].indexOf(e.code) >= 0 ? 1 : ['email_taken', 'invalid_email', 'weak_password'].indexOf(e.code) >= 0 ? 2 : 0;
+    const phTok = /phone_token/.test(e.code || '') || e.code === 'phone_taken';
+    const toStep = ['bad_idno', 'bad_category', 'already_registered', 'bad_phone', 'bad_country', 'bad_city'].indexOf(e.code) >= 0 ? 1 : ['email_taken', 'invalid_email', 'weak_password', 'bad_name'].indexOf(e.code) >= 0 || phTok ? 2 : 0;
     if (toStep) {
       if (toStep === 2) REG.password = '';
+      if (phTok) { REG.phone_token = null; REG.phone_acct = null; PPH = null; }
       go('register/' + toStep);
       const msg = e.code === 'email_taken' ? e.message + ' ' + tx('reg.taken') : e.message;
       setTimeout(() => showErr('rg-err', msg), 160);
@@ -5384,23 +5594,41 @@ ACTS['stats-days'] = el => go('stats?days=' + el.dataset.d, true);
 VIEWS.rewards = () => go('perks', true);
 const PKS = {draft: 'st-none', pending: 'st-soon', active: 'st-ok', paused: 'st-soon', rejected: 'st-bad'};
 const pkStatus = x => '<span class="status ' + (PKS[x.status] || 'st-none') + '">' + esc(srvT(x.status_title, has('pks.' + x.status) ? tx('pks.' + x.status) : '') || x.status || '') + '</span>';
-const corrOf = k => { const v = GM().corr[k] || CORR0[k] || [100, 600]; return [+v[0], +v[1]]; };
+/* цена плюшки — от 5 до 50 км Helper для любого вида; границы берём с сервера, если он их отдаёт
+   (GET …/perks: points_min/points_max или limits.points, /v1/partner/meta и /v1/game/meta: perk_points {min, max}) */
+const PTS_B0 = [5, 50];
+function ptsBounds() {
+  const src = [st.perkInfo || {}, st.meta || {}, st.gmeta || {}];
+  for (const x of src) {
+    const c = x.perk_points || x.points_range || (x.limits && (x.limits.perk_points || x.limits.points)) || null;
+    let lo = c ? (Array.isArray(c) ? c[0] : c.min) : null, hi = c ? (Array.isArray(c) ? c[1] : c.max) : null;
+    if (lo == null && x.perk_points_min != null) { lo = x.perk_points_min; hi = x.perk_points_max; }
+    if (lo == null && x.points_min != null) { lo = x.points_min; hi = x.points_max; }
+    if (+lo > 0 && +hi >= +lo) return [+lo, +hi];
+  }
+  return PTS_B0;
+}
+const corrOf = () => ptsBounds();
+/* шаблон в старой шкале (100–600) переводим в новую делением на 10 */
+const tplPts = t => { const [lo, hi] = ptsBounds(), v = +t.points || 0; return v >= lo && v <= hi ? v : clamp(Math.round(v / 10) || lo, lo, hi); };
+/* старая плюшка дороже максимума: сервер снизил цену — показываем, с какой */
+const ptsWas = x => { const hi = ptsBounds()[1], w = +(x.clamped_from || x.points_before || x.points_was || 0); return w > hi ? w : +x.points > hi ? +x.points : 0; };
 /* шаблоны по категориям (GAME_MODEL §7) — если GET …/perks/templates недоступен */
 const PERK_TPL0 = [
-  {key: 'sto_chassis', category: 'sto', kind: 'service', points: 300, t: {ru: ['Диагностика ходовой', 'Бесплатно проверим подвеску и рулевое на подъёмнике и подскажем, что требует внимания.'], ro: ['Diagnoza trenului de rulare', 'Verificăm gratuit suspensia și direcția pe elevator și vă spunem ce necesită atenție.'], en: ['Suspension check', 'A free lift check of the suspension and steering — we’ll tell you what needs attention.']}},
-  {key: 'sto_brakes', category: 'sto', kind: 'service', points: 250, t: {ru: ['Проверка тормозов', 'Проверим колодки, диски и тормозную жидкость — бесплатно, примерно за 15 минут.'], ro: ['Verificarea frânelor', 'Verificăm plăcuțele, discurile și lichidul de frână — gratuit, în aproximativ 15 minute.'], en: ['Brake check', 'We check the pads, discs and brake fluid — free, in about 15 minutes.']}},
-  {key: 'sto_fluids', category: 'sto', kind: 'service', points: 200, t: {ru: ['Проверка уровня масла и жидкостей', 'Проверим масло, антифриз, тормозную и омывающую жидкость.'], ro: ['Verificarea uleiului și a lichidelor', 'Verificăm uleiul, antigelul, lichidul de frână și lichidul de parbriz.'], en: ['Oil and fluids check', 'We check the oil, coolant, brake fluid and washer fluid.']}},
-  {key: 'tires_pressure', category: 'tires', kind: 'service', points: 200, t: {ru: ['Проверка давления и подкачка', 'Проверим давление во всех колёсах и подкачаем до нормы производителя.'], ro: ['Verificarea presiunii și umflarea roților', 'Verificăm presiunea în toate roțile și le umflăm la valoarea recomandată de producător.'], en: ['Pressure check and inflation', 'We check the pressure in all tyres and inflate them to the manufacturer’s spec.']}},
-  {key: 'tires_balance', category: 'tires', kind: 'service', points: 300, t: {ru: ['Проверка балансировки', 'Проверим балансировку колёс на стенде.'], ro: ['Verificarea echilibrării', 'Verificăm echilibrarea roților pe stand.'], en: ['Wheel balance check', 'We check your wheel balance on the machine.']}},
-  {key: 'wash_freshener', category: 'wash', kind: 'gift', points: 100, t: {ru: ['Ароматизатор в подарок', 'Ароматизатор для салона в подарок после мойки.'], ro: ['Odorizant cadou', 'Un odorizant auto cadou după spălare.'], en: ['Free air freshener', 'A car air freshener as a gift after your wash.']}},
-  {key: 'wash_tireshine', category: 'wash', kind: 'upgrade', points: 150, t: {ru: ['Чернение шин', 'К мойке — бесплатное чернение шин.'], ro: ['Înnegrirea anvelopelor', 'La spălare — înnegrirea gratuită a anvelopelor.'], en: ['Tyre shine', 'Free tyre shine added to your wash.']}},
-  {key: 'wash_mats', category: 'wash', kind: 'upgrade', points: 150, t: {ru: ['Мойка ковриков', 'К мойке — бесплатная мойка ковриков.'], ro: ['Spălarea covorașelor', 'La spălare — spălarea gratuită a covorașelor.'], en: ['Mat cleaning', 'Free floor mat cleaning added to your wash.']}},
-  {key: 'wash_paint', category: 'wash', kind: 'service', points: 250, t: {ru: ['Замер толщины ЛКП', 'Бесплатно замерим толщину лакокрасочного покрытия по всему кузову.'], ro: ['Măsurarea grosimii vopselei', 'Măsurăm gratuit grosimea vopselei pe toată caroseria.'], en: ['Paint thickness check', 'A free paint thickness measurement across the whole body.']}},
-  {key: 'fuel_coffee', category: 'fuel', kind: 'gift', points: 100, t: {ru: ['Кофе в подарок', 'Чашка кофе в подарок на нашей АЗС.'], ro: ['Cafea cadou', 'O cafea cadou la benzinăria noastră.'], en: ['Free coffee', 'A free cup of coffee at our station.']}},
-  {key: 'fuel_washer', category: 'fuel', kind: 'gift', points: 150, t: {ru: ['Омывающая жидкость', 'Бутылка омывающей жидкости в подарок.'], ro: ['Lichid de parbriz', 'O sticlă de lichid de parbriz cadou.'], en: ['Washer fluid', 'A free bottle of windscreen washer fluid.']}},
-  {key: 'parts_gift', category: 'parts', kind: 'gift', points: 100, t: {ru: ['Подарок — ароматизатор или салфетки', 'Ароматизатор или влажные салфетки для салона в подарок к покупке.'], ro: ['Cadou — odorizant sau șervețele', 'Un odorizant sau șervețele umede pentru interior, cadou la cumpărătură.'], en: ['Gift — air freshener or wipes', 'An air freshener or interior wipes as a gift with your purchase.']}},
-  {key: 'cafe_coffee', category: 'cafe', kind: 'gift', points: 100, t: {ru: ['Кофе в подарок', 'Чашка кофе в подарок.'], ro: ['Cafea cadou', 'O cafea cadou.'], en: ['Free coffee', 'A free cup of coffee.']}},
-  {key: 'any_priority', category: '*', kind: 'priority', points: 150, t: {ru: ['Обслуживание без очереди', 'Примем вас без очереди или в удобное время по записи.'], ro: ['Servire fără coadă', 'Vă servim fără coadă sau la o oră convenabilă, cu programare.'], en: ['No-queue service', 'We’ll serve you without queuing or at a convenient booked time.']}}
+  {key: 'sto_chassis', category: 'sto', kind: 'service', points: 40, t: {ru: ['Диагностика ходовой', 'Бесплатно проверим подвеску и рулевое на подъёмнике и подскажем, что требует внимания.'], ro: ['Diagnoza trenului de rulare', 'Verificăm gratuit suspensia și direcția pe elevator și vă spunem ce necesită atenție.'], en: ['Suspension check', 'A free lift check of the suspension and steering — we’ll tell you what needs attention.']}},
+  {key: 'sto_brakes', category: 'sto', kind: 'service', points: 35, t: {ru: ['Проверка тормозов', 'Проверим колодки, диски и тормозную жидкость — бесплатно, примерно за 15 минут.'], ro: ['Verificarea frânelor', 'Verificăm plăcuțele, discurile și lichidul de frână — gratuit, în aproximativ 15 minute.'], en: ['Brake check', 'We check the pads, discs and brake fluid — free, in about 15 minutes.']}},
+  {key: 'sto_fluids', category: 'sto', kind: 'service', points: 25, t: {ru: ['Проверка уровня масла и жидкостей', 'Проверим масло, антифриз, тормозную и омывающую жидкость.'], ro: ['Verificarea uleiului și a lichidelor', 'Verificăm uleiul, antigelul, lichidul de frână și lichidul de parbriz.'], en: ['Oil and fluids check', 'We check the oil, coolant, brake fluid and washer fluid.']}},
+  {key: 'tires_pressure', category: 'tires', kind: 'service', points: 15, t: {ru: ['Проверка давления и подкачка', 'Проверим давление во всех колёсах и подкачаем до нормы производителя.'], ro: ['Verificarea presiunii și umflarea roților', 'Verificăm presiunea în toate roțile și le umflăm la valoarea recomandată de producător.'], en: ['Pressure check and inflation', 'We check the pressure in all tyres and inflate them to the manufacturer’s spec.']}},
+  {key: 'tires_balance', category: 'tires', kind: 'service', points: 30, t: {ru: ['Проверка балансировки', 'Проверим балансировку колёс на стенде.'], ro: ['Verificarea echilibrării', 'Verificăm echilibrarea roților pe stand.'], en: ['Wheel balance check', 'We check your wheel balance on the machine.']}},
+  {key: 'wash_freshener', category: 'wash', kind: 'gift', points: 10, t: {ru: ['Ароматизатор в подарок', 'Ароматизатор для салона в подарок после мойки.'], ro: ['Odorizant cadou', 'Un odorizant auto cadou după spălare.'], en: ['Free air freshener', 'A car air freshener as a gift after your wash.']}},
+  {key: 'wash_tireshine', category: 'wash', kind: 'upgrade', points: 15, t: {ru: ['Чернение шин', 'К мойке — бесплатное чернение шин.'], ro: ['Înnegrirea anvelopelor', 'La spălare — înnegrirea gratuită a anvelopelor.'], en: ['Tyre shine', 'Free tyre shine added to your wash.']}},
+  {key: 'wash_mats', category: 'wash', kind: 'upgrade', points: 15, t: {ru: ['Мойка ковриков', 'К мойке — бесплатная мойка ковриков.'], ro: ['Spălarea covorașelor', 'La spălare — spălarea gratuită a covorașelor.'], en: ['Mat cleaning', 'Free floor mat cleaning added to your wash.']}},
+  {key: 'wash_paint', category: 'wash', kind: 'service', points: 30, t: {ru: ['Замер толщины ЛКП', 'Бесплатно замерим толщину лакокрасочного покрытия по всему кузову.'], ro: ['Măsurarea grosimii vopselei', 'Măsurăm gratuit grosimea vopselei pe toată caroseria.'], en: ['Paint thickness check', 'A free paint thickness measurement across the whole body.']}},
+  {key: 'fuel_coffee', category: 'fuel', kind: 'gift', points: 10, t: {ru: ['Кофе в подарок', 'Чашка кофе в подарок на нашей АЗС.'], ro: ['Cafea cadou', 'O cafea cadou la benzinăria noastră.'], en: ['Free coffee', 'A free cup of coffee at our station.']}},
+  {key: 'fuel_washer', category: 'fuel', kind: 'gift', points: 15, t: {ru: ['Омывающая жидкость', 'Бутылка омывающей жидкости в подарок.'], ro: ['Lichid de parbriz', 'O sticlă de lichid de parbriz cadou.'], en: ['Washer fluid', 'A free bottle of windscreen washer fluid.']}},
+  {key: 'parts_gift', category: 'parts', kind: 'gift', points: 10, t: {ru: ['Подарок — ароматизатор или салфетки', 'Ароматизатор или влажные салфетки для салона в подарок к покупке.'], ro: ['Cadou — odorizant sau șervețele', 'Un odorizant sau șervețele umede pentru interior, cadou la cumpărătură.'], en: ['Gift — air freshener or wipes', 'An air freshener or interior wipes as a gift with your purchase.']}},
+  {key: 'cafe_coffee', category: 'cafe', kind: 'gift', points: 10, t: {ru: ['Кофе в подарок', 'Чашка кофе в подарок.'], ro: ['Cafea cadou', 'O cafea cadou.'], en: ['Free coffee', 'A free cup of coffee.']}},
+  {key: 'any_priority', category: '*', kind: 'priority', points: 20, t: {ru: ['Обслуживание без очереди', 'Примем вас без очереди или в удобное время по записи.'], ro: ['Servire fără coadă', 'Vă servim fără coadă sau la o oră convenabilă, cu programare.'], en: ['No-queue service', 'We’ll serve you without queuing or at a convenient booked time.']}}
 ];
 const tplLocal = cat => { const a = PERK_TPL0.filter(t => t.category === cat); return a.length ? a.concat(PERK_TPL0.filter(t => t.category === '*')) : PERK_TPL0.filter(t => t.category === '*'); };
 /* текст шаблона на языке l (шаблон сервера: title/description — на языке запроса, i18n — переводы) */
@@ -5418,7 +5646,7 @@ async function perkTemplates() {
   try { items = await getTemplates(); } catch (e) { items = null; }
   return items && items.length ? items : tplLocal((st.partner || {}).category);
 }
-const tplCard = (t, attrs) => { const x = tplText(t, LANG) || {title: t.title || ''}; return '<span class="s">' + ic(PKIC[t.kind] || 'gift', 'xs') + esc(pkkT(t.kind, t.kind_title)) + '</span><span class="t">' + esc(x.title) + '</span><span class="s perk-km">' + esc(kmT(t.points)) + '</span>'; };
+const tplCard = (t, attrs) => { const x = tplText(t, LANG) || {title: t.title || ''}; return '<span class="s">' + ic(PKIC[t.kind] || 'gift', 'xs') + esc(pkkT(t.kind, t.kind_title)) + '</span><span class="t">' + esc(x.title) + '</span><span class="s perk-km">' + esc(kmT(tplPts(t))) + '</span>'; };
 function perkMetaLine(x) {
   const parts = [];
   if (+x.min_level > 1) parts.push(tx('pk.from.lvl', {t: dlvTitle(GM().dlevel(x.min_level))}));
@@ -5435,7 +5663,7 @@ function perkCard(x) {
   if (stt === 'active') acts.push('<button class="btn sm soft" data-act="pk-pause" data-id="' + esc(x.id) + '">' + ic('pause', 'sm') + tx('camp.pause') + '</button>');
   if (stt === 'paused') acts.push('<button class="btn sm ink" data-act="pk-resume" data-id="' + esc(x.id) + '">' + ic('play', 'sm') + tx('camp.resume') + '</button>');
   if (canDelete()) acts.push('<button class="btn sm danger" data-act="pk-del" data-id="' + esc(x.id) + '" aria-label="' + esc(tx('delete')) + '">' + ic('trash', 'sm') + '</button>');
-  const note = x.migrated ? tx('pk.migrated') : x.note ? srvMsg(x.note, '') : '';
+  const was = ptsWas(x), note = x.migrated ? tx('pk.migrated') : x.note ? srvMsg(x.note, '') : was ? tx('pk.clamped', {from: kmT(was), to: kmT(Math.min(+x.points, corrOf()[1]))}) + (x.moderation_note && stt !== 'rejected' ? ' ' + srvMsg(x.moderation_note, '') : '') : x.moderation_note && stt !== 'rejected' ? srvMsg(x.moderation_note, tx('pk.clamped.d', {a: fN(corrOf()[0]), b: fN(corrOf()[1])})) : '';
   const tt = perkIn(x, LANG); /* название на языке интерфейса, если есть перевод */
   return '<article class="perk-card' + (x.migrated ? ' legacy' : '') + '"><div class="row between wrap" style="gap:8px"><span class="badge">' + esc(pkkT(x.kind, x.kind_title)) + '</span>' + (x.migrated ? '<span class="status st-soon">' + tx('pk.migrated.b') + '</span>' : '') + pkStatus(x) + '</div>' +
     '<div class="ct">' + esc(tt.title) + '</div>' + (tt.description ? '<div class="cx">' + esc(tt.description) + '</div>' : '') +
@@ -5498,6 +5726,7 @@ function peFrom(x) {
     sched: !!(x.schedule && x.schedule.days && x.schedule.days.length), location_ids: (x.location_ids || []).map(Number),
     coupon_days: x.coupon_days || 7, cooldown_days: x.cooldown_days == null ? 30 : x.cooldown_days, lang, tl: lang,
     migrated: !!x.migrated, note: x.note || '', moderation_note: x.moderation_note || ''});
+  const was = ptsWas(x); if (was) { o.was = was; o.points = Math.min(+x.points || ptsBounds()[1], ptsBounds()[1]); }
   if (o.sched) { o.days = x.schedule.days.map(Number); o.from = x.schedule.from || '10:00'; o.to = x.schedule.to || '16:00'; }
   o.i18n = {};
   LANGS.forEach(l => { if (l !== lang) { const t = x.i18n && x.i18n[l] || {}; o.i18n[l] = {title: t.title || '', description: t.description || ''}; } });
@@ -5507,7 +5736,7 @@ function peApplyTpl(t) {
   const e = PE;
   if (PERK_KINDS.indexOf(t.kind) >= 0) e.kind = t.kind;
   const c = corrOf(e.kind);
-  e.points = clamp(Math.round((+t.points || c[0]) / 10) * 10, c[0], c[1]);
+  e.points = tplPts(t);
   const o = tplText(t, e.lang) || {title: t.title || '', description: t.description || ''};
   e.title = o.title; e.description = o.description;
   LANGS.forEach(l => {
@@ -5540,7 +5769,7 @@ const peHead = () => (PE.tl !== PE.lang && PE.i18n[PE.tl] && String(PE.i18n[PE.t
 function peRender(v) {
   v = v || $('#view');
   const e = PE, c = corrOf(e.kind);
-  e.points = clamp(Math.round((+e.points || (c[0] + c[1]) / 2) / 10) * 10, c[0], c[1]);
+  e.points = clamp(Math.round(+e.points || Math.round((c[0] + c[1]) / 10) * 5), c[0], c[1]);
   const h = phead(e.id ? tx('pk.edit') : tx('pk.new'), '<span id="pe-h">' + esc(peHead()) + '</span>', null, null, ['#/perks', tx('pk.back')]) +
     '<div class="cols"><form class="form" data-form="pe" novalidate id="pe-form">' + peFormHTML() + errBox('pe-err') + peFootHTML() + '</form>' +
     '<div class="sticky phone-wrap" id="pe-pv"></div></div>';
@@ -5552,6 +5781,8 @@ function peFormHTML() {
   const opt = (act, k, label, on) => '<button type="button" class="opt" data-act="' + act + '" data-k="' + esc(k) + '" aria-pressed="' + !!on + '">' + label + '</button>';
   let h = '';
   if (e.migrated || e.note) { const n = e.migrated ? tx('pk.migrated') : srvMsg(e.note, ''); if (n) h += '<div class="banner" style="margin:0"><span class="ic">' + ic('alert') + '</span><div><div class="t">' + tx('pk.migrated.b') + '</div><div class="s">' + esc(n) + '</div></div></div>'; }
+  /* цена вне 5–50 (старая плюшка): сервер привёл её к границе и оставил пометку модерации */
+  if (e.was || (e.moderation_note && e.status !== 'rejected')) h += '<div class="banner" style="margin:0" id="pe-clamp"><span class="ic">' + ic('info') + '</span><div><div class="t">' + (e.was ? tx('pk.clamped', {from: esc(kmT(e.was)), to: esc(kmT(e.points))}) : tx('pk.modnote')) + '</div><div class="s">' + esc(e.moderation_note && e.status !== 'rejected' ? srvMsg(e.moderation_note, tx('pk.clamped.d', {a: fN(corrOf()[0]), b: fN(corrOf()[1])})) : tx('pk.clamped.d', {a: fN(corrOf()[0]), b: fN(corrOf()[1])})) + '</div></div></div>';
   if (e.status === 'rejected') h += '<div class="banner bad" style="margin:0"><span class="ic">' + ic('alert') + '</span><div class="s" style="margin:0;color:var(--ink)">' + esc(e.moderation_note ? tx('pk.mod.rejected', {note: srvMsg(e.moderation_note, e.moderation_note)}) : tx('pk.mod.rejected0')) + '</div></div>';
   if (e.status === 'pending') h += '<div class="banner" style="margin:0"><span class="ic">' + ic('clock') + '</span><div class="s" style="margin:0;color:var(--ink)">' + tx('pk.mod.pending') + '</div></div>';
   if (e.status === 'active') h += '<p class="hint" style="margin:0">' + tx('pk.active.hint') + '</p>';
@@ -5566,7 +5797,12 @@ function peFormHTML() {
     fld('pe-desc', tx('pk.f.desc') + ' ' + cnt('pe-description-c', de.length, 500), '<textarea class="input" id="pe-desc" rows="3" maxlength="500" lang="' + e.tl + '" placeholder="' + esc(isO ? tx('pk.desc.ph') : (e.description || tx('pk.desc.ph'))) + '" data-in="pe-tr" data-f="description">' + esc(de) + '</textarea>') + '</section>';
   const c = corrOf(e.kind), num = (id, f, v0, attrs) => inp(id, v0, 'type="number" inputmode="numeric" ' + attrs + ' data-in="pe-f" data-f="' + f + '"');
   h += '<section class="fsec"><h3>' + tx('pk.sec.rules') + '</h3>' +
-    '<div class="field"><label for="pe-pts">' + tx('pk.price') + ' <span class="cnt perk-km" id="pe-ptsv">' + esc(kmT(e.points)) + '</span></label><input type="range" id="pe-pts" min="' + c[0] + '" max="' + c[1] + '" step="10" value="' + e.points + '" data-in="pe-pts" aria-valuetext="' + esc(kmT(e.points)) + '"><div class="corr" aria-hidden="true"><span>' + esc(kmT(c[0])) + '</span><span>' + esc(kmT(c[1])) + '</span></div><span class="hint">' + tx('pk.price.hint', {kind: esc(pkkT(e.kind)), a: fN(c[0]), b: fN(c[1])}) + '</span></div>' +
+    '<div class="field"><label for="pe-ptsn">' + tx('pk.price') + ' <span class="cnt perk-km" id="pe-ptsv">' + esc(kmT(e.points)) + '</span></label>' +
+      '<div class="pts-step"><button type="button" class="iconbtn soft" data-act="pe-pts-step" data-d="-1" aria-label="' + esc(tx('pk.price.less')) + '"' + (e.points <= c[0] ? ' disabled' : '') + '>' + ic('minus', 'sm') + '</button>' +
+      '<div class="input-unit"><input class="input" id="pe-ptsn" type="number" inputmode="numeric" min="' + c[0] + '" max="' + c[1] + '" step="1" value="' + e.points + '" data-in="pe-ptsn" aria-describedby="pe-pts-hint pe-pts-err"><span class="u">' + esc(kmUnit()) + '</span></div>' +
+      '<button type="button" class="iconbtn soft" data-act="pe-pts-step" data-d="1" aria-label="' + esc(tx('pk.price.more')) + '"' + (e.points >= c[1] ? ' disabled' : '') + '>' + ic('plus', 'sm') + '</button></div>' +
+      '<input type="range" id="pe-pts" min="' + c[0] + '" max="' + c[1] + '" step="1" value="' + e.points + '" data-in="pe-pts" aria-label="' + esc(tx('pk.price')) + '" aria-valuetext="' + esc(kmT(e.points)) + '"><div class="corr" aria-hidden="true"><span>' + esc(kmT(c[0])) + '</span><span>' + esc(kmT(c[1])) + '</span></div>' +
+      '<span class="hint" id="pe-pts-hint">' + tx('pk.price.hint', {a: fN(c[0]), b: fN(c[1])}) + '</span><div class="err" id="pe-pts-err" role="alert" hidden></div></div>' +
     fld('pe-lvl', tx('pk.level'), sel('pe-lvl', [1, 2, 3, 4, 5, 6].map(n => [n, tx('pk.lvl.opt', {n, t: dlvTitle(G0.dlevel(n))})]), e.min_level, 'data-ch="pe-f" data-f="min_level"'), tx('pk.level.hint')) +
     '<div class="field"><span class="flabel">' + tx('pk.stock') + '</span><div class="grid2">' +
       fld('pe-sd', tx('pk.stock.day'), num('pe-sd', 'stock_per_day', e.stock_per_day, 'min="1" max="10000" step="1" placeholder="' + esc(tx('pk.stock.ph')) + '"')) +
@@ -5601,7 +5837,7 @@ function peValid() {
   }
   const texts = [[e.lang, t + ' ' + d]].concat(LANGS.filter(l => l !== e.lang).map(l => [l, (e.i18n[l].title || '') + ' ' + (e.i18n[l].description || '')]));
   for (const x of texts) { const w = pkBadWord(x[1]); if (w) return [tx('pk.bad.words', {w}), x[0]]; }
-  const c = corrOf(e.kind); if (!(+e.points >= c[0] && +e.points <= c[1])) return [tx('pkv.price', {a: fN(c[0]), b: fN(c[1])})];
+  const c = corrOf(e.kind); if (!(Number.isInteger(+e.points) && e.points !== '' && +e.points >= c[0] && +e.points <= c[1])) return [tx('pkv.price', {a: fN(c[0]), b: fN(c[1])})];
   const si = v0 => v0 === '' || v0 == null ? null : +v0;
   const sd = si(e.stock_per_day), sm = si(e.stock_per_month);
   for (const v0 of [sd, sm]) if (v0 != null && !(Number.isInteger(v0) && v0 >= 1 && v0 <= 10000)) return [tx('pkv.stock')];
@@ -5642,7 +5878,7 @@ function perkPhoneHTML(x, l) {
       '<div class="ph-title">' + esc(title) + '</div><div class="ph-text">' + esc(desc) + '</div>' +
       '<div class="ph-meta">' + esc(meta.join(' · ')) + '</div>' +
       '<div class="ph-btn">' + esc(T('pv.perk.book', {km})) + '</div></div>' +
-    '<div class="ph-card ghost"><div class="ph-head"><span class="ph-logo">AZ</span><div><div class="n">' + T('pv.g.name') + '</div><div class="c">' + T('pv.g.cat', {d: fDist(1200, l)}) + '</div></div><span class="ph-badge">' + esc(kmT(100, l)) + '</span></div><div class="ph-title">' + T('pv.g.title') + '</div></div>' +
+    '<div class="ph-card ghost"><div class="ph-head"><span class="ph-logo">AZ</span><div><div class="n">' + T('pv.g.name') + '</div><div class="c">' + T('pv.g.cat', {d: fDist(1200, l)}) + '</div></div><span class="ph-badge">' + esc(kmT(15, l)) + '</span></div><div class="ph-title">' + T('pv.g.title') + '</div></div>' +
     '<div class="ph-tab"><span><i>' + ic('home', 'sm') + '</i></span><span><i>' + ic('pin', 'sm') + '</i></span><span class="on"><i>' + ic('gift', 'sm') + '</i></span><span><i>' + ic('more', 'sm') + '</i></span></div>' +
   '</div></div>';
 }
@@ -5688,7 +5924,21 @@ ACTS['pe-loc'] = el => { if (el.dataset.k === 'all') PE.location_ids = []; else 
 CHANGES['pe-sched'] = el => { PE.sched = el.checked; peRender(); };
 CHANGES['pe-f'] = el => { PE[el.dataset.f] = el.value; pePv(); };
 INPUTS['pe-f'] = el => { PE[el.dataset.f] = el.value; pePv(); };
-INPUTS['pe-pts'] = el => { PE.points = +el.value; const o = $('#pe-ptsv'); if (o) o.textContent = kmT(PE.points); el.setAttribute('aria-valuetext', kmT(PE.points)); pePv(); };
+/* цена: слайдер, поле и кнопки −/+ синхронны; вне 5–50 — подсказка под полем, сохранить нельзя */
+function pePtsSync(from) {
+  const [lo, hi] = corrOf(), v = +PE.points, ok = Number.isInteger(v) && v >= lo && v <= hi;
+  const o = $('#pe-ptsv'); if (o) o.textContent = ok ? kmT(v) : '—';
+  const r = $('#pe-pts'); if (r && from !== 'range' && ok) { r.value = v; r.setAttribute('aria-valuetext', kmT(v)); }
+  if (r && from === 'range') r.setAttribute('aria-valuetext', kmT(v));
+  const n = $('#pe-ptsn'); if (n && from !== 'num') n.value = v;
+  if (n) n.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  $$('[data-act="pe-pts-step"]').forEach(b => { b.disabled = +b.dataset.d < 0 ? !(v > lo) : !(v < hi); });
+  showErr('pe-pts-err', ok ? '' : tx('pkv.price', {a: fN(lo), b: fN(hi)}));
+  if (ok) pePv();
+}
+INPUTS['pe-pts'] = el => { PE.points = +el.value; pePtsSync('range'); };
+INPUTS['pe-ptsn'] = el => { const s0 = el.value.trim(); PE.points = s0 === '' ? '' : +s0; pePtsSync('num'); };
+ACTS['pe-pts-step'] = el => { const [lo, hi] = corrOf(), v = Number.isFinite(+PE.points) && PE.points !== '' ? Math.round(+PE.points) : lo; PE.points = clamp(v + (+el.dataset.d), lo, hi); pePtsSync(); };
 INPUTS['pe-tr'] = el => {
   const f = el.dataset.f, max = f === 'title' ? 80 : 500;
   if (PE.tl === PE.lang) PE[f] = el.value; else { PE.i18n[PE.tl] = PE.i18n[PE.tl] || {title: '', description: ''}; PE.i18n[PE.tl][f] = el.value; }
@@ -5975,7 +6225,7 @@ VIEWS.settings = async (v, r, alive) => {
       '<div class="field"><span class="flabel">' + tx('set.disc') + '</span><div class="row wrap" style="gap:10px"><div class="seg inline" role="group"><button type="button" data-act="s-dk" data-k="none" aria-pressed="' + (dk === 'none') + '">' + tx('set.disc.none') + '</button><button type="button" data-act="s-dk" data-k="percent" aria-pressed="' + (dk === 'percent') + '">%</button><button type="button" data-act="s-dk" data-k="fixed" aria-pressed="' + (dk === 'fixed') + '">' + cur() + '</button></div><input class="input" id="s-dv" inputmode="decimal" style="flex:1;min-width:120px" value="' + esc(p.discount_value || '') + '" aria-label="' + esc(tx('ed.disc')) + '"' + (dk === 'none' ? ' hidden' : '') + '></div></div>' +
       errBox('sb-err') + '<button class="btn ink" type="submit">' + tx('save') + '</button></form>' +
   '</div>' + pvBoxHTML() + '<div class="stack set-rest" style="gap:18px">' +
-    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="mu-prev sm" id="me-prev">' + esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 56) + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctEmail()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
+    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="mu-prev sm" id="me-prev">' + esc(acctInit()) + pImg(myPhoto(), 56) + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctName()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
       '<div class="row wrap" style="gap:8px;margin-top:12px"><label class="btn sm soft">' + ic('camera', 'sm') + tx('media.photoUp') + '<input type="file" accept="image/*" class="vh" data-ch="me-photo" id="me-file"></label><button type="button" class="btn sm line" data-act="me-photo-del" id="me-del"' + (myPhoto() ? '' : ' hidden') + '>' + ic('trash', 'sm') + tx('media.del') + '</button></div>' +
       '<div class="mu-bar" id="me-bar" hidden><i></i></div>' + errBox('me-err') + '<p class="hint" style="margin:8px 0 0">' + tx('media.photoHint') + '</p>' +
       '<div class="row between wrap" style="margin-top:16px;gap:10px"><span class="small muted">' + tx('lang.uiTheme') + '</span>' + langSw() + '</div>' +
@@ -6072,14 +6322,14 @@ async function mePick(file) {
   if (!/^image\//i.test(file.type || '')) return showErr('me-err', tx('media.type'));
   if (file.size > 25 * 1024 * 1024) return showErr('me-err', tx('media.big'));
   const blob = await imgFit(file, 800, false), el = $('#me-prev'), url = URL.createObjectURL(blob);
-  SET.mePrev = url; if (el) el.innerHTML = esc(initials((A.user && A.user.name) || acctEmail())) + pImg(url, 56); pvSoon(); mediaBar('me-bar', 0);
+  SET.mePrev = url; if (el) el.innerHTML = esc(acctInit()) + pImg(url, 56); pvSoon(); mediaBar('me-bar', 0);
   try {
     if (net.ready) await net.ready;
     const d = await upMedia('/v1/me/photo', blob, 'photo.jpg', f => mediaBar('me-bar', f));
     if (A.user && d.photo_url) { A.user.photo_url = d.photo_url; acctSave(); }
     chromeAvatars(); toast(tx('media.photoOk'));
     const del = $('#me-del'); if (del) del.hidden = false;
-  } catch (e) { SET.mePrev = null; URL.revokeObjectURL(url); if (el) el.innerHTML = esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 56); showErr('me-err', e.message); }
+  } catch (e) { SET.mePrev = null; URL.revokeObjectURL(url); if (el) el.innerHTML = esc(acctInit()) + pImg(myPhoto(), 56); showErr('me-err', e.message); }
   mediaBar('me-bar', null); pvSoon();
 }
 CHANGES['me-photo'] = el => { const f = el.files && el.files[0]; el.value = ''; mePick(f); };
@@ -6090,7 +6340,7 @@ ACTS['me-photo-del'] = async el => {
   done();
   if (A.user) { A.user.photo_url = null; acctSave(); }
   SET.mePrev = null; el.hidden = true;
-  const pv = $('#me-prev'); if (pv) pv.innerHTML = esc(initials((A.user && A.user.name) || acctEmail()));
+  const pv = $('#me-prev'); if (pv) pv.innerHTML = esc(acctInit());
   chromeAvatars(); pvSoon(); toast(tx('media.photoDel'));
 };
 
@@ -6190,7 +6440,7 @@ VIEWS.more = async (v) => {
     '<div class="group more-list">' + items.map(n => '<a class="item" href="#/' + n.r + '"><span class="ic-circle">' + ic(n.ic, 'sm') + '</span><span class="body"><span class="t">' + navT(n.r) + '</span></span>' + ic('chevR', 'sm') + '</a>').join('') + '</div>' +
     '<div class="group more-list section">' + (st.mine.length > 1 ? '<button class="item" data-act="account"><span class="ic-circle">' + ic('building', 'sm') + '</span><span class="body"><span class="t">' + tx('more.switch') + '</span></span>' + ic('chevR', 'sm') + '</button>' : '') +
     '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
-    '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('logout') + '</span><span class="s">' + esc(acctEmail()) + '</span></span></button></div>';
+    '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('logout') + '</span><span class="s">' + esc(acctName()) + '</span></span></button></div>';
 };
 
 /* ================= scanner: camera (BarcodeDetector → ZXing), photo, torch ================= */
