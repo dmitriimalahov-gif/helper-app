@@ -4352,9 +4352,10 @@ function pkCard(p, d, o) {
   h += '<div class="pkc-price"><span class="v">' + pkBig(p.price) + '</span><span class="u">' + esc(cc) + pkPer(p) + '</span></div>';
   h += '<div class="pkc-old">' + (+p.list_price > +p.price ? '<s>' + esc(pkMoney(p.list_price, cc)) + '</s>' : '') + (+p.discount_pct > 0 ? '<span class="pkc-disc">' + tx('plan.disc', {n: fN(p.discount_pct)}) + '</span>' : '') + '</div>';
   const cv = pkConv(p.price, cc); if (cv) h += '<div class="pkc-conv">' + esc(cv) + pkPer(p) + '</div>';
-  if (p.price_note) h += '<p class="pkc-note">' + esc(p.price_note) + '</p>';
+  if (p.price_note && !paid) h += '<p class="pkc-note">' + esc(p.price_note) + '</p>'; /* у платных период и скидка уже видны в цене */
   if (prev) h += '<p class="pkc-inh">' + tx('plan.inherits', {name: esc(prev.name || pkName(prev.key))}) + '</p>';
-  h += '<ul class="pkc-f">' + (p.features || []).map(f => '<li>' + ic('check', 'sm') + '<span>' + esc(f) + '</span></li>').join('') + '</ul>';
+  const feats = (p.features || []).filter(f => !(prev && /^(Всё из|Tot din|Everything in)\s/i.test(String(f).trim()))); /* строку наследования сервер присылает первой — у нас она своя */
+  h += '<ul class="pkc-f">' + feats.map(f => '<li>' + ic('check', 'sm') + '<span>' + esc(f) + '</span></li>').join('') + '</ul>';
   if (o.mode === 'land') h += '<button type="button" class="btn block ' + (p.highlight ? 'ink' : paid ? 'soft' : 'line') + '" data-act="pk-choose" data-k="' + esc(p.key) + '">' + esc(p.cta || tx(paid ? 'plan.choose' : 'plan.free')) + '</button>';
   else if (o.mode === 'cab') {
     if (cur) h += '<button type="button" class="btn block soft" disabled>' + ic('check', 'sm') + tx('plan.cur') + '</button>';
