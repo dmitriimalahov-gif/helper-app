@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Helper для бизнеса — кабинет партнёра</title>
 <meta name="description" content="Кабинет партнёра Helper: клиенты с приложением Helper приходят к вам, вы отмечаете визиты и дарите бесплатные плюшки за километры Helper, растёте в рейтинге партнёров, запускаете акции для водителей рядом и видите статистику.">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://accounts.google.com/gsi/style; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://accounts.google.com/gsi/">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://accounts.google.com/gsi/style; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https: http://127.0.0.1:* http://localhost:*; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob: mediastream:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://accounts.google.com/gsi/">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1314" media="(prefers-color-scheme: dark)">
@@ -498,6 +498,161 @@ input[type=range]{width:100%;accent-color:var(--teal-ink);height:28px}
 .sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .sugg button{height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface)}
 .sugg button:hover{background:var(--teal-3)}
+
+/* аватары: логотип / фото поверх букв; не загрузилось — картинка убирается */
+.av,.mu-prev{position:relative;overflow:hidden}
+.av .plogo,.mu-prev .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.side-foot .who{display:flex;align-items:center;gap:8px}
+.side-foot .who .av{width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--on-teal);display:grid;place-items:center;font-size:10px;font-weight:700;flex:none}
+/* загрузка логотипа и фото */
+.media-up{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:16px;border:1.5px dashed var(--line-2);transition:border-color .15s,background .15s}
+.media-up.drag{border-color:var(--teal-ink);background:var(--teal-3)}
+.mu-prev{width:72px;height:72px;border-radius:50%;background:var(--teal);color:var(--on-teal);display:grid;place-items:center;font-weight:700;font-size:22px;flex:none}
+.mu-prev.sm{width:56px;height:56px;font-size:18px}
+.mu-bar{height:6px;border-radius:6px;background:var(--surface);overflow:hidden;margin-top:10px}
+.mu-bar i{display:block;height:100%;width:0;background:var(--teal-ink);transition:width .15s}
+.media-up label.btn{cursor:pointer}
+/* живой предпросмотр «как в приложении водителя» */
+.set-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+.set-cols>.pv-col{order:-1}
+@media (min-width:1100px){.set-cols{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-areas:"f p" "f r";gap:32px;align-items:start}.set-cols>.set-forms{grid-area:f}.set-cols>.pv-col{grid-area:p;order:0}.set-cols>.set-rest{grid-area:r}}
+.pv-box summary{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;cursor:pointer;list-style:none}
+.pv-box summary::-webkit-details-marker{display:none}
+.pv-box summary .chev{margin-left:auto;transition:transform .2s}
+.pv-box[open] summary .chev{transform:rotate(180deg)}
+.pv-ctl{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin:14px 0}
+.pv-stage{display:flex;justify-content:center}
+.dpv-frame{padding:10px;border-radius:44px;background:#101516;box-shadow:0 30px 60px rgba(0,0,0,.18),inset 0 0 0 2px #2b3334}
+.dpv-vp{position:relative;overflow:hidden;border-radius:34px;width:calc(375px * var(--k,.8));height:calc(760px * var(--k,.8))}
+.dpv-scr{position:absolute;top:0;left:0;width:375px;height:760px;transform:scale(var(--k,.8));transform-origin:0 0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;font-weight:500;-webkit-font-smoothing:antialiased;text-align:left}
+.dpv-scr *{box-sizing:border-box}
+.dpv-scr .dpv-st{display:flex;justify-content:space-between;align-items:center;height:44px;padding:0 26px;font-size:14px;font-weight:600}
+.dpv-scr .dpv-body{padding:0 18px 90px}
+.dpv-scr .dpv-tabs{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px 18px;background:var(--bar-bg);border-top:1px solid var(--line)}
+.dpv-scr .dpv-dim{position:absolute;inset:0;background:rgba(10,14,15,.42)}
+.dpv-scr .dpv-sheet{position:absolute;left:0;right:0;bottom:0;max-height:88%;display:flex;flex-direction:column;background:var(--bg);border-radius:26px 26px 0 0;box-shadow:var(--shadow-up)}
+.dpv-scr .dpv-sheet .sheet-body{overflow:hidden}
+.dpv-scr .ghost{opacity:.45}
+.dpv-scr .pv-ex{position:absolute;bottom:12px;right:12px}
+/* --- Предпросмотр «как в приложении водителя»: копия токенов и стилей 06_WEB/index.html (карточки акций/плюшек, лист компании). Меняете там — обновите здесь. --- */
+.dpv-scr{
+  --teal:#96D5D2; --teal-2:#C9E9E6; --teal-3:#EEF7F6; --teal-ink:#1F6E69;
+  --ink:#231F20; --ink-2:#56605F; --ink-3:#86908F;
+  --bg:#FFFFFF; --bg-outer:#E9F1F0; --surface:#F3F7F7; --card:#FFFFFF; --line:#E2EAE9; --line-2:#CFDBDA;
+  --bar-bg:rgba(255,255,255,.9);
+  --on-teal:#231F20; --on-ink:#FFFFFF;
+  --ok:#2E9A5E; --ok-bg:#E4F4EA; --ok-t:#1D7444;
+  --soon:#D18F14; --soon-bg:#FBF0D9; --soon-t:#8A5A00;
+  --bad:#D2433A; --bad-bg:#FBE5E3; --bad-t:#B0302A;
+  --none:#A9B3B2;
+  --c1:#159a92; --c2:#e0703c; --c3:#5a4fc9; --c4:#d4588f; --c5:#2a78d6; --c6:#9c7b1f;
+  --shadow:0 1px 2px rgba(35,31,32,.05),0 10px 30px rgba(35,31,32,.07);
+  --shadow-up:0 -8px 30px rgba(35,31,32,.10);
+  --font:"Montserrat",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --r-xl:26px; --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --tabbar-h:64px;
+  --logo-light:block; --logo-dark:none;
+  --font:"Montserrat",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; --r-xl:26px; --r-lg:20px; --r-md:14px; --r-sm:10px;
+}
+.dpv-scr[data-pv="dark"]{
+  color-scheme:dark;
+  --teal:#96D5D2; --teal-2:#24413F; --teal-3:#142726; --teal-ink:#9ADAD6;
+  --ink:#EEF3F2; --ink-2:#AAB7B6; --ink-3:#7A8A89;
+  --bg:#0E1314; --bg-outer:#070A0B; --surface:#161F20; --card:#172122; --line:#243234; --line-2:#30413F;
+  --bar-bg:rgba(14,19,20,.9);
+  --on-teal:#0E1314; --on-ink:#0E1314;
+  --ok:#4CC27F; --ok-bg:#15301F; --ok-t:#79DBA1;
+  --soon:#E7A93A; --soon-bg:#33270F; --soon-t:#F2C063;
+  --bad:#EF6A60; --bad-bg:#3A1A18; --bad-t:#FF9A90;
+  --none:#4E5D5C;
+  --c1:#1aa39a; --c2:#d9683a; --c3:#6f64e0; --c4:#d65590; --c5:#3d86e0; --c6:#a8852e;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  --shadow-up:0 -8px 30px rgba(0,0,0,.45);
+  --logo-light:none; --logo-dark:block;
+}
+.dpv-scr .ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.dpv-scr .ico.sm{width:18px;height:18px}
+.dpv-scr .ico.xs{width:15px;height:15px;stroke-width:1.9}
+.dpv-scr .topbar{position:relative;z-index:30;margin:0 -18px;padding:10px 18px 8px;background:var(--bar-bg);-webkit-backdrop-filter:saturate(1.4) blur(18px);backdrop-filter:saturate(1.4) blur(18px);display:flex;align-items:center;gap:10px;min-height:56px}
+.dpv-scr .topbar .grow{flex:1;min-width:0}
+.dpv-scr .topbar h1.small{font-size:17px;font-weight:600;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.dpv-scr .iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:var(--surface);flex:none}
+.dpv-scr .iconbtn.ghost{background:transparent}
+.dpv-scr .tb-title{margin:0;font-weight:300;font-size:26px;letter-spacing:-.01em;line-height:1.15}
+.dpv-scr .subtitle{color:var(--ink-2);font-size:13.5px;margin:0}
+.dpv-scr .eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin:0}
+.dpv-scr .section{margin-top:26px}
+.dpv-scr .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.dpv-scr .muted{color:var(--ink-2)}
+.dpv-scr .muted-3{color:var(--ink-3)}
+.dpv-scr .small{font-size:13px}
+.dpv-scr .xsmall{font-size:12px}
+.dpv-scr .row{display:flex;align-items:center;gap:12px}
+.dpv-scr .stack{display:flex;flex-direction:column;gap:12px}
+.dpv-scr .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0 7px;color:var(--ink-3);font-size:10.5px;font-weight:600;letter-spacing:.01em;border-radius:14px}
+.dpv-scr .tab .pill{width:52px;height:30px;border-radius:999px;display:grid;place-items:center;transition:background .2s}
+.dpv-scr .tab[aria-current="page"]{color:var(--ink)}
+.dpv-scr .tab[aria-current="page"] .pill{background:var(--teal-2)}
+.dpv-scr .btn{height:50px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;background:var(--teal);color:var(--on-teal);transition:transform .12s, filter .12s;white-space:nowrap}
+.dpv-scr .btn.block{width:100%}
+.dpv-scr .btn.ink{background:var(--ink);color:var(--on-ink)}
+.dpv-scr .btn.soft{background:var(--surface);color:var(--ink)}
+.dpv-scr .btn.line{background:transparent;border:1.5px solid var(--line-2);color:var(--ink)}
+.dpv-scr .btn.sm{height:38px;padding:0 16px;font-size:13.5px}
+.dpv-scr .btn-row{display:flex;gap:10px}
+.dpv-scr .btn-row>.btn{flex:1}
+.dpv-scr .badge{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--teal-2);color:var(--ink)}
+.dpv-scr .badge.warn{background:var(--soon-bg);color:var(--soon-t)}
+.dpv-scr .ic-circle{width:38px;height:38px;border-radius:50%;background:var(--teal-3);color:var(--ink);display:grid;place-items:center;flex:none}
+.dpv-scr .tip{margin-top:22px;padding:14px 16px;border-radius:var(--r-md);background:var(--teal-3);display:flex;gap:12px;font-weight:500;font-size:14px;line-height:1.5}
+.dpv-scr .sheet-grab{width:40px;height:5px;border-radius:5px;background:var(--line-2);margin:8px auto 0;flex:none}
+.dpv-scr .sheet-head{display:flex;align-items:center;gap:10px;padding:10px 18px 6px;flex:none}
+.dpv-scr .sheet-head h2{flex:1;margin:0;font-size:19px;font-weight:600;line-height:1.25}
+.dpv-scr .sheet-body{overflow-y:auto;padding:8px 18px calc(22px + 0px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.dpv-scr .tagchip{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;background:var(--teal-3);color:var(--ink);font-size:12px;font-weight:600}
+.dpv-scr .lgo{position:relative;display:grid;place-items:center;flex:none;border-radius:50%;overflow:hidden;background:var(--teal-3);color:var(--teal-ink);font-weight:700}
+.dpv-scr .lgo .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.dpv-scr .offer .oh .lgo{width:28px;height:28px;font-size:12px;margin-right:2px}
+.dpv-scr .offer .oh .ocat{flex:1;min-width:0}
+.dpv-scr .oown{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);min-width:0}
+.dpv-scr .oown .lgo{width:22px;height:22px;font-size:10px}
+.dpv-scr .oown span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dpv-scr .perk .pk{position:relative;overflow:hidden}
+.dpv-scr .perk .pk .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.dpv-scr .co-head{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.dpv-scr .co-head .lgo{width:52px;height:52px;font-size:18px}
+.dpv-scr .co-own{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px 12px;border-radius:var(--r-md);background:var(--surface)}
+.dpv-scr .co-own .lgo{width:36px;height:36px;font-size:13px}
+.dpv-scr .offer{flex:none;width:min(248px,72vw);scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--card);text-align:left;position:relative}
+.dpv-scr .offer:hover{border-color:var(--line-2)}
+.dpv-scr .offer.wide{width:100%}
+.dpv-scr .offer .oh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dpv-scr .offer .ocat{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dpv-scr .offer .ot{font-weight:600;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dpv-scr .offer .oc{font-size:12.5px;color:var(--ink-2)}
+.dpv-scr .offer .od{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:auto}
+.dpv-scr .obadge{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;background:var(--teal);color:var(--on-teal);font-size:12px;font-weight:700;white-space:nowrap;flex:none;font-variant-numeric:tabular-nums}
+.dpv-scr .oloc{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.dpv-scr .oloc .body{flex:1;min-width:0}
+.dpv-scr .oloc .t{font-weight:600;font-size:14px}
+.dpv-scr .oloc .s{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.dpv-scr .kmh{display:inline-flex;align-items:center;gap:.26em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dpv-scr .kmh>svg.mark{width:.95em;height:.95em;flex:none}
+.dpv-scr .kmh.lg>svg.mark{width:.6em;height:.6em}
+.dpv-scr .kmh-u{font-size:.5em;font-weight:500;color:var(--ink-2);letter-spacing:0;margin-left:.1em}
+.dpv-scr .perk{display:flex;flex-direction:column;gap:8px;width:100%;padding:14px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--card);text-align:left;position:relative}
+.dpv-scr .perk:hover{border-color:var(--line-2)}
+.dpv-scr .perk .ph{display:flex;align-items:center;gap:10px;min-width:0}
+.dpv-scr .perk .pk{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--teal-3);color:var(--ink);flex:none}
+.dpv-scr .perk .pk.helper{background:var(--ink);color:var(--on-ink)}
+.dpv-scr .perk .pc{flex:1;min-width:0}
+.dpv-scr .perk .pco{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.dpv-scr .perk .pm{font-size:11.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:1px}
+.dpv-scr .perk .pt{font-weight:600;font-size:15px;line-height:1.3}
+.dpv-scr .perk .pf{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:auto}
+.dpv-scr .perk .price{font-weight:300;font-size:24px;line-height:1;letter-spacing:-.01em}
+.dpv-scr .perk .tags{display:flex;flex-wrap:wrap;gap:6px}
+.dpv-scr .perk.locked .pt,.dpv-scr .perk.locked .price{color:var(--ink-2)}
 
 /* phone preview */
 .phone-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -1003,6 +1158,51 @@ const isK = v => typeof v === 'string' && v.trim().charAt(0) === '<';
 const numv = v => isK(v) ? 0 : (+v || 0);
 const kv = (v, fmt) => isK(v) ? '<span class="kanon" tabindex="0" role="button" data-act="kanon" aria-label="' + esc(tx('k.aria')) + '" title="' + esc(tx('k.kanon')) + '">' + tx('k.lt5') + '</span>' : (fmt || fN)(v);
 const parseAmount = s => { const v = parseFloat(String(s || '').replace(/\s| /g, '').replace(',', '.')); return isFinite(v) ? Math.round(v * 100) / 100 : 0; };
+/* ===================== Логотип компании и фото владельца =====================
+   Адреса картинок — абсолютные https на адресе API (туннель меняется) или локальный API разработки; ленивые, с размерами;
+   не загрузилось — картинка убирается (обработчик error ниже), остаются буквы. Загрузка: уменьшение на устройстве (canvas:
+   метаданные снимаются, логотип PNG остаётся PNG), multipart POST с прогрессом, те же токены, что у api(). */
+const mediaUrl = u => typeof u === 'string' && (/^https:\/\/[^\s"'<>]+$/i.test(u) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^\s"'<>]*$/i.test(u) || /^blob:https?:\/\/[^\s"'<>]+$/i.test(u)) ? u : '';
+const pImg = (u, size) => mediaUrl(u) ? '<img class="plogo" src="' + esc(mediaUrl(u)) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">' : '';
+const myPhoto = () => (A && A.user && mediaUrl(A.user.photo_url)) || '';
+document.addEventListener('error', e => { const el = e.target; if (el && el.tagName === 'IMG' && el.classList && el.classList.contains('plogo')) el.remove(); }, true);
+async function imgFit(file, max, alpha) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const w = img.naturalWidth, h = img.naturalHeight; if (!w || !h) return file;
+    const k = Math.min(1, max / Math.max(w, h)), c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
+    const png = alpha && /png|webp|gif/i.test(file.type || ''), g = c.getContext('2d');
+    if (!png) { g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); }
+    g.drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise(res => c.toBlob(b => res(b || file), png ? 'image/png' : 'image/jpeg', 0.9));
+  } catch (e) { return file; } finally { URL.revokeObjectURL(url); }
+}
+const mediaErr = (d, s) => s === 413 ? tx('media.big') : s === 415 ? tx('media.type') : s === 403 ? tx('media.rights') : humanErr(d, s);
+async function upMedia(path, blob, name, onProg) {
+  if (net.ready) await net.ready;
+  if (!net.api) throw apiErr(0, 'no_api', tx('err.noapi'));
+  const go = retried => new Promise((res, rej) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', net.api + path);
+    x.setRequestHeader('Accept', 'application/json'); x.setRequestHeader('Accept-Language', LANG);
+    if (logged()) x.setRequestHeader('Authorization', 'Bearer ' + A.access);
+    if (x.upload) x.upload.onprogress = e => { if (onProg && e.lengthComputable) onProg(e.loaded / e.total); };
+    x.onload = () => {
+      let d = null; try { d = JSON.parse(x.responseText); } catch (e) {}
+      if (x.status === 401 && !retried) return res({retry: true});
+      if (x.status >= 200 && x.status < 300 && !(d && d.ok === false)) return res({d: d || {}});
+      rej(apiErr(x.status, (d && d.error) || 'http_' + x.status, mediaErr(d, x.status), d));
+    };
+    x.onerror = x.ontimeout = () => rej(apiErr(0, 'offline', tx('err.offline')));
+    x.timeout = 120000;
+    const fd = new FormData(); fd.append('file', blob, name); x.send(fd);
+  });
+  let r = await go(false);
+  if (r.retry) { if (!(await apiRefresh().catch(() => false))) { sessionLost(); throw apiErr(401, 'unauthorized', tx('err.session')); } r = await go(true); if (r.retry) throw apiErr(401, 'unauthorized', tx('err.session')); }
+  return r.d;
+}
 const initials = s => String(s || '').replace(/[«»"'()]/g, ' ').replace(/\b(SRL|SA|II|ÎI|ICS|SC|ООО)\b/gi, ' ').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'H';
 /* поиск без регистра и диакритики: «chisinau» найдёт «Chișinău», «кишинев» — «Кишинёв» */
 const fold = s => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -1020,6 +1220,51 @@ Object.assign(TX, {
   'lang.ui': ['Язык интерфейса', 'Limba interfeței', 'Interface language'],
   'lang.uiTheme': ['Язык, тема и валюта', 'Limba, tema și moneda', 'Language, theme and currency'],
   'fx.disp': ['Валюта показа', 'Moneda de afișare', 'Display currency'],
+  'media.logo': ['Логотип', 'Logo', 'Logo'],
+  'media.pick': ['Выбрать файл', 'Alegeți fișierul', 'Choose file'],
+  'media.del': ['Удалить', 'Ștergeți', 'Remove'],
+  'media.logoHint': ['Квадратная картинка от 256×256 (PNG или JPEG). В приложении логотип показывается в круге — края обрезаются, главное держите в центре. На компьютере файл можно перетащить сюда.', 'Imagine pătrată de la 256×256 (PNG sau JPEG). În aplicație logo-ul apare într-un cerc — marginile se taie, păstrați esențialul în centru. Pe calculator puteți trage fișierul aici.', 'A square image, 256×256 or larger (PNG or JPEG). The app shows the logo in a circle — the edges are cropped, so keep the important part centred. On a computer you can drag the file here.'],
+  'media.uploading': ['Загружаем… {pct}%', 'Se încarcă… {pct}%', 'Uploading… {pct}%'],
+  'media.logoOk': ['Логотип обновлён', 'Logo-ul a fost actualizat', 'Logo updated'],
+  'media.logoDel': ['Логотип удалён', 'Logo-ul a fost șters', 'Logo removed'],
+  'media.photo': ['Ваше фото', 'Fotografia dvs.', 'Your photo'],
+  'media.photoUp': ['Загрузить фото', 'Încărcați fotografia', 'Upload photo'],
+  'media.photoHint': ['Фото видно в кабинете и — если это включено в настройках компании — клиентам в приложении Helper.', 'Fotografia apare în panou și — dacă este activat în setările companiei — clienților în aplicația Helper.', 'Your photo appears in the dashboard and — if enabled in the company settings — to customers in the Helper app.'],
+  'media.photoOk': ['Фото обновлено', 'Fotografia a fost actualizată', 'Photo updated'],
+  'media.photoDel': ['Фото удалено', 'Fotografia a fost ștearsă', 'Photo removed'],
+  'media.type': ['Нужна картинка: JPEG, PNG или WebP', 'Este nevoie de o imagine: JPEG, PNG sau WebP', 'Please choose an image: JPEG, PNG or WebP'],
+  'media.big': ['Файл слишком большой — выберите картинку поменьше', 'Fișierul este prea mare — alegeți o imagine mai mică', 'The file is too large — choose a smaller image'],
+  'media.rights': ['Менять это может владелец или менеджер компании', 'Poate modifica doar proprietarul sau managerul companiei', 'Only the company owner or a manager can change this'],
+  'own.h': ['Владелец в приложении', 'Proprietarul în aplicație', 'Owner in the app'],
+  'own.show': ['Показывать моё фото клиентам', 'Afișați fotografia mea clienților', 'Show my photo to customers'],
+  'own.show.d': ['Фото и подпись появятся в карточке компании в приложении Helper — к знакомому человеку ехать приятнее.', 'Fotografia și semnătura apar în fișa companiei în aplicația Helper — la o persoană cunoscută se merge mai ușor.', 'Your photo and caption appear on the company card in the Helper app — people prefer going to someone they know.'],
+  'own.title': ['Как подписать', 'Cum să semnăm', 'Caption'],
+  'own.title.ph': ['Например, Иван, владелец', 'De exemplu, Ion, proprietar', 'For example, John, owner'],
+  'own.nophoto': ['Фото ещё нет — загрузите его в блоке «Аккаунт».', 'Încă nu există fotografie — încărcați-o în blocul „Cont”.', 'No photo yet — upload it in the “Account” block.'],
+  'pv.h': ['Как вас видят в приложении', 'Cum vă văd în aplicație', 'How you look in the app'],
+  'pv.list': ['В списке', 'În listă', 'In the list'],
+  'pv.card': ['Карточка компании', 'Fișa companiei', 'Company card'],
+  'pv.th': ['Тема предпросмотра', 'Tema previzualizării', 'Preview theme'],
+  'pv.note': ['Так водители видят вашу компанию в приложении Helper. Расстояние и соседняя компания — пример. Изменения видны сразу; чтобы они попали в приложение, сохраните форму.', 'Așa vă văd șoferii compania în aplicația Helper. Distanța și compania vecină sunt exemple. Modificările se văd imediat; ca să ajungă în aplicație, salvați formularul.', 'This is how drivers see your company in the Helper app. The distance and the neighbouring business are examples. Changes show instantly; save the form to publish them.'],
+  'pv.d.nearby': ['Предложения рядом', 'Oferte în apropiere', 'Offers nearby'],
+  'pv.d.offers': ['Акции партнёров', 'Oferte de la parteneri', 'Partner offers'],
+  'pv.d.perks': ['Плюшки партнёров', 'Beneficii de la parteneri', 'Partner perks'],
+  'pv.d.address': ['Адрес', 'Adresă', 'Address'],
+  'pv.d.route': ['Маршрут', 'Traseu', 'Directions'],
+  'pv.d.code': ['Показать мой код', 'Arătați codul meu', 'Show my code'],
+  'pv.d.coupon': ['Получить купон', 'Obțineți cuponul', 'Get coupon'],
+  'pv.d.free': ['бесплатно', 'gratuit', 'free'],
+  'pv.d.until': ['до {date}', 'până la {date}', 'until {date}'],
+  'pv.d.valid': ['Действует до {date}', 'Valabilă până la {date}', 'Valid until {date}'],
+  'pv.d.note': ['Покажите Helper-код на кассе — визит засчитается, а вам придут километры Helper. Партнёр не видит ваше имя, телефон и где вы ездите.', 'Arătați codul Helper la casă — vizita se contorizează și primiți kilometri Helper. Partenerul nu vă vede numele, telefonul și nici pe unde circulați.', 'Show your Helper code at the till — the visit counts and you get Helper kilometres. The partner can’t see your name, phone number or where you drive.'],
+  'pv.d.badge': ['акция', 'ofertă', 'offer'],
+  'pv.d.sample': ['Здесь появится ваша акция', 'Aici va apărea oferta dvs.', 'Your offer will appear here'],
+  'pv.d.example': ['пример', 'exemplu', 'example'],
+  'pv.d.km': ['км', 'km', 'km'],
+  'pv.d.book': ['Забронировать за', 'Rezervați pentru', 'Book for'],
+  'pv.d.other': ['Автомойка «Пример»', 'Spălătoria „Exemplu”', 'Car wash “Example”'],
+  'pv.d.otherT': ['Мойка кузова −15%', 'Spălare caroserie −15%', 'Body wash −15%'],
+  'pv.d.tabs': ['Главная|Авто|Журнал|Игра|Ещё', 'Acasă|Auto|Jurnal|Joc|Mai mult', 'Home|Car|Log|Game|More'],
   'fx.payIn': ['Оплата и списания — в {cur}; суммы в {disp} — ориентировочно по курсу', 'Plata și debitările — în {cur}; sumele în {disp} sunt orientative, la curs', 'Payments and charges are in {cur}; amounts in {disp} are indicative, at the exchange rate'],
   'fx.caption': ['Курс {src} на {date}: 1 EUR = {rates}', 'Cursul {src} din {date}: 1 EUR = {rates}', '{src} rate on {date}: 1 EUR = {rates}'],
   'fx.captionApprox': ['Примерный курс на {date}: 1 EUR = {rates}', 'Curs aproximativ din {date}: 1 EUR = {rates}', 'Approximate rate on {date}: 1 EUR = {rates}'],
@@ -2865,18 +3110,27 @@ function shellHTML() {
   const multi = st.mine.length > 1;
   return '<div class="shell">' +
     '<aside class="side" aria-label="' + esc(tx('shell.menu')) + '"><a class="logo-wrap" href="#/' + defaultRoute() + '">' + logoHTML() + logoSub() + '</a>' +
-      '<button class="side-co" data-act="account"><span class="av">' + esc(initials(p.company)) + '</span><span class="grow"><span class="t" style="display:block">' + esc(p.company) + '</span><span class="s">' + esc(roleTitle(role())) + (multi ? ' · ' + tx('shell.switch') : '') + '</span></span>' + ic('chevD', 'xs') + '</button>' +
+      '<button class="side-co" data-act="account"><span class="av">' + esc(initials(p.company)) + pImg(p.logo_url, 36) + '</span><span class="grow"><span class="t" style="display:block">' + esc(p.company) + '</span><span class="s">' + esc(roleTitle(role())) + (multi ? ' · ' + tx('shell.switch') : '') + '</span></span>' + ic('chevD', 'xs') + '</button>' +
       '<nav class="nav">' + nav.map(n => '<a href="#/' + n.r + '" data-nav="' + n.r + '">' + ic(n.ic, 'sm') + navT(n.r) + '</a>').join('') + '</nav>' +
-      '<div class="side-foot"><span class="who" title="' + esc(acctEmail()) + '">' + esc(acctEmail()) + '</span><button class="textbtn" data-act="logout" style="justify-content:flex-start">' + ic('logout', 'sm') + tx('logout') + '</button></div>' +
+      '<div class="side-foot"><span class="who" title="' + esc(acctEmail()) + '"><span class="av">' + esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 24) + '</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">' + esc(acctEmail()) + '</span></span><button class="textbtn" data-act="logout" style="justify-content:flex-start">' + ic('logout', 'sm') + tx('logout') + '</button></div>' +
     '</aside>' +
-    '<main class="main' + (cashier ? ' notab' : '') + '" id="main"><div class="lang-float">' + langSw() + '</div><div class="mtop"><a href="#/' + defaultRoute() + '" aria-label="' + esc(tx('app.name')) + '">' + logoHTML() + '</a>' + langSw('sm') + '<button class="co-btn" data-act="account" aria-label="' + esc(tx('acct.title')) + '"><span>' + esc(p.company) + '</span><span class="av">' + esc(initials(p.company)) + '</span></button></div>' +
+    '<main class="main' + (cashier ? ' notab' : '') + '" id="main"><div class="lang-float">' + langSw() + '</div><div class="mtop"><a href="#/' + defaultRoute() + '" aria-label="' + esc(tx('app.name')) + '">' + logoHTML() + '</a>' + langSw('sm') + '<button class="co-btn" data-act="account" aria-label="' + esc(tx('acct.title')) + '"><span>' + esc(p.company) + '</span><span class="av">' + esc(initials(p.company)) + pImg(myPhoto() || p.logo_url, 28) + '</span></button></div>' +
       '<div id="gb"></div><div id="view"></div></main>' +
     (cashier ? '' : '<nav class="tabbar" aria-label="' + esc(tx('shell.tabs')) + '">' + TABS.map(tb => { const n = NAV.find(x => x.r === tb) || {r: 'more', ic: 'more'}; return '<a class="tab" href="#/' + n.r + '" data-tab="' + n.r + '"><span class="pill">' + ic(n.ic) + '</span>' + tx(n.r === 'kassa' ? 'nav.kassa.short' : 'nav.' + n.r) + '</a>'; }).join('') + '</nav>') +
   '</div>';
 }
+const chromeKey = () => { const p = st.partner || {}; return [st.pid, role(), p.company, st.mine.length, acctEmail(), LANG, p.logo_url || '', myPhoto()].join('|'); };
+/* логотип / фото сменились — обновить аватары на месте (без перерисовки страницы с формами) */
+function chromeAvatars() {
+  const p = st.partner || {}, me = initials((A.user && A.user.name) || acctEmail());
+  $$('.side-co .av').forEach(e => { e.innerHTML = esc(initials(p.company)) + pImg(p.logo_url, 36); });
+  $$('.co-btn .av').forEach(e => { e.innerHTML = esc(initials(p.company)) + pImg(myPhoto() || p.logo_url, 28); });
+  $$('.side-foot .who .av').forEach(e => { e.innerHTML = esc(me) + pImg(myPhoto(), 24); });
+  if ($('#root').dataset.shell) $('#root').dataset.shell = chromeKey();
+}
 function paintChrome() {
   const p = st.partner; if (!p) return;
-  const key = [st.pid, role(), p.company, st.mine.length, acctEmail(), LANG].join('|');
+  const key = chromeKey();
   if (!$('#view') || $('#root').dataset.shell !== key) { $('#root').innerHTML = shellHTML(); $('#root').dataset.shell = key; }
   const name = navOf(st.route.name);
   $$('[data-nav]').forEach(a => { if (a.dataset.nav === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -2902,9 +3156,9 @@ function accountSheet() {
   const p = st.partner;
   const others = st.mine.filter(x => +x.partner_id !== +st.pid);
   openSheet(tx('acct.title'),
-    '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + '</div></div></div>' +
+    '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal av" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + pImg(p.logo_url, 48) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + '</div></div></div>' +
     (others.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.others') + '</p><div class="group">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + ' · ' + esc(pstT(x.status, x.status_title)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '') +
-    '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle">' + ic('user', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(acctEmail() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
+    '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle av">' + ic('user', 'sm') + pImg(myPhoto(), 38) + '</span><span class="body"><span class="t" style="display:block">' + esc(acctEmail() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
     '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
     (canManage() ? '<a class="item" href="#/settings"><span class="ic-circle">' + ic('gear', 'sm') + '</span><span class="body"><span class="t">' + tx('acct.settings') + '</span></span>' + ic('chevR', 'sm') + '</a>' : '') +
     '<button class="item" data-act="logout"><span class="ic-circle bad">' + ic('logout', 'sm') + '</span><span class="body"><span class="t">' + tx('logout') + '</span></span></button></div>');
@@ -5404,9 +5658,10 @@ ACTS.invoice = async el => {
 ACTS['inv-text-copy'] = async () => toast(await copyText(INV.text) ? tx('bill.req.copied') : tx('bill.copy.fail'));
 
 /* ---------- Настройки ---------- */
-const SET = {dk: 'none', place: null, ph: null};
+const SET = {dk: 'none', place: null, ph: null, logoPrev: null, logoPid: null, mePrev: null};
 VIEWS.settings = async (v, r, alive) => {
   const p = st.partner;
+  if (SET.logoPid !== st.pid) { SET.logoPrev = null; SET.logoPid = st.pid; } /* выбранный, но ещё не с сервера логотип — только этой компании */
   if (!st.meta) { try { await loadMeta(); } catch (e) {} if (!alive()) return; }
   const m = M();
   const others = st.mine.filter(x => +x.partner_id !== +st.pid);
@@ -5417,8 +5672,12 @@ VIEWS.settings = async (v, r, alive) => {
   SET.ph = {dial: ph.dial || p.country || 'MD', nat: ph.nat, dm: !!ph.dial && ph.dial !== p.country};
   const plang = LANGS.indexOf(p.lang) >= 0 ? p.lang : LANG;
   let h = phead(navT('settings'), tx('set.h'), null);
-  h += '<div class="cols"><div class="stack" style="gap:18px">' +
+  const owner = role() === 'owner', showOwn = p.show_owner !== false, logoU = SET.logoPrev || p.logo_url || '';
+  h += '<div class="set-cols"><div class="stack set-forms" style="gap:18px">' +
     '<form class="card pad-lg form" data-form="set-co" novalidate><h3>' + tx('set.profile') + '</h3>' +
+      '<div class="field"><span class="flabel">' + tx('media.logo') + '</span><div class="media-up" id="logo-up"><span class="mu-prev" id="logo-prev">' + esc(initials(p.company)) + pImg(logoU, 72) + '</span><div class="grow" style="min-width:0">' +
+        '<div class="row wrap" style="gap:8px"><label class="btn sm soft">' + ic('image', 'sm') + tx('media.pick') + '<input type="file" accept="image/*" class="vh" data-ch="logo-file" id="logo-file"></label><button type="button" class="btn sm line" data-act="logo-del" id="logo-del"' + (logoU ? '' : ' hidden') + '>' + ic('trash', 'sm') + tx('media.del') + '</button></div>' +
+        '<p class="hint" style="margin:8px 0 0">' + tx('media.logoHint') + '</p><div class="mu-bar" id="logo-bar" hidden><i></i></div>' + errBox('logo-err') + '</div></div></div>' +
       fld('s-company', tx('f.name'), inp('s-company', p.company, 'maxlength="120" autocomplete="organization"')) +
       fld('s-category', tx('f.category'), sel('s-category', m.categories.map(c => [c.key, c.title]), p.category)) +
       placeHTML('s', SET.place, {phone: 's', grid: true}) +
@@ -5427,14 +5686,18 @@ VIEWS.settings = async (v, r, alive) => {
       fld('s-desc', tx('set.desc'), '<textarea class="input" id="s-desc" rows="3" maxlength="500" placeholder="' + esc(tx('set.desc.ph')) + '">' + esc(p.description || '') + '</textarea>') +
       fld('s-lang', tx('lang.co'), sel('s-lang', LANGS.map(l => [l, LNAME[l]]), plang), tx('lang.co.hint')) +
       '<dl class="detail"><dt>' + esc(idnoLabel(p.country || 'MD')) + '</dt><dd class="tnum">' + esc(p.idno || '—') + '</dd><dt>' + tx('set.status') + '</dt><dd>' + pStatus(p) + '</dd>' + (p.created_at ? '<dt>' + tx('set.since') + '</dt><dd>' + fDate(p.created_at) + '</dd>' : '') + '</dl>' +
+      (owner ? '<div class="field" style="margin-top:4px"><span class="flabel">' + tx('own.h') + '</span><label class="switch" for="s-show-owner"><span><span class="lbl">' + tx('own.show') + '</span><span>' + tx('own.show.d') + (myPhoto() ? '' : ' ' + tx('own.nophoto')) + '</span></span><input type="checkbox" id="s-show-owner"' + (showOwn ? ' checked' : '') + '></label></div>' +
+        fld('s-owner-title', tx('own.title'), inp('s-owner-title', p.owner_title || '', 'maxlength="60" placeholder="' + esc(tx('own.title.ph')) + '"')) : '') +
       errBox('sc-err') + '<button class="btn ink" type="submit">' + tx('set.save.profile') + '</button></form>' +
     '<form class="card pad-lg form" data-form="set-bonus" novalidate><h3>' + tx('set.bonus.h') + '</h3>' +
       '<p class="hint" style="margin:0">' + tx('set.offer.note') + '</p>' +
       fld('s-offer', tx('set.offer'), '<textarea class="input" id="s-offer" rows="2" maxlength="200" placeholder="' + esc(tx('set.offer.ph')) + '">' + esc(p.offer_text || '') + '</textarea>', tx('set.offer.hint')) +
       '<div class="field"><span class="flabel">' + tx('set.disc') + '</span><div class="row wrap" style="gap:10px"><div class="seg inline" role="group"><button type="button" data-act="s-dk" data-k="none" aria-pressed="' + (dk === 'none') + '">' + tx('set.disc.none') + '</button><button type="button" data-act="s-dk" data-k="percent" aria-pressed="' + (dk === 'percent') + '">%</button><button type="button" data-act="s-dk" data-k="fixed" aria-pressed="' + (dk === 'fixed') + '">' + cur() + '</button></div><input class="input" id="s-dv" inputmode="decimal" style="flex:1;min-width:120px" value="' + esc(p.discount_value || '') + '" aria-label="' + esc(tx('ed.disc')) + '"' + (dk === 'none' ? ' hidden' : '') + '></div></div>' +
       errBox('sb-err') + '<button class="btn ink" type="submit">' + tx('save') + '</button></form>' +
-  '</div><div class="stack" style="gap:18px">' +
-    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="ic-circle">' + ic('user', 'sm') + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctEmail()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
+  '</div>' + pvBoxHTML() + '<div class="stack set-rest" style="gap:18px">' +
+    '<section class="card pad-lg"><h3>' + tx('acct.account') + '</h3><div class="row" style="margin-top:12px"><span class="mu-prev sm" id="me-prev">' + esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 56) + '</span><div class="grow"><div style="font-weight:600" class="break">' + esc(acctEmail()) + '</div><div class="small muted">' + tx('set.acct.s', {role: esc(roleTitle(role()))}) + '</div></div></div>' +
+      '<div class="row wrap" style="gap:8px;margin-top:12px"><label class="btn sm soft">' + ic('camera', 'sm') + tx('media.photoUp') + '<input type="file" accept="image/*" class="vh" data-ch="me-photo" id="me-file"></label><button type="button" class="btn sm line" data-act="me-photo-del" id="me-del"' + (myPhoto() ? '' : ' hidden') + '>' + ic('trash', 'sm') + tx('media.del') + '</button></div>' +
+      '<div class="mu-bar" id="me-bar" hidden><i></i></div>' + errBox('me-err') + '<p class="hint" style="margin:8px 0 0">' + tx('media.photoHint') + '</p>' +
       '<div class="row between wrap" style="margin-top:16px;gap:10px"><span class="small muted">' + tx('lang.uiTheme') + '</span>' + langSw() + '</div>' +
       '<button class="btn line block" style="margin-top:16px" data-act="logout">' + ic('logout', 'sm') + tx('logout') + '</button></section>' +
     '<section class="card pad-lg"><h3>' + tx('set.cos') + '</h3>' + (others.length ? '<div class="group" style="margin-top:12px">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '<p class="small muted" style="margin:8px 0 0">' + tx('set.only') + '</p>') +
@@ -5446,6 +5709,8 @@ VIEWS.settings = async (v, r, alive) => {
   SET.dk = dk;
   phoneMount('s');
   placeMount('s');
+  logoDrop();
+  pvInit();
 };
 ACTS['s-dk'] = el => { SET.dk = el.dataset.k; $$('[data-act="s-dk"]').forEach(b => b.setAttribute('aria-pressed', b === el)); $('#s-dv').hidden = SET.dk === 'none'; };
 async function patchPartner(body, errId, btn) {
@@ -5453,7 +5718,8 @@ async function patchPartner(body, errId, btn) {
   try { const d = await P('', {method: 'PATCH', body}); if (d.partner) st.partner = d.partner; else await loadPartner(); }
   catch (e) { done(); return showErr(errId, e.message); }
   done(); showErr(errId, '');
-  $('#root').dataset.shell = ''; paintChrome();
+  /* название/логотип в меню: оболочку перерисовать только при изменении — и сразу страницу (иначе форма пропадала) */
+  if ($('#root').dataset.shell !== chromeKey()) { $('#root').dataset.shell = ''; render(); } else pvSoon();
   toast(tx('set.saved'));
 }
 FORMS['set-co'] = f => {
@@ -5468,8 +5734,168 @@ FORMS['set-co'] = f => {
   const pb = placeBody(SET.place);
   if (pb.country !== (p.country || '') || pb.city !== (p.city || '') || String(pb.city_id == null ? '' : pb.city_id) !== String(p.city_id == null ? '' : p.city_id)) { body.country = pb.country; body.city = pb.city; body.city_id = pb.city_id; }
   const lg = val('s-lang'); if (lg && lg !== (p.lang || '')) body.lang = lg;
+  if ($('#s-show-owner')) {
+    const so = $('#s-show-owner').checked, ot = val('s-owner-title').trim().slice(0, 60);
+    if (so !== (p.show_owner !== false)) body.show_owner = so;
+    if (ot !== (p.owner_title || '')) body.owner_title = ot;
+  }
   patchPartner(body, 'sc-err', f.querySelector('[type=submit]'));
 };
+/* ---------- логотип компании: выбор файла / камера на телефоне / перетаскивание на компьютере ---------- */
+function mediaBar(id, frac) { const b = $('#' + id); if (!b) return; b.hidden = frac == null; const i = b.querySelector('i'); if (i) i.style.width = Math.round((frac || 0) * 100) + '%'; }
+function logoPaint() {
+  const p = st.partner || {}, u = SET.logoPrev || p.logo_url || '', el = $('#logo-prev'), del = $('#logo-del');
+  if (el) el.innerHTML = esc(initials(val('s-company') || p.company)) + pImg(u, 72);
+  if (del) del.hidden = !u;
+}
+async function logoPick(file) {
+  showErr('logo-err', '');
+  if (!file) return;
+  if (!/^image\//i.test(file.type || '')) return showErr('logo-err', tx('media.type'));
+  if (file.size > 25 * 1024 * 1024) return showErr('logo-err', tx('media.big'));
+  const blob = await imgFit(file, 1024, true), png = /png/.test(blob.type || '');
+  const prev = SET.logoPrev;
+  SET.logoPrev = URL.createObjectURL(blob); SET.logoPid = st.pid;
+  logoPaint(); pvSoon(); mediaBar('logo-bar', 0);
+  try {
+    const d = await upMedia('/v1/partner/' + st.pid + '/logo', blob, png ? 'logo.png' : 'logo.jpg', f => mediaBar('logo-bar', f));
+    if (prev) URL.revokeObjectURL(prev);
+    if (st.partner && d.logo_url) st.partner.logo_url = d.logo_url;
+    chromeAvatars();
+    toast(tx('media.logoOk'));
+  } catch (e) {
+    URL.revokeObjectURL(SET.logoPrev); SET.logoPrev = prev;
+    showErr('logo-err', e.message);
+  }
+  mediaBar('logo-bar', null); logoPaint(); pvSoon();
+}
+CHANGES['logo-file'] = el => { const f = el.files && el.files[0]; el.value = ''; logoPick(f); };
+ACTS['logo-del'] = async el => {
+  showErr('logo-err', '');
+  const done = busy(el, tx('busy.save'));
+  try { await P('/logo', {method: 'DELETE'}); } catch (e) { done(); return showErr('logo-err', e.message); }
+  done();
+  if (SET.logoPrev) URL.revokeObjectURL(SET.logoPrev);
+  SET.logoPrev = null; if (st.partner) st.partner.logo_url = null;
+  chromeAvatars(); logoPaint(); pvSoon(); toast(tx('media.logoDel'));
+};
+function logoDrop() {
+  const z = $('#logo-up'); if (!z) return;
+  const on = e => { e.preventDefault(); z.classList.add('drag'); }, off = () => z.classList.remove('drag');
+  z.addEventListener('dragenter', on); z.addEventListener('dragover', on); z.addEventListener('dragleave', off);
+  z.addEventListener('drop', e => { e.preventDefault(); off(); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; logoPick(f); });
+}
+/* ---------- личное фото (аватар в кабинете; владельцу — и клиентам, если включено) ---------- */
+async function mePick(file) {
+  showErr('me-err', '');
+  if (!file) return;
+  if (!/^image\//i.test(file.type || '')) return showErr('me-err', tx('media.type'));
+  if (file.size > 25 * 1024 * 1024) return showErr('me-err', tx('media.big'));
+  const blob = await imgFit(file, 800, false), el = $('#me-prev'), url = URL.createObjectURL(blob);
+  SET.mePrev = url; if (el) el.innerHTML = esc(initials((A.user && A.user.name) || acctEmail())) + pImg(url, 56); pvSoon(); mediaBar('me-bar', 0);
+  try {
+    if (net.ready) await net.ready;
+    const d = await upMedia('/v1/me/photo', blob, 'photo.jpg', f => mediaBar('me-bar', f));
+    if (A.user && d.photo_url) { A.user.photo_url = d.photo_url; acctSave(); }
+    chromeAvatars(); toast(tx('media.photoOk'));
+    const del = $('#me-del'); if (del) del.hidden = false;
+  } catch (e) { SET.mePrev = null; URL.revokeObjectURL(url); if (el) el.innerHTML = esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 56); showErr('me-err', e.message); }
+  mediaBar('me-bar', null); pvSoon();
+}
+CHANGES['me-photo'] = el => { const f = el.files && el.files[0]; el.value = ''; mePick(f); };
+ACTS['me-photo-del'] = async el => {
+  showErr('me-err', '');
+  const done = busy(el, tx('busy.save'));
+  try { await api('/v1/me/photo', {method: 'DELETE'}); } catch (e) { done(); return showErr('me-err', e.message); }
+  done();
+  if (A.user) { A.user.photo_url = null; acctSave(); }
+  SET.mePrev = null; el.hidden = true;
+  const pv = $('#me-prev'); if (pv) pv.innerHTML = esc(initials((A.user && A.user.name) || acctEmail()));
+  chromeAvatars(); pvSoon(); toast(tx('media.photoDel'));
+};
+
+/* ---------- «Как вас видят в приложении»: живой предпросмотр — разметка и стили приложения водителя (06_WEB/index.html:
+   offerCard, perkCard, offerSheet → coHead), цвета — токены приложения в светлой и тёмной теме ---------- */
+const PV = {view: 'list', theme: null, camps: null, perks: null, locs: null, raf: 0};
+function pvBoxHTML() {
+  if (!PV.theme) PV.theme = themeDark() ? 'dark' : 'light';
+  const seg = (act, v, lab, cur) => '<button type="button" data-act="' + act + '" data-v="' + v + '" aria-pressed="' + (v === cur) + '">' + lab + '</button>';
+  return '<div class="pv-col"><details class="card pad-lg pv-box" id="pv-box"' + (window.innerWidth >= 1100 ? ' open' : '') + '><summary><span class="ic-circle">' + ic('eye', 'sm') + '</span>' + tx('pv.h') + '<span class="chev">' + ic('chevD', 'sm') + '</span></summary>' +
+    '<div class="pv-ctl"><div class="seg inline" role="group" aria-label="' + esc(tx('pv.h')) + '">' + seg('pv-view', 'list', tx('pv.list'), PV.view) + seg('pv-view', 'sheet', tx('pv.card'), PV.view) + '</div>' +
+    '<div class="seg inline" role="group" aria-label="' + esc(tx('pv.th')) + '">' + seg('pv-theme', 'light', tx('thm.light'), PV.theme) + seg('pv-theme', 'dark', tx('thm.dark'), PV.theme) + '</div></div>' +
+    '<div class="pv-stage" id="pv-stage"><div class="dpv-frame"><div class="dpv-vp" id="pv-vp"><div class="dpv-scr" id="pv-scr" data-pv="' + PV.theme + '" aria-hidden="true"></div></div></div></div>' +
+    '<p class="hint" style="margin:12px 0 0">' + tx('pv.note') + '</p></details></div>';
+}
+function pvData() {
+  const p = st.partner || {}, cs = $('#s-category'), so = $('#s-show-owner'), mine = role() === 'owner';
+  const company = (val('s-company') || '').trim() || p.company || '';
+  const cat = cs && cs.selectedOptions && cs.selectedOptions[0] ? cs.selectedOptions[0].textContent : catTitle(p.category, p.category_title);
+  const showOwn = so ? so.checked : p.show_owner !== false, otitle = ($('#s-owner-title') ? val('s-owner-title') : p.owner_title || '').trim();
+  const ophoto = mine ? (SET.mePrev || myPhoto()) : mediaUrl(p.owner_photo_url || (p.owner && p.owner.photo_url) || '');
+  const camp = (PV.camps || []).find(c => c.status === 'active') || null, perk = (PV.perks || []).find(x => x.status === 'active') || null;
+  return {company, cat, logo: SET.logoPrev || p.logo_url || '', owner: showOwn && (otitle || ophoto) ? {name: otitle, photo_url: ophoto} : null,
+    camp, perk, loc: (PV.locs || [])[0] || null, offer: ($('#s-offer') ? val('s-offer') : p.offer_text || '').trim(), city: p.city || ''};
+}
+const pvLgo = (u, name, size) => '<span class="lgo">' + esc((String(name || '').replace(/[«»"'()]/g, '').trim()[0] || 'H').toUpperCase()) + pImg(u, size) + '</span>';
+const pvKm = n => '<span class="kmh"><span>' + fN(n) + '</span>' + markSVG(16, 'var(--teal-ink)', 'currentColor') + '</span>';
+function pvOffer(d) {
+  const c = d.camp, bits = ['~' + fNum(1.2) + ' ' + tx('pv.d.km')]; /* как fKm() в приложении: «~1,2 км» */
+  if (c && c.ends_at) bits.push(tx('pv.d.until', {date: fDate(c.ends_at)}));
+  return '<div class="offer wide"><span class="oh">' + (mediaUrl(d.logo) ? pvLgo(d.logo, d.company, 28) : '') + '<span class="ocat">' + esc(d.cat) + '</span><span class="obadge">' + esc(c ? offerBadge(c) : tx('pv.d.badge')) + '</span></span>' +
+    '<span class="ot">' + esc(c ? c.title : d.offer || tx('pv.d.sample')) + '</span><span class="oc">' + esc(d.company) + '</span><span class="od">' + esc(bits.join(' · ')) + '</span>' +
+    (d.owner ? '<span class="oown">' + pvLgo(d.owner.photo_url, d.owner.name, 22) + '<span>' + esc(d.owner.name) + '</span></span>' : '') + (c ? '' : '<span class="badge warn pv-ex">' + tx('pv.d.example') + '</span>') + '</div>';
+}
+function pvPerk(d) {
+  const k = d.perk;
+  return '<div class="perk"><span class="ph"><span class="pk">' + ic(k && k.kind === 'service' ? 'wrench' : 'gift', 'sm') + pImg(d.logo, 38) + '</span><span class="pc"><span class="pco">' + esc(d.company) + '</span><span class="pm">' + esc(k && has('pkk.' + k.kind) ? tx('pkk.' + k.kind) : tx('pkk.gift')) + ' · ' + esc(d.cat) + '</span></span></span>' +
+    '<span class="pt">' + esc(k.title || '') + '</span><span class="pf"><span class="price">' + pvKm(+k.points || 0) + '</span></span></div>';
+}
+function pvList(d) {
+  const tabs = tx('pv.d.tabs').split('|'), tic = ['home', 'car', 'doc', 'star', 'more'];
+  return '<div class="dpv-st"><span>9:41</span><span>●●● ▮</span></div><div class="dpv-body"><header class="topbar"><span class="iconbtn ghost">' + ic('chevL') + '</span><div class="grow"><h1 class="small">' + tx('pv.d.nearby') + '</h1></div><span style="width:40px"></span></header>' +
+    '<section class="section" style="margin-top:12px"><div class="section-head"><h2 class="eyebrow">' + tx('pv.d.offers') + '</h2></div><div class="stack">' + pvOffer(d) +
+    '<div class="offer wide ghost"><span class="oh"><span class="ocat">' + esc(catTitle('wash')) + '</span><span class="obadge">−15%</span></span><span class="ot">' + tx('pv.d.otherT') + '</span><span class="oc">' + tx('pv.d.other') + '</span><span class="od">' + fNum(2.4) + ' ' + tx('pv.d.km') + '</span></div></div></section>' +
+    (d.perk ? '<section class="section"><div class="section-head"><h2 class="eyebrow">' + tx('pv.d.perks') + '</h2></div>' + pvPerk(d) + '</section>' : '') + '</div>' +
+    '<nav class="dpv-tabs">' + tabs.map((x, i) => '<span class="tab"' + (i === 4 ? ' aria-current="page"' : '') + '><span class="pill">' + ic(tic[i]) + '</span>' + esc(x) + '</span>').join('') + '</nav>';
+}
+function pvSheet(d) {
+  const c = d.camp, l = d.loc, addr = l ? (l.address || '') : d.city;
+  let b = '';
+  if (mediaUrl(d.logo)) b += '<div class="co-head">' + pvLgo(d.logo, d.company, 52) + '<div style="min-width:0"><p style="margin:0;font-weight:600">' + esc(d.company) + '</p><p class="small muted" style="margin:2px 0 0">' + esc(d.cat) + '</p></div></div>';
+  if (d.owner) b += '<div class="co-own">' + pvLgo(d.owner.photo_url, d.owner.name, 36) + '<span class="small" style="font-weight:600">' + esc(d.owner.name) + '</span></div>';
+  b += '<p class="small muted" style="margin:0 0 6px">' + esc(d.cat) + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(c ? offerBadge(c) : tx('pv.d.badge')) + '</span></p>' +
+    '<p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(c ? c.title : d.offer || tx('pv.d.sample')) + '</p>' + (c && c.text ? '<p style="margin:8px 0 0;line-height:1.55">' + esc(c.text) + '</p>' : '');
+  if (c && c.ends_at) b += '<div class="tip" style="margin-top:14px">' + ic('tag') + '<span>' + esc(offerBadge(c)) + '<br><span class="small muted">' + tx('pv.d.valid', {date: fDate(c.ends_at)}) + '</span></span></div>';
+  if (addr) b += '<p class="eyebrow" style="margin:18px 0 0">' + tx('pv.d.address') + '</p><div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc((l && l.title) || d.company) + ' <span class="small muted num">· ~' + fNum(1.2) + ' ' + tx('pv.d.km') + '</span></span><span class="s" style="display:block">' + esc(addr) + '</span></span><span class="btn sm soft">' + tx('pv.d.route') + '</span></div>';
+  /* как offerSheet(): плюшка акции — главная кнопка, «Показать мой код» — вторая; без плюшки — одна тёмная кнопка кода */
+  b += '<div class="stack" style="margin-top:16px">' + (d.perk ? '<span class="btn block ink">' + ic('gift', 'sm') + '<span>' + esc(d.perk.title) + ' · </span>' + pvKm(+d.perk.points || 0) + '</span>' : '') +
+    '<span class="btn block ' + (d.perk ? 'soft' : 'ink') + '">' + ic('qr', 'sm') + tx('pv.d.code') + '</span></div><p class="xsmall muted" style="margin:12px 0 0">' + tx('pv.d.note') + '</p>';
+  return pvList(d) + '<div class="dpv-dim"></div><div class="dpv-sheet"><div class="sheet-grab"></div><header class="sheet-head"><h2>' + esc(d.company) + '</h2><span class="iconbtn">' + ic('close', 'sm') + '</span></header><div class="sheet-body">' + b + '</div></div>';
+}
+function pvFit() {
+  const box = $('#pv-stage'), vp = $('#pv-vp'); if (!box || !vp) return;
+  const w = box.clientWidth; if (!w) return;
+  vp.style.setProperty('--k', String(Math.max(.5, Math.min(.8, (w - 24) / 375))));
+}
+function pvRender() {
+  PV.raf = 0;
+  const el = $('#pv-scr'); if (!el) return;
+  const d = pvData();
+  el.dataset.pv = PV.theme;
+  el.innerHTML = PV.view === 'sheet' ? pvSheet(d) : pvList(d);
+  pvFit();
+}
+function pvSoon() { if (!PV.raf && $('#pv-scr')) PV.raf = requestAnimationFrame(pvRender); }
+function pvInit() {
+  pvRender();
+  const box = $('#pv-box'); if (box) box.addEventListener('toggle', pvFit);
+  Promise.all([getCampaigns().catch(() => []), getPerks().catch(() => []), getLocations().catch(() => [])]).then(r => { PV.camps = r[0]; PV.perks = r[1]; PV.locs = r[2]; pvSoon(); });
+}
+ACTS['pv-view'] = el => { PV.view = el.dataset.v; $$('[data-act="pv-view"]').forEach(b => b.setAttribute('aria-pressed', b === el)); pvRender(); };
+ACTS['pv-theme'] = el => { PV.theme = el.dataset.v; $$('[data-act="pv-theme"]').forEach(b => b.setAttribute('aria-pressed', b === el)); pvRender(); };
+/* поля настроек → предпросмотр сразу, до сохранения */
+['input', 'change'].forEach(n => document.addEventListener(n, e => { const t0 = e.target; if (t0 && t0.closest && t0.closest('#view form') && $('#pv-scr')) pvSoon(); }));
+window.addEventListener('resize', () => { if ($('#pv-scr')) pvFit(); });
 FORMS['set-bonus'] = f => {
   const body = {offer_text: val('s-offer').trim(), discount_kind: SET.dk, discount_value: SET.dk === 'none' ? 0 : parseAmount(val('s-dv'))};
   if (SET.dk !== 'none' && !(body.discount_value > 0)) return showErr('sb-err', tx('set.disc.v'));

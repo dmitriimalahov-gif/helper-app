@@ -542,6 +542,28 @@ div.item:hover{background:none}
 .hidc.cta .s{font-size:12px;color:var(--ink-2);margin-top:2px;display:block}
 .hidc.cta .t{font-weight:600;font-size:14px;line-height:1.3;display:block}
 .hidc.cta .go{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;flex:none}
+/* логотип партнёра и фото владельца: картинка поверх буквы/значка; не загрузилась — картинка убирается, остаётся буква/значок */
+.lgo{position:relative;display:grid;place-items:center;flex:none;border-radius:50%;overflow:hidden;background:var(--teal-3);color:var(--teal-ink);font-weight:700}
+.lgo .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.offer .oh .lgo{width:28px;height:28px;font-size:12px;margin-right:2px}
+.offer .oh .ocat{flex:1;min-width:0}
+.oown{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);min-width:0}
+.oown .lgo{width:22px;height:22px;font-size:10px}
+.oown span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.perk .pk{position:relative;overflow:hidden}
+.perk .pk .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.co-head{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.co-head .lgo{width:52px;height:52px;font-size:18px}
+.co-own{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px 12px;border-radius:var(--r-md);background:var(--surface)}
+.co-own .lgo{width:36px;height:36px;font-size:13px}
+/* фото вывески в рекомендации */
+.rc-photo{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rc-photo label.btn{cursor:pointer}
+.rc-thumb{position:relative;width:96px;height:96px;border-radius:14px;overflow:hidden;background:var(--surface);flex:none}
+.rc-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.rc-thumb .x{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;background:rgba(10,14,15,.6);color:#fff;display:grid;place-items:center}
+.rc-pst{font-size:12.5px;color:var(--ink-2);flex:1;min-width:140px}
+.rc-pst.bad{color:var(--bad-t)}
 .codefs{outline:none;position:fixed;inset:0;z-index:95;background:#FFFFFF;color:#231F20;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:fade .15s ease}
 .codefs-in{min-height:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:calc(64px + env(safe-area-inset-top,0px)) 22px calc(24px + env(safe-area-inset-bottom,0px))}
 .codefs .x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(14px,calc(50% - 206px));width:44px;height:44px;border-radius:50%;background:#EEF2F2;color:#231F20;display:grid;place-items:center}
@@ -1989,6 +2011,7 @@ function pageHome() {
     h += '<div class="card section row between" style="margin-top:20px"><div><p class="eyebrow">' + t('c.odo') + '</p><div class="odo" style="margin-top:6px"><span class="v">' + fN(car.odo) + '</span><span class="u">' + t('c.km') + '</span></div><p class="xsmall muted" style="margin:6px 0 0">' + t('home.odoUpdated', {when: staleDays === 0 ? t('d.today') : relDays(-staleDays)}) + (kpd ? ' · ' + t('home.kmPerDay', {km: fN(kpd)}) : '') + '</p></div><button class="btn sm soft" data-act="odo">' + t('home.odoUpdateBtn') + '</button></div>';
   }
   h += offersHome();
+  h += recHomeCard();
   h += inviteHomeCard();
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('home.svcByOdo') + '</h2><button class="link" data-act="go" data-p="settings">' + t('home.intervals') + ic('chevR', 'xs') + '</button></div><div class="group">';
   h += list.map(x => {
@@ -2186,6 +2209,7 @@ function pageMore() {
     row('go', 'report', t('more.report'), t('more.reportSub'), lk, 'data-p="report"') +
     row('go', 'tag', t('partners.title'), t('more.partnersSub'), '', 'data-p="partners"') +
     row('go', 'pin', t('c.nearby'), S.geo.consent ? t('more.nearbyOn') : t('more.nearbySub'), '', 'data-p="nearby"') +
+    row('biz-rec', 'store', t('rec.homeT'), t('rec.homeS'), '') +
     row('ref', 'gift', t('c.invite'), t('more.inviteSub'), '') + '</div>';
   const mine = logged() && Array.isArray(A.partners) ? A.partners : [];
   if (!CAP) h += '<p class="eyebrow section" style="margin-bottom:8px">' + t('more.business') + '</p><div class="group">' +
@@ -2981,6 +3005,19 @@ async function api(path, o) {
   if (!r.ok) throw apiErr(r.status, (d && d.error) || 'http_' + r.status, (d && d.message) || t('api.serverError', {status: String(r.status)}), d);
   return d || {};
 }
+async function apiForm(path, fd, o) {
+  o = o || {};
+  if (!net.api && net.ready) await net.ready;
+  if (!net.api) throw apiErr(0, 'no_api', t('api.noServer'));
+  const send = () => fetchT(net.api + path, {method: o.method || 'POST', headers: {Accept: 'application/json', 'Accept-Language': LANG, Authorization: 'Bearer ' + A.access}, body: fd, cache: 'no-store'}, o.timeout || 90000);
+  let r;
+  try { r = await send(); } catch (e) { throw apiErr(0, 'offline', offlineMsg()); }
+  if (r.status === 401 && logged() && await apiRefresh().catch(() => false)) { try { r = await send(); } catch (e) { throw apiErr(0, 'offline', offlineMsg()); } }
+  let d = null;
+  try { d = await r.json(); } catch (e) {}
+  if (!r.ok) throw apiErr(r.status, (d && d.error) || 'http_' + r.status, (d && d.message) || t('api.serverError', {status: String(r.status)}), d);
+  return d || {};
+}
 let refreshing = null;
 function apiRefresh() {
   if (refreshing) return refreshing;
@@ -3739,14 +3776,11 @@ function refBody() {
   h += '<p class="small" style="margin:8px 0 0">' + (base > 0 ? t('inv.levelQuota', {level: esc(tier.title || lv.title || ''), base: tn('inv.nInv', base), n: +d.earn_activated || 2}) : t('inv.levelNone', {level: esc(tier.title || lv.title || '')})) + '</p>';
   if (nx) h += '<p class="xsmall muted num" style="margin:4px 0 0">' + t('inv.toNext', {xp: xpTxt(+nx.score_needed || 0), tier: esc(nx.title || '')}) + '</p>';
   h += '<p class="small" style="margin:12px 0 0">' + t('inv.sub', {days: +d.bonus_days || 30, km: kmFull(+d.points_referral || 0)}) + '</p>';
-  if (+q.total <= 0 && q.reason === 'tier') {
-    h += '<div class="card tint" style="margin-top:12px"><p class="small" style="margin:0">' + esc(q.hint || t('inv.guestCta')) + '</p><button class="btn sm ink" style="margin-top:10px" data-act="ref-add-car">' + ic('plus', 'xs') + t('inv.guestBtn') + '</button></div>';
-  } else {
-    h += '<p class="small num" style="margin:10px 0 0;font-weight:600">' + t('inv.available', {n: +q.available || 0, total: +q.total || 0}) + '</p>';
-    if (q.reason && q.hint) h += '<p class="xsmall muted" style="margin:2px 0 0">' + esc(q.hint) + '</p>';
-    h += '<p class="eyebrow" style="margin:12px 0 6px">' + t('inv.link') + '</p><div class="copyline"><span class="v num" style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(d.url) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(d.url) + '" aria-label="' + t('inv.copyLink') + '">' + ic('copy', 'sm') + '</button></div>';
-    if (+q.available > 0) h += '<button class="btn block ink" style="margin-top:10px" data-act="ref-share">' + ic('share', 'sm') + t('inv.share') + '</button>';
-  }
+  /* приглашения открыты сразу после регистрации (Новичок — 3): ссылка и «Поделиться» без блокировки уровнем; квота 0 — только подсказка */
+  h += '<p class="small num" style="margin:10px 0 0;font-weight:600">' + t('inv.available', {n: +q.available || 0, total: +q.total || 0}) + '</p>';
+  if (q.reason && q.hint) h += '<p class="xsmall muted" style="margin:2px 0 0">' + esc(q.hint) + '</p>';
+  h += '<p class="eyebrow" style="margin:12px 0 6px">' + t('inv.link') + '</p><div class="copyline"><span class="v num" style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(d.url) + '</span><button class="iconbtn" data-act="copy" data-text="' + esc(d.url) + '" aria-label="' + t('inv.copyLink') + '">' + ic('copy', 'sm') + '</button></div>';
+  if (+q.available > 0) h += '<button class="btn block ink" style="margin-top:10px" data-act="ref-share">' + ic('share', 'sm') + t('inv.share') + '</button>';
   const list = Array.isArray(d.invited) ? d.invited : [];
   h += '<p class="eyebrow" style="margin:16px 0 6px">' + t('inv.friends') + '</p>';
   if (!list.length) h += '<p class="small muted" style="margin:0">' + t('inv.noFriends') + '</p>';
@@ -3757,6 +3791,10 @@ function refBlock() {
   return '<div class="card section"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('gift', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('c.invite') + '</p><p class="small muted" style="margin:2px 0 0">' + t('more.inviteSub') + '</p></div></div><div id="ref-body" style="margin-top:12px">' + refBody() + '</div></div>';
 }
 function refSheet() { openSheet(t('c.invite'), '<div id="ref-body">' + refBody() + '</div>'); refFetch(); }
+/* карточка «Рекомендовать компанию» — как «Пригласить друга», над ней (главная) */
+function recHomeCard() {
+  return '<button class="hidc" style="margin-top:12px" data-act="biz-rec"><span class="ic-circle" style="background:var(--teal);color:var(--on-teal)">' + ic('store', 'sm') + '</span><span class="body"><span class="t" style="display:block;font-weight:600">' + t('rec.homeT') + '</span><span class="s small muted" style="display:block">' + t('rec.homeS') + '</span></span><span class="go">' + ic('chevR', 'sm') + '</span></button>';
+}
 /* карточка на главной */
 function inviteHomeCard() {
   const s = refSrv(), q = s && s.d.quota;
@@ -3826,7 +3864,7 @@ function recFetch(force) {
 }
 /* точная геопозиция один раз, только по нажатию кнопки; на пользователе не сохраняется */
 function recLocate() {
-  const round = p => ({lat: +(+p.coords.latitude).toFixed(4), lon: +(+p.coords.longitude).toFixed(4)});
+  const round = p => ({lat: +(+p.coords.latitude).toFixed(4), lon: +(+p.coords.longitude).toFixed(4), acc: isFinite(+p.coords.accuracy) ? Math.round(+p.coords.accuracy) : null});
   const opts = {enableHighAccuracy: true, timeout: 12000, maximumAge: 0};
   return new Promise(res => {
     try {
@@ -3860,6 +3898,7 @@ function bizRecSheet() {
     fld('rc-address', t('rec.address'), inp('rc-address', '', 'autocomplete="off" maxlength="300"'), t('rec.addressHint')) +
     fld('rc-phone', t('rec.phone'), inp('rc-phone', '', 'type="tel" inputmode="tel" maxlength="40"')) +
     fld('rc-comment', t('rec.comment'), '<textarea id="rc-comment" class="input" rows="2" maxlength="500" placeholder="' + esc(t('rec.commentPh')) + '"></textarea>') +
+    '<div class="field"><span class="flabel">' + t('rec.photo') + ' <span class="muted" style="font-weight:500">· ' + t('c.optional') + '</span></span><div class="rc-photo" id="rc-photo">' + recPhotoHTML() + '</div><span class="hint">' + t('rec.photoNote') + '</span></div>' +
     '<div id="rc-near"></div>' + errBox('rc-err') +
     '<button class="btn block ink" type="submit">' + ic('send', 'sm') + t('rec.send') + '</button>' +
     '<p class="xsmall muted" style="margin:0">' + t('rec.privacy') + '</p></form>');
@@ -3882,7 +3921,8 @@ function recRender() { const g = $('#rc-geo'), nr = $('#rc-near'); if (g) setHTM
 function recStart() {
   if (!REC) return;
   REC.geo = 'locating'; REC.near = null; recRender();
-  recLocate().then(async pos => {
+  REC.posP = recLocate();
+  REC.posP.then(async pos => {
     if (!REC) return;
     if (!pos) { REC.geo = 'denied'; recRender(); return; }
     REC.pos = pos; REC.geo = 'ok'; recRender();
@@ -3900,6 +3940,95 @@ function recResultSheet(d) {
   else { title = t('rec.sentTitle'); text = t('rec.sentText', {a: kmFull(p.a), b: kmFull(p.b)}); }
   openSheet(title, '<p class="muted" style="margin:0 0 18px;line-height:1.55">' + text + '</p><div class="stack">' + btn + '<button class="btn block soft" data-act="sheet-close">' + t('c.done') + '</button></div>');
   toast(d.result === 'partner_exists' ? t('rec.partnerTitle') : t('rec.sentTitle'));
+}
+/* --- Фото вывески: «Сфотографировать вывеску» (камера) / «Выбрать из галереи». Файл до 8 МБ уходит как есть — EXIF с координатами
+   съёмки сохраняется (менеджеру — куда ехать); больше — уменьшаем (canvas → JPEG ~1600 px, 0,82), а координаты EXIF из оригинала
+   отправляем полями exif_lat / exif_lon. С фото — место устройства из этой рекомендации (lat, lon, accuracy), если оно есть;
+   без него фото всё равно отправляется. Фото видят только администраторы Helper. --- */
+const PHOTO_MAX = 8 * 1024 * 1024;
+function recPhotoHTML() {
+  const ph = REC && REC.photo;
+  if (ph) return '<div class="rc-thumb"><img src="' + esc(ph.url) + '" alt="' + esc(t('rec.photo')) + '"><button type="button" class="x" data-act="rc-photo-del" aria-label="' + esc(t('rec.photoDel')) + '">' + ic('close', 'xs') + '</button></div>' +
+    '<span class="rc-pst' + (ph.st === 'err' ? ' bad' : '') + '" role="status">' + (ph.st === 'up' ? t('rec.photoUp') : ph.st === 'ok' ? '✓ ' + t('rec.photoOk') : esc(ph.err || '')) + (ph.st === 'err' ? ' <button type="button" class="link" data-act="rc-photo-retry">' + t('c.retry') + '</button>' : '') + '</span>';
+  const cam = CAP && NP.Camera && NP.Camera.getPhoto ? '<button type="button" class="btn sm soft" data-act="rc-cam">' + ic('camera', 'xs') + t('rec.photoCam') + '</button>'
+    : '<label class="btn sm soft">' + ic('camera', 'xs') + t('rec.photoCam') + '<input type="file" id="rc-cam" accept="image/*" capture="environment" class="vh"></label>';
+  return cam + '<label class="btn sm line">' + t('rec.photoGal') + '<input type="file" id="rc-gal" accept="image/*" class="vh"></label>';
+}
+function recPhotoRender() { const e = $('#rc-photo'); if (e) setHTML(e, recPhotoHTML()); }
+function recPhotoDrop() { const ph = REC && REC.photo; if (ph && ph.url) try { URL.revokeObjectURL(ph.url); } catch (e) {} if (REC) REC.photo = null; }
+function recPhotoPick(file) {
+  if (!REC || !file) return;
+  if (!/^image\//i.test(file.type || '') && !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name || '')) return showErr('rc-err', t('rec.photoType'));
+  recPhotoDrop();
+  REC.photo = {file, url: URL.createObjectURL(file), st: 'up', id: null, err: ''};
+  recPhotoRender();
+  recPhotoUpload();
+}
+function recPhotoUpload() {
+  const ph = REC && REC.photo; if (!ph) return Promise.resolve(null);
+  ph.st = 'up'; ph.err = ''; recPhotoRender();
+  ph.p = (async () => {
+    let blob = ph.file, gps = null;
+    if (blob.size > PHOTO_MAX) { gps = await exifGps(ph.file); blob = await imgShrink(ph.file, 1600, 0.82); }
+    if (REC && !REC.pos && REC.posP) await Promise.race([REC.posP, sleep(8000)]);
+    const fd = new FormData();
+    fd.append('file', blob, blob === ph.file ? (ph.file.name || 'photo.jpg') : 'photo.jpg');
+    if (REC && REC.pos) { fd.append('lat', String(REC.pos.lat)); fd.append('lon', String(REC.pos.lon)); if (REC.pos.acc != null) fd.append('accuracy', String(REC.pos.acc)); }
+    if (gps) { fd.append('exif_lat', String(gps.lat)); fd.append('exif_lon', String(gps.lon)); }
+    const d = await apiForm('/v1/recommend/photo', fd);
+    if (!d.photo_id) throw new Error(t('api.serverError', {status: '—'}));
+    return d.photo_id;
+  })().then(id => { if (REC && REC.photo === ph) { ph.id = id; ph.st = 'ok'; recPhotoRender(); } return id; },
+    e => { if (REC && REC.photo === ph) { ph.st = 'err'; ph.err = t('rec.photoErr', {msg: e.message || ''}); recPhotoRender(); } return null; });
+  return ph.p;
+}
+/* камера приложения (плагин Camera, если есть) — тот же путь, что и выбор файла */
+async function recCamNative() {
+  try {
+    const r = await NP.Camera.getPhoto({source: 'CAMERA', resultType: 'uri', quality: 90, saveToGallery: false, correctOrientation: true});
+    const b = await (await fetch(r.webPath)).blob();
+    recPhotoPick(new File([b], 'sign.' + (r.format || 'jpg'), {type: b.type || 'image/jpeg'}));
+  } catch (e) { if (e && !/cancel/i.test(String(e.message || e))) toast(t('rec.photoErr', {msg: String(e.message || e)})); }
+}
+/* уменьшение фото на устройстве (только если файл больше 8 МБ) */
+async function imgShrink(file, max, q) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const k = Math.min(1, max / Math.max(img.naturalWidth || 1, img.naturalHeight || 1)), c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise(res => c.toBlob(b => res(b || file), 'image/jpeg', q));
+  } catch (e) { return file; } finally { URL.revokeObjectURL(url); }
+}
+/* координаты съёмки из EXIF JPEG (GPSLatitude/GPSLongitude + Ref) — без библиотек, первые 256 КБ файла */
+async function exifGps(file) {
+  try {
+    const v = new DataView(await file.slice(0, 256 * 1024).arrayBuffer());
+    if (v.byteLength < 12 || v.getUint16(0) !== 0xFFD8) return null;
+    let o = 2;
+    while (o + 10 < v.byteLength) {
+      const m = v.getUint16(o), len = v.getUint16(o + 2);
+      if ((m & 0xFF00) !== 0xFF00) break;
+      if (m === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) {
+        const t0 = o + 10, le = v.getUint16(t0) === 0x4949, u16 = p => v.getUint16(p, le), u32 = p => v.getUint32(p, le);
+        const ifd0 = t0 + u32(t0 + 4); let gp = 0;
+        for (let i = 0, n = u16(ifd0); i < n; i++) { const e = ifd0 + 2 + i * 12; if (u16(e) === 0x8825) gp = t0 + u32(e + 8); }
+        if (!gp) return null;
+        const g = {};
+        for (let i = 0, n = u16(gp); i < n; i++) {
+          const e = gp + 2 + i * 12, tag = u16(e), type = u16(e + 2), cnt = u32(e + 4);
+          if (tag === 1 || tag === 3) g[tag] = String.fromCharCode(v.getUint8(e + 8));
+          if ((tag === 2 || tag === 4) && type === 5 && cnt === 3) { const p = t0 + u32(e + 8), r = k => u32(p + k * 8) / (u32(p + k * 8 + 4) || 1); g[tag] = r(0) + r(1) / 60 + r(2) / 3600; }
+        }
+        if (g[2] == null || g[4] == null) return null;
+        const lat = (g[1] === 'S' ? -1 : 1) * g[2], lon = (g[3] === 'W' ? -1 : 1) * g[4];
+        return isFinite(lat) && isFinite(lon) && (lat || lon) ? {lat: +lat.toFixed(6), lon: +lon.toFixed(6)} : null;
+      }
+      o += 2 + len;
+    }
+  } catch (e) {}
+  return null;
 }
 /* карточки: «Порекомендовать компанию» (Предложения рядом, главная) и «Мои рекомендации» + «Пригласить бизнес» (Бонусы) */
 function bizRecCard() {
@@ -4826,11 +4955,24 @@ function offerDiscText(o) {
   if (o.reward) b.push(+o.reward.cost_points ? t('offer.couponFor', {title: String(o.reward.title), pts: kmShort(+o.reward.cost_points)}) : t('offer.couponNamed', {title: String(o.reward.title)}));
   return b.join(' · ');
 }
+/* Медиа партнёров (логотип, фото владельца) — абсолютные https-адреса API; лениво, с размерами; не загрузилось — буква / значок */
+const mediaUrl = u => typeof u === 'string' && (/^https:\/\/[^\s"'<>]+$/i.test(u) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^\s"'<>]*$/i.test(u)) ? u : '';
+const pLogo = (u, size) => mediaUrl(u) ? '<img class="plogo" src="' + esc(mediaUrl(u)) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">' : '';
+const letter = s => esc((String(s || '').replace(/[«»"'()]/g, '').trim()[0] || 'H').toUpperCase());
+const lgo = (u, name, size) => '<span class="lgo" aria-hidden="true">' + letter(name) + pLogo(u, size) + '</span>';
+const ownerOf = x => x && x.owner && (x.owner.name || mediaUrl(x.owner.photo_url)) ? x.owner : null;
 function offerCard(x, wide) {
-  const o = x.o, bits = [];
+  const o = x.o, bits = [], ow = wide && ownerOf(o);
   if (x.d != null) bits.push(fKm(x.d));
   if (o.ends_at) bits.push(t('c.until', {date: fDt(o.ends_at)}));
-  return '<button class="offer' + (wide ? ' wide' : '') + '" data-act="offer" data-id="' + esc(o.campaign_id) + '" data-ov="' + esc(o.campaign_id) + '"><span class="oh"><span class="ocat">' + esc(o.category_title || t('offer.partner')) + '</span><span class="obadge">' + esc(offerBadge(o)) + '</span></span><span class="ot">' + esc(o.title || o.company) + '</span><span class="oc">' + esc(o.company || '') + '</span>' + (bits.length ? '<span class="od">' + esc(bits.join(' · ')) + '</span>' : '') + '</button>';
+  return '<button class="offer' + (wide ? ' wide' : '') + '" data-act="offer" data-id="' + esc(o.campaign_id) + '" data-ov="' + esc(o.campaign_id) + '"><span class="oh">' + (mediaUrl(o.logo_url) ? lgo(o.logo_url, o.company, 28) : '') + '<span class="ocat">' + esc(o.category_title || t('offer.partner')) + '</span><span class="obadge">' + esc(offerBadge(o)) + '</span></span><span class="ot">' + esc(o.title || o.company) + '</span><span class="oc">' + esc(o.company || '') + '</span>' + (bits.length ? '<span class="od">' + esc(bits.join(' · ')) + '</span>' : '') + (ow ? '<span class="oown">' + lgo(ow.photo_url, ow.name, 22) + '<span>' + esc(ow.name || '') + '</span></span>' : '') + '</button>';
+}
+/* шапка карточки компании: логотип, название, категория; владелец (фото и подпись), если компания его показывает */
+function coHead(x, company, cat) {
+  const ow = ownerOf(x);
+  let h = mediaUrl(x.logo_url) ? '<div class="co-head">' + lgo(x.logo_url, company, 52) + '<div style="min-width:0"><p style="margin:0;font-weight:600">' + esc(company || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(cat || '') + '</p></div></div>' : '';
+  if (ow) h += '<div class="co-own">' + lgo(ow.photo_url, ow.name, 36) + '<span class="small" style="font-weight:600">' + esc(ow.name || '') + '</span></div>';
+  return h;
 }
 function offEmpty() { return t('offer.empty'); } /* «Скоро здесь появятся акции…» — и на экране «Предложения рядом» */
 function offersEmpty() {
@@ -4841,8 +4983,7 @@ function offersHome() {
   setTimeout(() => offersFetch(), 0);
   const L = offersList().slice(0, 3);
   return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('c.offers') + '</h2>' + (L.length ? '<button class="link" data-act="go" data-p="nearby">' + t('c.all') + ic('chevR', 'xs') + '</button>' : '') + '</div>' +
-    (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) +
-    '<button class="textbtn" data-act="biz-rec" style="margin-top:8px">' + ic('pin', 'xs') + t('rec.btn') + '</button></section>';
+    (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) + '</section>'; /* «Рекомендовать компанию» — карточка recHomeCard() над «Пригласить друга» */
 }
 function offersSection() {
   setTimeout(() => offersFetch(), 0);
@@ -4862,7 +5003,7 @@ function offerSheet(cid, from) {
   const o = offerById(cid);
   if (!o) return toast(t('offer.gone'));
   const src = geoSrc(), disc = offerDiscText(o);
-  let b = '<p class="small muted" style="margin:0 0 6px">' + esc(o.category_title || t('offer.partner')) + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(offerBadge(o)) + '</span></p>' +
+  let b = coHead(o, o.company, o.category_title) + '<p class="small muted" style="margin:0 0 6px">' + esc(o.category_title || t('offer.partner')) + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(offerBadge(o)) + '</span></p>' +
     '<p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(o.title || '') + '</p>' + (o.text ? '<p style="margin:8px 0 0;line-height:1.55">' + esc(o.text) + '</p>' : '');
   if (disc || o.ends_at) b += '<div class="tip" style="margin-top:14px">' + ic('tag') + '<span>' + esc(disc || t('offer.partnerOffer')) + (o.ends_at ? '<br><span class="small muted">' + t('offer.validUntil', {date: fDt(o.ends_at)}) + '</span>' : '') + '</span></div>';
   const locs = (o.locations || []).map(l => ({l, d: src && isFinite(+l.lat) ? distKm(src.lat, src.lon, +l.lat, +l.lon) : null})).sort((a, b2) => (a.d == null ? 1e9 : a.d) - (b2.d == null ? 1e9 : b2.d));
@@ -5671,7 +5812,7 @@ function perkTags(p, V) {
 }
 function perkCard(x, V, sample) {
   const p = x.p, lock = !p.available && (p.reason === 'level' || p.reason === 'stock');
-  return '<button class="perk' + (lock ? ' locked' : '') + '" data-act="perk" data-id="' + esc(p.id) + '"><span class="ph"><span class="pk">' + ic(PERK_IC[p.kind] || 'gift', 'sm') + '</span><span class="pc"><span class="pco">' + esc(p.company || '') + '</span><span class="pm">' + esc(p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + (p.category_title ? ' · ' + esc(p.category_title) : '') + '</span></span>' + (sample ? '<span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span>' +
+  return '<button class="perk' + (lock ? ' locked' : '') + '" data-act="perk" data-id="' + esc(p.id) + '"><span class="ph"><span class="pk">' + ic(PERK_IC[p.kind] || 'gift', 'sm') + pLogo(p.logo_url, 38) + '</span><span class="pc"><span class="pco">' + esc(p.company || '') + '</span><span class="pm">' + esc(p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + (p.category_title ? ' · ' + esc(p.category_title) : '') + '</span></span>' + (sample ? '<span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span>' +
     '<span class="pt">' + esc(p.title || '') + '</span>' + (perkMeta(p, x.d) ? '<span class="pm">' + perkMeta(p, x.d) + '</span>' : '') +
     '<span class="pf"><span class="price">' + kmIco(+p.points || 0) + '</span><span class="tags">' + perkTags(p, V) + '</span></span></button>';
 }
@@ -5722,6 +5863,7 @@ function perkSheet(id) {
   const helper = String(p.id) === 'premium' || p.kind === 'helper', sample = String(p.id).indexOf('demo-') === 0;
   const src = geoSrc();
   let b = '';
+  if (!helper) b += coHead(p, p.company, p.category_title);
   if (!helper) b += '<p class="small muted" style="margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">' + (p.category_title ? esc(p.category_title) + ' ' : '') + perkMeta(p, null) + (sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</p>';
   b += '<div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle' + (helper ? ' ink' : '') + '" style="width:48px;height:48px">' + (helper ? markSVG(26, 'var(--teal)', 'var(--on-ink)') : ic(PERK_IC[p.kind] || 'gift')) + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(p.title || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(helper ? t('perk.kind.helper') : p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + '</p></div><span class="price" style="font-weight:300;font-size:26px;flex:none">' + kmIco(+p.points || 0) + '</span></div>';
   if (p.description) b += '<p style="margin:12px 0 0;line-height:1.55">' + esc(p.description) + '</p>';
@@ -6232,10 +6374,15 @@ FORMS['biz-rec'] = async f => {
   if (!REC.pos) return showErr('rc-err', t('rec.noGeo'));
   const body = {name, category, address: val('rc-address').trim(), phone: val('rc-phone').trim(), comment: val('rc-comment').trim(), lat: REC.pos.lat, lon: REC.pos.lon, consent: true};
   const done = formBusy(f, t('rec.sending'));
+  if (REC.photo) {
+    if (REC.photo.st === 'up' && REC.photo.p) await REC.photo.p;
+    if (!REC || !REC.photo || REC.photo.st !== 'ok') { done(); return showErr('rc-err', t('rec.photoFail')); }
+    body.photo_id = REC.photo.id;
+  }
   let d;
   try { d = await api('/v1/recommend', {body}); }
   catch (e) { done(); return showErr('rc-err', e.message); }
-  done(); REC = null;
+  done(); recPhotoDrop(); REC = null;
   recResultSheet(d);
   recFetch(true);
 };
@@ -6327,6 +6474,9 @@ const ACT = {
   corp: () => corpSheet(),
   ref: () => refSheet(),
   'biz-rec': () => bizRecSheet(),
+  'rc-photo-del': () => { recPhotoDrop(); recPhotoRender(); },
+  'rc-photo-retry': () => recPhotoUpload(),
+  'rc-cam': () => recCamNative(),
   'biz-rec-retry': () => recStart(),
   'biz-share': () => shareBusiness(),
   'biz-offers': () => { closeSheet(); REC = null; ui.tab = 'more'; ui.stacks.more = [{p: 'nearby'}]; render(false); },
@@ -6425,6 +6575,7 @@ function onChange(e) {
   if (id === 'rec-cat') { $('#rec-x-tires').hidden = tt.value !== 'tires'; $('#rec-x-wheels').hidden = tt.value !== 'wheels'; return; }
   if (id === 'sae-w' || id === 'sae-h') { ui.saeW = val('sae-w'); ui.saeH = val('sae-h'); setHTML($('#sae-out'), saeOut()); return; }
   if (tt.dataset && tt.dataset.fx) { fxFormUpd(); return; }
+  if (id === 'rc-cam' || id === 'rc-gal') { const fl = tt.files && tt.files[0]; tt.value = ''; recPhotoPick(fl); return; }
   if (id === 'set-currency') { activeCar().currency = tt.value; save(); render(); fxToast(tt.value); return; }
   if (id === 'set-remind') { S.settings.remindDays = +tt.value; save(); return; }
   if (id === 'set-geo') { if (tt.checked) { S.geo.consent = true; S.geo.consentAt = todayISO(); } else { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; } save(); geoPush(); render(); toast(tt.checked ? t('act.geoOn') : t('act.geoOff')); return; }
@@ -6639,6 +6790,7 @@ function langFromAccount(u) {
   setLang(l, {chosen: false, push: false});
 }
 function init() {
+  document.addEventListener('error', e => { const el = e.target; if (el && el.tagName === 'IMG' && el.classList && el.classList.contains('plogo')) el.remove(); }, true);
   const fresh = !store.get(KEY);
   S = load();
   if (curStamp(S, true)) { syncPersist(); store.set(KEY, JSON.stringify(S)); }
