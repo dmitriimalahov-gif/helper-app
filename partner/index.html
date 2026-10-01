@@ -499,6 +499,78 @@ input[type=range]{width:100%;accent-color:var(--teal-ink);height:28px}
 .sugg button{height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface)}
 .sugg button:hover{background:var(--teal-3)}
 
+/* ===== Пакеты подключения: карточки в стиле Helper (кольца, бирюзовый акцент, тёмные кнопки), выбор, сравнение ===== */
+.pkgs{max-width:1180px;margin:0 auto;padding:30px 18px 10px;position:relative;isolation:isolate}
+@media (min-width:960px){.pkgs{padding:44px 48px 20px}}
+.pkgs h2{font-weight:300;font-size:30px;margin:6px 0 10px;letter-spacing:-.01em;line-height:1.1}
+@media (min-width:960px){.pkgs h2{font-size:44px;font-weight:200}}
+.pkgs .lead{font-size:15px;line-height:1.6;color:var(--ink-2);max-width:64ch;margin:0}
+.pk-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:8px}
+.pk-grid{display:grid;grid-auto-flow:column;grid-auto-columns:min(84vw,330px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 18px;scrollbar-width:none;margin:0 -18px;padding:18px 18px 10px}
+.pk-grid::-webkit-scrollbar{display:none}
+@media (min-width:760px){.pk-grid{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;margin:0;padding:18px 0 0}}
+@media (min-width:1180px){.pk-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.pkc-price .v{font-size:34px}}
+.pkc{position:relative;isolation:isolate;overflow:hidden;scroll-snap-align:start;display:flex;flex-direction:column;gap:14px;padding:35px 20px 20px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);min-width:0}
+.pkc>.ring{position:absolute;right:-48px;top:-48px;width:146px;height:146px;border-radius:50%;border:1.5px solid var(--teal-2);z-index:-1}
+.pkc>.ring+.ring{right:-20px;top:-20px;width:90px;height:90px;border-color:var(--teal);opacity:.55}
+.pkc.hl{border:2px solid var(--teal-ink);padding:34px 19px 19px;box-shadow:0 18px 44px rgba(31,110,105,.16)}
+.pkc.cur{border:2px solid var(--ink);padding:34px 19px 19px}
+.pkc-rib{position:absolute;top:0;left:18px;height:25px;padding:0 11px;border-radius:0 0 11px 11px;background:var(--teal);color:var(--on-teal);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:5px}
+.pkc-rib.cur{background:var(--ink);color:var(--on-ink)}
+.pkc-h{display:flex;align-items:center;gap:12px}
+.pkc-n{font-weight:600;font-size:19px;line-height:1.2}
+.pkc-t{font-size:13px;color:var(--ink-2);line-height:1.45;margin:0;min-height:38px}
+.pkc-price{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.pkc-price .v{font-weight:200;font-size:46px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pkc-price .u{font-size:14px;font-weight:600;color:var(--ink-2)}
+.pkc-old{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-3);min-height:22px}
+.pkc-old s{font-variant-numeric:tabular-nums}
+.pkc-disc{height:22px;padding:0 8px;border-radius:999px;background:var(--ok-bg);color:var(--ok-t);font-size:12px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap}
+.pkc-conv{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-top:-6px}
+.pkc-note{font-size:12.5px;color:var(--ink-2);line-height:1.45;margin:0;padding:10px 12px;border-radius:12px;background:var(--surface)}
+.pkc-inh{font-size:12.5px;font-weight:600;color:var(--teal-ink);margin:0}
+.pkc-f{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;flex:1}
+.pkc-f li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.4}
+.pkc-f li .ico{color:var(--teal-ink);margin-top:1px;flex:none}
+.pkc .btn{margin-top:4px}
+.pk-mk{display:inline-flex}
+.pk-sec{margin-top:30px}
+.pk-sec>h3{font-size:18px;font-weight:600;margin:0 0 12px}
+.pk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+@media (min-width:720px){.pk-pick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pkm{position:relative;text-align:left;padding:14px 12px 12px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:3px;min-height:104px;min-width:0}
+.pkm:hover{border-color:var(--line-2)}
+.pkm[aria-checked="true"]{border-color:var(--teal-ink);background:var(--teal-3);box-shadow:inset 0 0 0 1px var(--teal-ink)}
+.pkm .ic-circle{width:30px;height:30px;margin-bottom:4px}
+.pkm .n{font-weight:600;font-size:14.5px}
+.pkm .p{font-weight:300;font-size:19px;font-variant-numeric:tabular-nums;line-height:1.2}
+.pkm .p small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.pkm .t{font-size:11.5px;color:var(--ink-2);line-height:1.35}
+.pkm .hlb{position:absolute;top:-10px;right:10px;height:20px;padding:0 8px;border-radius:999px;background:var(--teal);color:var(--on-teal);font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center}
+.pk-adds{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:760px){.pk-adds{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}}
+.pk-add{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-lg);background:var(--teal-3)}
+.pk-add>.ring{position:absolute;right:-30px;top:-30px;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--teal);opacity:.7;z-index:-1}
+.pk-add .n{font-weight:600;font-size:15.5px}
+.pk-add .i{font-size:13px;color:var(--ink-2);line-height:1.45;flex:1}
+.pk-add .fr{font-weight:300;font-size:22px;font-variant-numeric:tabular-nums}
+.pk-add .fr small{font-size:12px;font-weight:600;color:var(--ink-2)}
+.pk-cmpd summary{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;cursor:pointer;list-style:none;padding:4px 0 12px}
+.pk-cmpd summary::-webkit-details-marker{display:none}
+.pk-cmpd summary .chev{margin-left:auto;transition:transform .2s}
+.pk-cmpd[open] summary .chev{transform:rotate(180deg)}
+.pk-tbl{min-width:620px}
+.tbl.pk-tbl th,.tbl.pk-tbl td{text-align:center}
+.tbl.pk-tbl th:first-child,.tbl.pk-tbl td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;min-width:190px}
+.pk-tbl thead th{background:var(--card);font-size:12px}
+.pk-tbl th.hl{color:var(--teal-ink)}
+.pk-tbl td.y .ico{display:inline-block;color:var(--teal-ink);vertical-align:-4px}
+.pk-tbl td.no{color:var(--ink-3)}
+@media (min-width:960px){.pk-cmpw{overflow:visible}.pk-tbl{min-width:0}.pk-tbl thead th{position:sticky;top:0;z-index:2;box-shadow:0 1px 0 var(--line)}}
+.pk-notes{font-size:12.5px;color:var(--ink-2);line-height:1.55;margin:14px 0 0}
+.pk-chip{display:inline-flex;align-items:center;height:19px;padding:0 7px;border-radius:999px;background:var(--teal-2);color:var(--ink);font-size:10.5px;font-weight:700;letter-spacing:.03em;vertical-align:1px;white-space:nowrap}
+.pk-chip.req{background:var(--soon-bg);color:var(--soon-t)}
+.pk-curcard{position:relative;isolation:isolate;overflow:hidden}
 /* аватары: логотип / фото поверх букв; не загрузилось — картинка убирается */
 .av,.mu-prev{position:relative;overflow:hidden}
 .av .plogo,.mu-prev .plogo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
@@ -745,6 +817,10 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .lsw-box.sm .thm-btn{width:32px;height:32px}
 .cur-sw{height:34px;padding:0 22px 0 10px;border:0;border-radius:999px;background-color:var(--surface);color:var(--ink-2);font-size:11.5px;font-weight:700;letter-spacing:.06em;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 12px) 15px,calc(100% - 8px) 15px;background-size:4px 4px;background-repeat:no-repeat;cursor:pointer;flex:none}
 .cur-sw:hover{color:var(--ink)}
+/* узкий экран: в шапках лендинга и мастера валюта показа прячется (она есть в кабинете), ссылка «Пакеты» — тоже */
+@media (max-width:599px){.land-top .cur-sw,.wiz-head .cur-sw{display:none}}
+@media (max-width:719px){.land-top [data-act="pk-scroll"]{display:none}}
+@media (max-width:399px){.land-top,.wiz-head{gap:8px}.land-top .lsw-box,.wiz-head .lsw-box{gap:4px}}
 .lsw-box.sm .cur-sw{height:32px;font-size:10.5px;padding:0 18px 0 8px;background-position:calc(100% - 10px) 14px,calc(100% - 6px) 14px}
 .fx-conv{font-size:12.5px;opacity:.8;font-variant-numeric:tabular-nums}
 .fx-cap{font-size:11.5px;color:var(--ink-3);margin:8px 0 0;font-variant-numeric:tabular-nums}
@@ -1388,6 +1464,50 @@ Object.assign(TX, {
   'nav.staff': ['Сотрудники', 'Angajați', 'Staff'],
   'nav.billing': ['Баланс', 'Sold', 'Balance'],
   'nav.settings': ['Настройки', 'Setări', 'Settings'],
+  'nav.package': ['Пакет', 'Pachet', 'Plan'],
+  'plan.e': ['Пакеты подключения', 'Pachete de conectare', 'Partner plans'],
+  'plan.h': ['Выберите, как вас увидят водители', 'Alegeți cum vă vor vedea șoferii', 'Choose how drivers will see you'],
+  'plan.lead': ['Начните бесплатно — пакет можно сменить в любой момент. Платные пакеты подключает менеджер Helper, оплата — после подтверждения.', 'Începeți gratuit — pachetul se poate schimba oricând. Pachetele plătite le activează managerul Helper, plata — după confirmare.', 'Start for free — you can change your plan at any time. A Helper manager activates paid plans; you pay after confirmation.'],
+  'plan.popular': ['Популярный', 'Popular', 'Popular'],
+  'plan.perMonth': ['/мес', '/lună', '/mo'],
+  'plan.inherits': ['Всё из пакета «{name}», плюс:', 'Tot din pachetul „{name}”, plus:', 'Everything in “{name}”, plus:'],
+  'plan.choose': ['Выбрать пакет', 'Alegeți pachetul', 'Choose plan'],
+  'plan.free': ['Подключить бесплатно', 'Conectați-vă gratuit', 'Join for free'],
+  'plan.market': ['Страна', 'Țara', 'Country'],
+  'plan.addons': ['Для сетей и брендов', 'Pentru rețele și branduri', 'For chains and brands'],
+  'plan.from': ['от {sum}', 'de la {sum}', 'from {sum}'],
+  'plan.talk': ['Обсудить с менеджером', 'Discutați cu managerul', 'Talk to a manager'],
+  'plan.cmp': ['Сравнить пакеты', 'Comparați pachetele', 'Compare plans'],
+  'plan.cmp.f': ['Возможности', 'Funcții', 'Features'],
+  'plan.yes': ['есть', 'da', 'included'],
+  'plan.no': ['нет', 'nu', 'not included'],
+  'plan.cur': ['Ваш пакет', 'Pachetul dvs.', 'Your plan'],
+  'plan.cur.h': ['Ваш пакет подключения', 'Pachetul dvs. de conectare', 'Your partner plan'],
+  'plan.active': ['Действует', 'Activ', 'Active'],
+  'plan.until': ['до {date}', 'până la {date}', 'until {date}'],
+  'plan.req': ['Заявка на «{name}» отправлена — менеджер свяжется', 'Cererea pentru „{name}” a fost trimisă — managerul vă va contacta', 'Request for “{name}” sent — a manager will contact you'],
+  'plan.req.cancel': ['Отменить заявку', 'Anulați cererea', 'Cancel request'],
+  'plan.req.sent': ['Заявка отправлена', 'Cerere trimisă', 'Request sent'],
+  'plan.req.cancelled': ['Заявка отменена', 'Cererea a fost anulată', 'Request cancelled'],
+  'plan.req.chip': ['заявка: {name}', 'cerere: {name}', 'requested: {name}'],
+  'plan.toStart': ['Перейти на «{name}»', 'Treceți la „{name}”', 'Switch to “{name}”'],
+  'plan.confirm.h': ['Пакет «{name}»', 'Pachetul „{name}”', '“{name}” plan'],
+  'plan.confirm.paid': ['Отправим заявку менеджеру Helper: он свяжется с вами, подключит пакет и выставит счёт. С баланса ничего не списывается.', 'Trimitem cererea managerului Helper: vă va contacta, va activa pachetul și va emite factura. Din sold nu se retrage nimic.', 'We’ll send the request to a Helper manager: they’ll contact you, activate the plan and send an invoice. Nothing is charged from your balance.'],
+  'plan.confirm.free': ['«{name}» включается сразу. Гео-кампании оплачиваются по факту доставки.', '„{name}” se activează imediat. Campaniile geo se plătesc după livrare.', '“{name}” starts right away. Geo campaigns are paid per delivery.'],
+  'plan.comment': ['Комментарий для менеджера', 'Comentariu pentru manager', 'Comment for the manager'],
+  'plan.comment.ph': ['Удобное время для звонка, вопросы', 'Ora potrivită pentru apel, întrebări', 'Best time to call, questions'],
+  'plan.send': ['Отправить заявку', 'Trimiteți cererea', 'Send request'],
+  'plan.readonly': ['Сменить пакет может владелец или менеджер компании.', 'Pachetul îl poate schimba proprietarul sau managerul companiei.', 'Only the company owner or a manager can change the plan.'],
+  'plan.reg.h': ['Пакет подключения', 'Pachetul de conectare', 'Partner plan'],
+  'plan.reg.p': ['Платный пакет — это заявка менеджеру сразу после регистрации; оплата — после подтверждения. Начать можно со «Старта» и сменить пакет позже.', 'Pachetul plătit este o cerere către manager imediat după înregistrare; plata — după confirmare. Puteți începe cu „Start” și schimba pachetul mai târziu.', 'A paid plan is a request to a manager right after sign-up; you pay after confirmation. You can start with “Start” and change later.'],
+  'plan.reg.done': ['Компания зарегистрирована. Заявка на «{name}» отправлена — менеджер свяжется.', 'Compania a fost înregistrată. Cererea pentru „{name}” a fost trimisă — managerul vă va contacta.', 'Your business is registered. Request for “{name}” sent — a manager will contact you.'],
+  'plan.err': ['Пакеты сейчас не загрузились — попробуйте позже или напишите менеджеру.', 'Pachetele nu s-au încărcat — încercați mai târziu sau scrieți managerului.', 'Plans didn’t load — try again later or message a manager.'],
+  'plan.n.start': ['Старт', 'Start', 'Start'],
+  'plan.n.showcase': ['Витрина', 'Vitrină', 'Showcase'],
+  'plan.n.district': ['Район', 'Cartier', 'District'],
+  'plan.n.leader': ['Лидер', 'Lider', 'Leader'],
+  'plan.disc': ['−{n} %', '−{n} %', '−{n}%'],
+  'plan.nav': ['Пакеты', 'Pachete', 'Plans'],
   'nav.more': ['Ещё', 'Mai mult', 'More'],
   'nav.cabinet': ['Кабинет', 'Panou', 'Dashboard'],
   'shell.menu': ['Меню кабинета', 'Meniul panoului', 'Dashboard menu'],
@@ -2939,6 +3059,7 @@ const getOps = () => cached('ops', () => P('/operations?limit=50').then(d => d.i
 async function loadPartner() {
   const d = await api('/v1/partner/' + st.pid);
   st.partner = d.partner; st.role = d.role || (st.mine.find(x => +x.partner_id === +st.pid) || {}).role || 'cashier';
+  st.pkg = d.package || (d.partner && d.partner.package) || null; /* {key, status: active|requested, requested, until} */
   st.perms = d.permissions || null;
   /* язык по умолчанию: нет сохранённого выбора и язык браузера не поддерживается → язык компании */
   if (LANG_SRC === 'default' && st.partner && LANGS.indexOf(st.partner.lang) >= 0 && st.partner.lang !== LANG) setLang(st.partner.lang, false, true);
@@ -2980,6 +3101,7 @@ const NAV = [
   {r: 'stats', ic: 'chart', roles: ['owner', 'manager']},
   {r: 'staff', ic: 'users', roles: ['owner']},
   {r: 'billing', ic: 'wallet', roles: ['owner', 'manager']},
+  {r: 'package', ic: 'medal', roles: ['owner', 'manager', 'cashier']},
   {r: 'settings', ic: 'gear', roles: ['owner', 'manager']}
 ];
 const navT = r => tx('nav.' + r);
@@ -3110,7 +3232,7 @@ function shellHTML() {
   const multi = st.mine.length > 1;
   return '<div class="shell">' +
     '<aside class="side" aria-label="' + esc(tx('shell.menu')) + '"><a class="logo-wrap" href="#/' + defaultRoute() + '">' + logoHTML() + logoSub() + '</a>' +
-      '<button class="side-co" data-act="account"><span class="av">' + esc(initials(p.company)) + pImg(p.logo_url, 36) + '</span><span class="grow"><span class="t" style="display:block">' + esc(p.company) + '</span><span class="s">' + esc(roleTitle(role())) + (multi ? ' · ' + tx('shell.switch') : '') + '</span></span>' + ic('chevD', 'xs') + '</button>' +
+      '<button class="side-co" data-act="account"><span class="av">' + esc(initials(p.company)) + pImg(p.logo_url, 36) + '</span><span class="grow"><span class="t" style="display:block">' + esc(p.company) + '</span><span class="s">' + esc(roleTitle(role())) + (multi ? ' · ' + tx('shell.switch') : '') + '</span>' + (st.pkg ? '<span style="display:block;margin-top:4px">' + pkChip() + '</span>' : '') + '</span>' + ic('chevD', 'xs') + '</button>' +
       '<nav class="nav">' + nav.map(n => '<a href="#/' + n.r + '" data-nav="' + n.r + '">' + ic(n.ic, 'sm') + navT(n.r) + '</a>').join('') + '</nav>' +
       '<div class="side-foot"><span class="who" title="' + esc(acctEmail()) + '"><span class="av">' + esc(initials((A.user && A.user.name) || acctEmail())) + pImg(myPhoto(), 24) + '</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">' + esc(acctEmail()) + '</span></span><button class="textbtn" data-act="logout" style="justify-content:flex-start">' + ic('logout', 'sm') + tx('logout') + '</button></div>' +
     '</aside>' +
@@ -3119,7 +3241,7 @@ function shellHTML() {
     (cashier ? '' : '<nav class="tabbar" aria-label="' + esc(tx('shell.tabs')) + '">' + TABS.map(tb => { const n = NAV.find(x => x.r === tb) || {r: 'more', ic: 'more'}; return '<a class="tab" href="#/' + n.r + '" data-tab="' + n.r + '"><span class="pill">' + ic(n.ic) + '</span>' + tx(n.r === 'kassa' ? 'nav.kassa.short' : 'nav.' + n.r) + '</a>'; }).join('') + '</nav>') +
   '</div>';
 }
-const chromeKey = () => { const p = st.partner || {}; return [st.pid, role(), p.company, st.mine.length, acctEmail(), LANG, p.logo_url || '', myPhoto()].join('|'); };
+const chromeKey = () => { const p = st.partner || {}, k = st.pkg || {}; return [st.pid, role(), p.company, st.mine.length, acctEmail(), LANG, p.logo_url || '', myPhoto(), k.key || '', k.requested || ''].join('|'); };
 /* логотип / фото сменились — обновить аватары на месте (без перерисовки страницы с формами) */
 function chromeAvatars() {
   const p = st.partner || {}, me = initials((A.user && A.user.name) || acctEmail());
@@ -3156,7 +3278,7 @@ function accountSheet() {
   const p = st.partner;
   const others = st.mine.filter(x => +x.partner_id !== +st.pid);
   openSheet(tx('acct.title'),
-    '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal av" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + pImg(p.logo_url, 48) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + '</div></div></div>' +
+    '<div class="client-head" style="margin-bottom:16px">' + rings() + '<span class="ic-circle teal av" style="width:48px;height:48px;font-weight:700">' + esc(initials(p.company)) + pImg(p.logo_url, 48) + '</span><div class="grow"><div style="font-weight:600;font-size:16px" class="break">' + esc(p.company) + '</div><div class="small muted">' + esc(roleTitle(role())) + ' · ' + esc(catTitle(p.category, p.category_title)) + '</div><div style="margin-top:6px">' + pStatus(p) + (st.pkg ? ' <a href="#/package" style="text-decoration:none">' + pkChip() + '</a>' : '') + '</div></div></div>' +
     (others.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.others') + '</p><div class="group">' + others.map(x => '<button class="item" data-act="switch-co" data-pid="' + esc(x.partner_id) + '"><span class="ic-circle">' + esc(initials(x.company)) + '</span><span class="body"><span class="t" style="display:block">' + esc(x.company) + '</span><span class="s">' + esc(roleTitle(x.role)) + ' · ' + esc(pstT(x.status, x.status_title)) + '</span></span>' + ic('chevR', 'sm') + '</button>').join('') + '</div>' : '') +
     '<p class="eyebrow" style="margin:18px 0 8px">' + tx('acct.helper') + '</p><div class="group"><div class="item"><span class="ic-circle av">' + ic('user', 'sm') + pImg(myPhoto(), 38) + '</span><span class="body"><span class="t" style="display:block">' + esc(acctEmail() || tx('acct.account')) + '</span><span class="s">' + tx('acct.same') + '</span></span></div>' +
     '<div class="item"><span class="ic-circle">' + ic('globe', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tx('lang.uiTheme') + '</span></span>' + langSw() + '</div>' +
@@ -3205,7 +3327,7 @@ function pageLanding(openLogin) {
   const sample = {company: tx('land.s.company'), category_title: tx('cat.wash'), kind: 'discount', discount_kind: 'percent', discount_value: 15, title: tx('land.s.title'), text: tx('land.s.text'), ends_at: new Date(Date.now() + 20 * 864e5).toISOString(), dist: fDist(300)};
   const B = (icn, k) => '<article class="benefit"><span class="ring"></span><span class="ic-circle teal">' + ic(icn, 'sm') + '</span><div class="bt">' + tx(k + '.t') + '</div><div class="bd">' + tx(k + '.d') + '</div></article>';
   $('#root').innerHTML = '<div class="land">' +
-    '<header class="land-top"><a class="logo-wrap" href="#/">' + logoHTML() + logoSub() + '</a><span class="grow"></span>' + langSw() + '<button class="btn sm line" data-act="login">' + tx('login') + '</button></header>' +
+    '<header class="land-top"><a class="logo-wrap" href="#/">' + logoHTML() + logoSub() + '</a><span class="grow"></span>' + langSw() + '<button class="textbtn" data-act="pk-scroll" style="padding:8px 6px">' + tx('plan.nav') + '</button><button class="btn sm line" data-act="login">' + tx('login') + '</button></header>' +
     '<section class="hero"><div>' +
       '<p class="eyebrow">' + tx('land.eyebrow') + '</p>' +
       '<h1>' + tx('land.h1') + '</h1>' +
@@ -3215,7 +3337,7 @@ function pageLanding(openLogin) {
     '</div><div class="hero-art">' + rings() + '<div class="phone-wrap">' + phoneHTML(sample, {push: true}) + '</div></div></section>' +
     '<section class="benefits" aria-label="' + esc(tx('land.benefits')) + '">' +
       B('users', 'land.b1') + B('loyal', 'land.b2') + B('bell', 'land.b3') + B('chart', 'land.b4') +
-    '</section>' +
+    '</section>' + pkLandHTML() +
     '<section class="how"><p class="eyebrow">' + tx('land.how.e') + '</p><h2>' + tx('land.how.h') + '</h2><ol>' +
       '<li><div><b>' + tx('land.how.1t') + '</b><span>' + tx('land.how.1d') + '</span></div></li>' +
       '<li><div><b>' + tx('land.how.2t') + '</b><span>' + tx('land.how.2d') + '</span></div></li>' +
@@ -3223,6 +3345,7 @@ function pageLanding(openLogin) {
     '</ol><div class="btn-row" style="margin-top:28px;max-width:560px"><a class="btn ink" href="#/register">' + tx('land.cta.reg') + '</a><button class="btn soft" data-act="login">' + tx('land.have') + '</button></div></section>' +
     '<footer class="land-foot"><span>© NUMEROM SRL · Helper</span><a href="../">' + tx('land.f.app') + '</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('land.f.bot') + '</a></footer>' +
   '</div>';
+  pkLandFill();
   if (openLogin) loginSheet();
 }
 
@@ -4145,6 +4268,7 @@ async function pageRegister(r, alive) {
     const terms = m.terms_url ? '<a href="' + esc(m.terms_url) + '" target="_blank" rel="noopener noreferrer">' + tx('reg.4.terms') + '</a>' : tx('reg.4.terms');
     h += '<h1 class="wiz-title">' + tx('reg.4.h') + '</h1><p class="muted" style="margin:0 0 22px">' + tx('reg.4.p') + '</p>' +
       '<form class="form" data-form="reg4" novalidate>' +
+      '<div class="card" style="padding:18px 18px 16px"><h3 style="margin:0">' + tx('plan.reg.h') + '</h3><p class="hint" style="margin:6px 0 0">' + tx('plan.reg.p') + '</p><div id="pk-reg">' + loaderHTML() + '</div></div>' +
       gameExplainHTML() +
       pricesHTML() +
       '<div class="card" style="padding:14px 16px"><dl class="detail"><dt>' + tx('geo.country') + '</dt><dd>' + esc(placeText({country: R.place.country})) + '</dd><dt>' + tx('geo.city') + '</dt><dd>' + esc(R.place.cityName || R.place.city) + '</dd><dt>' + tx('f.phone') + '</dt><dd class="tnum">' + esc(phoneE164(R.ph)) + '</dd><dt>' + tx('lang.co') + '</dt><dd>' + LNAME[LANG] + '</dd></dl><p class="hint" style="margin:10px 0 0">' + tx('reg.4.lang') + '</p></div>' +
@@ -4165,6 +4289,7 @@ async function pageRegister(r, alive) {
       else { const h0 = await geoHint(); if (alive() && h0.source === 'ip' && !R.place.cm) regNote(ic('info', 'xs') + '<span>' + esc(tx('geo.note.ip', {country: countryName(R.place.country)})) + '</span>'); }
     } else if (R.geo) regNote(ic('locate', 'xs') + '<span>' + esc(tx('geo.note.ok', {place: placeText(R.place)})) + '</span>');
   }
+  if (step === 4) pkRegFill();
   if (step === 3) {
     rpPlaceNote();
     let center = null;
@@ -4187,6 +4312,114 @@ function gameExplainHTML() {
     x('check', tx('reg.g.visit.t'), tx('reg.g.visit.d', {km: kmT(G0.visit.points), xp: fN(G0.visit.xp), pxp: fN(G0.pxp('visit'))})) +
     x('gift', tx('reg.g.perk.t'), tx('reg.g.perk.d', {a: fN(lo), b: fN(hi)})) +
     x('trophy', tx('reg.g.lvl.t'), tx('reg.g.lvl.d', {a: plvTitle(G0.levels[0]), b: plvTitle(G0.levels[3])})) + '</div>';
+}
+/* ================= Пакеты подключения: GET /v1/partner/packages?market=MD|RO (публично); пакет компании — в профиле
+   (package: {key, status, requested, until}); смена — POST /v1/partner/{pid}/package {key, comment?} (платный — заявка менеджеру,
+   «Старт» — сразу), отмена заявки — DELETE …/package/request. Цены — в валюте пакета, рядом «≈» в валюте показа. ================= */
+const PKG_IC = {start: 'flag', showcase: 'star', district: 'target', leader: 'trophy'};
+const PKGS = {}, PKGSP = {};
+const pkMarketOf = cc => cc === 'RO' ? 'RO' : 'MD';
+const pkMarket = () => pkMarketOf(st.partner && st.partner.country);
+function pkgsLoad(market) {
+  market = market || 'MD';
+  const c = PKGS[market];
+  if (c && c.lang === LANG && Date.now() - c.at < 10 * 60000) return Promise.resolve(c.d);
+  if (PKGSP[market]) return PKGSP[market];
+  PKGSP[market] = api('/v1/partner/packages?market=' + market, {auth: false}).then(d => {
+    if (!d || !Array.isArray(d.packages) || !d.packages.length) throw apiErr(0, 'no_packages', tx('plan.err'));
+    PKGS[market] = {at: Date.now(), lang: LANG, d}; return d;
+  }).finally(() => { delete PKGSP[market]; });
+  return PKGSP[market];
+}
+const pkName = (k, d) => { const p = d && (d.packages || []).find(x => x.key === k); return (p && p.name) || (has('plan.n.' + k) ? tx('plan.n.' + k) : k || ''); };
+const pkBig = n => { const v = +n || 0; return Math.abs(v % 1) < 0.005 ? fN(v) : NF2.format(v); };
+const pkMoney = (n, cc) => { const v = +n || 0; return money(v, Math.abs(v % 1) < 0.005 ? 0 : 2, cc); };
+const pkConv = (n, cc) => { const d0 = dispCur(); return d0 !== cc && +n > 0 ? '≈ ' + money(fxConv(+n, cc, d0), 0, d0) : ''; };
+const pkPer = p => p.period === 'month' ? tx('plan.perMonth') : '';
+function pkChip() {
+  const k = st.pkg || {}, rq = k.requested || null;
+  return '<span class="pk-chip' + (rq ? ' req' : '') + '">' + esc(rq ? tx('plan.req.chip', {name: pkName(rq, PKGS[pkMarket()] && PKGS[pkMarket()].d)}) : pkName(k.key || 'start', PKGS[pkMarket()] && PKGS[pkMarket()].d)) + '</span>';
+}
+/* карточка пакета: o.mode — land (лендинг) | cab (кабинет); o.cur — текущий, o.req — запрошенный, o.ro — только просмотр */
+function pkCard(p, d, o) {
+  o = o || {};
+  const cc = d.currency || 'MDL', prev = p.inherits ? (d.packages || []).find(x => x.key === p.inherits) : null, paid = +p.price > 0;
+  const cur = o.cur === p.key, req = o.req === p.key, nm = esc(p.name || pkName(p.key));
+  let h = '<article class="pkc' + (p.highlight ? ' hl' : '') + (cur ? ' cur' : '') + '" data-pk="' + esc(p.key) + '"><span class="ring"></span><span class="ring"></span>';
+  if (cur) h += '<span class="pkc-rib cur">' + ic('check', 'xs') + tx('plan.cur') + '</span>'; else if (p.highlight) h += '<span class="pkc-rib">' + ic('star', 'xs') + tx('plan.popular') + '</span>';
+  h += '<div class="pkc-h"><span class="ic-circle teal">' + ic(PKG_IC[p.key] || 'medal', 'sm') + '</span><span class="pkc-n">' + nm + '</span></div>';
+  h += '<p class="pkc-t">' + esc(p.tagline || '') + '</p>';
+  h += '<div class="pkc-price"><span class="v">' + pkBig(p.price) + '</span><span class="u">' + esc(cc) + pkPer(p) + '</span></div>';
+  h += '<div class="pkc-old">' + (+p.list_price > +p.price ? '<s>' + esc(pkMoney(p.list_price, cc)) + '</s>' : '') + (+p.discount_pct > 0 ? '<span class="pkc-disc">' + tx('plan.disc', {n: fN(p.discount_pct)}) + '</span>' : '') + '</div>';
+  const cv = pkConv(p.price, cc); if (cv) h += '<div class="pkc-conv">' + esc(cv) + pkPer(p) + '</div>';
+  if (p.price_note) h += '<p class="pkc-note">' + esc(p.price_note) + '</p>';
+  if (prev) h += '<p class="pkc-inh">' + tx('plan.inherits', {name: esc(prev.name || pkName(prev.key))}) + '</p>';
+  h += '<ul class="pkc-f">' + (p.features || []).map(f => '<li>' + ic('check', 'sm') + '<span>' + esc(f) + '</span></li>').join('') + '</ul>';
+  if (o.mode === 'land') h += '<button type="button" class="btn block ' + (p.highlight ? 'ink' : paid ? 'soft' : 'line') + '" data-act="pk-choose" data-k="' + esc(p.key) + '">' + esc(p.cta || tx(paid ? 'plan.choose' : 'plan.free')) + '</button>';
+  else if (o.mode === 'cab') {
+    if (cur) h += '<button type="button" class="btn block soft" disabled>' + ic('check', 'sm') + tx('plan.cur') + '</button>';
+    else if (req) h += '<button type="button" class="btn block soft" disabled>' + ic('clock', 'sm') + tx('plan.req.sent') + '</button>';
+    else if (!o.ro) h += '<button type="button" class="btn block ' + (p.highlight ? 'ink' : 'soft') + '" data-act="pk-change" data-k="' + esc(p.key) + '">' + (paid ? tx('plan.choose') : tx('plan.toStart', {name: nm})) + '</button>';
+  }
+  return h + '</article>';
+}
+/* компактный выбор (регистрация) */
+function pkMini(p, d, sel) {
+  return '<button type="button" class="pkm" role="radio" aria-checked="' + (p.key === sel) + '" data-act="pk-pick" data-k="' + esc(p.key) + '">' + (p.highlight ? '<span class="hlb">' + tx('plan.popular') + '</span>' : '') +
+    '<span class="ic-circle teal">' + ic(PKG_IC[p.key] || 'medal', 'xs') + '</span><span class="n">' + esc(p.name || pkName(p.key)) + '</span><span class="p">' + pkBig(p.price) + ' <small>' + esc(d.currency || 'MDL') + pkPer(p) + '</small></span>' + (p.tagline ? '<span class="t">' + esc(p.tagline) + '</span>' : '') + '</button>';
+}
+/* «Для сетей и брендов», сравнение, примечания */
+function pkExtras(d, o) {
+  o = o || {};
+  const cc = d.currency || 'MDL', P0 = d.packages || [];
+  let h = '';
+  if ((d.addons || []).length) h += '<div class="pk-sec"><h3>' + tx('plan.addons') + '</h3><div class="pk-adds">' + d.addons.map(a => '<div class="pk-add"><span class="ring"></span><span class="n">' + esc(a.name || '') + '</span><span class="i">' + esc(Array.isArray(a.includes) ? a.includes.join(' · ') : a.includes || '') + '</span>' +
+    (a.from_price != null ? '<span class="fr">' + tx('plan.from', {sum: esc(pkMoney(a.from_price, cc))}) + (a.unit ? (/^\//.test(a.unit) ? '' : ' ') + '<small>' + esc(a.unit) + '</small>' : '') + '</span>' : '') +
+    '<a class="btn sm ink" style="align-self:flex-start" href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + ic('send', 'sm') + tx('plan.talk') + '</a></div>').join('') + '</div></div>';
+  if ((d.compare || []).length && P0.length) {
+    const cell = v => v === true ? '<td class="y">' + ic('check', 'sm') + '<span class="vh">' + tx('plan.yes') + '</span></td>' : v === false || v == null || v === '' ? '<td class="no"><span aria-hidden="true">—</span><span class="vh">' + tx('plan.no') + '</span></td>' : '<td>' + esc(String(v)) + '</td>';
+    h += '<div class="pk-sec"><details class="pk-cmpd"' + (o.cmpOpen ? ' open' : '') + '><summary>' + ic('chart', 'sm') + tx('plan.cmp') + '<span class="chev">' + ic('chevD', 'sm') + '</span></summary>' +
+      '<div class="tbl-wrap pk-cmpw"><table class="tbl pk-tbl"><thead><tr><th scope="col">' + tx('plan.cmp.f') + '</th>' + P0.map(p => '<th scope="col"' + (p.highlight ? ' class="hl"' : '') + '>' + esc(p.name || pkName(p.key)) + '</th>').join('') + '</tr></thead><tbody>' +
+      d.compare.map(r => '<tr><th scope="row" style="font-size:13.5px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:500">' + esc(r.feature || '') + '</th>' + P0.map(p => cell(r.values ? r.values[p.key] : null)).join('') + '</tr>').join('') + '</tbody></table></div></details></div>';
+  }
+  if ((d.notes || []).length) h += '<p class="pk-notes">' + d.notes.map(esc).join(' · ') + '</p>';
+  return h;
+}
+/* лендинг */
+function pkLandHTML() {
+  if (!UI.pkMarket) UI.pkMarket = 'MD';
+  return '<section class="pkgs" id="packages" aria-labelledby="pk-h">' + rings('', 'width:440px;right:-210px;top:-60px') +
+    '<div class="pk-top"><div><p class="eyebrow">' + tx('plan.e') + '</p><h2 id="pk-h">' + tx('plan.h') + '</h2><p class="lead">' + tx('plan.lead') + '</p></div>' +
+    '<div class="seg inline pk-mk" role="group" aria-label="' + esc(tx('plan.market')) + '">' + ['MD', 'RO'].map(m => '<button type="button" data-act="pk-market" data-v="' + m + '" aria-pressed="' + (UI.pkMarket === m) + '">' + flagOf(m) + ' ' + esc(countryName(m)) + '</button>').join('') + '</div></div>' +
+    '<div id="pk-land">' + loaderHTML() + '</div></section>';
+}
+async function pkLandFill() {
+  if (!$('#pk-land')) return;
+  const mk = UI.pkMarket || 'MD';
+  let d;
+  try { d = await pkgsLoad(mk); } catch (e) { const el = $('#pk-land'); if (el) el.innerHTML = '<div class="card tint"><p class="small" style="margin:0">' + esc(tx('plan.err')) + '</p></div>'; return; }
+  const el = $('#pk-land'); if (!el || (UI.pkMarket || 'MD') !== mk) return;
+  el.innerHTML = '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'land'})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
+}
+/* регистрация: выбор пакета на последнем шаге */
+async function pkRegFill() {
+  const R = regState(), mk = pkMarketOf(R.place.country);
+  if (!R.pkg) { R.pkg = 'start'; regSave(); }
+  let d;
+  try { d = await pkgsLoad(mk); } catch (e) { const el = $('#pk-reg'); if (el) el.innerHTML = '<p class="small muted" style="margin:10px 0 0">' + esc(tx('plan.err')) + '</p>'; return; }
+  const el = $('#pk-reg'); if (!el) return;
+  if (!d.packages.some(p => p.key === R.pkg)) R.pkg = 'start';
+  el.innerHTML = '<div class="pk-pick" role="radiogroup" aria-label="' + esc(tx('plan.reg.h')) + '">' + d.packages.map(p => pkMini(p, d, R.pkg)).join('') + '</div>';
+}
+function pkConfirm(key) {
+  const d = PKGS[pkMarket()] && PKGS[pkMarket()].d, p = d && d.packages.find(x => x.key === key);
+  if (!p) return;
+  const paid = +p.price > 0, nm = esc(p.name || pkName(p.key)), cv = pkConv(p.price, d.currency);
+  openSheet(tx('plan.confirm.h', {name: p.name || pkName(p.key)}), '<div class="pkc-price"><span class="v" style="font-size:38px">' + pkBig(p.price) + '</span><span class="u">' + esc(d.currency || 'MDL') + pkPer(p) + '</span></div>' + (cv ? '<p class="small muted tnum" style="margin:4px 0 0">' + esc(cv) + pkPer(p) + '</p>' : '') +
+    '<p class="muted" style="line-height:1.55;margin:14px 0 16px">' + tx(paid ? 'plan.confirm.paid' : 'plan.confirm.free', {name: nm}) + '</p>' +
+    '<form class="form" data-form="pk-req" novalidate><input type="hidden" id="pk-k" value="' + esc(p.key) + '">' +
+    (paid ? fld('pk-comment', tx('plan.comment') + ' ' + opt0(), '<textarea class="input" id="pk-comment" rows="2" maxlength="500" placeholder="' + esc(tx('plan.comment.ph')) + '"></textarea>') : '') +
+    errBox('pk-err') + '<button class="btn ink block" type="submit">' + (paid ? ic('send', 'sm') + tx('plan.send') : tx('plan.toStart', {name: nm})) + '</button></form>');
 }
 function pricesHTML() {
   const m = M(), pr = m.prices;
@@ -4257,18 +4490,46 @@ FORMS.reg4 = async f => {
   }
   done();
   if (d.tokens) setTokens(d.tokens);
-  const p = d.partner || {};
+  const p = d.partner || {}, pkSel = R.pkg || 'start', pkD = PKGS[pkMarketOf(R.place.country)];
   REG = null; store.del(K.reg); REG_GEO.auto = false;
   st.pid = +p.id; store.set(K.pid, p.id);
   st.partner = null; st.cache = {}; st.mine = [];
   store.del(K.todo(p.id));
-  toast(tx('reg.done'), 4000);
+  let doneMsg = tx('reg.done');
+  if (pkSel !== 'start' && p.id) {
+    /* платный пакет из регистрации — сразу заявка менеджеру (оплата после подтверждения) */
+    try { const r2 = await api('/v1/partner/' + p.id + '/package', {body: {key: pkSel}}); if (r2.package) st.pkg = r2.package; doneMsg = tx('plan.reg.done', {name: pkName(pkSel, pkD && pkD.d)}); }
+    catch (e) { doneMsg = tx('reg.done') + ' ' + e.message; }
+  }
+  toast(doneMsg, 6000);
   store.del(K.dref);
   go('home', true);
 };
 
 /* ================= global actions ================= */
 ACTS['sheet-close'] = () => closeSheet();
+ACTS['pk-scroll'] = () => { const s = $('#packages'); if (s) s.scrollIntoView({behavior: 'smooth', block: 'start'}); };
+ACTS['pk-market'] = el => { UI.pkMarket = el.dataset.v; $$('[data-act="pk-market"]').forEach(b => b.setAttribute('aria-pressed', b === el)); const l = $('#pk-land'); if (l) l.innerHTML = loaderHTML(); pkLandFill(); };
+ACTS['pk-choose'] = el => { const R = regState(); R.pkg = el.dataset.k; if (!R.place.country && UI.pkMarket) R.place.country = UI.pkMarket; regSave(); go('register'); };
+ACTS['pk-pick'] = el => { const R = regState(); R.pkg = el.dataset.k; regSave(); $$('[data-act="pk-pick"]').forEach(b => b.setAttribute('aria-checked', b === el)); };
+ACTS['pk-change'] = el => pkConfirm(el.dataset.k);
+ACTS['pk-cancel'] = async el => {
+  const done = busy(el, tx('busy.save'));
+  let d;
+  try { d = await P('/package/request', {method: 'DELETE'}); } catch (e) { done(); return toast(e.message, 5000); }
+  st.pkg = d.package || Object.assign({}, st.pkg, {requested: null, status: 'active'});
+  toast(tx('plan.req.cancelled')); $('#root').dataset.shell = ''; render();
+};
+FORMS['pk-req'] = async f => {
+  const body = {key: val('pk-k')}, c = val('pk-comment').trim(); if (c) body.comment = c;
+  const done = busy(f.querySelector('[type=submit]'), tx('busy.save'));
+  let d;
+  try { d = await P('/package', {body}); } catch (e) { done(); return showErr('pk-err', e.message); }
+  done(); closeSheet(true);
+  if (d.package) st.pkg = d.package;
+  toast(d.message || tx('plan.req.sent'), 5000);
+  $('#root').dataset.shell = ''; render();
+};
 ACTS['thm-menu'] = el => thmMenu(el);
 ACTS['thm-set'] = el => { thmClose(); themeSet(el.dataset.v); const b = $('.thm-btn'); if (b) try { b.focus({preventScroll: true}); } catch (e) {} };
 ACTS.login = () => loginSheet();
@@ -5579,6 +5840,24 @@ ACTS['staff-del'] = async el => {
 const INVS = {paid: ['inv.paid', 'st-ok'], pending: ['inv.pending', 'st-soon'], issued: ['inv.issued', 'st-soon'], open: ['inv.pending', 'st-soon'], cancelled: ['inv.cancelled', 'st-none'], canceled: ['inv.cancelled', 'st-none'], expired: ['inv.expired', 'st-none'], failed: ['inv.failed', 'st-bad']};
 const purposeT = x => { const p = x.purpose || ''; if (!p || LANG === 'ru' || !CYR.test(p)) return p; return x.method === 'card' || /попол/i.test(p) ? tx('bill.p.topup') : tx('bill.p.other'); };
 const TOP = {amount: 0};
+/* кабинет: страница «Пакет» */
+VIEWS.package = async (v, r, alive) => {
+  const k = st.pkg || {key: 'start', status: 'active'}, ro = !canManage(), cur = k.key || 'start', rq = k.requested || null;
+  let d;
+  try { d = await pkgsLoad(pkMarket()); } catch (e) { if (alive()) v.innerHTML = phead(navT('package'), tx('plan.cur.h'), null) + errorHTML(e); return; }
+  if (!alive()) return;
+  const cp = d.packages.find(x => x.key === cur) || null;
+  let h = phead(navT('package'), tx('plan.cur.h'), null);
+  h += '<section class="card pad-lg pk-curcard">' + rings('', 'width:260px;right:-110px;top:-120px') +
+    '<div class="row" style="gap:14px;align-items:flex-start"><span class="ic-circle teal" style="width:52px;height:52px">' + ic(PKG_IC[cur] || 'medal') + '</span><div class="grow">' +
+    '<p class="eyebrow">' + tx('plan.cur') + '</p><div style="font-weight:600;font-size:24px;margin-top:4px;line-height:1.2">' + esc(pkName(cur, d)) + ' <span class="badge" style="vertical-align:4px">' + tx('plan.active') + '</span></div>' +
+    (cp ? '<p class="small muted tnum" style="margin:6px 0 0">' + esc(pkMoney(cp.price, d.currency)) + pkPer(cp) + (pkConv(cp.price, d.currency) ? ' · ' + esc(pkConv(cp.price, d.currency)) : '') + (k.until ? ' · ' + tx('plan.until', {date: fDate(k.until)}) : '') + '</p>' : (k.until ? '<p class="small muted" style="margin:6px 0 0">' + tx('plan.until', {date: fDate(k.until)}) + '</p>' : '')) +
+    '</div></div>' +
+    (rq ? '<div class="banner teal" style="margin:16px 0 0"><span class="ic">' + ic('clock') + '</span><div><div class="t">' + tx('plan.req', {name: esc(pkName(rq, d))}) + '</div>' + (ro ? '' : '<button class="btn sm soft" style="margin-top:10px" data-act="pk-cancel">' + ic('close', 'sm') + tx('plan.req.cancel') + '</button>') + '</div></div>' : '') +
+    (ro ? '<p class="hint" style="margin:14px 0 0">' + tx('plan.readonly') + '</p>' : '') + '</section>';
+  h += '<div class="pk-grid">' + d.packages.map(p => pkCard(p, d, {mode: 'cab', cur, req: rq, ro})).join('') + '</div>' + pkExtras(d, {cmpOpen: window.innerWidth >= 960});
+  v.innerHTML = h;
+};
 VIEWS.billing = async (v, r, alive) => {
   const [d, game] = await Promise.all([getBilling(), getGame().catch(() => null)]);
   if (!alive()) return;
