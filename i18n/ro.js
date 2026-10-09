@@ -1867,6 +1867,7 @@
     "perk.bookOk": "Rezervați",
     "perk.cancel": "Anulați rezervarea",
     "perk.couponTitle": "Cupon pentru beneficiu",
+    "cpn.campaignTitle": "Cupon de promoție",
     "perk.couponHint": "Arătați cuponul casierului — partenerul vă oferă beneficiul",
     "perk.sampleCoupon": "Acesta este un exemplu — partenerul nu îl va accepta.",
     "perk.cancelQ": "Anulați rezervarea?",

@@ -972,10 +972,22 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .lvl-steps span.on b{opacity:.8}
 .bene{width:100%;border-collapse:collapse;font-size:13.5px}
 .bene th,.bene td{padding:10px 6px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
-.bene thead th{border-top:0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;padding-top:0}
+.bene thead th{border-top:0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;padding-top:0;vertical-align:bottom}
+.bene thead .bh{display:block}
+.bene thead .bv{display:block;margin-top:3px;font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:700;line-height:1.25}
 .bene tbody th{font-weight:500;color:var(--ink-2);width:40%}
+@media (max-width:599px){.bene thead th{letter-spacing:.06em}.bene tbody th{width:36%}}
 .bene td{font-weight:600}
 .bene td .hint{display:block;font-weight:500;margin-top:3px}
+/* «Баланс» → прайс пакетов: список карточек вместо двух колонок (на телефоне описание сжималось до слова в строке, цена наезжала) */
+.pk-list{display:flex;flex-direction:column;margin-top:6px}
+.pk-li{padding:12px 0;display:flex;flex-direction:column;gap:4px}
+.pk-li+.pk-li{border-top:1px solid var(--line)}
+.pk-li:last-child{padding-bottom:0}
+.pk-li-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px}
+.pk-li-t{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.pk-li-p{font-size:14px;color:var(--teal-ink)}
+.pk-li-p .nw{white-space:nowrap}
 .quest{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:var(--r-md);background:var(--surface)}
 .quest .grow>.t{font-weight:600;font-size:14.5px;line-height:1.3}
 .quest .d{font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.45}
@@ -2666,8 +2678,9 @@ Object.assign(TX, {
   'gmr.quest': ['Выполненный квест', 'Misiune finalizată', 'Completed quest'],
   'gmr.quest.v': ['по квесту', 'conform misiunii', 'per quest'],
   'gm.bene': ['Что даёт уровень', 'Ce oferă nivelul', 'What your level gives you'],
-  'gm.bene.now': ['Сейчас · {t}', 'Acum · {t}', 'Now · {t}'],
-  'gm.bene.next': ['«{t}»', '«{t}»', '“{t}”'],
+  /* шапка столбцов «Что даёт уровень»: подпись мелко, название уровня — строкой ниже (не «Сейчас · Бронза» в три строки) */
+  'gm.bene.now': ['Сейчас', 'Acum', 'Now'],
+  'gm.bene.next': ['Дальше', 'Următorul', 'Next'],
   'gmb.rank': ['Место в ленте и на карте', 'Locul în flux și pe hartă', 'Position in the feed and map'],
   'gmb.rank.base': ['базовое', 'de bază', 'standard'],
   'gmb.rank.v': ['выше ×{n}', 'mai sus ×{n}', 'higher ×{n}'],
@@ -6312,7 +6325,8 @@ VIEWS.game = async (v, r, alive) => {
   const quota = +fg.month_quota || +now.free_geo_push_month || 0;
   const mName = (() => { const m = /^(\d{4})-(\d{2})/.exec(fg.month || ''); const dt = m ? new Date(+m[1], +m[2] - 1, 1) : new Date(); const s = dtf({month: 'long'}).format(dt); return s.charAt(0).toUpperCase() + s.slice(1); })();
   const row = (label, a, b0) => '<tr><th scope="row">' + label + '</th><td>' + a + '</td>' + (nx ? '<td>' + b0 + '</td>' : '') + '</tr>';
-  const bene = '<table class="bene"><thead><tr><th></th><th>' + esc(tx('gm.bene.now', {t: plvTitle(lv)})) + '</th>' + (nx ? '<th>' + esc(tx('gm.bene.next', {t: plvTitle(nx)})) + '</th>' : '') + '</tr></thead><tbody>' +
+  const bh = (k, l) => '<th><span class="bh">' + esc(tx(k)) + '</span><span class="bv">' + esc(plvTitle(l)) + '</span></th>';
+  const bene = '<table class="bene"><thead><tr><th></th>' + bh('gm.bene.now', lv) + (nx ? bh('gm.bene.next', nx) : '') + '</tr></thead><tbody>' +
     row(tx('gmb.rank'), esc(rank(now)), esc(rank(nx))) +
     row(tx('gmb.badge'), esc(plvBadge(now) || tx('gmb.none')), esc(nx ? plvBadge(nx) || tx('gmb.none') : '')) +
     row(tx('gmb.season'), yn(now.seasonal_events), yn(nx && nx.seasonal_events)) +
@@ -6472,7 +6486,8 @@ VIEWS.billing = async (v, r, alive) => {
       '<div class="field" style="margin-top:14px"><label for="top-amt">' + tx('bill.sum') + '</label><div class="input-unit"><input class="input" id="top-amt" inputmode="decimal" value="' + esc(TOP.amount) + '" data-in="top-amt"><span class="u">' + cur() + '</span></div><span class="fx-conv" id="top-conv">' + (dispOf(TOP.amount) ? '≈ ' + dispOf(TOP.amount) : '') + '</span>' + payNote() + '</div>' + errBox('top-err') +
       '<div class="btn-row" style="margin-top:16px"><button class="btn ink" data-act="topup"' + (cardOk ? '' : ' disabled title="' + esc(tx('bill.card.off')) + '"') + '>' + ic('card', 'sm') + tx('bill.card') + '</button><button class="btn soft" data-act="invoice">' + ic('doc', 'sm') + tx('bill.invoice') + '</button></div>' +
       (d.payment_mode === 'test' ? '<p style="margin:12px 0 0"><span class="badge">' + tx('bill.test') + '</span></p>' : '') + (cardOk ? '' : '<p class="hint" style="margin:12px 0 0;color:var(--soon-t)">' + tx('bill.card.off.d') + '</p>') + '<p class="hint" style="margin:12px 0 0">' + tx('bill.note', {min: fMDL(TOP.min)}) + '</p>' + (dispCur() !== cur() ? '<p class="fx-cap">' + esc(fxCaption()) + '</p>' : '') + '</section>' +
-    (pk.length ? '<section class="card pad-lg"><h3>' + tx('bill.packages') + '</h3><div class="stack" style="gap:10px;margin-top:12px">' + pk.map(p => '<div class="row" style="align-items:flex-start"><div class="grow"><div style="font-weight:600">' + esc(srvT(p.title, has('pkg.' + p.key) ? tx('pkg.' + p.key) : '')) + '</div>' + (p.desc ? '<div class="small muted">' + esc(srvT(p.desc, has('pkg.' + p.key + '.d') ? tx('pkg.' + p.key + '.d') : '')) + '</div>' : '') + '</div><b class="tnum" style="white-space:nowrap">' + (p.price_mdl ? fMDL(p.price_mdl) + (p.unit ? ' ' + esc(srvT(p.unit, has('pkg.' + p.key + '.u') ? tx('pkg.' + p.key + '.u') : '')) : '') : tx('free')) + '</b></div>').join('') + '</div></section>' : '') +
+    /* прайс: название и цена строкой (не помещаются — цена переносится под название), описание — во всю ширину под ними */
+    (pk.length ? '<section class="card pad-lg"><h3>' + tx('bill.packages') + '</h3><div class="pk-list">' + pk.map(p => '<div class="pk-li"><div class="pk-li-h"><span class="pk-li-t">' + esc(srvT(p.title, has('pkg.' + p.key) ? tx('pkg.' + p.key) : '')) + '</span><b class="pk-li-p tnum">' + (p.price_mdl ? '<span class="nw">' + fMDL(p.price_mdl) + '</span>' + (p.unit ? ' ' + esc(srvT(p.unit, has('pkg.' + p.key + '.u') ? tx('pkg.' + p.key + '.u') : '')) : '') : tx('free')) + '</b></div>' + (p.desc ? '<div class="small muted">' + esc(srvT(p.desc, has('pkg.' + p.key + '.d') ? tx('pkg.' + p.key + '.d') : '')) + '</div>' : '') + '</div>').join('') + '</div></section>' : '') +
   '</div><section><div class="section-head"><h2>' + tx('bill.invoices') + '</h2></div>' +
     (inv.length ? '<div class="group">' + inv.map(x => { const s = INVS[x.status] || [null, 'st-none']; const pp = purposeT(x); return '<div class="item"><span class="ic-circle">' + ic('doc', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.invoice_no || tx('bill.inv')) + '</span><span class="s">' + (x.method === 'card' ? tx('bill.m.card') + ' · ' : x.method === 'bank' ? tx('bill.m.bank') + ' · ' : '') + esc(pp) + (pp ? ' · ' : '') + fDate(x.created_at) + (x.paid_at ? ' · ' + tx('bill.paid', {d: fDate(x.paid_at)}) : '') + '</span></span><span class="end"><b>' + fMDL(x.amount_mdl) + '</b><span class="status ' + s[1] + '" style="margin-top:4px">' + esc(s[0] ? tx(s[0]) : x.status) + '</span></span></div>'; }).join('') + '</div>'
       : emptyHTML('doc', tx('bill.empty.t'), tx('bill.empty.d'))) +

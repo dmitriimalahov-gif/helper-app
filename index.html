@@ -591,6 +591,7 @@ div.item:hover{background:none}
 .codefs .x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(14px,calc(50% - 206px));width:44px;height:44px;border-radius:50%;background:#EEF2F2;color:#231F20;display:grid;place-items:center}
 .codefs .ttl{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#56605F;margin:0}
 .codefs .sub{font-size:15px;font-weight:600;margin:0;color:#231F20}
+.codefs .ben{font-size:15px;font-weight:700;margin:-4px 0 0;padding:5px 14px;border-radius:999px;background:#C9E9E6;color:#1F6E69;max-width:100%;overflow-wrap:anywhere}
 .codefs .qr{width:min(78vw,320px);height:auto;display:block}
 .codefs .bc{max-width:100%;height:78px;display:block}
 .codefs .big{font-size:clamp(28px,9vw,38px);font-weight:600;letter-spacing:.1em;line-height:1.1;font-variant-numeric:tabular-nums;margin:0;user-select:all;-webkit-user-select:all;color:#000}
@@ -5241,7 +5242,7 @@ function codeFull(o) {
   codeClose(true);
   const el = document.createElement('div');
   el.id = 'codefs'; el.className = 'codefs'; el.tabIndex = -1; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', o.title);
-  setHTML(el, '<div class="codefs-in"><button class="x" data-act="code-close" aria-label="' + esc(t('c.close')) + '">' + ic('close') + '</button><p class="ttl">' + esc(o.title) + '</p>' + (o.sub ? '<p class="sub">' + esc(o.sub) + '</p>' : '') +
+  setHTML(el, '<div class="codefs-in"><button class="x" data-act="code-close" aria-label="' + esc(t('c.close')) + '">' + ic('close') + '</button><p class="ttl">' + esc(o.title) + '</p>' + (o.sub ? '<p class="sub">' + esc(o.sub) + '</p>' : '') + (o.ben ? '<p class="ben">' + esc(o.ben) + '</p>' : '') +
     qrSVG(o.qr, 300, t('hcode.qr', {code: String(o.big)})) + barSVG(o.bar, 78, t('hcode.bar', {code: String(o.bar)})) + '<p class="big" id="codefs-big">' + esc(o.big) + '</p><p class="hint">' + esc(o.hint) + '</p>' + (o.note ? '<p class="note">' + esc(o.note) + '</p>' : '') +
     (o.extra ? '<div class="cpn-actions">' + o.extra + '</div>' : '') + '<button class="btn" data-act="code-close">' + t('c.close') + '</button></div>');
   if (o.code) el.dataset.code = o.code;
@@ -5346,6 +5347,8 @@ function offerBadge(o) {
   if (o.discount_text) return o.discount_text;
   return t('offer.badgeOffer');
 }
+/* выгода акции одной строкой — для купона акции («Скидка 10%»); текст сервера (discount_text) — как есть */
+const offerBen = o => { const v = +o.discount_value || 0; return o.discount_kind === 'percent' && v ? t('offer.discPct', {v: fN(v)}) : o.discount_kind === 'fixed' && v ? t('offer.discFixed', {v: fN(v)}) : String(o.discount_text || ''); };
 function offerDiscText(o) {
   const v = +o.discount_value || 0, b = [];
   if (o.discount_kind === 'percent' && v) b.push(t('offer.discPct', {v: fN(v)}));
@@ -5432,7 +5435,8 @@ async function offerCoupon(cid) {
     const c = d.coupon || {};
     if (!c.code) return toast(t('offer.couponFail'));
     const spent = d.points != null ? Math.abs(+d.points) || 0 : c.points != null ? Math.abs(+c.points) || 0 : cost;
-    const cp = {code: c.code, title: c.title || (o.reward && o.reward.title) || o.title, company: d.company || c.company || o.company, expires_at: c.expires_at || null, qr: c.qr || 'HELPER-COUPON:' + c.code, campaign_id: o.campaign_id};
+    const cp = {code: c.code, title: c.title || (o.reward && o.reward.title) || o.title, company: d.company || c.company || o.company, expires_at: c.expires_at || null, qr: c.qr || 'HELPER-COUPON:' + c.code, campaign_id: o.campaign_id,
+      coupon_kind: c.coupon_kind || 'campaign', benefit: c.benefit || offerBen(o)};
     if (loySrv()) { LS.coupons = [cp].concat((LS.coupons || []).filter(x => x.code !== cp.code)); if (spent) LS.balance = Math.max(0, (+LS.balance || 0) - spent); jset(K_LOY, LS); }
     offerEvent('coupon', o.campaign_id);
     closeSheet(); liveRender(['home', 'bonus']); cpnShow(cp);
@@ -6340,15 +6344,25 @@ function gSetPoints(n) {
   if (PK && PK.ok) { PK.points = n; jset(K_PERKS, PK); }
   if (loySrv()) { LS.balance = n; jset(K_LOY, LS); }
 }
-/* купон брони на весь экран: QR HELPER-COUPON:<код>, срок, «счастливые часы», «Отменить бронь» */
+/* вид купона: GET /v1/me/coupons → coupon_kind perk (купон на плюшку) | campaign (купон акции) | legacy (старый купон награды);
+   поле kind там — вид плюшки. Старый ответ без coupon_kind: есть campaign_id без perk_id — акция, perk_id или вид плюшки — плюшка */
+function cpnKind(c) {
+  const k = c && c.coupon_kind;
+  if (k === 'perk' || k === 'campaign' || k === 'legacy') return k;
+  if (c.campaign_id != null && c.perk_id == null) return 'campaign';
+  return c.perk_id != null || (c.kind && c.kind !== 'discount') ? 'perk' : 'legacy';
+}
+/* купон на весь экран: QR HELPER-COUPON:<код>, срок, «счастливые часы», «Отменить бронь»; у купона акции — выгода («Скидка 1 MDL/л») */
 function cpnShow(c) {
   if (!c || !c.code) return;
   closeSheet();
-  const perk = c.perk_id != null || (c.kind && c.kind !== 'discount');
+  const kind = cpnKind(c), perk = kind === 'perk';
+  const title = perk ? t('perk.couponTitle') : kind === 'campaign' ? t('cpn.campaignTitle') : t('hcode.coupon');
+  const ben = perk ? '' : String(c.benefit || c.discount_text || '').trim();
   const until = c.expires_at ? fUntilD(c.expires_at) : '';
   const note = [until ? t('hcode.couponUntil', {date: until}) : t('hcode.singleUse'), c.schedule_text ? t('perk.schedule', {when: c.schedule_text}) : ''].filter(Boolean).join(' ');
   const acts = c.can_cancel ? '<button class="btn line" data-act="cpn-cancel" data-code="' + esc(c.code) + '">' + t('perk.cancel') + '</button>' : '';
-  codeFull({title: perk ? t('perk.couponTitle') : t('hcode.coupon'), sub: [c.title, c.company].filter(Boolean).join(' · '), qr: c.qr || 'HELPER-COUPON:' + c.code, bar: c.code, big: c.code, hint: perk ? t('perk.couponHint') : t('hcode.couponHint'), note: note + (c.sample ? ' ' + t('perk.sampleCoupon') : ''), extra: acts, code: c.code});
+  codeFull({title, sub: [c.title || c.campaign_title, c.company].filter(Boolean).join(' · '), ben: ben && ben !== c.title ? ben : '', qr: c.qr || 'HELPER-COUPON:' + c.code, bar: c.code, big: c.code, hint: perk ? t('perk.couponHint') : t('hcode.couponHint'), note: note + (c.sample ? ' ' + t('perk.sampleCoupon') : ''), extra: acts, code: c.code});
   if (!c.sample) cpnWatch(c.code);
 }
 function cpnCancel(code) {

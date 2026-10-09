@@ -1906,6 +1906,7 @@
     "perk.bookOk": "Забронировать",
     "perk.cancel": "Отменить бронь",
     "perk.couponTitle": "Купон на плюшку",
+    "cpn.campaignTitle": "Купон акции",
     "perk.couponHint": "Покажите купон кассиру — партнёр выдаст плюшку",
     "perk.sampleCoupon": "Это пример — партнёр его не примет.",
     "perk.cancelQ": "Отменить бронь?",

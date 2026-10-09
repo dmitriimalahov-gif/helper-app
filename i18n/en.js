@@ -1833,6 +1833,7 @@
     "perk.bookOk": "Book",
     "perk.cancel": "Cancel booking",
     "perk.couponTitle": "Perk coupon",
+    "cpn.campaignTitle": "Promotion coupon",
     "perk.couponHint": "Show the coupon to the cashier to collect your perk",
     "perk.sampleCoupon": "This is an example — partners won’t accept it.",
     "perk.cancelQ": "Cancel booking?",
