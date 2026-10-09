@@ -235,7 +235,7 @@ select.input.ph-cc{flex:0 0 auto;width:auto;min-width:112px;padding-right:34px}
 .gauge .g-unit{font-size:12.5px;color:var(--ink-2);margin-top:4px;font-weight:500}
 .hero-meta{display:flex;align-items:center;gap:8px;margin-top:2px;flex-wrap:wrap;justify-content:center}
 .hero-actions{display:flex;gap:10px;margin-top:16px;width:100%}
-.hero-actions .btn{flex:1;padding:0 12px}
+.hero-actions .btn{flex:1;min-width:0;padding:0 12px;white-space:normal;line-height:1.15;text-align:center} /* длинная подпись («Alimentare auto») — в две строки, а не за край экрана */
 .odo{display:flex;align-items:center;gap:14px}
 .odo .v{font-weight:300;font-size:30px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
 .odo .u{font-size:13px;color:var(--ink-2);margin-left:4px}
@@ -376,9 +376,12 @@ textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:
 .cur-sel:focus{outline:none;border-color:var(--teal-ink);box-shadow:0 0 0 3px var(--teal-2)}
 .fx-conv{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .fx-cap{margin:10px 0 0;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
-.int-row{display:grid;grid-template-columns:1fr 92px 64px auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.int-row{display:grid;grid-template-columns:minmax(0,1fr) 92px 64px auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .int-row .input{height:40px;font-size:14px;padding:0 8px;text-align:center}
-.int-row .nm{font-size:13.5px;font-weight:600;line-height:1.25}
+.int-row .nm{font-size:13.5px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+/* телефон: поля уже — самое длинное слово названия («стеклоочистителя») помещается целиком, переключатель не выходит за карточку */
+@media (max-width:420px){.int-row{grid-template-columns:minmax(0,1fr) 68px 48px auto;gap:6px}.int-row .input{padding:0 4px}}
+@media (max-width:380px){.int-row{grid-template-columns:minmax(0,1fr) 60px 40px auto;gap:4px}.int-row .input{padding:0 2px;font-size:13.5px}.int-row .nm{font-size:13px}}
 .int-row .switch{padding:0}
 .int-row .switch input{width:44px;height:26px}
 .int-row .switch input::after{width:20px;height:20px}
@@ -4360,10 +4363,13 @@ function pageAccount() {
     : '<p class="small muted" style="margin:6px 0 0">' + t('account.tgHint', {bot: TG_BOT}) + '</p><button class="btn block soft" style="margin-top:12px" data-act="acct-tg">' + ic('send', 'sm') + t('account.tgLink') + '</button>') + '</div>';
   const row = (act, icn, tt, s) => '<button class="item" data-act="' + act + '"><span class="ic-circle">' + ic(icn, 'sm') + '</span><span class="body"><span class="t" style="display:block">' + tt + '</span>' + (s ? '<span class="s">' + s + '</span>' : '') + '</span>' + ic('chevR', 'sm chev') + '</button>';
   const phRow = u.phone ? row('acct-phone', 'phone', t('ph.row'), esc(phShow(u.phone)) + (u.phone_verified !== false ? ' · ' + t('ph.verified') : '')) : phOn() ? row('acct-phone-add', 'phone', t('ph.add'), t('ph.addHint')) : '';
-  /* e-mail: «Подтверждён» или «Не подтверждён · Подтвердить» (статус — только если сервер его знает) */
+  /* e-mail: «Подтверждён» или «Не подтверждён · Подтвердить» (статус — только если сервер его знает); нет e-mail (вход по телефону
+     или через Telegram) — «Добавить e-mail», есть — «Изменить»: POST /v1/me/email → код из письма (emSheet) */
   const evSt = u.email_verified === true ? ' · <span class="ev-ok">' + t('ev.ok') + '</span>' : u.email_verified === false ? ' · <span class="ev-no">' + t('ev.no') + '</span> · <span style="color:var(--teal-ink);font-weight:600">' + t('ev.do') + '</span>' : '';
-  const emRow = u.email ? (u.email_verified === false ? row('ev-open', 'send', 'E-mail', esc(u.email) + evSt) : '<div class="item"><span class="ic-circle">' + ic('send', 'sm') + '</span><span class="body"><span class="t" style="display:block">E-mail</span><span class="s" style="word-break:break-all">' + esc(u.email) + evSt + '</span></span></div>') : '';
-  h += '<div class="group section">' + row('acct-name', 'user', t('acct.name'), nm ? esc(nm) : t('acct.nameAdd')) + emRow + phRow + (u.has_password === false ? (u.email ? row('acct-setpass', 'lock', t('account.setPass'), t('account.setPassHint')) : '') : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
+  const emA = '<span style="overflow-wrap:anywhere">' + esc(u.email || '') + '</span>', emGo = s => ' · <span style="color:var(--teal-ink);font-weight:600">' + s + '</span>';
+  const emRow = !u.email ? row('em-add', 'send', 'E-mail', '<span style="color:var(--teal-ink);font-weight:600">' + t('em.add') + '</span>')
+    : u.email_verified === false ? row('ev-open', 'send', 'E-mail', emA + evSt) : row('em-change', 'send', 'E-mail', emA + evSt + emGo(t('em.change')));
+  h += '<div class="group section">' + row('acct-name', 'user', t('acct.name'), nm ? esc(nm) : t('acct.nameAdd')) + emRow + phRow + (u.has_password === false ? (u.email ? row('acct-setpass', 'lock', t('account.setPass'), t(u.google || u.google_linked || u.has_google ? 'account.setPassHint' : 'account.setPassHintMail')) : '') : row('acct-pass', 'lock', t('account.changePass'), '')) + row('acct-export', 'share', t('account.export'), t('account.exportHint')) + row('acct-logout', 'user', t('account.logout'), t('account.logoutHint')) + '</div>';
   h += '<div class="card section"><label class="switch" for="set-news"><span><span style="font-weight:600;display:block">' + t('news.title') + '</span><span class="hint">' + t('news.hint') + '</span></span><input type="checkbox" id="set-news"' + (u.news ? ' checked' : '') + '></label></div>';
   h += '<div class="card section"><p class="eyebrow">' + t('account.delTitle') + '</p><p class="small muted" style="margin:6px 0 12px">' + t('account.delText') + '</p><button class="btn block danger" data-act="acct-delete">' + ic('trash', 'sm') + t('account.delete') + '</button></div>';
   return h;
@@ -4604,12 +4610,49 @@ function evCard() {
   return '<div class="card tint ev-card" style="margin-top:14px"><div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle">' + ic('send', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('ev.cardT') + '</p><p class="small muted" style="margin:2px 0 0">' + t('ev.cardS', {email: '<span style="overflow-wrap:anywhere">' + esc(A.user.email) + '</span>'}) + '</p>' +
     '<div class="btn-row" style="margin-top:10px"><button class="btn sm ink" data-act="ev-open">' + t('ev.enter') + '</button></div></div><button class="iconbtn" data-act="ev-hide" aria-label="' + esc(t('ev.hide')) + '" style="margin:-6px -6px 0 0">' + ic('close', 'sm') + '</button></div></div>';
 }
+/* ошиблись в адресе — «Изменить e-mail» прямо из листа кода */
+const evChg = () => '<div style="margin-top:2px"><button type="button" class="textbtn" data-act="em-change">' + t('em.changeRow') + '</button></div>';
 function evBoxHTML(msg) {
-  if (msg) return '<p class="muted" style="margin:0 0 16px;line-height:1.5">' + msg + '</p><button class="btn block soft" data-act="sheet-close">' + t('c.close') + '</button>';
+  if (msg) return '<p class="muted" style="margin:0 0 16px;line-height:1.5">' + msg + '</p><button class="btn block soft" data-act="sheet-close">' + t('c.close') + '</button>' + evChg();
   return '<p class="ph-sent" role="status">' + t('ev.sent', {email: '<b style="overflow-wrap:anywhere">' + esc(A.user.email) + '</b>'}) + '</p>' +
     '<form class="form" data-form="ev-verify" novalidate>' + fld('ev-code', t('ph.code'), inp('ev-code', '', 'inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="••••••"')) + errBox('ev-err') +
     '<button class="btn block ink" type="submit">' + t('ph.verify') + '</button></form>' +
-    '<div class="ph-links"><span class="small muted" style="padding:8px 0">' + t('ev.spam') + '</span><button type="button" class="textbtn" id="ev-resend" data-act="ev-resend"></button></div>';
+    '<div class="ph-links"><span class="small muted" style="padding:8px 0">' + t('ev.spam') + '</span><button type="button" class="textbtn" id="ev-resend" data-act="ev-resend"></button></div>' + evChg();
+}
+/* ===================== Добавить / изменить e-mail =====================
+   POST /v1/me/email {email} → {user, email_verification_sent} (409 email_taken, 400 bad_email, 429 retry_after) — затем код из письма
+   (evSheet: письмо ушло — сразу поле кода, иначе отправить). Аккаунт по телефону или через Telegram получает e-mail для входа и
+   восстановления доступа; новый адрес до подтверждения — «Не подтверждён». */
+function emSheet() {
+  const cur = (A.user && A.user.email) || '';
+  openSheet(t(cur ? 'em.changeTitle' : 'em.addTitle'), (cur ? '<p class="small muted" style="margin:0 0 14px">' + t('em.cur', {email: '<b style="overflow-wrap:anywhere;color:var(--ink)">' + esc(cur) + '</b>'}) + '</p>' : '<p class="small muted" style="margin:0 0 14px;line-height:1.5">' + t('em.addText') + '</p>') +
+    '<form class="form" data-form="em-set" novalidate>' + fld('em-email', t(cur ? 'em.newLabel' : 'em.label'), inp('em-email', '', 'type="email" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="254" placeholder="name@example.com"'), t('em.hint')) + errBox('em-err') +
+    '<button class="btn block ink" type="submit">' + t('em.send') + '</button></form>');
+  setTimeout(() => { const i = $('#em-email'); if (i) try { i.focus(); } catch (e) {} }, 80);
+}
+async function emSet(f) {
+  const email = val('em-email').trim().toLowerCase();
+  if (!EMAIL_RE.test(email)) return showErr('em-err', t('auth.badEmail'));
+  if (A.user && String(A.user.email || '').toLowerCase() === email) return showErr('em-err', t('em.same'));
+  const done = formBusy(f, t('fv.saving'));
+  let d;
+  try { d = await api('/v1/me/email', {body: {email}}); }
+  catch (e) {
+    done();
+    if (e.code === 'email_taken') return showErr('em-err', t('em.taken'));
+    if (e.code === 'bad_email') return showErr('em-err', t('auth.badEmail'));
+    if (e.status === 429) return showErr('em-err', t('em.wait', {time: mmssLeft((+(e.data && e.data.retry_after) || 60) * 1000)}));
+    if (srvDown(e)) return showErr('em-err', t('api.down'));
+    return showErr('em-err', e.message);
+  }
+  done();
+  A.user = Object.assign({}, A.user || {}, d && d.user ? d.user : {}, {email: (d && d.user && d.user.email) || email});
+  if (A.user.email_verified == null) A.user.email_verified = false;
+  acctSave();
+  /* письмо с кодом уже ушло — лист сразу с полем кода; не ушло (почта не настроена) — evSheet попробует отправить и объяснит */
+  EVS = d && d.email_verification_sent ? {sent: Date.now(), resendAt: Date.now() + 60000} : null;
+  render(true);
+  if (evNeed()) evSheet(); else { closeSheet(); toast(t('em.saved')); }
 }
 function evResendPaint() {
   const b = $('#ev-resend'); if (!b || !EVS) return;
@@ -6698,6 +6741,7 @@ Object.assign(FORMS, {
   login(f) { return authSubmit(f, 'login'); },
   'ph-start'(f) { return phStart(f); },
   'ev-verify'(f) { return evVerify(f); },
+  'em-set'(f) { return emSet(f); },
   async 'acct-name'(f) {
     const name = val('nm-name').trim();
     if (!nameOk(name)) return showErr('nm-err', t('auth.nameBad'));
@@ -6917,6 +6961,8 @@ Object.assign(ACT, {
   'ph-resend': () => { if (PHS && Date.now() >= (PHS.resendAt || 0)) phStart(null); },
   'acct-phone': () => phAcctSheet(),
   'ev-open': () => evSheet(),
+  'em-add': () => emSheet(),
+  'em-change': () => emSheet(),
   'ev-resend': () => { if (EVS && Date.now() < (EVS.resendAt || 0)) return; evStart(true); },
   'ev-hide': () => { if (A.user && A.user.email) jset(K_EVD, A.user.email); const c = $('.ev-card'); if (c) c.remove(); toast(t('ev.hidden')); },
   'acct-name': () => { const u = A.user || {}; openSheet(t('acct.name'), '<form class="form" data-form="acct-name" novalidate>' + nameFld(u.display_name || '', 'nm-name') + '<p class="hint" style="margin:-6px 0 0">' + t('acct.nameHint') + '</p>' + errBox('nm-err') + '<button class="btn block ink" type="submit">' + t('c.save') + '</button></form>'); setTimeout(() => { const i = $('#nm-name'); if (i) try { i.focus(); } catch (e) {} }, 80); },
