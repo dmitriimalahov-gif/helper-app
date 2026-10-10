@@ -374,6 +374,35 @@ textarea.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:
 .total .tot-l{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .total .tot-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
 .total{align-items:center}
+/* «Заправка за 10 секунд» */
+.fq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fq-big{height:60px;font-size:26px;font-weight:300;letter-spacing:-.01em;padding:0 14px;font-variant-numeric:tabular-nums}
+.fq-price{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 10px;padding:10px 12px;border-radius:12px;background:var(--teal-3)}
+.fq-price label{font-size:12.5px;color:var(--ink-2);font-weight:600}
+.fq-price .input{height:36px;font-size:15px;padding:0 10px;max-width:130px;justify-self:end;text-align:right}
+.fq-price .hint,.fq-price .fx-conv{grid-column:1 / -1;margin:0}
+.fq-price .fx-conv:empty{display:none}
+.fq-chips{margin:0 -18px;padding:2px 18px 2px}
+.fq-chips .chip{height:36px}
+.fq-sum{margin:0;font-variant-numeric:tabular-nums}
+.fq-more{border-top:1px solid var(--line);padding-top:6px}
+.fq-more summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--teal-ink);padding:6px 0;-webkit-tap-highlight-color:transparent}
+.fq-more summary::-webkit-details-marker{display:none}
+.fq-more summary .c,.fq-more[open] summary .o{display:none}
+.fq-more[open] summary .c{display:inline}
+.fq-rcpt{position:relative;display:inline-block}
+.fq-rcpt img{width:56px;height:56px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block}
+.fq-rcpt .iconbtn{position:absolute;top:-8px;right:-8px;width:26px;height:26px;background:var(--ink);color:var(--on-ink)}
+/* плюшки в поздравлении «+100 км» и «Что можно взять за N км» */
+.celeb .wel-perks{list-style:none;padding:0;margin:4px 0 2px;display:flex;flex-direction:column;gap:8px;width:100%;max-width:360px;text-align:left}
+.celeb .wel-perks button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:var(--r-md);background:var(--teal-3);text-align:left}
+.celeb .wel-perks .b{flex:1;min-width:0}
+.celeb .wel-perks .t{display:block;font-weight:600;font-size:14px;line-height:1.3}
+.celeb .wel-perks .s{display:block;font-size:12px;color:var(--ink-2);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.celeb .wel-perks .k{flex:none;font-weight:600}
+.celeb .wel-perks .lgo{width:36px;height:36px;font-size:14px}
+.celeb .textbtn{margin-top:4px}
+.gsug .item .lgo{width:38px;height:38px;flex:none}
 .cur-sel{height:32px;padding:0 26px 0 10px;border-radius:999px;border:1px solid var(--line-2);background-color:var(--card);color:var(--ink);font-size:12.5px;font-weight:700;letter-spacing:.04em;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-2) 50%),linear-gradient(135deg,var(--ink-2) 50%,transparent 50%);background-position:calc(100% - 14px) 14px,calc(100% - 10px) 14px;background-size:4px 4px;background-repeat:no-repeat;cursor:pointer;flex:none}
 .cur-sel:focus{outline:none;border-color:var(--teal-ink);box-shadow:0 0 0 3px var(--teal-2)}
 .fx-conv{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
@@ -2144,7 +2173,7 @@ function costsBody() {
   else {
     h += '<div class="group">' + shown.map(f => {
       const c = consMap[f.id];
-      return '<button class="item" data-act="fuel" data-id="' + f.id + '"><span class="ic-circle">' + ic('pump', 'sm') + '</span><span class="body"><span class="t num" style="display:block">' + f1(f.liters) + ' ' + unit + ' · ' + approxMark(f, car) + f2(toDisp(f.price, f, car)) + ' ' + cur + '/' + unit + '</span><span class="s num" style="display:block">' + fDs(f.date) + ' · ' + kmTxt(f.odo) + (f.full ? '' : ' · ' + t('costs.partial')) + (c ? ' · ' + f1(c) + ' ' + unit + '/100' : '') + '</span></span><span class="end"><b>' + approxMark(f, car) + fN(fuelAmt(f, car)) + '</b><span class="xsmall muted"> ' + cur + '</span></span></button>';
+      return '<button class="item" data-act="fuel" data-id="' + f.id + '"><span class="ic-circle">' + ic('pump', 'sm') + '</span><span class="body"><span class="t num" style="display:block">' + f1(f.liters) + ' ' + unit + ' · ' + approxMark(f, car) + f2(toDisp(f.price, f, car)) + ' ' + cur + '/' + unit + '</span><span class="s num" style="display:block">' + fDs(f.date) + ' · ' + kmTxt(f.odo) + (f.full ? '' : ' · ' + t('costs.partial')) + (f.ex && f.ex.receipt ? ' · ' + t('fq.receiptOpen') : '') + (c ? ' · ' + f1(c) + ' ' + unit + '/100' : '') + '</span></span><span class="end"><b>' + approxMark(f, car) + fN(fuelAmt(f, car)) + '</b><span class="xsmall muted"> ' + cur + '</span></span></button>';
     }).join('') + '</div>';
     if (fl.length > 8) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-fuel">' + (ui.allFuel ? t('costs.collapse') : t('costs.showAll', {fills: tn('u.fills', fl.length)})) + '</button>';
   }
@@ -3115,7 +3144,7 @@ async function afterAuth(d, kind) {
   /* регистрация по приглашению: сервер начислил километры — поздравление, затем «Ваш автомобиль» */
   const wp = kind === 'register' ? Math.round(+d.welcome_points || 0) : 0, wn = (d.user && (d.user.display_name || d.user.name)) || ui.regName || '';
   ui.regName = '';
-  if (wp > 0) celWelcome(wp, wn); else toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctName()}));
+  if (wp > 0) celWelcome(wp, wn, Array.isArray(d.welcome_perks) ? d.welcome_perks : null, typeof d.spend_hint === 'string' ? d.spend_hint : ''); else toast(t(kind === 'register' ? 'acct.created' : 'acct.loggedIn', {email: acctName()}));
   if (ui.pwInfo || d.password_reset) { const tg = !!(ui.pwInfoTg || d.telegram_unlinked); ui.pwInfo = false; ui.pwInfoTg = false; setTimeout(() => pwResetSheet(tg), 450); }
   acctMe(); loyFetch(true); refFetch(true); if (S.geo.consent) geoPush();
   gameFetch(true); cpnFetch(true); perksFetch(true); gFlush();
@@ -3153,8 +3182,10 @@ const isDemoEnt = (k, e) => k === 'cars' ? !!e.demo : e.carId === 'demo';
 function stable(v) {
   if (v === null || v === undefined || typeof v !== 'object') return v === undefined ? 'null' : JSON.stringify(v);
   if (Array.isArray(v)) return '[' + v.map(stable).join(',') + ']';
-  return '{' + Object.keys(v).filter(k => k !== 'updatedAt' && v[k] !== undefined).sort().map(k => JSON.stringify(k) + ':' + stable(v[k])).join(',') + '}';
+  return '{' + Object.keys(v).filter(k => k !== 'updatedAt' && k !== 'receipt' && v[k] !== undefined).sort().map(k => JSON.stringify(k) + ':' + stable(v[k])).join(',') + '}';
 }
+/* копия для отправки: фото чека (ex.receipt) хранится только на устройстве — в /v1/sync не уходит */
+function syncOut(e) { const x = Object.assign({}, e); if (x.ex && typeof x.ex === 'object' && x.ex.receipt) { const ex = Object.assign({}, x.ex); delete ex.receipt; x.ex = Object.keys(ex).length ? ex : null; } return x; }
 function hashOf(v) { const s = stable(v); let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36) + '.' + s.length.toString(36); }
 /* Вызывается из save(): изменённым сущностям — updatedAt = сейчас; удалённым (при входе в аккаунт) — «надгробие» */
 function syncStamp() {
@@ -3200,7 +3231,7 @@ async function syncRun() {
   SY.status = 'busy'; syncUI();
   const body = {cursor: SY.cursor || 0, changes: {}, deletions: {}}, sent = kmap();
   SYNC_KINDS.forEach(k => {
-    const ch = S[k].filter(e => e && e.id && !isDemoEnt(k, e) && isDirty(k, e)).slice(0, 2000).map(e => Object.assign({}, e));
+    const ch = S[k].filter(e => e && e.id && !isDemoEnt(k, e) && isDirty(k, e)).slice(0, 2000).map(e => syncOut(e));
     if (ch.length) body.changes[k] = ch;
     ch.forEach(e => { sent[k][e.id] = e.updatedAt; });
     const dl = Object.keys(SY.del[k]).slice(0, 2000).map(id => ({id, deletedAt: SY.del[k][id]}));
@@ -3249,6 +3280,7 @@ function entPut(k, e, force) {
   if (cur && isDemoEnt(k, cur)) return false;
   if (cur && !force && isDirty(k, cur) && (cur.updatedAt || 0) > (e.updatedAt || 0)) return false;
   const x = entIn(k, e), h = hashOf(x);
+  if (cur && cur.ex && cur.ex.receipt && !(x.ex && x.ex.receipt)) x.ex = Object.assign({}, x.ex || {}, {receipt: cur.ex.receipt}); /* фото чека есть только здесь */
   SY.acked[k][x.id] = x.updatedAt; SY.hash[k][x.id] = h;
   if (cur && cur.updatedAt === x.updatedAt && hashOf(cur) === h) return false;
   if (cur) arr[i] = x; else arr.push(x);
@@ -3661,20 +3693,76 @@ function recDetail(id) {
   b += '<div class="btn-row" style="margin-top:18px"><button class="btn ink" data-act="rec-edit" data-id="' + r.id + '">' + ic('edit', 'sm') + t('c.edit') + '</button><button class="btn danger" data-act="rec-del" data-id="' + r.id + '">' + ic('trash', 'sm') + t('c.delete') + '</button></div>';
   openSheet(esc(c[0]), b);
 }
+/* ===== «Заправка за 10 секунд»: новая заправка — быстрый режим: сумма и литры (цена за литр запоминается с прошлой
+   заправки и считает третье число), дата — сегодня, пробег — из авто (чип «+N км как в прошлый раз»), полный бак и АЗС —
+   как в прошлый раз; всё остальное — под «Подробнее». Правка существующей — полная форма. Фото чека хранится только на
+   устройстве (ex.receipt, JPEG ≤ 120 КБ) и в синхронизацию не уходит. ===== */
+const FQ = {typed: null, receipt: undefined};
 function fuelSheet(id) {
   const car = activeCar(), f = id ? S.fuel.find(x => x.id === id) : null, unit = fuelUnit(car), cur = f ? entCur(f, car) : car.currency;
-  const last = carFuel(car.id).sort(byDateDesc)[0];
-  const d = f || {date: todayISO(), odo: car.odo, liters: '', price: last ? Math.round(toDisp(last.price, last, car) * 100) / 100 : '', full: true, station: ''};
-  const b = '<form class="form" data-form="fuel" novalidate><input type="hidden" id="fuel-id" value="' + (f ? f.id : '') + '">' +
-    '<div class="grid2">' + fld('fuel-date', t('c.date'), inp('fuel-date', d.date, 'type="date" max="' + todayISO() + '"')) + fld('fuel-odo', t('c.odoKm'), inp('fuel-odo', d.odo, 'inputmode="numeric"')) + '</div>' +
-    '<div class="grid2">' + fld('fuel-liters', (car.fuel === 'ev' ? t('c.kwh') : t('fill.liters')), inp('fuel-liters', d.liters === '' ? '' : String(d.liters).replace('.', ','), 'inputmode="decimal" placeholder="40"')) + fld('fuel-price', t('fill.pricePer', {unit, cur}), inp('fuel-price', d.price === '' ? '' : String(d.price).replace('.', ','), 'inputmode="decimal" placeholder="24,90"')) + '</div>' +
-    '<div class="total"><span class="tot-l"><span class="small muted">' + t('fill.sum') + '</span>' + curSel('fuel-cur', cur) + '</span><span class="tot-r"><span class="v" id="fuel-total">' + moneyIn(Math.round((parseNum(d.liters) || 0) * (parseNum(d.price) || 0) * 100) / 100, cur) + '</span><span class="fx-conv" id="fuel-conv"></span></span></div>' +
+  const fl = carFuel(car.id).slice().reverse().sort(byDateDesc), last = fl[0], prev = fl[1]; /* при равных дате и пробеге — последняя записанная */
+  const lastPrice = last ? Math.round(toDisp(last.price, last, car) * 100) / 100 : '';
+  const d = f || {date: todayISO(), odo: car.odo, liters: '', price: lastPrice, full: last ? last.full !== false : true, station: ''};
+  const quick = !f, delta = last && prev && last.odo > prev.odo ? last.odo - prev.odo : 0;
+  FQ.typed = null; FQ.receipt = undefined;
+  const rc = f && f.ex && f.ex.receipt ? f.ex.receipt : '';
+  const num = v => v === '' || v == null ? '' : String(v).replace('.', ',');
+  const sum0 = f ? Math.round((+f.liters || 0) * (+f.price || 0) * 100) / 100 : '';
+  const tank = d.full ? t('fq.fullShort') : t('fq.partShort');
+  const chips = quick ? (delta || (last && last.station) ? '<div class="chips fq-chips">' +
+      (delta ? '<button type="button" class="chip" data-act="fq-odo" data-km="' + (Math.max(car.odo, last.odo) + delta) + '" aria-pressed="false">' + ic('gauge', 'xs') + esc(t('fq.odoChip', {km: fN(delta)})) + '</button>' : '') +
+      (last && last.station ? '<button type="button" class="chip" data-act="fq-station" data-st="' + esc(last.station) + '" aria-pressed="false">' + ic('pin', 'xs') + esc(t('fq.stChip', {station: last.station})) + '</button>' : '') + '</div>' : '') : '';
+  const quickBlock = '<div class="fq-grid">' +
+      '<div class="field"><label for="fuel-sum">' + t('fq.sum', {cur}) + '</label><input id="fuel-sum" class="input fq-big num" inputmode="decimal" enterkeyhint="done" placeholder="0" value="' + esc(num(sum0)) + '"' + (quick ? ' autofocus' : '') + '></div>' +
+      '<div class="field"><label for="fuel-liters">' + (car.fuel === 'ev' ? t('fq.kwh') : t('fq.liters')) + '</label><input id="fuel-liters" class="input fq-big num" inputmode="decimal" enterkeyhint="done" placeholder="0" value="' + esc(num(d.liters)) + '"></div></div>' +
+    '<div class="fq-price"><label for="fuel-price">' + t('fq.priceL', {unit}) + ', ' + cur + '</label><input id="fuel-price" class="input num" inputmode="decimal" placeholder="24,90" value="' + esc(num(d.price)) + '"><span class="hint" id="fuel-price-h">' + (quick && lastPrice ? t('fq.priceLast') : quick ? t('fq.priceNew') : '') + '</span><span class="fx-conv" id="fuel-conv"></span><span id="fuel-total" hidden></span></div>' +
+    chips +
+    (quick ? '<p class="hint fq-sum" id="fq-summary">' + esc(t('fq.summary', {date: t('fq.today'), odo: kmTxt(d.odo), tank})) + '</p>' : '');
+  const receipt = '<div class="field fq-rc"><span class="flabel">' + t('fq.receipt') + ' <span class="muted" style="font-weight:400">· ' + t('c.optional').toLowerCase() + '</span></span><div class="row wrap" style="gap:10px;align-items:center"><label class="btn sm soft file-btn">' + ic('camera', 'sm') + t('fq.receipt') + '<input type="file" id="fuel-rcpt" accept="image/*" capture="environment" class="vh"></label>' +
+    '<span id="fuel-rcpt-box" class="fq-rcpt"' + (rc ? '' : ' hidden') + '><img id="fuel-rcpt-img" alt="' + esc(t('fq.receiptOpen')) + '" src="' + (rc ? rc : '') + '"><button type="button" class="iconbtn" data-act="fq-rcpt-del" aria-label="' + esc(t('fq.receiptDel')) + '">' + ic('close', 'xs') + '</button></span></div><span class="hint">' + t('fq.receiptHint') + '</span></div>';
+  const more = '<div class="grid2">' + fld('fuel-date', t('c.date'), inp('fuel-date', d.date, 'type="date" max="' + todayISO() + '"')) + fld('fuel-odo', t('c.odoKm'), inp('fuel-odo', d.odo, 'inputmode="numeric"')) + '</div>' +
+    '<div class="field"><span class="flabel">' + t('fill.sum') + '</span>' + curSel('fuel-cur', cur) + '</div>' +
     '<label class="switch" for="fuel-full"><span><span style="font-weight:600;display:block">' + t('fill.full') + '</span><span class="hint">' + t('fill.fullHint') + '</span></span><input type="checkbox" id="fuel-full"' + (d.full ? ' checked' : '') + '></label>' +
-    fld('fuel-station', t('fill.station'), inp('fuel-station', d.station, 'autocomplete="off" placeholder="' + t('c.optional') + '"')) +
+    fld('fuel-station', t('fill.station'), inp('fuel-station', d.station, 'autocomplete="off" placeholder="' + t('c.optional') + '"')) + receipt;
+  const b = '<form class="form fq" data-form="fuel" novalidate><input type="hidden" id="fuel-id" value="' + (f ? f.id : '') + '">' + quickBlock +
+    (quick ? '<p class="hint" style="margin:0">' + t('fq.hint') + '</p>' : '') +
+    '<details class="fq-more" id="fuel-more"' + (quick ? '' : ' open') + '><summary>' + ic('sliders', 'xs') + '<span class="o">' + t('fq.more') + '</span><span class="c">' + t('fq.less') + '</span></summary><div class="stack" style="gap:14px;margin-top:12px">' + more + '</div></details>' +
     errBox('fuel-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (f ? '<button class="btn block danger" type="button" data-act="fuel-del" data-id="' + f.id + '">' + ic('trash', 'sm') + t('fill.del') + '</button>' : '') + '</form>';
   openSheet(f ? t('fill.title') : t('fill.newTitle'), b);
   fxFormUpd();
+  if (quick) setTimeout(() => { const i = $('#fuel-sum'); if (i) try { i.focus({preventScroll: true}); } catch (e) {} }, 120);
+}
+/* сумма ↔ литры ↔ цена: введено одно — третье считается; какое из двух (сумма/литры) ввёл человек — помним, чтобы не затирать */
+function fqCalc(which) {
+  const sumE = $('#fuel-sum'), lE = $('#fuel-liters'), pE = $('#fuel-price'); if (!sumE || !lE || !pE) return;
+  const sum = parseNum(sumE.value), l = parseNum(lE.value), p = parseNum(pE.value), r2 = v => String(Math.round(v * 100) / 100).replace('.', ',');
+  if (which === 'sum' || which === 'liters') FQ.typed = which;
+  if (which === 'sum') { if (sum > 0 && l > 0 && lE.dataset.auto !== '1') { pE.value = r2(sum / l); } else if (sum > 0 && p > 0) { lE.value = r2(sum / p); lE.dataset.auto = '1'; } else if (!sum && lE.dataset.auto === '1') { lE.value = ''; } sumE.dataset.auto = ''; }
+  else if (which === 'liters') { if (l > 0 && sum > 0 && sumE.dataset.auto !== '1') { pE.value = r2(sum / l); } else if (l > 0 && p > 0) { sumE.value = r2(l * p); sumE.dataset.auto = '1'; } else if (!l && sumE.dataset.auto === '1') { sumE.value = ''; } lE.dataset.auto = ''; }
+  else if (which === 'price') { if (p > 0 && FQ.typed === 'liters' && l > 0) { sumE.value = r2(l * p); sumE.dataset.auto = '1'; } else if (p > 0 && sum > 0) { lE.value = r2(sum / p); lE.dataset.auto = '1'; } else if (p > 0 && l > 0) { sumE.value = r2(l * p); sumE.dataset.auto = '1'; } const h = $('#fuel-price-h'); if (h) h.textContent = ''; }
+  fxFormUpd();
+}
+/* после чипа — курсор обратно в сумму или литры: Enter сохраняет, не нужно искать кнопку */
+function fqRefocus() { const a = $('#fuel-sum'), l = $('#fuel-liters'); const i = a && !a.value && l && l.value ? l : a; if (i) try { i.focus({preventScroll: true}); } catch (e) {} }
+/* фото чека → JPEG ≤ 120 КБ (уменьшаем сторону и качество, пока не влезет) */
+async function fqReceipt(file) {
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    let side = 900, out = '';
+    for (let i = 0; i < 6 && !out; i++) {
+      const k = Math.min(1, side / Math.max(img.naturalWidth || 1, img.naturalHeight || 1)), c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      for (const q of [0.8, 0.65, 0.5]) { const u = c.toDataURL('image/jpeg', q); if (u.length <= 120 * 1024) { out = u; break; } }
+      side = Math.round(side * 0.75);
+    }
+    if (!out) return toast(t('fq.receiptBad'));
+    FQ.receipt = out;
+    const box = $('#fuel-rcpt-box'), im = $('#fuel-rcpt-img'); if (im) im.src = out; if (box) box.hidden = false;
+  } catch (e) { toast(t('fq.receiptBad')); } finally { URL.revokeObjectURL(url); }
 }
 function docSheet(id, type) {
   const car = activeCar(), dd = id ? S.docs.find(x => x.id === id) : null;
@@ -5816,7 +5904,7 @@ function perksAll() {
   if (ok && (ok.items.length || logged())) return {items: ok.items, helper: ok.helper, sample: false};
   return {items: ok ? ok.items : [], helper: ok ? ok.helper : [], sample: false};
 }
-const perkById = id => { const A2 = perksAll(); return A2.items.concat(A2.helper).find(p => String(p.id) === String(id)) || null; };
+const perkById = id => { const A2 = perksAll(); return A2.items.concat(A2.helper).find(p => String(p.id) === String(id)) || (SUG.items || []).find(p => String(p.id) === String(id)) || null; };
 const PERK_IC = {service: 'wrench', gift: 'gift', priority: 'fast', upgrade: 'up'};
 function perkNear(p, src) { let best = null; (p.locations || []).forEach(l => { if (!src || !isFinite(+l.lat) || !isFinite(+l.lon)) return; const d = distKm(src.lat, src.lon, +l.lat, +l.lon); if (!best || d < best.d) best = {d, l}; }); return best; }
 /* «счастливые часы»: расписание плюшки сейчас (время устройства; сервер присылает happy_hours_now) */
@@ -6026,16 +6114,28 @@ function celLevel(x, next) {
   try { el.focus({preventScroll: true}); } catch (e) {}
 }
 function celClose() { const el = $('#celeb'); if (!el) return false; el._fin(); return true; }
-function celWelcome(n, name) {
+/* плюшки, на которые уже хватает: с регистрацией приходят welcome_perks, иначе GET /v1/perks/suggest; нет — карточек нет */
+function welPerksHTML(n, perks, hint) {
+  const L = (perks || []).filter(p => p && p.title).slice(0, 3);
+  if (!L.length) return '';
+  const can = L.filter(p => +p.points <= n).length;
+  /* spend_hint сервера («Хватит на 2–3 плюшки…») — как есть; иначе считаем по присланным плюшкам */
+  return '<p class="lead sm" id="wel-sub">' + esc(hint || (can ? tn('wel.enough', can) : t('wel.sub', {km: kmFull(n)}))) + '</p>' +
+    '<p class="ey" style="margin-top:6px">' + t('wel.perksE') + '</p><ul class="wel-perks">' + L.map(p => '<li><button type="button" data-act="wel-perk" data-id="' + esc(p.id) + '">' + lgo(p.logo_url, p.company, 36) + '<span class="b"><span class="t">' + esc(p.title) + '</span><span class="s">' + esc([p.company, p.distance_m != null ? fKm(p.distance_m / 1000) : ''].filter(Boolean).join(' · ')) + '</span></span><span class="k">' + kmIco(+p.points || 0) + '</span></button></li>').join('') + '</ul>';
+}
+function celWelcome(n, name, perks, hint) {
   const old = $('#celeb'); if (old) old.remove();
   name = String(name || '').trim();
+  const wph = welPerksHTML(n, perks, hint);
+  if (!wph && perks == null) sugFetch(true).then(r => { const box = $('#wel-perks-box'); if (box && r && r.items && r.items.length) { sugAdd(r.items); setHTML(box, welPerksHTML(n, r.items, hint)); const sub = $('#wel-sub0'); if (sub && $('#wel-sub')) sub.remove(); } });
+  if (perks && perks.length) sugAdd(perks);
   const el = document.createElement('div');
   el.id = 'celeb'; el.className = 'celeb'; el.tabIndex = -1; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-labelledby', 'cel-t'); el.setAttribute('aria-describedby', 'cel-d');
   setHTML(el, '<div class="celeb-in"><button class="x" data-act="cel-close" aria-label="' + esc(t('c.close')) + '">' + ic('close') + '</button>' +
     '<div class="rings" aria-hidden="true"><i></i><i></i><i></i><span class="wel-km"><b class="num">+' + fN(n) + '</b><small>' + esc(t('u.kmhS', {n: ''}).trim()) + '</small></span></div>' +
     '<p class="ey">' + t('wel.ey') + '</p><h2 id="cel-t">' + esc(t('wel.title', {km: kmShort(n)})) + '</h2><p class="lead" id="cel-d">' + esc(name ? t('wel.lead', {name}) : t('wel.lead0')) + '</p>' +
-    '<p class="lead sm">' + esc(t('wel.sub', {km: kmFull(n)})) + '</p>' +
-    '<button class="btn ink" data-act="cel-close">' + (S.cars.some(c => !c.demo) ? t('wel.ok') : ic('car', 'sm') + t('wel.car')) + '</button></div>');
+    (wph ? '' : '<p class="lead sm" id="wel-sub0">' + esc(hint || t('wel.sub', {km: kmFull(n)})) + '</p>') + '<div id="wel-perks-box" style="width:100%;display:contents">' + wph + '</div>' +
+    '<button class="btn ink" data-act="cel-close">' + (S.cars.some(c => !c.demo) ? t('wel.ok') : ic('car', 'sm') + t('wel.car')) + '</button>' + (wph ? '<button class="textbtn" data-act="wel-all">' + t('wel.perksAll') + '</button>' : '') + '</div>');
   el._fin = () => { el.remove(); if ($('#sheet').hidden && !$('#codefs')) document.body.style.overflow = ''; };
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { el.focus({preventScroll: true}); } catch (e) {}
@@ -6095,13 +6195,49 @@ function rateDone(d, quiet) {
 }
 
 /* ================= экран «Моя игра» (вкладка bonus) ================= */
-function gRefresh() { if (logged()) { gameFetch(); cpnFetch(); gFlush(); } gMetaFetch(); perksFetch(); }
+function gRefresh() { if (logged()) { gameFetch(); cpnFetch(); gFlush(); sugFetch(); } gMetaFetch(); perksFetch(); }
+/* --- «Что можно взять за N км»: GET /v1/perks/suggest?lat&lon&limit=3 — до 3 доступных плюшек рядом (сервер знает баланс);
+   в демо — пример каталога; нет ответа (404, офлайн) — карточки нет. Подсказанные плюшки открываются обычным листом плюшки. --- */
+let SUG = {items: [], at: 0, who: '', lang: '', ok: false, missing: false}, sugP = null, sugTry = 0;
+function sugAdd(items) { const seen = {}; SUG.items = (items || []).filter(p => p && p.id != null).concat(SUG.items).filter(p => !seen[p.id] && (seen[p.id] = 1)); }
+function sugFetch(force) {
+  if (!logged()) return Promise.resolve(null);
+  if (sugP) return sugP;
+  const who = gWho();
+  if (!force && SUG.who === who && SUG.lang === LANG && (SUG.missing || Date.now() - SUG.at < 300000 || Date.now() - sugTry < 30000)) return Promise.resolve(SUG);
+  sugTry = Date.now();
+  const src = geoSrc(), q = (src ? '&lat=' + src.lat.toFixed(3) + '&lon=' + src.lon.toFixed(3) : '');
+  sugP = (async () => {
+    let d = null;
+    try { d = await api('/v1/perks/suggest?limit=3' + q, {timeout: 10000}); }
+    catch (e) { if (e.status === 404) SUG = {items: [], at: Date.now(), who, lang: LANG, ok: false, missing: true}; return SUG; }
+    const was = JSON.stringify((SUG.items || []).map(p => p.id));
+    SUG = {items: Array.isArray(d && d.items) ? d.items.slice(0, 3) : [], budget: d && d.budget != null ? +d.budget : null, at: Date.now(), who, lang: LANG, ok: true, missing: false};
+    if (JSON.stringify(SUG.items.map(p => p.id)) !== was) liveRender(['bonus']);
+    return SUG;
+  })().finally(() => { sugP = null; });
+  return sugP;
+}
+function gSuggest(V) {
+  let L = [], sample = false, bal = V.km || 0;
+  if (!logged() && S.demo) { L = GMOCK.catalog().items.filter(p => p.available).slice(); sample = true; }
+  else if (logged() && SUG.ok && SUG.who === gWho()) { L = SUG.items.slice(); if (SUG.budget != null && SUG.budget > bal) bal = SUG.budget; /* баланс по данным сервера, если профиль игры ещё не пришёл */ }
+  else return '';
+  if (!L.length) return '';
+  const can = L.filter(p => +p.points <= bal).sort((a, b) => b.points - a.points).slice(0, 3);
+  if (!can.length) { const min = Math.min.apply(null, L.map(p => +p.points || 0)); return '<section class="section gsug"><div class="card tint oempty"><span class="ic-circle">' + ic('gift', 'sm') + '</span><p class="small" style="margin:0">' + esc(t('gsug.none', {km: kmShort(min)})) + '</p></div></section>'; }
+  L = can;
+  return '<section class="section gsug"><div class="section-head"><h2 class="eyebrow">' + esc(t('gsug.t', {km: kmShort(bal)})) + gSampleBadge(V) + '</h2><button class="link" data-act="go" data-p="perks">' + t('c.all') + ic('chevR', 'xs') + '</button></div>' +
+    '<div class="card" style="padding:6px 0"><div class="group" style="border:0;background:transparent">' + L.map(p => '<button class="item" data-act="perk" data-id="' + esc(p.id) + '">' + lgo(p.logo_url, p.company, 38) + '<span class="body"><span class="t" style="display:block">' + esc(p.title || '') + (sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span><span class="s">' + esc([p.company, p.distance_m != null ? fKm(p.distance_m / 1000) : ''].filter(Boolean).join(' · ')) + '</span></span><span class="end"><b class="num">' + kmIco(+p.points || 0) + '</b></span></button>').join('') + '</div></div>' +
+    '<p class="xsmall muted" style="margin:8px 0 0">' + t('gsug.s') + '</p></section>';
+}
 function pageGame() {
   sweepCoupons();
   setTimeout(gRefresh, 0);
   const V = gView();
   let h = topbar(t('game.title'), {sub: t('game.sub')});
   h += gHero(V);
+  h += gSuggest(V);
   if (!logged()) h += gAuthCard(V);
   h += gRateCards(V);
   h += gStreaks(V);
@@ -6225,12 +6361,12 @@ function gEarn() {
 }
 function gHistory() {
   const srv = loySrv(), L = LOY();
-  const hs = srv ? (srv.history || []).map(x => { const tt = tsParse(x.created_at); return {t: (x.title || x.reason || t('bonus.op')) + (x.company ? ' · ' + x.company : ''), d: isFinite(tt) ? iso(new Date(tt)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0}; })
+  const hs = srv ? (srv.history || []).map(x => { const tt = tsParse(x.created_at); return {t: (x.title || x.reason || t('bonus.op')) + (x.company ? ' · ' + x.company : ''), d: isFinite(tt) ? iso(new Date(tt)) : String(x.created_at || '').slice(0, 10), p: +x.delta || 0, hint: x.reason === 'invite_welcome' && typeof x.spend_hint === 'string' ? x.spend_hint : ''}; })
     : L.hist.slice().reverse().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0)).map(h => h.tk ? Object.assign({}, h, {t: histText(h.tk, h.tp)}) : h);
   if (!hs.length) return '';
   const shown = ui.allHist ? hs : hs.slice(0, 6);
   let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('game.history') + '</h2><span class="xsmall muted">' + tn('bonus.ops', hs.length) + '</span></div><div class="group">';
-  h += shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + (x.d ? fD(x.d) : '') + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '"><span class="kmh" role="img" aria-label="' + esc((x.p > 0 ? '+' : '−') + kmFull(Math.abs(x.p))) + '"><span aria-hidden="true">' + (x.p > 0 ? '+' : '−') + fN(Math.abs(x.p)) + '</span>' + markSVG(14, 'var(--teal-ink)', 'currentColor') + '</span></span></div>').join('');
+  h += shown.map(x => '<div class="item" style="min-height:52px"><span class="body"><span class="t" style="display:block;font-weight:500;font-size:14px">' + esc(x.t) + '</span><span class="s num">' + (x.d ? fD(x.d) : '') + (x.hint ? ' · ' + esc(x.hint) : '') + '</span></span><span class="end ' + (x.p > 0 ? 'pts-plus' : 'pts-minus') + '"><span class="kmh" role="img" aria-label="' + esc((x.p > 0 ? '+' : '−') + kmFull(Math.abs(x.p))) + '"><span aria-hidden="true">' + (x.p > 0 ? '+' : '−') + fN(Math.abs(x.p)) + '</span>' + markSVG(14, 'var(--teal-ink)', 'currentColor') + '</span></span></div>').join('');
   h += '</div>';
   if (hs.length > 6) h += '<button class="btn soft block" style="margin-top:10px" data-act="all-hist">' + (ui.allHist ? t('bonus.collapse') : t('bonus.showAll')) + '</button>';
   return h + '</section>';
@@ -6490,6 +6626,8 @@ const GAME_ACT = {
   'rate-tag': el => { const r = ui.rate; if (!r) return; const k = el.dataset.k, i = r.tags.indexOf(k); if (i >= 0) r.tags.splice(i, 1); else r.tags.push(k); el.setAttribute('aria-pressed', String(i < 0)); },
   'rate-send': () => { if (ui.rate && String(ui.rate.id).indexOf('demo-') === 0) { GMOCK.rateLocal(ui.rate.id); closeSheet(); ui.rate = null; toast(t('rate.thanks') + ' · ' + t('bonus.example')); return render(); } rateSend(); },
   'cel-close': () => celClose(),
+  'wel-perk': el => { celClose(); perkSheet(el.dataset.id); },
+  'wel-all': () => { celClose(); go('perks'); },
   'gbanner-close': () => { const b = $('#gbanner'); if (b && b._fin) b._fin(); },
   'gbanner-open': el => { const b = $('#gbanner'), k = el.dataset.k, id = el.dataset.id; if (b && b._fin) b._fin(); if (ui.onb) return; if (k === 'badge') { setTab('bonus'); setTimeout(() => badgeSheet(id), 250); } else setTab('bonus'); }
 };
@@ -6853,13 +6991,21 @@ const FORMS = {
     if (!id && S.stats.recAdded === 3 && !isPrem() && !S.flags.upRec3) { S.flags.upRec3 = true; save(); setTimeout(() => upsell('rec3'), 800); }
   },
   fuel() {
-    const car = activeCar(), date = val('fuel-date'), odo = parseNum(val('fuel-odo')), liters = parseNum(val('fuel-liters')), price = parseNum(val('fuel-price'));
+    const car = activeCar(), date = val('fuel-date'), odo = parseNum(val('fuel-odo')), sum = parseNum(val('fuel-sum'));
+    let liters = parseNum(val('fuel-liters')), price = parseNum(val('fuel-price'));
+    /* быстрый режим: сумма и цена → литры; сумма и литры → цена */
+    if (!liters && sum > 0 && price > 0) liters = sum / price;
+    if (!price && sum > 0 && liters > 0) price = sum / liters;
+    if (!price && !sum && liters > 0) { const m = $('#fuel-more'); if (m) m.open = true; return showErr('fuel-err', t('fq.needPrice', {unit: fuelUnit(car)})); }
     if (!date || date > todayISO()) return showErr('fuel-err', t('fv.fuelDate'));
     if (odo == null || odo < 0) return showErr('fuel-err', t('fv.fuelOdo'));
     if (!liters || liters <= 0 || liters > 300) return showErr('fuel-err', t('fv.liters'));
     if (!price || price <= 0 || price > 1000) return showErr('fuel-err', t('fv.price', {unit: fuelUnit(car)}));
     const data = {date, odo: Math.round(odo), liters: Math.round(liters * 100) / 100, price: Math.round(price * 100) / 100, currency: CUR.indexOf(val('fuel-cur')) >= 0 ? val('fuel-cur') : car.currency, full: $('#fuel-full').checked, station: val('fuel-station').trim()};
     const id = val('fuel-id');
+    /* фото чека: новое — сохранить, убрано — удалить; не трогали — оставить как было (только на устройстве) */
+    const cur0 = id ? S.fuel.find(x => x.id === id) : null, ex0 = cur0 && cur0.ex && typeof cur0.ex === 'object' ? cur0.ex : {};
+    if (FQ.receipt !== undefined) { const ex = Object.assign({}, ex0); if (FQ.receipt) ex.receipt = FQ.receipt; else delete ex.receipt; data.ex = Object.keys(ex).length ? ex : null; }
     let got = 0;
     if (id) Object.assign(S.fuel.find(x => x.id === id), data); else { S.fuel.push(Object.assign({id: uid(), carId: car.id}, data)); got = awardFuel(); }
     bumpOdo(car, data.odo, date); save(); closeSheet(); render(); toast(id ? t('act.fuelUpdated') : t('act.fuelSaved') + (got ? ' · ' + ptsTxt(got) : ''));
@@ -7067,6 +7213,9 @@ const ACT = {
   'rec-edit': el => recSheet(el.dataset.id),
   'rec-del': el => { const id = el.dataset.id; confirmSheet({title: t('act.recDelTitle'), text: t('act.recDelText'), ok: t('c.delete'), onOk: () => { S.records = S.records.filter(r => r.id !== id); save(); render(); toast(t('act.recDeleted')); }, onCancel: () => recDetail(id)}); },
   'fuel-new': () => fuelSheet(null),
+  'fq-odo': el => { const o = $('#fuel-odo'); if (o) o.value = el.dataset.km; el.setAttribute('aria-pressed', 'true'); const sm = $('#fq-summary'); if (sm) sm.textContent = t('fq.summary', {date: t('fq.today'), odo: kmTxt(+el.dataset.km), tank: $('#fuel-full') && $('#fuel-full').checked ? t('fq.fullShort') : t('fq.partShort')}); fqRefocus(); },
+  'fq-station': el => { const i = $('#fuel-station'); if (i) i.value = el.dataset.st; el.setAttribute('aria-pressed', 'true'); fqRefocus(); },
+  'fq-rcpt-del': () => { FQ.receipt = ''; const box = $('#fuel-rcpt-box'); if (box) box.hidden = true; const im = $('#fuel-rcpt-img'); if (im) im.removeAttribute('src'); },
   fuel: el => fuelSheet(el.dataset.id),
   'fuel-del': el => { const id = el.dataset.id; confirmSheet({title: t('act.fuelDelTitle'), text: t('act.fuelDelText'), ok: t('c.delete'), onOk: () => { S.fuel = S.fuel.filter(r => r.id !== id); save(); render(); toast(t('act.fuelDeleted')); }, onCancel: () => fuelSheet(id)}); },
   doc: el => docSheet(el.dataset.id),
@@ -7197,7 +7346,8 @@ function onClick(e) {
 function onInput(e) {
   const tt = e.target, id = tt.id;
   if (id === 'kb-search') { ui.kbq = tt.value; const r = $('#kb-results'); if (r) setHTML(r, guideResults()); return; }
-  if (id === 'rec-parts' || id === 'rec-labor' || id === 'fuel-liters' || id === 'fuel-price' || id === 'doc-cost') { fxFormUpd(); return; }
+  if (id === 'fuel-sum' || id === 'fuel-liters' || id === 'fuel-price') { fqCalc(id.slice(5)); return; }
+  if (id === 'rec-parts' || id === 'rec-labor' || id === 'doc-cost') { fxFormUpd(); return; }
   if (id === 'ev-code') { const v = tt.value.replace(/\D/g, '').slice(0, 6); if (tt.value !== v) tt.value = v; const e0 = $('#ev-err'); if (e0) e0.hidden = true; if (v.length === 6 && !(EVS && EVS.busy)) { EVS = EVS || {}; EVS.busy = true; Promise.resolve(evVerify(tt.closest('form'))).finally(() => { if (EVS) EVS.busy = false; }); } return; }
   if (id === 'au-name') { ui.authName = tt.value; if (PHS) PHS.name = tt.value.trim(); }
   if (id === 'ph-num') { const cc = val('ph-cc') || phDefaultCc(), v = phFmt(cc, phNat(cc, tt.value)); if (tt.value !== v) tt.value = v; }
@@ -7213,6 +7363,7 @@ function onChange(e) {
   if (tt.dataset && tt.dataset.fx) { fxFormUpd(); return; }
   if (id === 'ph-cc') { const n = $('#ph-num'); if (n) { n.placeholder = PHC[tt.value].ex; n.value = phFmt(tt.value, phNat(tt.value, n.value)); } return; }
   if (id === 'rc-cam' || id === 'rc-gal') { const fl = tt.files && tt.files[0]; tt.value = ''; recPhotoPick(fl); return; }
+  if (id === 'fuel-rcpt') { const fl = tt.files && tt.files[0]; tt.value = ''; fqReceipt(fl); return; }
   if (id === 'set-currency') { activeCar().currency = tt.value; save(); render(); fxToast(tt.value); return; }
   if (id === 'set-remind') { S.settings.remindDays = +tt.value; save(); return; }
   if (id === 'set-geo') { if (tt.checked) { S.geo.consent = true; S.geo.consentAt = todayISO(); } else { S.geo = {consent: false, consentAt: null, area: null}; ui.geo = {status: null, pos: null}; } save(); geoPush(); render(); toast(tt.checked ? t('act.geoOn') : t('act.geoOff')); return; }

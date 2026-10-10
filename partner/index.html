@@ -936,7 +936,6 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 /* ---------- игра: касса, плюшки, уровень партнёра (docs/GAME_MODEL.md) ---------- */
 .ico.fill{fill:currentColor}
 .kactions{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
-@media (min-width:560px){.kactions{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .kact{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:100%;min-height:196px;padding:22px 20px 20px;border-radius:var(--r-xl);text-align:left;background:var(--ink);color:var(--on-ink)}
 .kact .rings{width:260px;right:-110px;top:-120px}
 .kact .rings i{border-color:rgba(150,213,210,.28)}
@@ -950,6 +949,29 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .kact.perk .big{background:var(--ink);color:var(--on-ink);box-shadow:0 0 0 10px var(--teal-2)}
 .kact:hover{filter:brightness(1.03)}
 .kact:active{transform:scale(.99)}
+/* касса: один сканер, чип вида кода, крупные кнопки «в перчатках», статус сети, офлайн-очередь */
+.kact.one{min-height:176px}
+.kassa-alt{display:flex;flex-wrap:wrap;gap:0 18px;margin-top:-4px}
+.kassa-alt .textbtn{padding:7px 2px;font-size:13.5px;cursor:pointer}
+.kchip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px 0 9px;border-radius:999px;background:var(--teal-2);color:var(--ink);font-size:12px;font-weight:700;letter-spacing:.03em;margin:0 0 12px;max-width:100%}
+.kchip .ico{width:15px;height:15px;flex:none}
+.kchip.off{background:var(--soon-bg);color:var(--soon-t)}
+.btn.xl.kcta{width:100%;height:auto;min-height:60px;font-size:17px;padding:12px 20px;white-space:normal;line-height:1.2}
+.btn.kcta .ico.sm{width:22px;height:22px}
+.knet{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:30px}
+.knet .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-bg);flex:none}
+.knet.off .dot{background:var(--bad);box-shadow:0 0 0 3px var(--bad-bg)}
+.knet.q .dot{background:var(--soon);box-shadow:0 0 0 3px var(--soon-bg)}
+.qn{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--soon);color:#231F20;font-size:10.5px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.tab .pill{position:relative}
+.tab .qn{position:absolute;top:-5px;right:4px;box-shadow:0 0 0 2px var(--bar-bg)}
+.nav a .qn{margin-left:auto;min-width:20px;height:20px;font-size:11px}
+.kq{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--surface);font-size:13.5px;line-height:1.4;width:100%;text-align:left;color:var(--ink)}
+.kq.bad{background:var(--bad-bg);color:var(--bad-t)}
+.kq .ic-circle{width:36px;height:36px}
+.qop{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;position:relative}
+.qop+.qop::before{content:"";position:absolute;top:0;left:14px;right:14px;height:1px;background:var(--line)}
+.qop .r{font-size:12.5px;color:var(--bad-t);margin-top:3px;line-height:1.4;overflow-wrap:anywhere}
 .medal{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;flex:none;color:#231F20;box-shadow:inset 0 0 0 3px rgba(255,255,255,.5),0 2px 8px rgba(0,0,0,.14)}
 .medal .ico{width:27px;height:27px;stroke-width:1.6}
 .medal.sm{width:30px;height:30px}.medal.sm .ico{width:16px;height:16px}
@@ -2853,6 +2875,47 @@ Object.assign(TX, {
   'gm.demand.camp': ['Акция для них', 'Campanie pentru ei', 'Campaign for them'],
   'gm.recent': ['Последний опыт', 'Experiența recentă', 'Recent XP']
 });
+/* касса: один сканер + офлайн-очередь (ks.* — распознавание кода, kq.* — очередь) */
+Object.assign(TX, {
+  'kassa.scan': ['Сканировать', 'Scanează', 'Scan'],
+  'kassa.scan.s': ['Helper-код клиента или купон — касса сама поймёт, что это', 'Codul Helper al clientului sau un cupon — casa înțelege singură ce este', 'The customer’s Helper code or a coupon — the till works out which it is'],
+  'kassa.manual.l': ['Ввести Helper ID или код вручную', 'Introdu Helper ID sau codul manual', 'Enter a Helper ID or code manually'],
+  'scan.t': ['Наведите камеру на Helper-код или купон', 'Îndreptați camera spre codul Helper sau cupon', 'Point the camera at a Helper code or coupon'],
+  'ks.client': ['Helper-код клиента', 'Codul Helper al clientului', 'Customer’s Helper code'],
+  'ks.perk': ['Купон на плюшку', 'Cupon pentru beneficiu', 'Perk coupon'],
+  'ks.camp': ['Купон акции', 'Cupon de promoție', 'Promotion coupon'],
+  'ks.coupon': ['Купон', 'Cupon', 'Coupon'],
+  'ks.unknown.t': ['Код не распознан', 'Codul nu a fost recunoscut', 'Code not recognised'],
+  'ks.unknown': ['Это не Helper-код клиента и не купон Helper. Попросите клиента открыть приложение Helper: Helper-код — на главном экране, купон — в «Плюшках».', 'Nu este nici codul Helper al clientului, nici un cupon Helper. Rugați clientul să deschidă aplicația Helper: codul Helper este pe ecranul principal, cuponul — la «Beneficii».', 'This is neither a customer’s Helper code nor a Helper coupon. Ask the customer to open the Helper app: the Helper code is on the home screen, the coupon is under Perks.'],
+  'ks.off.chip': ['Офлайн — проверим при отправке', 'Offline — verificăm la trimitere', 'Offline — we’ll check it when sending'],
+  'ks.off.client': ['Нет сети: клиента проверить не удалось. Визит сохранится на этом устройстве и отправится, когда появится связь.', 'Nu există rețea: clientul nu a putut fi verificat. Vizita se salvează pe acest dispozitiv și se trimite când revine conexiunea.', 'No network: the customer couldn’t be checked. The visit is saved on this device and will be sent once you’re back online.'],
+  'ks.off.coupon': ['Нет сети: купон проверить не удалось. Выдайте клиенту плюшку или скидку по купону — погашение отправится, когда появится связь. Если купон окажется недействительным, он попадёт в «Не принято».', 'Nu există rețea: cuponul nu a putut fi verificat. Acordați clientului beneficiul sau reducerea de pe cupon — validarea se trimite când revine conexiunea. Dacă cuponul se dovedește invalid, ajunge la «Respinse».', 'No network: the coupon couldn’t be checked. Give the customer the perk or discount from the coupon — the redemption will be sent once you’re back online. If the coupon turns out to be invalid, it will appear under “Rejected”.'],
+  'ks.off.btn': ['Погасить при подключении', 'Validează la conectare', 'Redeem when connected'],
+  'kq.saved.t': ['Сохранено офлайн', 'Salvat offline', 'Saved offline'],
+  'kq.saved': ['Отправим, когда появится сеть. Клиенту километры придут после отправки.', 'Trimitem când apare rețeaua. Kilometrii ajung la client după trimitere.', 'We’ll send it once the network is back. The customer gets the kilometres after it’s sent.'],
+  'kq.t.visit': ['Визит клиента', 'Vizita clientului', 'Customer visit'],
+  'kq.t.redeem': ['Погашение купона', 'Validarea cuponului', 'Coupon redemption'],
+  'kq.dup': ['Уже в очереди', 'Deja în coadă', 'Already queued'],
+  'kq.net.on': ['Онлайн', 'Online', 'Online'],
+  'kq.net.off': ['Нет сети', 'Fără rețea', 'No network'],
+  'kq.net.q': ['В очереди: {n}', 'În coadă: {n}', 'Queued: {n}'],
+  'kq.send': ['Отправить сейчас', 'Trimite acum', 'Send now'],
+  'kq.sending': ['Отправляем…', 'Se trimite…', 'Sending…'],
+  'kq.row': [{one: '{n} операция ждёт отправки', few: '{n} операции ждут отправки', many: '{n} операций ждут отправки', other: '{n} операции ждут отправки'}, {one: '{n} operațiune așteaptă trimiterea', few: '{n} operațiuni așteaptă trimiterea', other: '{n} de operațiuni așteaptă trimiterea'}, {one: '{n} operation waiting to be sent', other: '{n} operations waiting to be sent'}],
+  'kq.sent': ['Отправлено: {list}', 'Trimis: {list}', 'Sent: {list}'],
+  'kq.sent.v': [{one: '{n} визит', few: '{n} визита', many: '{n} визитов', other: '{n} визита'}, {one: '{n} vizită', few: '{n} vizite', other: '{n} de vizite'}, {one: '{n} visit', other: '{n} visits'}],
+  'kq.sent.r': [{one: '{n} купон', few: '{n} купона', many: '{n} купонов', other: '{n} купона'}, {one: '{n} cupon', few: '{n} cupoane', other: '{n} de cupoane'}, {one: '{n} coupon', other: '{n} coupons'}],
+  'kq.still': ['Не отправлено: {n} — попробуем позже', 'Netrimise: {n} — încercăm mai târziu', 'Not sent: {n} — we’ll try again later'],
+  'kq.rej': ['Не принято: {n} — посмотреть', 'Respinse: {n} — vezi', 'Rejected: {n} — view'],
+  'kq.rej.t': ['Не принято', 'Respinse', 'Rejected'],
+  'kq.rej.row': [{one: '{n} операция не принята сервером', few: '{n} операции не приняты сервером', many: '{n} операций не приняты сервером', other: '{n} операции не приняты сервером'}, {one: '{n} operațiune respinsă de server', few: '{n} operațiuni respinse de server', other: '{n} de operațiuni respinse de server'}, {one: '{n} operation rejected by the server', other: '{n} operations rejected by the server'}],
+  'kq.rej.p': ['Сервер отклонил эти операции при отправке — например, визит уже был засчитан сегодня или купон не найден. Клиенту ничего не начислено.', 'Serverul a respins aceste operațiuni la trimitere — de exemplu, vizita a fost deja înregistrată azi sau cuponul nu a fost găsit. Clientului nu i s-a acordat nimic.', 'The server rejected these operations when they were sent — for example, the visit was already recorded today or the coupon wasn’t found. Nothing was awarded to the customer.'],
+  'kq.rej.empty': ['Отклонённых операций нет', 'Nu există operațiuni respinse', 'No rejected operations'],
+  'kq.clear': ['Очистить все', 'Șterge toate', 'Clear all'],
+  'kq.srvtime': ['время сервера', 'ora serverului', 'server time'],
+  'ks.more': ['Сканировать ещё', 'Scanează încă', 'Scan another'],
+  'ks.noact': ['Сейчас с этим кодом ничего сделать нельзя.', 'Momentan nu se poate face nimic cu acest cod.', 'Nothing can be done with this code right now.']
+});
 /* ================= icons (line, 24×24) ================= */
 const I = {
   home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
@@ -2958,10 +3021,12 @@ const errorHTML = e => emptyHTML('alert', tx('err.load'), esc(e && e.message || 
 const phead = (eyebrow, title, sub, acts, back) => '<header class="phead">' + rings() + '<div class="ttl">' + (back ? '<a class="back" href="' + back[0] + '">' + ic('chevL', 'xs') + esc(back[1]) + '</a>' : '') + (eyebrow ? '<p class="eyebrow">' + eyebrow + '</p>' : '') + '<h1>' + title + '</h1>' + (sub ? '<p class="sub">' + sub + '</p>' : '') + '</div>' + (acts ? '<div class="acts">' + acts + '</div>' : '') + '</header>';
 
 let toastT = 0;
-function toast(msg, ms) {
+function toast(msg, ms, act) {
   let el = $('#toast');
   if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); document.body.appendChild(el); }
   el.textContent = msg; el.hidden = false;
+  /* act — действие по нажатию на тост (напр. открыть «Не принято») */
+  if (act) { el.dataset.act = act; el.style.cursor = 'pointer'; } else { delete el.dataset.act; el.style.cursor = ''; }
   el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
   clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, ms || 3200);
 }
@@ -3209,6 +3274,7 @@ async function api(path, o) {
   const hasBody = o.body !== undefined;
   if (hasBody) h['Content-Type'] = 'application/json';
   if (auth) h.Authorization = 'Bearer ' + tok;
+  if (o.headers) Object.assign(h, o.headers); /* напр. Idempotency-Key кассы */
   let r;
   const base = net.api;
   try { r = await fetchT(base + path, {method: o.method || (hasBody ? 'POST' : 'GET'), headers: h, body: hasBody ? JSON.stringify(o.body) : undefined, cache: 'no-store'}, o.timeout || 20000); }
@@ -3593,6 +3659,7 @@ function paintChrome() {
   const tabName = TABS.indexOf(name) >= 0 ? name : 'more';
   $$('[data-tab]').forEach(a => { if (a.dataset.tab === tabName) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   $('#gb').innerHTML = statusBanner(); $('#gb').classList.toggle('gb-demo', DEMO.on);
+  queueBadge();
 }
 function statusBanner() {
   if (DEMO.on) return demoBarHTML();
@@ -5371,28 +5438,29 @@ VIEWS.home = async (v, r, alive) => {
 ACTS['todo-hide'] = () => { store.set(K.todo(st.pid), '1'); render(); };
 
 /* ---------- Касса: «Отметить визит» и «Выдать плюшку» (docs/GAME_API.md §7) ----------
-   Сумма чека не вводится, денег за километры нет. Режим (visit / perk) влияет на подсказки;
-   что отсканировано — Helper ID или купон — определяет сервер (GET …/client → scanned). */
-const KS = {locs: [], client: null, mode: 'visit', allTags: false, blocked: false};
+   Сумма чека не вводится, денег за километры нет. Одна кнопка «Сканировать»: что отсканировано — Helper ID
+   или купон — определяет сервер (GET …/scan → kind; старый сервер — GET …/client → scanned). KS.mode больше
+   ни на что не влияет (кнопки «Следующий клиент» просто открывают сканер). pend — текущая операция (client_op_id
+   и at создаются один раз на действие кассира), cpn/cpnHid — открытый купон. */
+const KS = {locs: [], client: null, mode: 'visit', allTags: false, blocked: false, pend: null, cpn: null, cpnHid: ''};
 const curLoc = () => { const id = store.get(K.loc(st.pid)); return KS.locs.some(l => String(l.id) === id) ? id : (KS.locs.length === 1 ? String(KS.locs[0].id) : ''); };
 const locSelect = (id, v) => KS.locs.length > 1 ? fld(id, tx('kassa.loc'), sel(id, [['', tx('kassa.loc.none')]].concat(KS.locs.map(l => [l.id, l.title])), v, 'data-ch="kassa-loc"')) : '';
 VIEWS.kassa = async (v, r, alive) => {
   const [locs] = await Promise.all([getLocations().catch(() => []), st.gmeta ? null : loadGameMeta()]);
   KS.locs = locs;
   if (!alive()) return;
-  const G0 = GM();
-  const h = phead(tx('nav.kassa.short'), tx('kassa.h'), tx('kassa.sub')) +
+  const kq = kqRowsHTML();
+  const h = phead(tx('nav.kassa.short'), tx('kassa.h'), tx('kassa.sub'), '<div class="row wrap" id="k-net" style="gap:8px">' + knetHTML() + '</div>') +
     '<div class="cols"><div class="stack" style="gap:14px">' +
+      '<div class="stack" id="k-q" style="gap:10px"' + (kq ? '' : ' hidden') + '>' + kq + '</div>' +
       (KS.locs.length > 1 ? '<div class="card" style="padding:14px 16px">' + locSelect('k-loc', curLoc()) + '<span class="hint" style="display:block;margin-top:6px">' + tx('kassa.loc.hint') + '</span></div>' : '') +
-      '<div class="kactions">' +
-        '<button class="kact" data-act="scan" data-mode="visit">' + rings() + '<span class="big">' + ic('scan') + '</span><span class="st">' + tx('kassa.visit') + '</span><span class="ss">' + esc(tx('kassa.visit.s', {km: kmT(G0.visit.points), xp: fN(G0.visit.xp), pxp: fN(G0.pxp('visit'))})) + '</span></button>' +
-        '<button class="kact perk" data-act="scan" data-mode="perk">' + rings() + '<span class="big">' + ic('gift') + '</span><span class="st">' + tx('kassa.perk') + '</span><span class="ss">' + esc(tx('kassa.perk.s', {pxp: fN(G0.pxp('perk_redeemed'))})) + '</span></button>' +
-      '</div>' +
-      '<div class="scan-alt" style="margin-top:0"><label class="btn soft file-btn">' + ic('image', 'sm') + tx('kassa.photo') + '<input type="file" accept="image/*" data-ch="scan-file" aria-label="' + esc(tx('kassa.photo.aria')) + '"></label><button class="btn soft" data-act="manual">' + ic('keyboard', 'sm') + tx('kassa.manual') + '</button></div>' +
+      '<div class="kactions"><button class="kact one" data-act="scan">' + rings() + '<span class="big">' + ic('scan') + '</span><span class="st">' + tx('kassa.scan') + '</span><span class="ss">' + esc(tx('kassa.scan.s')) + '</span></button></div>' +
+      '<div class="kassa-alt"><label class="textbtn file-btn">' + ic('image', 'sm') + tx('kassa.photo') + '<input type="file" accept="image/*" data-ch="scan-file" aria-label="' + esc(tx('kassa.photo.aria')) + '"></label><button class="textbtn" data-act="manual">' + ic('keyboard', 'sm') + tx('kassa.manual.l') + '</button></div>' +
       '<p class="hint" style="margin:0">' + tx('kassa.hint') + '</p>' +
     '</div><section><div class="section-head"><h2>' + tx('kassa.ops') + '</h2><button class="textbtn" data-act="ops-refresh" style="padding:0;font-size:13px">' + ic('sync', 'xs') + tx('refresh') + '</button></div><div id="k-ops">' + loaderHTML() + '</div></section></div>';
   v.innerHTML = h;
   loadOps(alive);
+  setTimeout(() => flushQueue().catch(() => {}), 600);
 };
 async function loadOps(alive, force) {
   if (force) inval('ops');
@@ -5414,7 +5482,71 @@ function classify(raw) {
 function handleCode(raw) {
   const c = classify(raw);
   if (!c.code) return toast(tx('kassa.empty'));
-  return clientSheet(c.type === 'coupon' ? 'HELPER-COUPON:' + c.code : c.code);
+  return scanCode(String(raw || '').trim(), c);
+}
+/* Helper ID: HLP-XXXXXX (и коды планировщика HLP-XXXX-XXXX); код купона — 4–12 букв/цифр */
+const isHid = s => /^HLP-[A-Z0-9]{6}$/i.test(s) || /^HLP-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(s);
+const isCpn = s => /^[A-Z0-9]{4,12}$/i.test(s);
+/* сеть/сервер недоступны (в отличие от бизнес-ошибок 4xx) */
+const netErr = e => !!e && (e.code === 'offline' || e.code === 'no_api' || e.status === 0 || e.status >= 500);
+/* чип вида кода вверху листа */
+const KIND_CHIP = {client: ['ks.client', 'user'], perk_coupon: ['ks.perk', 'gift'], campaign_coupon: ['ks.camp', 'tag'], legacy_coupon: ['ks.coupon', 'gift']};
+const kindChip = kind => { const k = KIND_CHIP[kind]; return k ? '<span class="kchip">' + ic(k[1], 'xs') + esc(tx(k[0])) + '</span>' : ''; };
+const offChip = () => '<span class="kchip off">' + ic('bolt', 'xs') + esc(tx('ks.off.chip')) + '</span>';
+/* один сканер: GET …/scan определяет, что это (Helper-код клиента или купон); старый сервер без /scan (404) → GET …/client;
+   нет сети → проверка формата на месте и офлайн-лист (операция уйдёт в очередь) */
+async function scanCode(raw, c) {
+  if (navigator.onLine === false) return offlineSheet(c);
+  if (sheetOpen()) sheetBody(loaderHTML(), tx('client.title')); else openSheet(tx('client.title'), loaderHTML());
+  KS.pend = null;
+  let d;
+  const lp = curLoc();
+  try { d = await P('/scan?code=' + encodeURIComponent(raw) + (lp ? '&location_id=' + lp : ''), {timeout: 12000}); }
+  catch (e) {
+    if (e.status === 404) return clientSheet(c.type === 'coupon' ? 'HELPER-COUPON:' + c.code : c.code);
+    if (netErr(e)) return offlineSheet(c);
+    return failSheet(e);
+  }
+  if (!sheetOpen()) return;
+  KS.locs = await getLocations().catch(() => KS.locs);
+  const kind = d.kind || (d.scanned === 'coupon' && d.coupon ? cpnKind(d.coupon) + '_coupon' : d.scanned === 'client' ? 'client' : 'unknown');
+  /* вид известен, но действия нет (купон погашен/истёк, визит сегодня уже был, сотрудник, компания не активна):
+     чип + сообщение сервера + «Сканировать ещё», без кнопки действия */
+  const noAct = ('action' in d) && !d.action ? {noAct: true, msg: d.message} : null;
+  if (kind === 'client') return clientRender(d, d.code || c.code, kindChip('client'), noAct);
+  if (/_coupon$/.test(kind) && d.coupon) return couponSheet(d.coupon.code || d.code || c.code, d.coupon, d.helper_id, kindChip(KIND_CHIP[kind] ? kind : cpnKind(d.coupon) + '_coupon'), noAct);
+  return unknownSheet(d.message);
+}
+function unknownSheet(msg) {
+  const html = emptyHTML('alert', tx('ks.unknown.t'), esc(srvMsg(msg, tx('ks.unknown'))), '<div class="stack" style="gap:10px;margin-top:8px;text-align:left"><button class="btn ink xl kcta" data-act="scan">' + ic('scan', 'sm') + tx('kassa.again') + '</button><button class="btn soft block" data-act="manual">' + ic('keyboard', 'sm') + tx('kassa.manual.l') + '</button></div>');
+  if (!sheetBody(html, tx('nav.kassa.short'))) openSheet(tx('nav.kassa.short'), html);
+}
+function failSheet(e) {
+  const html = emptyHTML('alert', e.code === 'client_not_found' ? tx('client.nf') : e.code === 'coupon_not_found' ? tx('coupon.nf') : tx('client.fail'), esc(e.message), '<div class="btn-row" style="justify-content:center"><button class="btn sm ink" data-act="scan">' + ic('scan', 'sm') + tx('kassa.again') + '</button><button class="btn sm soft" data-act="manual">' + tx('kassa.manual') + '</button></div>');
+  if (!sheetBody(html, tx('client.title'))) openSheet(tx('client.title'), html);
+}
+/* нет сети: Helper ID → лист визита (уйдёт в очередь), код купона → погашение при подключении, иначе — не распознан */
+function offlineSheet(c) {
+  const code = String(c.code || '').toUpperCase().replace(/\s+/g, '');
+  KS.pend = null;
+  if (c.type !== 'coupon' && isHid(code)) {
+    KS.client = {code, helper_id: code, coupons: [], tag: '', offline: true}; KS.allTags = false; KS.blocked = false;
+    const html = offChip() + '<div class="client-head">' + rings() + '<span class="ic-circle soon" style="width:48px;height:48px">' + ic('user') + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + tx('client.e') + '</p><div class="hid">' + esc(code) + '</div></div></div>' +
+      '<div class="banner"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0;color:var(--ink)">' + tx('ks.off.client') + '</div></div>' +
+      '<form class="form" data-form="visit" novalidate style="margin-top:14px"><div class="field"><span class="flabel">' + tx('client.tag') + ' ' + opt0() + '</span><div id="v-tags">' + tagsHTML() + '</div><span class="hint">' + tx('client.tag.hint') + '</span></div>' + (KS.locs.length > 1 ? locSelect('g-loc', curLoc()) : '') + errBox('v-err') + '<button class="btn ink xl kcta" type="submit">' + ic('check', 'sm') + tx('visit.btn') + '</button></form>';
+    if (!sheetBody(html, tx('client.title'))) openSheet(tx('client.title'), html);
+    return;
+  }
+  if (c.type !== 'client' && isCpn(code)) {
+    KS.cpn = null; KS.cpnHid = '';
+    const html = offChip() + '<div class="client-head">' + rings() + '<span class="ic-circle soon" style="width:48px;height:48px">' + ic('gift') + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + tx('ks.coupon') + '</p><div class="hid">' + esc(code) + '</div></div></div>' +
+      '<div class="banner"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0;color:var(--ink)">' + tx('ks.off.coupon') + '</div></div>' +
+      (KS.locs.length > 1 ? '<div class="form" style="margin:14px 0 0">' + locSelect('c-loc', curLoc()) + '</div>' : '') + errBox('c-err') +
+      '<div class="stack" style="gap:10px;margin-top:14px"><button class="btn ink xl kcta" data-act="coupon-redeem" data-code="' + esc(code) + '" data-off="1">' + ic('check', 'sm') + tx('ks.off.btn') + '</button><button class="btn soft block" data-act="sheet-close">' + tx('cancel') + '</button></div>';
+    if (!sheetBody(html, tx('coupon'))) openSheet(tx('coupon'), html);
+    return;
+  }
+  return unknownSheet();
 }
 /* текст скидки прежних купонов акций («−10%», «−50 MDL», «Подарок») */
 const dText = s => { s = String(s || ''); return LANG !== 'ru' && CYR.test(s) ? (/подар/i.test(s) ? tx('rw.gift') : s) : s; };
@@ -5441,36 +5573,43 @@ function couponRow(c, strong) {
   const sub = k === 'campaign' ? srvT(c.kind_title, tx('coupon.e.c')) : pk ? pkkT(pk, c.perk_kind_title || c.kind_title) : '';
   return '<div class="coupon"><span class="ic-circle">' + ic(cpnIcon(c), 'sm') + '</span><div class="grow" style="min-width:0"><div style="font-weight:600" class="break">' + esc(c.title || tx('coupon')) + (ben && ben !== c.title ? ' · ' + esc(ben) : '') + '</div><div class="xsmall muted"><span class="code">' + esc(c.code) + '</span>' + (sub ? ' · ' + esc(sub) : '') + (c.expires_at ? ' · ' + tx('until', {d: fDate(c.expires_at)}) : '') + (c.schedule_ok === false && c.schedule_text ? ' · ' + esc(c.schedule_text) : '') + '</div></div><button class="btn sm ' + (strong ? 'ink' : 'soft') + '" data-act="coupon-open" data-code="' + esc(c.code) + '">' + tx(k === 'perk' ? 'coupon.redeem' : 'coupon.redeem.c') + '</button></div>';
 }
+/* старый сервер без /scan: GET …/client → scanned (client | coupon) */
 async function clientSheet(code) {
   if (sheetOpen()) sheetBody(loaderHTML(), tx('client.title')); else openSheet(tx('client.title'), loaderHTML());
   let d;
   const lp = curLoc();
-  try { d = await P('/client?code=' + encodeURIComponent(code) + (lp ? '&location_id=' + lp : '')); }
-  catch (e) {
-    return sheetBody(emptyHTML('alert', e.code === 'client_not_found' ? tx('client.nf') : e.code === 'coupon_not_found' ? tx('coupon.nf') : tx('client.fail'), esc(e.message), '<div class="btn-row" style="justify-content:center"><button class="btn sm ink" data-act="scan">' + ic('scan', 'sm') + tx('kassa.again') + '</button><button class="btn sm soft" data-act="manual">' + tx('kassa.manual') + '</button></div>'));
-  }
+  try { d = await P('/client?code=' + encodeURIComponent(code) + (lp ? '&location_id=' + lp : ''), {timeout: 12000}); }
+  catch (e) { if (netErr(e)) return offlineSheet(classify(code)); return failSheet(e); }
+  if (!sheetOpen()) return;
   KS.locs = await getLocations().catch(() => KS.locs);
-  if (d.scanned === 'coupon' && d.coupon) return couponSheet(d.coupon.code, d.coupon, d.helper_id);
+  if (d.scanned === 'coupon' && d.coupon) return couponSheet(d.coupon.code, d.coupon, d.helper_id, kindChip(cpnKind(d.coupon) + '_coupon'));
+  clientRender(d, code, kindChip('client'));
+}
+/* лист клиента: Helper ID, уровень, купоны на ваши плюшки и форма визита */
+function clientRender(d, code, chip, o) {
   const dr = d.driver || {}, vp = d.visit_preview || {}, coup = d.coupons || [];
   KS.client = {code: d.helper_id || code, helper_id: d.helper_id || code, coupons: coup, tag: ''};
-  KS.allTags = false;
+  KS.allTags = false; KS.pend = null;
   const vb = d.visit_block || (d.can_visit === false ? 'blocked' : '');
-  const blocked = d.valid === false ? srvMsg(d.reason, tx('client.blocked')) : d.partner_active === false ? tx('client.inactive') : vb ? (has('e.' + vb) ? tx('e.' + vb) : srvMsg(d.reason, tx('client.blocked'))) : '';
+  const blocked0 = d.valid === false ? srvMsg(d.reason, tx('client.blocked')) : d.partner_active === false ? tx('client.inactive') : vb ? (has('e.' + vb) ? tx('e.' + vb) : srvMsg(d.reason, tx('client.blocked'))) : '';
+  const blocked = o && o.noAct ? (srvMsg(o.msg, '') || blocked0 || srvMsg(d.visit_block_text, '') || tx('ks.noact')) : blocked0;
   KS.blocked = !!blocked;
-  const perkMode = KS.mode === 'perk', lv = dr.level;
-  const head = '<div class="client-head">' + rings() + '<span class="ic-circle ' + (blocked ? 'soon' : 'ok') + '" style="width:48px;height:48px">' + ic(blocked ? 'alert' : 'user') + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + tx('client.e') + '</p><div class="hid">' + esc(KS.client.helper_id) + '</div>' +
+  const lv = dr.level;
+  const head = (chip || '') + '<div class="client-head">' + rings() + '<span class="ic-circle ' + (blocked ? 'soon' : 'ok') + '" style="width:48px;height:48px">' + ic(blocked ? 'alert' : 'user') + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + tx('client.e') + '</p><div class="hid">' + esc(KS.client.helper_id) + '</div>' +
     (lv ? '<div style="font-weight:600;margin-top:4px">' + esc(tx('client.level', {n: lv.n || 1, title: dlvTitle(lv)})) + '</div>' : '') +
     '<div class="row wrap" style="gap:6px;margin-top:8px">' + (d.new_client != null ? '<span class="badge' + (d.new_client ? '' : ' soft') + '">' + tx(d.new_client ? 'client.new' : 'client.repeat') + '</span>' : '') + (dr.legend ? '<span class="badge dark">' + esc(dlvTitle({n: 6})) + '</span>' : '') + '</div></div></div>';
   const bdg = dr.badges && dr.badges.length ? '<p class="eyebrow" style="margin:16px 0 8px">' + tx('client.badges') + '</p>' + badgesHTML(dr.badges) : '';
-  const coupHTML = coup.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('client.coupons') + '</p><div class="stack" style="gap:8px">' + coup.map(c => couponRow(c, perkMode)).join('') + '</div>' : (perkMode ? '<p class="small muted" style="margin:16px 0 0">' + tx('kassa.nocoupons') + '</p>' : '');
+  const coupHTML = coup.length ? '<p class="eyebrow" style="margin:18px 0 8px">' + tx('client.coupons') + '</p><div class="stack" style="gap:8px">' + coup.map(c => couponRow(c, false)).join('') + '</div>' : '';
   const blockHTML = blocked ? '<div class="banner"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0;color:var(--ink)">' + esc(blocked) + '</div></div>' : '';
-  const form = '<form class="form" data-form="visit" novalidate style="margin-top:18px">' +
-      (blocked ? '' : '<div class="field"><span class="flabel">' + tx('client.tag') + ' ' + opt0() + '</span><div id="v-tags">' + tagsHTML() + '</div><span class="hint">' + tx('client.tag.hint') + '</span></div>' +
-      (KS.locs.length > 1 ? locSelect('g-loc', curLoc()) : '')) +
-      (!blocked && vp.points != null ? '<div class="gets"><span class="ic-circle teal">' + ic('star', 'sm') + '</span><span>' + esc(tx('client.gets', {km: kmT(vp.points), xp: fN(vp.xp || 0)})) + (+vp.multiplier > 1 ? ' · <b>' + esc(tx('visit.mult', {m: fNum(vp.multiplier)})) + '</b>' : '') + '</span></div>' : '') +
+  const form = blocked ? '<div class="stack" style="gap:10px;margin-top:16px"><button class="btn ink xl kcta" data-act="scan-next">' + ic('scan', 'sm') + tx('ks.more') + '</button></div>'
+    : '<form class="form" data-form="visit" novalidate style="margin-top:18px">' +
+      '<div class="field"><span class="flabel">' + tx('client.tag') + ' ' + opt0() + '</span><div id="v-tags">' + tagsHTML() + '</div><span class="hint">' + tx('client.tag.hint') + '</span></div>' +
+      (KS.locs.length > 1 ? locSelect('g-loc', curLoc()) : '') +
+      (vp.points != null ? '<div class="gets"><span class="ic-circle teal">' + ic('star', 'sm') + '</span><span>' + esc(tx('client.gets', {km: kmT(vp.points), xp: fN(vp.xp || 0)})) + (+vp.multiplier > 1 ? ' · <b>' + esc(tx('visit.mult', {m: fNum(vp.multiplier)})) + '</b>' : '') + '</span></div>' : '') +
       errBox('v-err') +
-      '<button class="btn ink block xl" type="submit"' + (blocked ? ' disabled' : '') + '>' + ic('check', 'sm') + tx('visit.btn') + '</button></form>';
-  sheetBody(head + (perkMode ? '<div class="banner teal"><span class="ic">' + ic('info') + '</span><div class="s" style="margin:0;color:var(--ink)">' + tx('kassa.mode.perk') + '</div></div>' + coupHTML + bdg + blockHTML + form : bdg + blockHTML + coupHTML + form), tx('client.title'));
+      '<button class="btn ink xl kcta" type="submit">' + ic('check', 'sm') + tx('visit.btn') + '</button></form>';
+  const html = head + bdg + blockHTML + coupHTML + form;
+  if (!sheetBody(html, tx('client.title'))) openSheet(tx('client.title'), html);
 }
 /* уровень партнёра после визита / плюшки: опыт, прогресс, новый уровень */
 function pxpHTML(px) {
@@ -5486,11 +5625,14 @@ FORMS.visit = async f => {
   const loc = locParam(); if (loc) body.location_id = loc;
   if (KS.client.tag) body.service_tag = KS.client.tag;
   showErr('v-err', '');
+  const op = opNew('visit', body, {kind: 'client', hid: KS.client.helper_id, title: KS.client.tag ? stagT(KS.client.tag) : ''});
+  if (KS.client.offline) return queuedSheet(op);
   const done = busy(f.querySelector('[type=submit]'), tx('visit.busy'));
   let d;
-  try { d = await P('/visit', {body}); }
-  catch (e) { done(); return showErr('v-err', e.message); }
+  try { d = await opSend(op); }
+  catch (e) { done(); if (netErr(e)) return queuedSheet(op); return showErr('v-err', e.message); }
   done();
+  KS.pend = null;
   feedback();
   inval('ops', 'stats', 'game');
   const aw = d.awarded || {}, px = d.partner_xp || {}, vis = d.visit || {};
@@ -5501,16 +5643,19 @@ FORMS.visit = async f => {
   sheetBody('<div class="success">' + rings() + '<span class="ok-ring' + (review ? ' soon' : '') + '">' + ic(review ? 'clock' : 'check') + '</span>' +
     (review ? '<div class="pts km" style="font-size:30px">' + tx('visit.review.t') + '</div><div class="sline">' + esc(srvMsg(d.message, tx('visit.review'))) + '</div>'
       : '<div class="pts km">+' + esc(km) + '</div><div class="sline" role="status">' + esc(tx('visit.ok', {km, xp: fN(aw.xp || 0), pxp: fN(px.gained || 0)})) + '</div>') +
-    '<div class="small muted tnum">' + esc([vis.helper_id || KS.client.helper_id, svc, +aw.multiplier > 1 ? tx('visit.mult', {m: fNum(aw.multiplier)}) : ''].filter(Boolean).join(' · ')) + '</div>' +
+    '<div class="small muted tnum">' + esc([vis.helper_id || KS.client.helper_id, svc, +aw.multiplier > 1 ? tx('visit.mult', {m: fNum(aw.multiplier)}) : ''].filter(Boolean).join(' · ')) + '</div>' + srvTimeNote(d) +
     (d.driver && d.driver.new_client ? '<span class="badge" style="margin-top:6px">' + tx('client.new') + '</span>' : '') +
     '</div>' + pxpHTML(px) +
     '<div class="btn-row" style="margin-top:18px"><button class="btn ink xl" data-act="scan-next" data-mode="visit">' + ic('scan', 'sm') + tx('next.client') + '</button><button class="btn soft xl" data-act="sheet-close">' + tx('done') + '</button></div>', tx('done'));
   loadOps(null, true);
 };
 const CPS = {used: 'cps.used', redeemed: 'cps.used', expired: 'cps.expired', cancelled: 'cps.cancelled', canceled: 'cps.cancelled'};
-function couponSheet(code, info, hid) {
+function couponSheet(code, info, hid, chip, o) {
   info = info || {};
-  const dead = info.status && info.status !== 'active' ? (CPS[info.status] ? tx(CPS[info.status]) : tx('cps.other', {s: srvT(info.status_title, '') || info.status})) : '';
+  KS.cpn = Object.assign({code}, info); KS.cpnHid = hid || ''; KS.pend = null;
+  if (chip == null) chip = kindChip(cpnKind(info) + '_coupon');
+  const dead0 = info.status && info.status !== 'active' ? (CPS[info.status] ? tx(CPS[info.status]) : tx('cps.other', {s: srvT(info.status_title, '') || info.status})) : '';
+  const dead = o && o.noAct ? (srvMsg(o.msg, '') || dead0 || tx('ks.noact')) : dead0;
   const off = !dead && info.schedule_ok === false;
   const rows = [];
   const ck = cpnKind(info), pk = cpnPerkKind(info), ben = cpnBenefit(info);
@@ -5522,13 +5667,13 @@ function couponSheet(code, info, hid) {
   if (ck === 'legacy' && ben) rows.push([tx('coupon.discount'), esc(ben)]);
   if (info.expires_at) rows.push([tx('coupon.valid'), fDate(info.expires_at)]);
   if (hid) rows.push([tx('coupon.client'), '<span class="tnum">' + esc(hid) + '</span>']);
-  const html = '<div class="client-head">' + rings() + '<span class="ic-circle ' + (dead ? 'soon' : 'teal') + '" style="width:48px;height:48px">' + ic(cpnIcon(info)) + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + (ck === 'campaign' ? esc(srvT(info.kind_title, tx('coupon.e.c'))) : ck === 'legacy' ? tx('coupon.e.l') : tx('coupon.e')) + '</p><div class="hid">' + esc(code) + '</div>' + (info.title ? '<div style="font-weight:600;margin-top:4px" class="break">' + esc(info.title) + '</div>' : '') + '</div></div>' +
+  const html = (chip || '') + '<div class="client-head">' + rings() + '<span class="ic-circle ' + (dead ? 'soon' : 'teal') + '" style="width:48px;height:48px">' + ic(cpnIcon(info)) + '</span><div class="grow" style="min-width:0"><p class="eyebrow">' + (ck === 'campaign' ? esc(srvT(info.kind_title, tx('coupon.e.c'))) : ck === 'legacy' ? tx('coupon.e.l') : tx('coupon.e')) + '</p><div class="hid">' + esc(code) + '</div>' + (info.title ? '<div style="font-weight:600;margin-top:4px" class="break">' + esc(info.title) + '</div>' : '') + '</div></div>' +
     (rows.length ? '<dl class="detail card" style="margin:14px 0 0">' + rows.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>' : '') +
     (dead ? '<div class="banner bad"><span class="ic">' + ic('alert') + '</span><div class="t" style="margin:0">' + esc(dead) + '</div></div>'
       : off ? '<div class="banner"><span class="ic">' + ic('clock') + '</span><div class="s" style="margin:0;color:var(--ink)">' + esc(tx('coupon.sched.no', {s: info.schedule_text || ''})) + '</div></div>'
       : '<p class="muted" style="line-height:1.6;margin:16px 0">' + tx(ck === 'perk' ? 'coupon.p' : 'coupon.p.c') + '</p>' + (KS.locs.length > 1 ? '<div class="form" style="margin-bottom:16px">' + locSelect('c-loc', curLoc()) + '</div>' : '')) +
     errBox('c-err') +
-    '<div class="btn-row" style="margin-top:12px">' + (dead || off ? '<button class="btn ink xl" data-act="scan-next" data-mode="perk">' + ic('scan', 'sm') + tx('kassa.other') + '</button>' : '<button class="btn soft xl" data-act="sheet-close">' + tx('cancel') + '</button><button class="btn ink xl" data-act="coupon-redeem" data-code="' + esc(code) + '">' + ic('check', 'sm') + (ck === 'perk' ? tx('coupon.btn') : esc(srvT(info.action_title, tx('coupon.btn.c')))) + '</button>') + '</div>';
+    '<div class="stack" style="gap:10px;margin-top:12px">' + (dead || off ? '<button class="btn ink xl kcta" data-act="scan-next">' + ic('scan', 'sm') + tx('ks.more') + '</button>' : '<button class="btn ink xl kcta" data-act="coupon-redeem" data-code="' + esc(code) + '">' + ic('check', 'sm') + (ck === 'perk' ? tx('coupon.btn') : esc(srvT(info.action_title, tx('coupon.btn.c')))) + '</button><button class="btn soft block" data-act="sheet-close">' + tx('cancel') + '</button>') + '</div>';
   if (!sheetBody(html, tx('coupon'))) openSheet(tx('coupon'), html);
 }
 ACTS['coupon-open'] = el => { const c = KS.client && KS.client.coupons.find(x => x.code === el.dataset.code); couponSheet(el.dataset.code, c, KS.client && KS.client.helper_id); };
@@ -5536,11 +5681,15 @@ ACTS['coupon-redeem'] = async el => {
   const body = {code: el.dataset.code};
   const loc = $('#c-loc') ? val('c-loc') : curLoc(); if (loc) body.location_id = +loc;
   showErr('c-err', '');
+  const info = KS.cpn && KS.cpn.code === el.dataset.code ? KS.cpn : null;
+  const op = opNew('redeem', body, {kind: info ? cpnKind(info) + '_coupon' : 'coupon', hid: KS.cpnHid || '', title: info ? info.title || '' : ''});
+  if (el.dataset.off) return queuedSheet(op);
   const done = busy(el, tx('coupon.busy'));
   let d;
-  try { d = await P('/coupons/redeem', {body}); }
-  catch (e) { done(); return showErr('c-err', e.message); }
+  try { d = await opSend(op); }
+  catch (e) { done(); if (netErr(e)) return queuedSheet(op); return showErr('c-err', e.message); }
   done();
+  KS.pend = null;
   feedback();
   inval('ops', 'stats', 'perks', 'game');
   const px = d.partner_xp || {};
@@ -5550,7 +5699,7 @@ ACTS['coupon-redeem'] = async el => {
   const okSub = dk === 'perk' ? (dpk && pkkT(dpk, d.perk_kind_title || d.kind_title) !== d.title ? pkkT(dpk, d.perk_kind_title || d.kind_title) : '') : (d.campaign_title && d.campaign_title !== d.title ? d.campaign_title : '');
   sheetBody('<div class="success">' + rings() + '<span class="ok-ring">' + ic(dk === 'perk' ? 'gift' : cpnIcon(d)) + '</span><p class="eyebrow" role="status">' + esc(okT) + '</p><div class="pts break" style="font-size:30px;font-weight:300;line-height:1.2;margin-top:6px">' + esc(d.title || '') + '</div>' +
     (okSub ? '<div class="small muted">' + esc(okSub) + '</div>' : '') + (dk !== 'perk' && dben && dben !== d.title ? '<div style="font-weight:600">' + esc(dben) + '</div>' : '') +
-    '<div class="small muted tnum">' + esc([d.code || body.code, d.helper_id_masked].filter(Boolean).join(' · ')) + '</div>' +
+    '<div class="small muted tnum">' + esc([d.code || body.code, d.helper_id_masked].filter(Boolean).join(' · ')) + '</div>' + srvTimeNote(d) +
     (d.visit && d.visit.created ? '<span class="badge" style="margin-top:6px">' + tx('visit.also') + '</span>' : '') + '</div>' +
     pxpHTML(px) +
     '<p class="small muted" style="text-align:center;margin:14px 0 20px">' + tx('coupon.ok.p') + '</p>' +
@@ -5577,6 +5726,164 @@ function feedback() {
     o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + 0.22);
   } catch (e) {}
 }
+
+/* ---------- Офлайн-очередь кассы ----------
+   Визит и погашение купона уходят с заголовком Idempotency-Key: <client_op_id> и временем действия at (создаются один раз
+   на действие кассира, при повторе — те же: сервер вернёт исходный результат с replayed). Нет сети / таймаут / 5xx →
+   операция в localStorage (helper.partner.kassa.queue.v1, у записи свой pid) и лист «Сохранено офлайн»; бизнес-ошибки 4xx
+   не копятся. Фон: при появлении сети, возврате на вкладку и раз в 30 с — POST …/ops/batch (≤50, одна отправка
+   одновременно); ok → убрать, 4xx → «Не принято» (с причиной), 5xx/нет сети → остаётся. Старый сервер без /ops/batch
+   (404) — по одной операции через обычные эндпоинты. */
+const KQ = {key: 'helper.partner.kassa.queue.v1', flushing: null};
+const uuid = () => {
+  try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+  const b = new Uint8Array(16);
+  try { crypto.getRandomValues(b); } catch (e) { for (let i = 0; i < 16; i++) b[i] = Math.random() * 256 | 0; }
+  b[6] = b[6] & 15 | 64; b[8] = b[8] & 63 | 128;
+  const h = Array.from(b, x => ('0' + x.toString(16)).slice(-2)).join('');
+  return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
+};
+const qAll = () => { const a = jget(KQ.key); return Array.isArray(a) ? a : []; };
+const qSave = a => { jset(KQ.key, a.length ? a : null); qPaint(); };
+const qMine = status => qAll().filter(o => +o.pid === +st.pid && o.status === (status || 'queued'));
+const qCount = status => logged() && st.pid ? qMine(status).length : 0;
+const opKey = (type, code) => type + ':' + String(code || '').toUpperCase().replace(/^HELPER(-COUPON)?:/i, '').replace(/\s+/g, '');
+const qHas = (type, code) => qMine().some(o => opKey(o.type, (o.payload || {}).code) === opKey(type, code));
+/* операция на действие кассира: новая либо та же при повторной попытке в этом же листе (id и at не пересоздаются) */
+function opNew(type, payload, meta) {
+  const key = opKey(type, payload.code);
+  if (KS.pend && KS.pend.key === key) { KS.pend.payload = payload; return KS.pend; }
+  KS.pend = Object.assign({client_op_id: uuid(), pid: st.pid, type, payload, at: new Date().toISOString(), tries: 0, key}, meta || {});
+  return KS.pend;
+}
+const opSend = op => P(op.type === 'visit' ? '/visit' : '/coupons/redeem', {body: Object.assign({}, op.payload, {at: op.at, client_op_id: op.client_op_id}), headers: {'Idempotency-Key': op.client_op_id}, timeout: 12000});
+/* заметка «время сервера»: сервер не принял время действия (at: null — старше 72 ч) и записал операцию текущим временем */
+const srvTimeNote = d => d && d.at === null ? '<div class="xsmall muted">' + esc(tx('kq.srvtime')) + '</div>' : '';
+/* результат операции в пакете: {status: 200|409…|'ok', replayed, result | error:{error,message}} или плоские ok/error/message */
+function opRes(r) {
+  if (!r) return null;
+  const sn = typeof r.status === 'number' ? r.status : /^\d+$/.test(String(r.status || '')) ? +r.status : null;
+  const okk = r.ok === true || r.status === 'ok' || (sn != null && sn >= 200 && sn < 300) || (r.ok !== false && sn == null && !r.error && !!r.result);
+  const eo = r.error && typeof r.error === 'object' ? r.error : null;
+  return {ok: okk, status: sn != null ? sn : okk ? 200 : 0, error: eo ? String(eo.error || '') : typeof r.error === 'string' ? r.error : '', message: eo ? String(eo.message || '') : String(r.message || ''), result: r.result || null, replayed: !!r.replayed};
+}
+function qAdd(op) {
+  if (qHas(op.type, op.payload.code)) { toast(tx('kq.dup')); return false; }
+  const a = qAll();
+  a.push({client_op_id: op.client_op_id, pid: op.pid, type: op.type, payload: op.payload, at: op.at, kind: op.kind || '', hid: op.hid || '', title: op.title || '', status: 'queued', tries: op.tries || 0});
+  qSave(a); return true;
+}
+const qDel = id => qSave(qAll().filter(o => o.client_op_id !== id));
+const qBump = ops => { const a = qAll(); ops.forEach(o => { const it = a.find(x => x.client_op_id === o.client_op_id); if (it) it.tries = (it.tries || 0) + 1; }); qSave(a); };
+/* лист «Сохранено офлайн» */
+function queuedSheet(op) {
+  const added = qAdd(op); KS.pend = null;
+  feedback();
+  const isV = op.type === 'visit';
+  const html = '<div class="success">' + rings() + '<span class="ok-ring soon">' + ic('clock') + '</span><div class="pts km" style="font-size:30px">' + tx('kq.saved.t') + '</div><div class="sline" role="status">' + esc(tx('kq.saved')) + '</div>' +
+    '<div class="small muted tnum">' + esc([tx(isV ? 'kq.t.visit' : 'kq.t.redeem'), op.hid || op.payload.code, op.title].filter(Boolean).join(' · ')) + '</div></div>' +
+    '<div class="kq" style="margin-top:16px"><span class="ic-circle soon">' + ic('sync', 'sm') + '</span><span class="grow">' + esc(tp('kq.row', qCount())) + '</span></div>' +
+    '<div class="btn-row" style="margin-top:18px"><button class="btn ink xl" data-act="scan-next">' + ic('scan', 'sm') + tx('next.client') + '</button><button class="btn soft xl" data-act="sheet-close">' + tx('done') + '</button></div>';
+  if (!sheetBody(html, tx('kq.saved.t'))) openSheet(tx('kq.saved.t'), html);
+  if (added && navigator.onLine !== false) setTimeout(() => flushQueue().catch(() => {}), 1500);
+}
+/* статус сети в шапке кассы и строки очереди на странице */
+function knetHTML() {
+  const q = qCount(), rj = qCount('rejected'), off = navigator.onLine === false;
+  return '<span class="knet ' + (off ? 'off' : q ? 'q' : '') + '"><span class="dot"></span>' + esc(off ? tx('kq.net.off') : q ? tx('kq.net.q', {n: q}) : tx('kq.net.on')) + '</span>' +
+    (q && !off ? '<button class="btn sm ink" data-act="q-flush">' + ic('sync', 'xs') + tx('kq.send') + '</button>' : '') +
+    (rj ? '<button class="btn sm danger" data-act="q-rejected">' + ic('alert', 'xs') + tx('kq.rej.t') + ' · ' + rj + '</button>' : '');
+}
+function kqRowsHTML() {
+  const q = qCount(), rj = qCount('rejected');
+  return (q ? '<div class="kq"><span class="ic-circle soon">' + ic('clock', 'sm') + '</span><span class="grow">' + esc(tp('kq.row', q)) + '</span></div>' : '') +
+    (rj ? '<button type="button" class="kq bad" data-act="q-rejected"><span class="ic-circle bad">' + ic('alert', 'sm') + '</span><span class="grow">' + esc(tp('kq.rej.row', rj)) + '</span>' + ic('chevR', 'sm') + '</button>' : '');
+}
+function queueBadge() {
+  const n = qCount();
+  $$('[data-tab="kassa"] .pill, [data-nav="kassa"]').forEach(el => {
+    let b = el.querySelector('.qn');
+    if (!n) { if (b) b.remove(); return; }
+    if (!b) { b = document.createElement('span'); b.className = 'qn'; el.appendChild(b); }
+    b.textContent = n > 99 ? '99+' : n;
+  });
+}
+function kassaPaint() {
+  const nb = $('#k-net'); if (nb) nb.innerHTML = knetHTML();
+  const q = $('#k-q'); if (q) { const h = kqRowsHTML(); q.innerHTML = h; q.hidden = !h; }
+}
+function qPaint() { queueBadge(); kassaPaint(); }
+/* отправка очереди: одна одновременно, ≤50 операций за раз */
+async function flushQueue(manual) {
+  if (KQ.flushing) return KQ.flushing;
+  if (!logged() || !st.pid || navigator.onLine === false) return null;
+  const ops = qMine().slice(0, 50);
+  if (!ops.length) return null;
+  KQ.flushing = (async () => {
+    let results;
+    try {
+      const d = await P('/ops/batch', {body: {ops: ops.map(o => ({client_op_id: o.client_op_id, type: o.type, payload: o.payload, at: o.at}))}, timeout: 30000});
+      results = d.results || [];
+    } catch (e) {
+      /* 404 — старый сервер без /ops/batch; 400 bad_ops и прочие 4xx — по одной, чтобы получить ответ на каждую; 401/403 — ждём */
+      if (e.status === 404 || (e.status >= 400 && e.status < 500 && e.status !== 401 && e.status !== 403)) results = await flushOneByOne(ops);
+      else { qBump(ops); if (manual) toast(netErr(e) ? tx('err.offline') : e.message, 4000); return null; }
+    }
+    const byId = {}; (results || []).forEach(r => { if (r && r.client_op_id) byId[r.client_op_id] = opRes(r); });
+    const sent = {visit: 0, redeem: 0}; let rej = 0, kept = 0, srvT = 0;
+    const a = qAll();
+    ops.forEach(o => {
+      const r = byId[o.client_op_id], it = a.find(x => x.client_op_id === o.client_op_id); if (!it) return;
+      if (r && r.ok) { a.splice(a.indexOf(it), 1); sent[o.type === 'visit' ? 'visit' : 'redeem']++; if (r.result && r.result.at === null) srvT++; return; }
+      if (!r || r.status >= 500 || (!r.status && !r.error)) { it.tries = (it.tries || 0) + 1; kept++; return; }
+      it.status = 'rejected'; it.error = r.error; it.message = r.message; it.rejected_at = new Date().toISOString(); rej++;
+    });
+    qSave(a);
+    const n = sent.visit + sent.redeem;
+    if (n) {
+      inval('ops', 'stats', 'game', 'perks');
+      if ($('#k-ops')) loadOps(null, true);
+      const parts = []; if (sent.visit) parts.push(tp('kq.sent.v', sent.visit)); if (sent.redeem) parts.push(tp('kq.sent.r', sent.redeem));
+      toast(tx('kq.sent', {list: parts.join(', ')}) + (srvT ? ' · ' + tx('kq.srvtime') : ''), 3600);
+    }
+    if (rej) setTimeout(() => toast(tx('kq.rej', {n: rej}), 6500, 'q-rejected'), n ? 3800 : 0);
+    else if (!n && kept && manual) toast(tx('kq.still', {n: kept}), 4000);
+    return {sent: n, rej, kept};
+  })().finally(() => { KQ.flushing = null; });
+  return KQ.flushing;
+}
+/* старый сервер без /ops/batch: по одной через обычные эндпоинты с тем же Idempotency-Key */
+async function flushOneByOne(ops) {
+  const out = [];
+  for (let i = 0; i < ops.length; i++) {
+    const o = ops[i];
+    try { const d = await opSend(o); out.push({client_op_id: o.client_op_id, type: o.type, ok: true, result: d, replayed: !!d.replayed}); }
+    catch (e) {
+      if (netErr(e) || e.status === 401 || e.status === 403) break; /* сеть пропала / сессия — остальные подождут */
+      out.push({client_op_id: o.client_op_id, type: o.type, ok: false, error: e.code, message: e.message, status: e.status});
+    }
+  }
+  return out;
+}
+/* «Не принято»: отклонённые сервером операции с причиной */
+const qReason = o => o.error && has('e.' + o.error) ? tx('e.' + o.error) : srvMsg(o.message, o.error === 'client_not_found' ? tx('client.nf') : o.error === 'coupon_not_found' ? tx('coupon.nf') : tx('client.fail'));
+function rejectedSheet() {
+  const list = qMine('rejected');
+  const body = list.length ? '<p class="small muted" style="margin:0 0 12px;line-height:1.5">' + tx('kq.rej.p') + '</p><div class="group">' +
+      list.map(o => '<div class="qop"><span class="ic-circle bad">' + ic(o.type === 'visit' ? 'user' : 'gift', 'sm') + '</span><div class="grow" style="min-width:0"><div style="font-weight:600">' + esc(tx(o.type === 'visit' ? 'kq.t.visit' : 'kq.t.redeem')) + ' · <span class="tnum">' + esc(o.hid || (o.payload || {}).code || '') + '</span></div>' + (o.title ? '<div class="small muted break">' + esc(o.title) + '</div>' : '') + '<div class="r">' + esc(qReason(o)) + '</div><div class="xsmall muted">' + fDT(o.at) + '</div></div><button class="iconbtn danger" data-act="q-del" data-id="' + esc(o.client_op_id) + '" aria-label="' + esc(tx('delete')) + '" title="' + esc(tx('delete')) + '">' + ic('trash', 'sm') + '</button></div>').join('') + '</div>' +
+      '<div class="btn-row" style="margin-top:16px"><button class="btn soft" data-act="q-clear">' + ic('trash', 'sm') + tx('kq.clear') + '</button><button class="btn ink" data-act="sheet-close">' + tx('done') + '</button></div>'
+    : emptyHTML('check', tx('kq.rej.empty'), '', '<button class="btn sm soft" data-act="sheet-close">' + tx('close') + '</button>');
+  if (!sheetBody(body, tx('kq.rej.t'))) openSheet(tx('kq.rej.t'), body);
+}
+ACTS['q-rejected'] = () => { const t = $('#toast'); if (t) t.hidden = true; rejectedSheet(); };
+ACTS['q-del'] = el => { qDel(el.dataset.id); if (qCount('rejected')) rejectedSheet(); else closeSheet(); };
+ACTS['q-clear'] = () => { qSave(qAll().filter(o => !(+o.pid === +st.pid && o.status === 'rejected'))); closeSheet(); };
+ACTS['q-flush'] = async el => { const done = busy(el, tx('kq.sending')); try { await flushQueue(true); } finally { done(); } };
+window.addEventListener('online', () => { kassaPaint(); setTimeout(() => flushQueue().catch(() => {}), 800); });
+window.addEventListener('offline', () => kassaPaint());
+document.addEventListener('visibilitychange', () => { if (!document.hidden) flushQueue().catch(() => {}); });
+window.addEventListener('focus', () => { flushQueue().catch(() => {}); });
+setInterval(() => { if (navigator.onLine !== false && qCount()) flushQueue().catch(() => {}); }, 30000);
 
 /* ---------- Акции ---------- */
 /* переводы (docs/I18N_GEO_API.md §4): lang — язык оригинала, i18n: {ro: {title, text}, en: {...}} */
@@ -7031,7 +7338,7 @@ async function scanOpen() {
   const ov = document.createElement('div');
   ov.className = 'scan'; ov.id = 'scan'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', tx('scan.aria'));
   ov.innerHTML = '<video playsinline muted autoplay></video><div class="scan-shade"><div class="scan-frame"><i></i><i></i><i></i><i></i><span class="scan-line"></span></div></div>' +
-    '<div class="scan-top"><button class="rbtn" data-act="scan-close" aria-label="' + esc(tx('scan.close')) + '">' + ic('close') + '</button><span class="t">' + tx(KS.mode === 'perk' ? 'scan.t.perk' : 'scan.t.visit') + '</span><button class="rbtn" data-act="scan-torch" aria-label="' + esc(tx('scan.torch')) + '" aria-pressed="false" hidden>' + ic('torch') + '</button><span class="rbtn" style="visibility:hidden" id="scan-sp"></span></div>' +
+    '<div class="scan-top"><button class="rbtn" data-act="scan-close" aria-label="' + esc(tx('scan.close')) + '">' + ic('close') + '</button><span class="t">' + tx('scan.t') + '</span><button class="rbtn" data-act="scan-torch" aria-label="' + esc(tx('scan.torch')) + '" aria-pressed="false" hidden>' + ic('torch') + '</button><span class="rbtn" style="visibility:hidden" id="scan-sp"></span></div>' +
     '<p class="scan-hint">' + tx('scan.hint') + '</p>' +
     '<div class="scan-bot"><label class="btn file-btn">' + ic('image', 'sm') + tx('kassa.photo') + '<input type="file" accept="image/*" data-ch="scan-file" aria-label="' + esc(tx('kassa.photo.aria')) + '"></label><button class="btn" data-act="manual">' + ic('keyboard', 'sm') + tx('kassa.manual') + '</button></div>';
   document.body.appendChild(ov); document.body.classList.add('lock');
@@ -7308,20 +7615,27 @@ async function demoApi(path, o) {
       if (sub === '/operations') return ok({items: pdOps()});
       if (sub === '/visits') return ok({items: []});
       if (sub === '/client') return ok(pdClient(qs.get('code')));
+      if (sub === '/scan') {
+        let c; try { c = pdClient(qs.get('code')); } catch (e) { return ok({kind: 'unknown', action: null, action_title: null, reason_code: e.code === 'coupon_not_found' ? 'coupon_not_found' : 'unknown_code', code: qs.get('code'), message: e.message}); }
+        const k = c.scanned === 'coupon' ? cpnKind(c.coupon) + '_coupon' : 'client';
+        const used = k !== 'client' && c.coupon.status !== 'active', vis = k === 'client' && !c.can_visit;
+        return ok(Object.assign({kind: k, action: used || vis ? null : k === 'client' ? 'visit' : k === 'perk_coupon' ? 'perk' : 'redeem', action_title: null, reason_code: null, code: k === 'client' ? c.helper_id : c.coupon.code, message: used ? tx('pd.cused') : vis ? tx('pd.vtoday') : null}, c));
+      }
       if (sub === '/perks/templates') throw apiErr(404, 'not_found', tx('e.not_found'));
       if (sub === '/package') return ok({package: pdPartner().package});
       throw apiErr(404, 'not_found', tx('e.not_found'));
     }
     const m = pdMem();
-    if (meth === 'POST' && sub === '/visit') {
-      const c = pdClient((o.body || {}).code), id = 'dv' + (++m.seq);
+    /* визит и погашение — общая эмуляция для одиночных запросов и пакета /ops/batch */
+    const pdVisit = body => {
+      const c = pdClient(body.code), id = 'dv' + (++m.seq);
       if (!c.can_visit) throw apiErr(409, 'visit_today', tx('pd.vtoday'));
       const lv = pdLvl(), xp = pdXp() + 5;
-      m.visits.unshift({at: new Date().toISOString(), kind: 'visit', helper_id_masked: c.helper_id.slice(0, 6) + '••••', points: c.visit_preview.points, service_tag: (o.body || {}).service_tag || null, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
-      return ok({visit: {id, at: new Date().toISOString(), helper_id: c.helper_id, service_tag: (o.body || {}).service_tag || null, location_id: null, status: 'ok'}, driver: Object.assign({}, c.driver, {new_client: c.new_client}), awarded: {points: c.visit_preview.points, xp: 30, multiplier: c.visit_preview.multiplier, campaign_id: c.visit_preview.campaign_id}, partner_xp: {gained: 5 + (c.new_client ? 15 : 0), xp, level: {key: lv.key, title: lv.title}, level_up: false}, review: false, message: ''});
-    }
-    if (meth === 'POST' && sub === '/coupons/redeem') {
-      const code = String((o.body || {}).code || '').replace(/^HELPER-COUPON:/i, '').trim().toUpperCase(), c = pdCoupon(code);
+      m.visits.unshift({at: new Date().toISOString(), kind: 'visit', helper_id_masked: c.helper_id.slice(0, 6) + '••••', points: c.visit_preview.points, service_tag: body.service_tag || null, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
+      return {visit: {id, at: body.at || new Date().toISOString(), helper_id: c.helper_id, service_tag: body.service_tag || null, location_id: null, status: 'ok'}, driver: Object.assign({}, c.driver, {new_client: c.new_client}), awarded: {points: c.visit_preview.points, xp: 30, multiplier: c.visit_preview.multiplier, campaign_id: c.visit_preview.campaign_id}, partner_xp: {gained: 5 + (c.new_client ? 15 : 0), xp, level: {key: lv.key, title: lv.title}, level_up: false}, review: false, message: ''};
+    };
+    const pdRedeem = body => {
+      const code = String(body.code || '').replace(/^HELPER-COUPON:/i, '').trim().toUpperCase(), c = pdCoupon(code);
       if (!c) throw apiErr(404, 'coupon_not_found', tx('coupon.nf'));
       if (m.used[code]) throw apiErr(409, 'coupon_used', tx('pd.cused'));
       m.used[code] = 1;
@@ -7329,8 +7643,17 @@ async function demoApi(path, o) {
       m.visits.unshift({at: new Date().toISOString(), kind: 'redeem', helper_id_masked: pdHid().slice(0, 6) + '••••', points: 0, title: c.title, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
       if (visitNew) m.visits.unshift({at: new Date().toISOString(), kind: 'visit', helper_id_masked: pdHid().slice(0, 6) + '••••', points: 20, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
       const lv = pdLvl();
-      return ok(Object.assign({}, c, {helper_id_masked: pdHid().slice(0, 6) + '••••', visit: visitNew ? {id: 'dv' + (++m.seq), status: 'ok', created: true} : null, partner_xp: {gained: 10, xp: pdXp() + 10, level: {key: lv.key, title: lv.title}, level_up: false}}));
-    }
+      return Object.assign({}, c, {helper_id_masked: pdHid().slice(0, 6) + '••••', visit: visitNew ? {id: 'dv' + (++m.seq), status: 'ok', created: true} : null, partner_xp: {gained: 10, xp: pdXp() + 10, level: {key: lv.key, title: lv.title}, level_up: false}});
+    };
+    /* как у сервера: в ответе replayed, client_op_id и принятое время at (старше 72 ч → null, записано текущим временем) */
+    const pdMeta = (r, b) => Object.assign(r, {replayed: false, client_op_id: b.client_op_id || null, at: b.at && Date.now() - Date.parse(b.at) > 72 * 3600e3 ? null : b.at || new Date().toISOString()});
+    if (meth === 'POST' && sub === '/visit') return ok(pdMeta(pdVisit(o.body || {}), o.body || {}));
+    if (meth === 'POST' && sub === '/coupons/redeem') return ok(pdMeta(pdRedeem(o.body || {}), o.body || {}));
+    if (meth === 'POST' && sub === '/ops/batch') return ok({results: ((o.body || {}).ops || []).slice(0, 50).map(op => {
+      const b = Object.assign({}, op.payload || {}, {at: op.at, client_op_id: op.client_op_id});
+      try { const r = op.type === 'visit' ? pdVisit(b) : op.type === 'redeem' ? pdRedeem(b) : null; if (!r) throw apiErr(400, 'bad_op', tx('e.generic', {code: 400})); return {client_op_id: op.client_op_id, status: 200, replayed: false, result: Object.assign({ok: true}, pdMeta(r, b))}; }
+      catch (e) { return {client_op_id: op.client_op_id, status: e.status || 400, replayed: false, error: {error: e.code || 'error', message: e.message}}; }
+    })});
   }
   throw pdErr();
 }
