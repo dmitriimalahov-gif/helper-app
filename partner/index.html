@@ -1064,6 +1064,55 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 .ph-lvl{display:inline-flex;align-items:center;gap:4px}
 .ph-medal{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none}
 .ph-medal.silver{background:#AAB6BA}.ph-medal.gold{background:#CF9A1E}.ph-medal.platinum{background:#8CC6C3}
+/* ---------- демо-кабинет ---------- */
+#gb.gb-demo{position:sticky;top:58px;z-index:28}
+@media (min-width:960px){#gb.gb-demo{top:12px}}
+.demo-bar{display:flex;align-items:center;gap:10px;margin:8px 0 14px;padding:8px 8px 8px 12px;border-radius:var(--r-md);background:var(--ink);color:var(--on-ink);box-shadow:var(--shadow)}
+@media (min-width:960px){.demo-bar{margin-top:30px}}
+.db-tag{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--teal);color:var(--on-teal)}
+.db-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.db-t b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.db-t>span{font-size:11.5px;opacity:.75}
+.demo-bar .db-tour{color:var(--teal);font-size:13px;padding:6px 4px;display:inline-flex;align-items:center;gap:4px;flex:none}
+.demo-bar .db-cta{flex:none;background:var(--teal);color:var(--on-teal);height:36px;padding:0 14px}
+.demo-bar .db-cta .s{display:none}
+.demo-bar .db-x{flex:none;color:var(--on-ink);background:rgba(255,255,255,.14);width:34px;height:34px}
+.demo-bar .db-x:hover{background:rgba(255,255,255,.24)}
+@media (max-width:719px){.demo-bar .db-seg{display:none}.demo-bar .db-cta .l{display:none}.demo-bar .db-cta .s{display:inline}.demo-bar .db-tour{display:none}}
+@media (max-width:399px){.demo-bar .db-tag{display:none}.demo-bar .db-cta{padding:0 10px;font-size:13px}}
+.demo-note{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:10px 14px;border-radius:var(--r-md);background:var(--teal-3);font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.demo-note .ic{color:var(--teal-ink);flex:none;margin-top:1px}
+.demo-note b{display:block;font-weight:600;color:var(--ink)}
+.demo-note span{display:block;margin-top:3px}
+.demo-kassa{padding:16px;border:1.5px dashed var(--teal)}
+.dp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.dp-tile{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:16px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);transition:border-color .15s,transform .15s;min-width:0}
+.dp-tile:hover{border-color:var(--teal);transform:translateY(-1px)}
+.dp-n{font-weight:600;font-size:15.5px;line-height:1.25}
+.dp-d{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.dp-go{margin-top:auto;display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--teal-ink)}
+@media (max-width:599px){.dp-grid{grid-template-columns:1fr 1fr;gap:10px}.dp-tile{padding:12px}.dp-d{display:none}.dp-n{font-size:14px}}
+.demo-story{position:fixed;z-index:70;left:12px;right:12px;bottom:calc(var(--tabbar-h) + 12px + env(safe-area-inset-bottom,0px));max-width:420px;margin:0 auto;padding:14px 16px 12px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);animation:up .26s cubic-bezier(.2,.8,.2,1)}
+@media (min-width:960px){.demo-story{left:auto;right:28px;bottom:28px;width:400px}}
+.demo-story .ds-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.demo-story .ds-n{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.demo-story .ds-dots{display:flex;gap:4px;flex:1}
+.demo-story .ds-dots i{width:16px;height:4px;border-radius:4px;background:var(--line-2)}
+.demo-story .ds-dots i.on{background:var(--teal-ink)}
+.demo-story .ds-x{margin-left:auto;width:32px;height:32px}
+.demo-story .ds-t{font-weight:600;font-size:16px;line-height:1.3}
+.demo-story .ds-d{margin:6px 0 10px;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.demo-story .ds-acts{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.demo-story .ds-acts.end{flex-direction:column;align-items:stretch}
+.demo-story .ds-acts .btn.block{white-space:normal;height:auto;min-height:50px;padding:10px 18px;line-height:1.25;text-align:center}
+.demo-story.end{border-color:var(--teal)}
+.demo-hl{outline:3px solid var(--teal);outline-offset:4px;border-radius:var(--r-md);animation:demoPulse 1.6s ease 2}
+@keyframes demoPulse{50%{outline-color:var(--teal-ink)}}
+.demo-cta{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 14px;border-radius:var(--r-md);background:var(--teal-3);text-decoration:none;color:inherit;max-width:560px;border:1px solid transparent;transition:border-color .15s}
+.demo-cta:hover{border-color:var(--teal)}
+.demo-cta b{display:block;font-weight:600;font-size:14.5px}
+.demo-cta span span{display:block;font-size:12.5px;color:var(--ink-2);margin-top:2px;line-height:1.4}
+.demo-cta>.ico:last-child{margin-left:auto;color:var(--ink-2);flex:none}
 </style>
 </head>
 <body>
@@ -1320,6 +1369,7 @@ async function imgFit(file, max, alpha) {
 }
 const mediaErr = (d, s) => s === 413 ? tx('media.big') : s === 415 ? tx('media.type') : s === 403 ? tx('media.rights') : humanErr(d, s);
 async function upMedia(path, blob, name, onProg) {
+  if (DEMO.on) throw pdErr();
   if (net.ready) await net.ready;
   if (!net.api) throw apiErr(0, 'no_api', tx('err.noapi'));
   const go = retried => new Promise((res, rej) => {
@@ -1735,6 +1785,91 @@ Object.assign(TX, {
   'ema.taken': ['Этот e-mail уже занят другим аккаунтом Helper. Укажите другой адрес или войдите в тот аккаунт.', 'Acest e-mail este deja folosit de alt cont Helper. Indicați altă adresă sau conectați-vă la acel cont.', 'This e-mail is already used by another Helper account. Enter a different address or sign in to that account.'],
   'ema.wait': ['Слишком много попыток. Повторите через {time}.', 'Prea multe încercări. Reîncercați peste {time}.', 'Too many attempts. Try again in {time}.'],
   'ema.saved': ['E-mail сохранён', 'E-mailul a fost salvat', 'E-mail saved'],
+  /* ---------- демо-кабинет (#/demo) ---------- */
+  'pd.land.btn': ['Посмотреть демо кабинета', 'Vedeți demo-ul cabinetului', 'See the demo dashboard'],
+  'pd.land.hint': ['Без регистрации: выберите свой вид бизнеса и посмотрите кабинет с примером данных.', 'Fără înregistrare: alegeți tipul afacerii și vedeți cabinetul cu date de exemplu.', 'No sign-up: pick your type of business and explore the dashboard with sample data.'],
+  'pd.pick.e': ['Демо-кабинет', 'Cabinet demo', 'Demo dashboard'],
+  'pd.pick.h': ['Какой у вас бизнес?', 'Ce afacere aveți?', 'What’s your business?'],
+  'pd.pick.p': ['Откроем кабинет вымышленной компании вашего сегмента: точки, плюшки, акции, касса и статистика. Ничего не сохраняется, регистрация не нужна.', 'Deschidem cabinetul unei companii fictive din segmentul vostru: locații, beneficii, promoții, casă și statistici. Nimic nu se salvează, înregistrarea nu e necesară.', 'We’ll open the dashboard of a fictional company in your segment: locations, perks, promotions, the till and statistics. Nothing is saved and no sign-up is needed.'],
+  'pd.pick.open': ['Открыть демо', 'Deschideți demo', 'Open demo'],
+  'pd.pick.note': ['Компании и цифры в демо вымышлены. Регистрация настоящей компании — 3 минуты, пакет «Старт» — 0 MDL.', 'Companiile și cifrele din demo sunt fictive. Înregistrarea unei companii reale durează 3 minute, pachetul «Start» — 0 MDL.', 'Companies and numbers in the demo are fictional. Registering a real company takes 3 minutes; the Start package is 0 MDL.'],
+  'pd.tag': ['Демо', 'Demo', 'Demo'],
+  'pd.bar.t': ['Демо-кабинет', 'Cabinet demo', 'Demo dashboard'],
+  'pd.bar.s': ['данные не сохраняются', 'datele nu se salvează', 'nothing is saved'],
+  'pd.cta': ['Зарегистрировать компанию — бесплатно', 'Înregistrați compania — gratuit', 'Register your company — free'],
+  'pd.cta.short': ['Регистрация — 0 MDL', 'Înregistrare — 0 MDL', 'Sign up — 0 MDL'],
+  'pd.tour': ['Тур', 'Tur', 'Tour'],
+  'pd.exit': ['Выйти из демо', 'Ieșiți din demo', 'Exit demo'],
+  'pd.ro': ['В демо изменения не сохраняются — зарегистрируйте компанию, чтобы сделать это по-настоящему.', 'În demo modificările nu se salvează — înregistrați compania ca s-o faceți pe bune.', 'Changes aren’t saved in the demo — register your company to do it for real.'],
+  'pd.note': ['Демо-данные для сегмента «{seg}» — пример, а не прогноз и не обещание результата.', 'Date demo pentru segmentul «{seg}» — un exemplu, nu o prognoză și nici o promisiune.', 'Demo data for “{seg}” — an example, not a forecast or a promise of results.'],
+  'pd.sched': ['пн–пт {from}–{to}', 'lun–vin {from}–{to}', 'Mon–Fri {from}–{to}'],
+  'pd.gc.t': ['Двойные км Helper за визит по будням с 9 до 12', 'Km Helper dubli pentru vizită, lun–vin 9–12', 'Double Helper km for weekday visits 9–12'],
+  'pd.gc.x': ['Утром в будни водители получают в 2 раза больше км Helper за визит — так заполняются тихие часы.', 'Dimineața, în zilele lucrătoare, șoferii primesc de 2 ori mai mulți km Helper pentru vizită — așa se umplu orele liniștite.', 'On weekday mornings drivers earn twice the Helper km per visit — that fills the quiet hours.'],
+  'pd.ge.t': ['Летняя акция для водителей рядом', 'Promoția de vară pentru șoferii din apropiere', 'Summer promotion for nearby drivers'],
+  'pd.ge.x': ['Завершённая акция — статистика сохраняется.', 'Promoție încheiată — statisticile se păstrează.', 'A finished promotion — its statistics are kept.'],
+  'pd.badge.silver': ['Серебряный партнёр Helper', 'Partener Helper de argint', 'Silver Helper partner'],
+  'pd.badge.gold': ['Золотой партнёр Helper', 'Partener Helper de aur', 'Gold Helper partner'],
+  'pd.badge.platinum': ['Платиновый партнёр Helper', 'Partener Helper de platină', 'Platinum Helper partner'],
+  'pd.rt.fast': ['Быстро', 'Rapid', 'Fast'],
+  'pd.rt.polite': ['Вежливо', 'Politicos', 'Polite'],
+  'pd.rt.quality': ['Качественно', 'Calitativ', 'Good quality'],
+  'pd.rv1': ['Пришёл по плюшке из Helper — приняли сразу, всё объяснили. Вернусь.', 'Am venit pentru beneficiul din Helper — m-au primit imediat și mi-au explicat tot. Revin.', 'Came for the Helper perk — served right away and everything explained. I’ll be back.'],
+  'pd.rv2': ['Удобно: показал код на кассе, и визит засчитался.', 'Comod: am arătat codul la casă și vizita s-a înregistrat.', 'Easy: showed the code at the till and the visit counted.'],
+  'pd.xr.visit': ['Визит клиента', 'Vizita clientului', 'Customer visit'],
+  'pd.xr.perk': ['Выдана плюшка', 'Beneficiu acordat', 'Perk given'],
+  'pd.xr.new': ['Новый клиент', 'Client nou', 'New customer'],
+  'pd.xr.month': ['Хороший месяц (оценка от 4,5)', 'Lună bună (nota de la 4,5)', 'Good month (rating 4.5+)'],
+  'pd.xr.quest': ['Квест выполнен', 'Misiune îndeplinită', 'Quest completed'],
+  'pd.q1.t': ['Первые шаги партнёра', 'Primii pași ai partenerului', 'First partner steps'],
+  'pd.q1.d': ['Настройте кабинет и примите первых клиентов.', 'Configurați cabinetul și primiți primii clienți.', 'Set up the dashboard and welcome your first customers.'],
+  'pd.q1.s1': ['Добавить точку', 'Adăugați o locație', 'Add a location'],
+  'pd.q1.s2': ['Опубликовать плюшку', 'Publicați un beneficiu', 'Publish a perk'],
+  'pd.q1.s3': ['Отметить 10 визитов', 'Înregistrați 10 vizite', 'Record 10 visits'],
+  'pd.q2.t': ['Месяц роста', 'Luna creșterii', 'Growth month'],
+  'pd.q2.d': ['30 новых клиентов и 20 выданных плюшек за месяц.', '30 de clienți noi și 20 de beneficii acordate într-o lună.', '30 new customers and 20 perks given in a month.'],
+  'pd.q2.s1': ['Новые клиенты', 'Clienți noi', 'New customers'],
+  'pd.q2.s2': ['Выданные плюшки', 'Beneficii acordate', 'Perks given'],
+  'pd.drv.lvl': ['Активный', 'Activ', 'Active'],
+  'pd.drv.b1': ['Первое ТО', 'Prima revizie', 'First service'],
+  'pd.drv.b2': ['Исследователь', 'Explorator', 'Explorer'],
+  'pd.vtoday': ['Визит этого водителя сегодня уже засчитан.', 'Vizita acestui șofer a fost deja înregistrată azi.', 'This driver’s visit has already been recorded today.'],
+  'pd.nf': ['В демо касса знает только демо-код водителя — нажмите «Helper-код водителя».', 'În demo, casa cunoaște doar codul demo al șoferului — apăsați «Codul Helper al șoferului».', 'In the demo the till only knows the demo driver code — tap “Driver’s Helper code”.'],
+  'pd.cused': ['Этот купон уже погашен — в демо можно попробовать другой.', 'Acest cupon a fost deja folosit — în demo puteți încerca altul.', 'This coupon has already been redeemed — try another one in the demo.'],
+  'pd.disc.pct': ['Скидка {v} %', 'Reducere {v} %', '{v}% off'],
+  'pd.disc.fix': ['Скидка {v} MDL', 'Reducere {v} MDL', '{v} MDL off'],
+  'pd.inv.p': ['Пополнение баланса для рекламы', 'Alimentarea soldului pentru reclamă', 'Advertising balance top-up'],
+  'pd.pk.start.t': ['Бесплатно навсегда', 'Gratuit pentru totdeauna', 'Free forever'],
+  'pd.pk.start.n': ['0,85 MDL за доставленное гео-предложение, с баланса', '0,85 MDL per ofertă geo livrată, din sold', '0.85 MDL per delivered geo offer, from the balance'],
+  'pd.pk.start.f': ['Карточка компании с геолокацией|Касса, визиты и плюшки|Игра партнёра и статистика', 'Fișa companiei cu geolocație|Casa, vizitele și beneficiile|Jocul partenerului și statisticile', 'Company card with location|Till, visits and perks|Partner game and statistics'],
+  'pd.pk.showcase.t': ['Спецпредложение в приложении', 'Ofertă specială în aplicație', 'A special offer in the app'],
+  'pd.pk.showcase.f': ['Спецпредложение месяца|500 гео-доставок', 'Oferta specială a lunii|500 de livrări geo', 'Special offer of the month|500 geo deliveries'],
+  'pd.pk.district.t': ['Популярный', 'Popular', 'Popular'],
+  'pd.pk.district.f': ['5 push-рассылок по сегменту|1 000 гео-доставок', '5 notificări push pe segment|1 000 de livrări geo', '5 segment push campaigns|1,000 geo deliveries'],
+  'pd.pk.leader.t': ['Для сетей', 'Pentru rețele', 'For chains'],
+  'pd.pk.leader.f': ['Баннер в разделе приложения|10 push-рассылок|2 000 гео-доставок', 'Banner într-o secțiune a aplicației|10 notificări push|2 000 de livrări geo', 'Banner in an app section|10 push campaigns|2,000 geo deliveries'],
+  'pd.kassa.t': ['Демо-касса: попробуйте без камеры', 'Casa demo: încercați fără cameră', 'Demo till: try it without a camera'],
+  'pd.kassa.d': ['Нажмите — касса «отсканирует» код водителя или купон и покажет то же, что увидит ваш кассир.', 'Apăsați — casa «scanează» codul șoferului sau cuponul și arată ce va vedea casierul vostru.', 'Tap and the till “scans” a driver code or a coupon and shows exactly what your cashier will see.'],
+  'pd.kassa.id': ['Helper-код водителя', 'Codul Helper al șoferului', 'Driver’s Helper code'],
+  'pd.kassa.perk': ['Купон на плюшку', 'Cupon pentru beneficiu', 'Perk coupon'],
+  'pd.kassa.camp': ['Купон акции', 'Cupon de promoție', 'Promotion coupon'],
+  'pd.s.n': ['Шаг {n} из {of}', 'Pasul {n} din {of}', 'Step {n} of {of}'],
+  'pd.s.start': ['Начать тур', 'Începeți turul', 'Start the tour'],
+  'pd.s.self': ['Посмотрю сам', 'Mă uit singur', 'I’ll look around'],
+  'pd.s.next': ['Далее', 'Mai departe', 'Next'],
+  'pd.s.skip': ['Пропустить', 'Omiteți', 'Skip'],
+  'pd.s.stay': ['Остаться в демо', 'Rămân în demo', 'Stay in the demo'],
+  'pd.s0.t': ['Демо-кабинет: {seg}', 'Cabinet demo: {seg}', 'Demo dashboard: {seg}'],
+  'pd.s0.d': ['Пройдите 5 коротких шагов — меньше минуты.', 'Parcurgeți 5 pași scurți — sub un minut.', 'Take 5 short steps — under a minute.'],
+  'pd.s1.t': ['Так водители видят вашу акцию', 'Așa văd șoferii promoția voastră', 'This is how drivers see your promotion'],
+  'pd.s1.d': ['Карточка в приложении Helper: в ленте «рядом» и гео-уведомлением тем, кто проезжает мимо. Предпросмотр — на русском, румынском и английском.', 'Fișa în aplicația Helper: în lista «în apropiere» și ca notificare geo pentru cei care trec pe lângă voi. Previzualizare în rusă, română și engleză.', 'The card in the Helper app: in the “nearby” feed and as a geo notification for drivers passing by. Preview in Russian, Romanian and English.'],
+  'pd.s2.t': ['Водитель пришёл — касса отмечает визит за 3 секунды', 'Șoferul a venit — casa înregistrează vizita în 3 secunde', 'A driver arrives — the till records the visit in 3 seconds'],
+  'pd.s2.d': ['Кассир сканирует Helper-код с телефона водителя. Нажмите «Helper-код водителя», затем «Засчитать визит».', 'Casierul scanează codul Helper de pe telefonul șoferului. Apăsați «Codul Helper al șoferului», apoi «Înregistrați vizita».', 'The cashier scans the Helper code on the driver’s phone. Tap “Driver’s Helper code”, then record the visit.'],
+  'pd.s3.t': ['Плюшка привела нового клиента — без скидок и без затрат на привлечение', 'Beneficiul a adus un client nou — fără reduceri și fără costuri de atragere', 'A perk brought a new customer — no discounts, no acquisition costs'],
+  'pd.s3.d': ['Водители копят км Helper и бронируют ваши бесплатные услуги и подарки. Вы ничего не платите за километры — клиент приходит сам.', 'Șoferii adună km Helper și rezervă serviciile și cadourile voastre gratuite. Nu plătiți nimic pentru kilometri — clientul vine singur.', 'Drivers collect Helper km and book your free services and gifts. You pay nothing for the km — the customer comes to you.'],
+  'pd.s4.t': ['Статистика за месяц', 'Statistica pe lună', 'Monthly statistics'],
+  'pd.s4.d': ['Визиты, новые клиенты, выданные плюшки, показы акций и уведомления — по дням. Здесь демо-данные, у вас будут ваши.', 'Vizite, clienți noi, beneficii acordate, afișări ale promoțiilor și notificări — pe zile. Aici sunt date demo, la voi vor fi ale voastre.', 'Visits, new customers, perks given, promotion views and notifications — by day. These are demo numbers; yours will be real.'],
+  'pd.s5.t': ['Начните бесплатно: пакет «Старт» — 0 MDL', 'Începeți gratuit: pachetul «Start» — 0 MDL', 'Start free: the Start package is 0 MDL'],
+  'pd.s5.d': ['Регистрация — 3 минуты. Кабинет, касса, плюшки и статистика бесплатны; платите только за рекламу, если захотите.', 'Înregistrarea durează 3 minute. Cabinetul, casa, beneficiile și statisticile sunt gratuite; plătiți doar pentru reclamă, dacă doriți.', 'Sign-up takes 3 minutes. The dashboard, till, perks and statistics are free; you only pay for advertising if you want it.'],
   'pwr.title': ['Старый пароль удалён', 'Parola veche a fost ștearsă', 'Old password removed'],
   'pwr.text': ['Для безопасности старый пароль удалён — входите через Google или задайте новый пароль через «Забыли пароль?».', 'Pentru siguranță, parola veche a fost ștearsă — intrați prin Google sau setați o parolă nouă prin „Ați uitat parola?”.', 'For security, the old password was removed — sign in with Google or set a new password via “Forgot password?”.'],
   'pwr.ok': ['Понятно', 'Am înțeles', 'Got it'],
@@ -2776,6 +2911,14 @@ const I = {
   wrench: '<path d="M14.8 3.8a4.6 4.6 0 0 0-4.3 6.2l-6.3 6.3a2.1 2.1 0 0 0 3 3l6.3-6.3a4.6 4.6 0 0 0 6.2-4.3l-2.9 2.9-2.6-.4-.4-2.6 2.9-2.9a4.6 4.6 0 0 0-1.9.1z"/>',
   bolt: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
   plusc: '<circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/>',
+  drop: '<path d="M12 3.5s-6 6.6-6 10.6a6 6 0 0 0 12 0c0-4-6-10.6-6-10.6z"/>',
+  tire: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/>',
+  pump: '<path d="M5 20.5V5a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 14 5v15.5M3.5 20.5h12"/><path d="M7.5 7h4v3.5h-4zM14 10h1.5a1.5 1.5 0 0 1 1.5 1.5v4.3a1.3 1.3 0 0 0 2.6 0V8.5L17.2 6"/>',
+  book: '<path d="M12 6.5C10 5 7.5 4.5 4 5v13c3.5-.5 6 0 8 1.5 2-1.5 4.5-2 8-1.5V5c-3.5-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/>',
+  sos: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="m6 6 3.5 3.5M18 6l-3.5 3.5M6 18l3.5-3.5M18 18l-3.5-3.5"/>',
+  gears: '<circle cx="6" cy="6" r="1.8"/><circle cx="12" cy="6" r="1.8"/><circle cx="18" cy="6" r="1.8"/><circle cx="6" cy="18" r="1.8"/><circle cx="12" cy="18" r="1.8"/><path d="M6 7.8v8.4M12 7.8v8.4M18 7.8V12H6"/>',
+  cup: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19 5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5c-.6 1 .6 2 0 3M12 3.5c-.6 1 .6 2 0 3"/>',
+  park: '<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M10 16.5v-9h3a2.8 2.8 0 0 1 0 5.6h-3"/>',
   flag: '<path d="M5.5 21V4M5.5 4.5h11l-2 4 2 4h-11"/>'
 };
 const ic = (n, cls) => '<svg class="ico ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (I[n] || I.info) + '</svg>';
@@ -3022,8 +3165,10 @@ function cfgLoad() {
 }
 
 let A = jget(K.acct) || {};
+/* демо-кабинет (#/demo): on — кабинет показывает вымышленную компанию, api() обслуживает demoApi() без сети */
+const DEMO = {on: false, seg: null, step: -1, mem: null, saveA: null, savePid: null};
 const logged = () => !!(A && A.access && A.refresh);
-const acctSave = () => jset(K.acct, logged() ? A : null);
+const acctSave = () => { if (!DEMO.on) jset(K.acct, logged() ? A : null); };
 function setTokens(d) {
   const tk = d && (d.tokens || d);
   if (!tk) return false;
@@ -3056,6 +3201,7 @@ function humanErr(d, status) {
 function apiErr(status, code, message, data) { const e = new Error(message); e.status = status; e.code = code; e.data = data || null; return e; }
 async function api(path, o) {
   o = o || {};
+  if (DEMO.on) return demoApi(path, o);
   if (net.ready) await net.ready;
   if (!net.api) throw apiErr(0, 'no_api', tx('err.noapi'));
   const auth = o.auth !== false && logged(), tok = A.access;
@@ -3326,6 +3472,8 @@ async function render() {
   runCleanup(); closeSheet(true); closePop(); cbClose();
   if ($('#scan')) scanClose();
   const r = st.route = parseHash();
+  if (r.name === 'demo') return pageDemoPick();
+  if (DEMO.on && (r.name === 'register' || r.name === 'join')) return demoExit(r.name === 'register');
   if (r.name === 'register') return pageRegister(r, alive);
   if (r.name === 'join') return pageJoin(alive);
   if (!logged()) return pageLanding(r.name === 'login');
@@ -3347,6 +3495,7 @@ async function render() {
   window.scrollTo(0, 0);
   try { await VIEWS[r.name](v, r, alive); }
   catch (e) { if (alive()) { v.innerHTML = errorHTML(e); if (e.status === 403) inval(); } }
+  if (DEMO.on && alive()) demoAfter(r);
 }
 
 /* вход в кабинет после авторизации: приглашение, список компаний, выбор компании */
@@ -3384,7 +3533,7 @@ async function enterCabinet(alive) {
   return alive();
 }
 async function selectPartner(pid) {
-  st.pid = +pid; store.set(K.pid, String(pid));
+  st.pid = +pid; if (!DEMO.on) store.set(K.pid, String(pid));
   st.cache = {}; st.partner = null; st.role = null;
   await loadPartner();
 }
@@ -3396,6 +3545,7 @@ async function switchCompany(pid) {
   go(defaultRoute(), true);
 }
 async function logout() {
+  if (DEMO.on) return demoExit(false);
   closeSheet(true);
   try { await Promise.race([api('/v1/auth/logout', {body: {}}), sleep(3000)]); } catch (e) {}
   A = {}; acctSave();
@@ -3442,9 +3592,10 @@ function paintChrome() {
   $$('[data-nav]').forEach(a => { if (a.dataset.nav === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   const tabName = TABS.indexOf(name) >= 0 ? name : 'more';
   $$('[data-tab]').forEach(a => { if (a.dataset.tab === tabName) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  $('#gb').innerHTML = statusBanner();
+  $('#gb').innerHTML = statusBanner(); $('#gb').classList.toggle('gb-demo', DEMO.on);
 }
 function statusBanner() {
+  if (DEMO.on) return demoBarHTML();
   const p = st.partner; if (!p) return '';
   const bot = '<a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('tg.bot') + '</a>';
   if (p.status === 'pending') {
@@ -3518,6 +3669,7 @@ function pageLanding(openLogin) {
       '<p class="lead">' + tx('land.lead') + '</p>' +
       '<div class="cta"><a class="btn ink xl" href="#/register">' + tx('land.cta.reg') + '</a><button class="btn line xl" data-act="login">' + tx('login') + '</button></div>' +
       '<p class="hint" style="margin-top:14px">' + tx('land.cta.hint') + '</p>' +
+      '<a class="demo-cta" href="#/demo"><span class="ic-circle teal">' + ic('eye', 'sm') + '</span><span><b>' + tx('pd.land.btn') + '</b><span>' + tx('pd.land.hint') + '</span></span>' + ic('chevR', 'sm') + '</a>' +
     '</div><div class="hero-art">' + rings() + '<div class="phone-wrap">' + phoneHTML(sample, {push: true}) + '</div></div></section>' +
     '<section class="benefits" aria-label="' + esc(tx('land.benefits')) + '">' +
       B('users', 'land.b1') + B('loyal', 'land.b2') + B('bell', 'land.b3') + B('chart', 'land.b4') +
@@ -3526,7 +3678,7 @@ function pageLanding(openLogin) {
       '<li><div><b>' + tx('land.how.1t') + '</b><span>' + tx('land.how.1d') + '</span></div></li>' +
       '<li><div><b>' + tx('land.how.2t') + '</b><span>' + tx('land.how.2d') + '</span></div></li>' +
       '<li><div><b>' + tx('land.how.3t') + '</b><span>' + tx('land.how.3d') + '</span></div></li>' +
-    '</ol><div class="btn-row" style="margin-top:28px;max-width:560px"><a class="btn ink" href="#/register">' + tx('land.cta.reg') + '</a><button class="btn soft" data-act="login">' + tx('land.have') + '</button></div></section>' +
+    '</ol><div class="btn-row" style="margin-top:28px;max-width:560px"><a class="btn ink" href="#/register">' + tx('land.cta.reg') + '</a><a class="btn soft" href="#/demo">' + ic('eye', 'sm') + tx('pd.land.btn') + '</a><button class="btn soft" data-act="login">' + tx('land.have') + '</button></div></section>' +
     '<footer class="land-foot"><span>© NUMEROM SRL · Helper</span><a href="../">' + tx('land.f.app') + '</a><a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('land.f.bot') + '</a></footer>' +
   '</div>';
   pkLandFill();
@@ -3550,7 +3702,7 @@ function loginSheet(o) {
       errBox('li-err') +
       '<button class="btn ink block" type="submit">' + tx('login') + '</button>' +
     '</form>') +
-    '<div class="stack" style="align-items:center;margin-top:10px;gap:2px">' + (via === 'phone' ? '' : '<button class="textbtn" data-act="forgot">' + tx('li.forgot') + '</button>') + (o.noReg ? '' : '<a class="textbtn" href="#/register">' + tx('land.cta.reg') + '</a>') + '</div>' +
+    '<div class="stack" style="align-items:center;margin-top:10px;gap:2px">' + (via === 'phone' ? '' : '<button class="textbtn" data-act="forgot">' + tx('li.forgot') + '</button>') + (o.noReg ? '' : '<a class="textbtn" href="#/register">' + tx('land.cta.reg') + '</a><a class="textbtn" href="#/demo">' + tx('pd.land.btn') + '</a>') + '</div>' +
     '<p class="hint" style="text-align:center;margin:10px 0 0">' + tx('li.note', {bot: '<a href="' + TG_BOT + '" target="_blank" rel="noopener noreferrer">' + tx('li.note.bot') + '</a>'}) + '</p>',
     {onClose: () => { UI.afterLogin = null; PPH = null; if (st.route.name === 'login') go('', true); }});
   gLogin($('#g-box'));
@@ -4954,7 +5106,7 @@ function pricesHTML() {
   if (pr && pr.geo_push_mdl != null) rows.push([tx('pr.push'), fMoney(pr.geo_push_mdl)]);
   if (pr && pr.views_1000_mdl != null) rows.push([tx('pr.views'), fMoney(pr.views_1000_mdl)]);
   return '<div class="card"><p class="eyebrow" style="margin-bottom:12px">' + tx('pr.title') + '</p>' + (rows.length ? '<dl class="detail nw">' + rows.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>').join('') + '</dl>' : '') +
-    (m.packages.length ? '<details style="margin-top:14px"><summary class="textbtn" style="cursor:pointer;padding:6px 0">' + tx('pr.packages', {n: m.packages.length}) + '</summary><div class="stack" style="margin-top:8px;gap:8px">' + m.packages.map(p => '<div class="row" style="align-items:flex-start;padding-top:10px;border-top:1px solid var(--line)"><div class="grow"><div style="font-weight:600">' + esc(p.title) + '</div>' + (p.desc ? '<div class="small muted">' + esc(p.desc) + '</div>' : '') + '</div><div style="font-weight:600;white-space:nowrap">' + (p.price_mdl ? fMDL(p.price_mdl) + (p.unit ? ' ' + esc(p.unit) : '') : tx('free')) + '</div></div>').join('') + '</div></details>' : '') +
+    (m.packages.length ? '<details style="margin-top:14px"><summary class="textbtn" style="cursor:pointer;padding:6px 0">' + tx('pr.packages', {n: m.packages.length}) + '</summary><div class="pk-list">' + m.packages.map(p => '<div class="pk-li"><div class="pk-li-h"><span class="pk-li-t">' + esc(p.title) + '</span><b class="pk-li-p tnum">' + (p.price_mdl ? '<span class="nw">' + fMDL(p.price_mdl) + '</span>' + (p.unit ? ' ' + esc(p.unit) : '') : tx('free')) + '</b></div>' + (p.desc ? '<div class="small muted">' + esc(p.desc) + '</div>' : '') + '</div>').join('') + '</div></details>' : '') +
     '<p class="hint" style="margin:12px 0 0">' + tx('pr.note') + '</p></div>';
 }
 FORMS.reg1 = f => {
@@ -5171,7 +5323,7 @@ VIEWS.home = async (v, r, alive) => {
     isOwner() ? {k: 'staff', done: (cnt.staff || 1) > 1, href: '#/staff'} : null
   ].filter(Boolean);
   const nDone = todo.filter(x => x.done).length;
-  const hideTodo = store.get(K.todo(st.pid)) === '1';
+  const hideTodo = DEMO.on || store.get(K.todo(st.pid)) === '1';
   const T = stats && stats.totals || {};
   const active = camps.filter(c => c.status === 'active');
   const aPerks = perks.filter(x => x.status === 'active');
@@ -6972,6 +7124,318 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && sheetOpen() && !$('#scan')) closeSheet();
   if ((e.key === 'Enter' || e.key === ' ') && el && el.classList && el.classList.contains('kanon')) { e.preventDefault(); popover(el, tx('k.kanon')); }
 });
+/* ================= демо-кабинет (без сервера) =====================
+   Лендинг / лист входа → «Посмотреть демо кабинета» → #/demo (выбор вида бизнеса из 16) → кабинет вымышленной компании
+   этого сегмента. Все запросы api() в демо обслуживает demoApi() — сеть не используется, записи не сохраняются
+   (изменения → «В демо изменения не сохраняются»), касса имитирует сканирование. Демо-данные помечены, тур из 5 шагов,
+   «Зарегистрировать компанию — бесплатно» открывает настоящий мастер с выбранной категорией. Выход — обычный лендинг.
+   PD_SEGS — общая с приложением водителя демо-сеть партнёров (тексты [ru, ro, en]). */
+const PD_SEGS = [{"k":"sto","cat":"sto","ic":"wrench","n":["СТО","Service auto","Car service"],"pain":["Водители приходят, когда Helper напомнил о замене масла — а вы уже рядом с плюшкой и акцией.","Șoferii vin atunci când Helper le amintește de schimbul de ulei — iar voi sunteți aproape, cu un beneficiu și o promoție.","Drivers come in when Helper reminds them about an oil change — and you are right there with a perk and a promotion."],"co":"Atelierul Mecanic Botanica","rt":4.8,"rc":126,"lvl":"gold","own":"Ion Rusu","ot":["Мастер-приёмщик","Consilier service","Service advisor"],"st":[96,38,41,58,1120,140,210,860,310,820],"pkg":"district","locs":[{"t":["Ботаника","Botanica","Botanica"],"a":["bd. Dacia 27, Ботаника","bd. Dacia 27, Botanica","bd. Dacia 27, Botanica"],"lat":46.9869,"lon":28.8573,"h":["пн–сб 08:30–19:00","lun–sâm 08:30–19:00","Mon–Sat 08:30–19:00"]},{"t":["Чеканы","Ciocana","Ciocana"],"a":["str. Uzinelor 21, Чеканы","str. Uzinelor 21, Ciocana","str. Uzinelor 21, Ciocana"],"lat":47.0411,"lon":28.8935,"h":["пн–сб 09:00–18:00","lun–sâm 09:00–18:00","Mon–Sat 09:00–18:00"]}],"perks":[{"id":"k01","kind":"service","pts":40,"stock":3,"sch":null,"lvl":1,"t":["Бесплатная проверка ходовой","Verificarea gratuită a trenului de rulare","Free suspension check"],"d":["Осмотр подвески, рулевого и тормозов на подъёмнике — 15 минут, с фото-отчётом.","Inspecția suspensiei, direcției și frânelor pe elevator — 15 minute, cu raport foto.","Suspension, steering and brakes checked on the lift — 15 minutes, with a photo report."],"st":"active"},{"id":"x01","kind":"service","pts":35,"stock":null,"sch":null,"lvl":1,"t":["Проверка тормозов","Verificarea frânelor","Brake check"],"d":["Колодки, диски и тормозная жидкость — бесплатно, около 15 минут.","Plăcuțe, discuri și lichid de frână — gratuit, circa 15 minute.","Pads, discs and brake fluid — free, about 15 minutes."],"st":"active"},{"id":"x02","kind":"priority","pts":20,"stock":null,"sch":null,"lvl":1,"t":["Запись без очереди в субботу","Programare fără coadă sâmbăta","No-queue Saturday booking"],"d":["Удобное время в субботу без ожидания.","O oră convenabilă sâmbăta, fără așteptare.","A convenient Saturday slot with no waiting."],"st":"pending"}],"camps":[{"id":"o01","kind":"discount","dk":"none","dv":0,"dt":["Диагностика в подарок","Diagnoză cadou","Free check-up"],"mult":1,"s":-6,"e":24,"cp":true,"geo":false,"due":["oil"],"ex":false,"t":["Бесплатная диагностика ходовой при замене масла","Diagnoza trenului de rulare gratuită la schimbul de ulei","Free suspension check with an oil change"],"x":["Меняете масло у нас — проверим подвеску, рулевое и тормоза на подъёмнике бесплатно, с фото-отчётом. Покажите купон кассиру до оплаты.","Schimbați uleiul la noi — verificăm gratuit suspensia, direcția și frânele pe elevator, cu raport foto. Arătați cuponul casierului înainte de plată.","Change your oil with us and we check the suspension, steering and brakes on the lift for free, with a photo report. Show the coupon before paying."],"tag":"bundle"},{"id":"o02","kind":"discount","dk":"percent","dv":10,"dt":null,"mult":1,"s":-10,"e":40,"cp":true,"geo":false,"due":[],"ex":false,"t":["−10 % на работы по ТО для водителей Helper","−10 % la manopera reviziei pentru șoferii Helper","−10% on service labour for Helper drivers"],"x":["Скидка на работу мастера при плановом ТО. Запчасти — по цене магазина. Покажите купон до оплаты.","Reducere la manopera reviziei planificate. Piesele — la prețul magazinului. Arătați cuponul înainte de plată.","A discount on the mechanic’s labour for a scheduled service. Parts at shop price. Show the coupon before paying."],"tag":"percent"}]},{"k":"ins","cat":"insurance","ic":"shield","n":["Страховая","Asigurări","Insurance"],"pain":["Уведомление тем, у кого скоро заканчивается RCA, — без передачи вам их данных.","O notificare pentru cei cărora le expiră curând RCA — fără să vă transmitem datele lor.","A notification for drivers whose RCA expires soon — without sharing their data with you."],"co":"Asigurări Scut","rt":4.5,"rc":33,"lvl":"silver","own":"Ana Ceban","ot":["Агент","Agent","Agent"],"st":[34,21,12,18,980,90,120,410,180,420],"pkg":"showcase","locs":[{"t":["Центр","Centru","Centre"],"a":["str. Ismail 88, Центр","str. Ismail 88, Centru","str. Ismail 88, Centre"],"lat":47.0201,"lon":28.8406,"h":["пн–пт 09:00–18:00","lun–vin 09:00–18:00","Mon–Fri 09:00–18:00"]},{"t":["Рышкановка","Rîșcani","Rîșcani"],"a":["str. Alecu Russo 6, Рышкановка","str. Alecu Russo 6, Rîșcani","str. Alecu Russo 6, Rîșcani"],"lat":47.0519,"lon":28.8641,"h":["пн–пт 09:00–17:00","lun–vin 09:00–17:00","Mon–Fri 09:00–17:00"]}],"perks":[{"id":"k03","kind":"priority","pts":20,"stock":10,"sch":null,"lvl":1,"t":["Фотоосмотр авто без очереди","Inspecție foto fără coadă","Photo inspection without queuing"],"d":["Осмотр для КАСКО или «Зелёной карты» — сразу, без ожидания.","Inspecția pentru CASCO sau «Carte Verde» — imediat, fără așteptare.","Inspection for CASCO or a Green Card — straight away, no waiting."],"st":"active"},{"id":"x03","kind":"gift","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Аптечка в подарок","Trusă medicală cadou","Free first-aid kit"],"d":["Автомобильная аптечка при визите в офис.","O trusă medicală auto la vizita în oficiu.","A car first-aid kit when you visit our office."],"st":"active"},{"id":"x04","kind":"service","pts":25,"stock":null,"sch":null,"lvl":1,"t":["Консультация по ДТП","Consultație după accident","Accident advice"],"d":["Подскажем, как оформить европротокол и что делать после ДТП.","Vă explicăm cum se completează constatarea amiabilă și ce faceți după accident.","We explain the accident report form and what to do after a crash."],"st":"paused"}],"camps":[{"id":"o03","kind":"discount","dk":"none","dv":0,"dt":["Осмотр в подарок","Inspecție cadou","Free inspection"],"mult":1,"s":-3,"e":45,"cp":true,"geo":false,"due":["insurance"],"ex":true,"t":["Бесплатный осмотр авто при оформлении КАСКО","Inspecția mașinii gratuită la încheierea CASCO","Free car inspection when you take out CASCO"],"x":["Оформляете КАСКО — фотоосмотр и проверка VIN бесплатно и без очереди. Условия страхования — по правилам компании. Пример акции.","Încheiați CASCO — inspecția foto și verificarea VIN sunt gratuite și fără coadă. Condițiile asigurării — conform regulilor companiei. Exemplu de promoție.","Taking out CASCO? The photo inspection and VIN check are free with no queue. Insurance terms follow the company’s rules. Sample promotion."],"tag":"gift-financial"}]},{"k":"wash","cat":"wash","ic":"drop","n":["Автомойка и детейлинг","Spălătorie și detailing","Car wash & detailing"],"pain":["Заполните пустые часы: счастливые часы с плюшкой приводят водителей в будни днём.","Umpleți orele goale: orele fericite cu un beneficiu aduc șoferi în zilele lucrătoare, ziua.","Fill the quiet hours: happy hours with a perk bring drivers in on weekday afternoons."],"co":"Spălătorie Picătura","rt":4.7,"rc":212,"lvl":"gold","own":"Victor Lungu","ot":["Администратор","Administrator","Manager"],"st":[180,64,92,118,1340,220,260,1650,420,1460],"pkg":"district","locs":[{"t":["Чеканы","Ciocana","Ciocana"],"a":["bd. Mircea cel Bătrân 14, Чеканы","bd. Mircea cel Bătrân 14, Ciocana","bd. Mircea cel Bătrân 14, Ciocana"],"lat":47.0447,"lon":28.8902,"h":["ежедневно 08:00–21:00","zilnic 08:00–21:00","daily 08:00–21:00"]},{"t":["Ботаника","Botanica","Botanica"],"a":["str. Grenoble 130, Ботаника","str. Grenoble 130, Botanica","str. Grenoble 130, Botanica"],"lat":46.9935,"lon":28.8299,"h":["ежедневно 08:00–20:00","zilnic 08:00–20:00","daily 08:00–20:00"]}],"perks":[{"id":"k04","kind":"upgrade","pts":15,"stock":8,"sch":{"days":[1,2,3,4,5],"from":"10:00","to":"15:00"},"lvl":1,"t":["Чернение шин","Înnegrirea anvelopelor","Tyre shine"],"d":["К любой мойке — чернение шин бесплатно в счастливые часы.","La orice spălare — înnegrirea anvelopelor gratuit în orele fericite.","Free tyre shine with any wash during happy hours."],"st":"active"},{"id":"x05","kind":"upgrade","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Мойка ковриков","Spălarea covorașelor","Mat cleaning"],"d":["К любой мойке — коврики бесплатно.","La orice spălare — covorașele gratuit.","Free floor-mat cleaning with any wash."],"st":"active"},{"id":"x06","kind":"gift","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Ароматизатор в подарок","Odorizant cadou","Free air freshener"],"d":["Ароматизатор для салона после мойки.","Un odorizant auto după spălare.","A car air freshener after your wash."],"st":"pending"}],"camps":[{"id":"o04","kind":"discount","dk":"percent","dv":20,"dt":null,"mult":1,"s":-14,"e":30,"cp":true,"geo":true,"due":[],"ex":false,"t":["Счастливые часы: −20 % на мойку с 10:00 до 15:00","Ore fericite: −20 % la spălare între 10:00 și 15:00","Happy hours: −20% on a wash from 10:00 to 15:00"],"x":["По будням с 10:00 до 15:00 — скидка 20 % на мойку кузова и салона. Покажите купон до оплаты.","În zilele lucrătoare, între 10:00 și 15:00 — reducere de 20 % la spălarea caroseriei și a salonului. Arătați cuponul înainte de plată.","On weekdays from 10:00 to 15:00, get 20% off an exterior and interior wash. Show the coupon before paying."],"tag":"happy-hours"},{"id":"o05","kind":"discount","dk":"percent","dv":25,"dt":null,"mult":1,"s":-20,"e":60,"cp":true,"geo":false,"due":[],"ex":false,"t":["Первый визит: −25 % на химчистку салона","Prima vizită: −25 % la curățarea chimică a salonului","First visit: −25% on interior deep cleaning"],"x":["Для новых клиентов — скидка 25 % на химчистку салона и озонирование. Один раз на автомобиль.","Pentru clienții noi — reducere de 25 % la curățarea chimică a salonului și ozonare. O singură dată per mașină.","For new customers: 25% off interior deep cleaning and ozone treatment. Once per car."],"tag":"first-visit"}]},{"k":"cafe","cat":"cafe","ic":"cup","n":["Кафе у трассы и при АЗС","Cafenea pe traseu și la benzinărie","Roadside & fuel-station café"],"pain":["Водители с трассы заезжают за кофе за км Helper — и остаются на обед.","Șoferii de pe traseu opresc pentru o cafea pe km Helper — și rămân la prânz.","Drivers on the highway stop for a coffee paid in Helper km — and stay for lunch."],"co":"Popas la Răscruce","rt":4.6,"rc":97,"lvl":"silver","own":"Maria Popa","ot":["Владелец","Proprietar","Owner"],"st":[240,97,130,152,1860,410,380,2900,520,1720],"pkg":"district","locs":[{"t":["M2 · 23 км","M2 · 23 km","M2 · 23 km"],"a":["трасса M2, 23-й км","traseul M2, km 23","M2 highway, km 23"],"lat":47.1702,"lon":28.8301,"h":["ежедневно 07:00–23:00","zilnic 07:00–23:00","daily 07:00–23:00"]},{"t":["M2 · 61 км","M2 · 61 km","M2 · 61 km"],"a":["трасса M2, 61-й км","traseul M2, km 61","M2 highway, km 61"],"lat":47.3801,"lon":28.8155,"h":["ежедневно 07:00–22:00","zilnic 07:00–22:00","daily 07:00–22:00"]}],"perks":[{"id":"k06","kind":"gift","pts":10,"stock":20,"sch":null,"lvl":1,"t":["Кофе в подарок","Cafea cadou","Free coffee"],"d":["Американо или капучино с собой — на кассе по купону.","Americano sau cappuccino la pachet — la casă, cu cupon.","A takeaway Americano or cappuccino — at the till with the coupon."],"st":"active"},{"id":"x07","kind":"gift","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Бутылка воды в дорогу","O sticlă de apă la drum","A bottle of water for the road"],"d":["Вода 0,5 л к любой покупке.","Apă 0,5 l la orice cumpărătură.","A 0.5 L water with any purchase."],"st":"active"},{"id":"x08","kind":"priority","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Заказ без очереди","Comandă fără coadă","Skip the queue"],"d":["Предзаказ по телефону — заберёте без ожидания.","Precomandă prin telefon — o ridicați fără așteptare.","Order ahead by phone and pick up without waiting."],"st":"paused"}],"camps":[{"id":"o06","kind":"discount","dk":"none","dv":0,"dt":["2-й кофе в подарок","A doua cafea cadou","2nd coffee free"],"mult":1,"s":-30,"e":60,"cp":true,"geo":true,"due":[],"ex":false,"t":["Второй кофе в подарок","A doua cafea — cadou","Second coffee on us"],"x":["Берёте кофе — второй для попутчика бесплатно. Каждый день с 7:00 до 11:00 по дороге на север.","Luați o cafea — a doua, pentru însoțitor, e gratuită. Zilnic între 7:00 și 11:00, în drum spre nord.","Buy a coffee and the second one for your passenger is free. Daily from 7:00 to 11:00 on the way north."],"tag":"bundle-gift"},{"id":"o07","kind":"discount","dk":"none","dv":0,"dt":["Десерт в подарок","Desert cadou","Free dessert"],"mult":1,"s":-7,"e":35,"cp":true,"geo":false,"due":[],"ex":false,"t":["По выходным: десерт к обеду в подарок","În weekend: desert cadou la prânz","Weekends: a free dessert with lunch"],"x":["В субботу и воскресенье при заказе обеда — десерт дня бесплатно. Кафе открыто круглосуточно.","Sâmbăta și duminica, la comanda unui prânz — desertul zilei e gratuit. Cafeneaua e deschisă non-stop.","On Saturdays and Sundays, order lunch and get the dessert of the day free. Open 24/7."],"tag":"weekend"}]},{"k":"parts","cat":"parts","ic":"gears","n":["Автозапчасти","Piese auto","Car parts"],"pain":["Helper знает, что машине скоро нужны фильтры и масло, — покажите акцию именно этим водителям.","Helper știe când mașina are nevoie curând de filtre și ulei — arătați promoția exact acestor șoferi.","Helper knows when a car will soon need filters and oil — show your promotion to exactly these drivers."],"co":"Piese Rapide","rt":4.7,"rc":88,"lvl":"silver","own":"Sergiu Bodiu","ot":["Продавец-консультант","Consultant vânzări","Sales advisor"],"st":[120,45,58,71,1050,130,190,940,260,960],"pkg":"showcase","locs":[{"t":["Рышкановка","Rîșcani","Rîșcani"],"a":["str. Kiev 7, Рышкановка","str. Kiev 7, Rîșcani","str. Kiev 7, Rîșcani"],"lat":47.0605,"lon":28.8691,"h":["пн–сб 08:00–19:00","lun–sâm 08:00–19:00","Mon–Sat 08:00–19:00"]},{"t":["Буюканы","Buiucani","Buiucani"],"a":["str. Ion Creangă 64, Буюканы","str. Ion Creangă 64, Buiucani","str. Ion Creangă 64, Buiucani"],"lat":47.0335,"lon":28.7955,"h":["пн–сб 09:00–18:00","lun–sâm 09:00–18:00","Mon–Sat 09:00–18:00"]}],"perks":[{"id":"k08","kind":"gift","pts":10,"stock":15,"sch":null,"lvl":1,"t":["Ароматизатор в подарок","Odorizant cadou","Free air freshener"],"d":["Ароматизатор для салона к любой покупке.","Un odorizant auto la orice cumpărătură.","A car air freshener with any purchase."],"st":"active"},{"id":"x09","kind":"service","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Подбор запчастей по VIN","Selecția pieselor după VIN","Parts lookup by VIN"],"d":["Подберём фильтры и масло точно под ваш автомобиль.","Alegem filtrele și uleiul exact pentru mașina voastră.","We match filters and oil exactly to your car."],"st":"active"},{"id":"x10","kind":"gift","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Влажные салфетки для салона","Șervețele umede pentru salon","Interior wipes"],"d":["Упаковка салфеток для пластика и стёкол.","Un pachet de șervețele pentru plastic și geamuri.","A pack of wipes for plastics and glass."],"st":"pending"}],"camps":[{"id":"o08","kind":"discount","dk":"percent","dv":10,"dt":null,"mult":1,"s":-5,"e":50,"cp":true,"geo":false,"due":["oil","filters"],"ex":false,"t":["−10 % на масла и фильтры для уровня «Активный» и выше","−10 % la uleiuri și filtre de la nivelul «Activ»","−10% on oils and filters from the “Active” level"],"x":["Для водителей Helper с уровнем 3 «Активный» и выше. Покажите купон кассиру до оплаты.","Pentru șoferii Helper cu nivelul 3 «Activ» și mai sus. Arătați cuponul casierului înainte de plată.","For Helper drivers at level 3 “Active” and above. Show the coupon to the cashier before paying."],"tag":"level"}]},{"k":"tires","cat":"tires","ic":"tire","n":["Шины и шиномонтаж","Anvelope și vulcanizare","Tyres & tyre fitting"],"pain":["Сезон смены шин — вовремя: приложение напомнит водителям, а запись придёт к вам.","Sezonul schimbului de anvelope — la timp: aplicația le amintește șoferilor, iar programările vin la voi.","Tyre-change season on time: the app reminds drivers, and the bookings come to you."],"co":"Vulcanizare Roata Bună","rt":4.8,"rc":143,"lvl":"gold","own":"Andrei Țurcanu","ot":["Мастер","Meșter","Technician"],"st":[140,52,77,95,1280,160,230,1120,340,1180],"pkg":"district","locs":[{"t":["Телецентр","Telecentru","Telecentru"],"a":["str. Grenoble 211, Телецентр","str. Grenoble 211, Telecentru","str. Grenoble 211, Telecentru"],"lat":46.9981,"lon":28.8117,"h":["ежедневно 08:00–20:00","zilnic 08:00–20:00","daily 08:00–20:00"]},{"t":["Чеканы","Ciocana","Ciocana"],"a":["str. Petru Zadnipru 2, Чеканы","str. Petru Zadnipru 2, Ciocana","str. Petru Zadnipru 2, Ciocana"],"lat":47.0461,"lon":28.8851,"h":["ежедневно 08:00–19:00","zilnic 08:00–19:00","daily 08:00–19:00"]}],"perks":[{"id":"k09","kind":"service","pts":5,"stock":20,"sch":null,"lvl":1,"t":["Проверка давления и подкачка","Verificarea presiunii și umflarea roților","Tyre pressure check and inflation"],"d":["Все четыре колеса и запаска — 10 минут.","Toate cele patru roți și roata de rezervă — 10 minute.","All four wheels and the spare — 10 minutes."],"st":"active"},{"id":"x11","kind":"service","pts":30,"stock":null,"sch":null,"lvl":1,"t":["Проверка балансировки","Verificarea echilibrării","Wheel balance check"],"d":["Проверим балансировку колёс на стенде.","Verificăm echilibrarea roților pe stand.","We check your wheel balance on the machine."],"st":"active"},{"id":"x12","kind":"priority","pts":20,"stock":null,"sch":null,"lvl":1,"t":["Шиномонтаж без очереди","Vulcanizare fără coadă","Tyre fitting without queuing"],"d":["В сезон — ваше время по записи без ожидания.","În sezon — ora voastră, cu programare, fără așteptare.","In peak season — your booked slot with no waiting."],"st":"active"}],"camps":[{"id":"o09","kind":"discount","dk":"fixed","dv":100,"dt":null,"mult":1,"s":-8,"e":21,"cp":true,"geo":false,"due":[],"ex":false,"t":["−100 MDL на шиномонтаж 4 колёс","−100 MDL la montajul a 4 roți","−100 MDL on fitting 4 tyres"],"x":["Снятие, балансировка и установка четырёх колёс — на 100 MDL дешевле по купону.","Demontarea, echilibrarea și montarea a patru roți — cu 100 MDL mai ieftin cu cupon.","Removal, balancing and fitting of four wheels — 100 MDL cheaper with the coupon."],"tag":"fixed"},{"id":"o10","kind":"discount","dk":"none","dv":0,"dt":["Хранение в подарок","Depozitare cadou","Free storage"],"mult":1,"s":-2,"e":50,"cp":true,"geo":false,"due":["tires"],"ex":false,"t":["Шины к зиме: хранение летнего комплекта — в подарок","Anvelope de iarnă: depozitarea setului de vară — cadou","Winter tyres: summer set storage on us"],"x":["С 15 октября по 30 ноября при сезонной смене шин — хранение летнего комплекта до весны бесплатно.","Între 15 octombrie și 30 noiembrie, la schimbul sezonier — depozitarea setului de vară până în primăvară e gratuită.","From 15 October to 30 November, change your tyres for the season and we store your summer set until spring for free."],"tag":"seasonal"}]},{"k":"mall","cat":"other","ic":"building","n":["Торговый центр","Centru comercial","Shopping mall"],"pain":["Парковка и плюшка за км Helper — повод заехать именно к вам в выходные.","Parcarea și un beneficiu pe km Helper — un motiv să vină exact la voi în weekend.","Parking and a perk for Helper km — a reason to come to you at the weekend."],"co":"Galeria Sudului","rt":4.3,"rc":51,"lvl":"silver","own":"Elena Munteanu","ot":["Управляющий","Administrator","Centre manager"],"st":[310,120,140,176,2200,300,410,3800,610,2350],"pkg":"district","locs":[{"t":["Ботаника","Botanica","Botanica"],"a":["bd. Decebal 23, Ботаника","bd. Decebal 23, Botanica","bd. Decebal 23, Botanica"],"lat":46.9897,"lon":28.8619,"h":["ежедневно 09:00–22:00","zilnic 09:00–22:00","daily 09:00–22:00"]}],"perks":[{"id":"k10","kind":"gift","pts":25,"stock":30,"sch":null,"lvl":1,"t":["2 часа парковки бесплатно","2 ore de parcare gratuit","2 hours of free parking"],"d":["Талон на 2 часа парковки у центра — без обязательных покупок.","Un tichet pentru 2 ore de parcare la centru — fără cumpărături obligatorii.","A ticket for 2 hours of parking at the centre — no purchase required."],"st":"active"},{"id":"x13","kind":"gift","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Кофе в фуд-корте","Cafea în food court","Coffee in the food court"],"d":["Капучино в любой кофейне фуд-корта.","Un cappuccino la orice cafenea din food court.","A cappuccino at any food-court café."],"st":"active"},{"id":"x14","kind":"upgrade","pts":20,"stock":null,"sch":null,"lvl":1,"t":["Чистка ковриков, пока вы за покупками","Curățarea covorașelor cât faceți cumpărături","Mat cleaning while you shop"],"d":["Пока вы за покупками — коврики почистят бесплатно.","Cât faceți cumpărături — covorașele se curăță gratuit.","While you shop, your mats are cleaned for free."],"st":"pending"}],"camps":[{"id":"o11","kind":"discount","dk":"none","dv":0,"dt":["3 часа парковки","3 ore de parcare","3 hours parking"],"mult":1,"s":-10,"e":70,"cp":true,"geo":false,"due":[],"ex":false,"t":["Выходные: 3 часа парковки бесплатно","Weekend: 3 ore de parcare gratuit","Weekends: 3 hours of free parking"],"x":["В субботу и воскресенье при покупке от 300 MDL в любом магазине центра — 3 часа парковки бесплатно.","Sâmbăta și duminica, la cumpărături de la 300 MDL în orice magazin al centrului — 3 ore de parcare gratuit.","On Saturdays and Sundays, spend 300 MDL in any shop in the centre and park for 3 hours free."],"tag":"weekend"}]},{"k":"fuel","cat":"fuel","ic":"pump","n":["АЗС","Benzinărie","Fuel station"],"pain":["Водители, которые каждый день проезжают мимо, получают уведомление — и заправляются у вас.","Șoferii care trec zilnic pe lângă voi primesc o notificare — și alimentează la voi.","Drivers who pass by every day get a notification — and fill up at your station."],"co":"Carburant Expres","rt":4.5,"rc":301,"lvl":"platinum","own":"Dorin Grosu","ot":["Директор сети","Director rețea","Network director"],"st":[420,150,210,260,3100,520,640,5400,880,3420],"pkg":"district","locs":[{"t":["Ботаника","Botanica","Botanica"],"a":["bd. Dacia 58, Ботаника","bd. Dacia 58, Botanica","bd. Dacia 58, Botanica"],"lat":46.9806,"lon":28.8655,"h":["круглосуточно","non-stop","24/7"]},{"t":["Рышкановка","Rîșcani","Rîșcani"],"a":["bd. Moscova 21, Рышкановка","bd. Moscova 21, Rîșcani","bd. Moscova 21, Rîșcani"],"lat":47.0577,"lon":28.8752,"h":["круглосуточно","non-stop","24/7"]},{"t":["M1 · 9 км","M1 · 9 km","M1 · 9 km"],"a":["трасса M1, 9-й км","traseul M1, km 9","M1 highway, km 9"],"lat":47.0336,"lon":28.7228,"h":["круглосуточно","non-stop","24/7"]}],"perks":[{"id":"k11","kind":"gift","pts":20,"stock":15,"sch":null,"lvl":1,"t":["Омывайка 1 л","Lichid de parbriz 1 l","Washer fluid 1 L"],"d":["Летняя или зимняя омывающая жидкость — на любой станции сети.","Lichid de parbriz de vară sau de iarnă — la orice stație a rețelei.","Summer or winter washer fluid — at any of our stations."],"st":"active"},{"id":"x15","kind":"gift","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Кофе в подарок","Cafea cadou","Free coffee"],"d":["Чашка кофе на любой станции сети.","O cafea la orice stație a rețelei.","A cup of coffee at any of our stations."],"st":"active"},{"id":"x16","kind":"service","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Подкачка шин","Umflarea roților","Tyre inflation"],"d":["Проверим давление и подкачаем колёса на заправке.","Verificăm presiunea și umflăm roțile la benzinărie.","We check the pressure and inflate your tyres at the station."],"st":"paused"}],"camps":[{"id":"o12","kind":"discount","dk":"none","dv":0,"dt":["−1 MDL/л","−1 MDL/l","−1 MDL/L"],"mult":1,"s":-12,"e":30,"cp":true,"geo":false,"due":[],"ex":false,"t":["−1 MDL/л на всё топливо по будням","−1 MDL/l la tot carburantul în zilele lucrătoare","−1 MDL/L on all fuel on weekdays"],"x":["С понедельника по пятницу — скидка 1 MDL на литр бензина, дизеля и газа на всех станциях сети. Покажите купон до оплаты.","De luni până vineri — reducere de 1 MDL la litrul de benzină, motorină și gaz la toate stațiile rețelei. Arătați cuponul înainte de plată.","Monday to Friday: 1 MDL off every litre of petrol, diesel and LPG at all our stations. Show the coupon before paying."],"tag":"per-litre"},{"id":"o13","kind":"discount","dk":"none","dv":0,"dt":["Кофе в подарок","Cafea cadou","Free coffee"],"mult":1,"s":-20,"e":60,"cp":true,"geo":true,"due":[],"ex":false,"t":["Проезжаете по M3? Кофе в подарок при заправке от 20 л","Treceți pe M3? Cafea cadou la alimentare de la 20 l","Driving on the M3? Free coffee when you fill up 20 L+"],"x":["Для тех, кто регулярно ездит по трассе M3: заправка от 20 литров — кофе с собой бесплатно. Уведомление приходит, только если вы рядом и разрешили геолокацию.","Pentru cei care circulă des pe traseul M3: la alimentare de la 20 de litri — o cafea la pachet gratuit. Notificarea vine doar dacă sunteți aproape și ați permis geolocația.","For regular M3 drivers: fill up 20 litres or more and get a takeaway coffee free. You only get the notification if you are nearby and allowed location."],"tag":"geo-regulars"}]},{"k":"dealer","cat":"dealer","ic":"car","n":["Автодилер","Dealer auto","Car dealer"],"pain":["Владельцы машин рядом узнают о тест-драйвах и сервисе у официального дилера.","Proprietarii de mașini din apropiere află despre test-drive-uri și service-ul dealerului oficial.","Car owners nearby hear about test drives and service at an official dealer."],"co":"AutoGalerie Buiucani","rt":4.7,"rc":45,"lvl":"gold","own":"Natalia Rotari","ot":["Менеджер сервиса","Manager service","Service manager"],"st":[48,22,19,26,760,60,110,520,240,610],"pkg":"showcase","locs":[{"t":["Буюканы","Buiucani","Buiucani"],"a":["str. Alba Iulia 75, Буюканы","str. Alba Iulia 75, Buiucani","str. Alba Iulia 75, Buiucani"],"lat":47.0398,"lon":28.782,"h":["пн–сб 09:00–19:00","lun–sâm 09:00–19:00","Mon–Sat 09:00–19:00"]},{"t":["Телецентр","Telecentru","Telecentru"],"a":["str. Sarmizegetusa 90, Телецентр","str. Sarmizegetusa 90, Telecentru","str. Sarmizegetusa 90, Telecentru"],"lat":46.9962,"lon":28.8221,"h":["пн–сб 09:00–18:00","lun–sâm 09:00–18:00","Mon–Sat 09:00–18:00"]}],"perks":[{"id":"k13","kind":"upgrade","pts":35,"stock":5,"sch":null,"lvl":2,"t":["Мойка при ТО у дилера","Spălare la revizia la dealer","Free wash with a dealer service"],"d":["При плановом ТО в нашем сервисе — мойка кузова бесплатно.","La revizia planificată în service-ul nostru — spălarea caroseriei gratuit.","A free exterior wash with a scheduled service at our workshop."],"st":"active"},{"id":"x17","kind":"service","pts":30,"stock":null,"sch":null,"lvl":1,"t":["Проверка по 20 пунктам","Verificare în 20 de puncte","20-point check"],"d":["Для автомобилей любых марок — с отчётом.","Pentru mașini de orice marcă — cu raport.","For any make of car — with a report."],"st":"active"},{"id":"x18","kind":"priority","pts":25,"stock":null,"sch":null,"lvl":1,"t":["Запись на ТО без очереди","Revizie fără coadă","Priority service booking"],"d":["Ближайшее свободное время в сервисе дилера.","Cea mai apropiată oră liberă în service-ul dealerului.","The nearest free slot at the dealer’s workshop."],"st":"pending"}],"camps":[{"id":"o14","kind":"announcement","dk":"none","dv":0,"dt":null,"mult":1,"s":-1,"e":9,"cp":false,"geo":false,"due":[],"ex":false,"t":["Дни открытых дверей: тест-драйв и кофе","Zilele ușilor deschise: test-drive și cafea","Open days: test drive and coffee"],"x":["В субботу с 10:00 до 16:00 — тест-драйвы новых моделей и проверка по 20 пунктам для владельцев любых марок.","Sâmbătă, între 10:00 și 16:00 — test-drive-uri cu modele noi și o verificare în 20 de puncte pentru orice marcă.","Saturday from 10:00 to 16:00: test drives of new models and a 20-point check for any make."],"tag":"announcement"}]},{"k":"leasing","cat":"other","ic":"doc","n":["Лизинг","Leasing","Leasing"],"pain":["Консультация и подарок для водителей, которые думают о новой машине, — без обещаний условий.","O consultație și un cadou pentru șoferii care se gândesc la o mașină nouă — fără promisiuni despre condiții.","A consultation and a gift for drivers thinking about a new car — without promising any terms."],"co":"Leasing Drum Lin","rt":4.6,"rc":12,"lvl":"bronze","own":"Igor Spătaru","ot":["Консультант","Consultant","Consultant"],"st":[18,12,7,11,540,40,70,300,120,260],"pkg":"showcase","locs":[{"t":["Центр","Centru","Centre"],"a":["bd. Ștefan cel Mare 71, Центр","bd. Ștefan cel Mare 71, Centru","bd. Ștefan cel Mare 71, Centre"],"lat":47.0247,"lon":28.8336,"h":["пн–пт 09:00–18:00","lun–vin 09:00–18:00","Mon–Fri 09:00–18:00"]}],"perks":[{"id":"k14","kind":"gift","pts":30,"stock":5,"sch":null,"lvl":1,"t":["Ежедневник Helper в подарок","Agenda Helper cadou","Free Helper planner"],"d":["Сервисная книжка Helper на год — заберите в офисе. Пример плюшки.","Carnetul de service Helper pentru un an — îl ridicați de la oficiu. Exemplu de beneficiu.","A Helper service planner for the year — pick it up at the office. Sample perk."],"st":"active"},{"id":"x19","kind":"service","pts":20,"stock":null,"sch":null,"lvl":1,"t":["Расчёт графика платежей","Calculul graficului de plăți","Payment schedule estimate"],"d":["Предварительный расчёт за 15 минут — без обязательств. Пример.","Un calcul preliminar în 15 minute — fără obligații. Exemplu.","A preliminary estimate in 15 minutes — no obligation. Sample."],"st":"active"}],"camps":[{"id":"o15","kind":"discount","dk":"none","dv":0,"dt":["Ежедневник в подарок","Agendă cadou","Free planner"],"mult":1,"s":-15,"e":75,"cp":true,"geo":false,"due":[],"ex":true,"t":["Консультация по лизингу + ежедневник Helper в подарок","Consultație despre leasing + agenda Helper cadou","Leasing consultation + a free Helper planner"],"x":["Расскажем, как устроен лизинг авто для частных лиц и бизнеса. Условия финансирования — по решению компании. Пример акции.","Vă explicăm cum funcționează leasingul auto pentru persoane fizice și companii. Condițiile de finanțare — la decizia companiei. Exemplu de promoție.","We explain how car leasing works for individuals and businesses. Financing terms are decided by the company. Sample promotion."],"tag":"gift-financial"}]},{"k":"bank","cat":"other","ic":"wallet","n":["Банк (автокредиты)","Bancă (credite auto)","Bank (car loans)"],"pain":["Подарки и сервис вместо финансовых обещаний: год Helper Premium к автокредиту.","Cadouri și servicii în loc de promisiuni financiare: un an Helper Premium la creditul auto.","Gifts and services instead of financial promises: a year of Helper Premium with a car loan."],"co":"Banca Plaiului","rt":null,"rc":0,"lvl":"bronze","own":"Irina Cojocaru","ot":["Менеджер","Manager","Manager"],"st":[26,17,9,14,690,50,90,380,150,330],"pkg":"showcase","locs":[{"t":["Центр","Centru","Centre"],"a":["str. București 45, Центр","str. București 45, Centru","str. București 45, Centre"],"lat":47.0258,"lon":28.8312,"h":["пн–пт 09:00–17:00","lun–vin 09:00–17:00","Mon–Fri 09:00–17:00"]},{"t":["Ботаника","Botanica","Botanica"],"a":["bd. Dacia 12, Ботаника","bd. Dacia 12, Botanica","bd. Dacia 12, Botanica"],"lat":46.9911,"lon":28.8541,"h":["пн–пт 09:00–17:00","lun–vin 09:00–17:00","Mon–Fri 09:00–17:00"]}],"perks":[{"id":"k15","kind":"gift","pts":30,"stock":10,"sch":null,"lvl":1,"t":["Ежедневник Helper в подарок","Agenda Helper cadou","Free Helper planner"],"d":["В любом отделении банка по купону. Пример плюшки.","În orice filială a băncii, cu cupon. Exemplu de beneficiu.","At any branch of the bank with the coupon. Sample perk."],"st":"active"},{"id":"x20","kind":"service","pts":20,"stock":null,"sch":null,"lvl":1,"t":["Консультация по автокредиту","Consultație despre creditul auto","Car-loan consultation"],"d":["Ответим на вопросы о документах — без обязательств. Пример.","Răspundem la întrebări despre acte — fără obligații. Exemplu.","We answer questions about the documents — no obligation. Sample."],"st":"active"}],"camps":[{"id":"o16","kind":"discount","dk":"none","dv":0,"dt":["Год Premium","Un an Premium","1 year Premium"],"mult":1,"s":-15,"e":75,"cp":true,"geo":false,"due":[],"ex":true,"t":["Год Helper Premium при оформлении автокредита","Un an Helper Premium la creditul auto","A year of Helper Premium with a car loan"],"x":["Оформляете автокредит в банке — год Helper Premium в подарок. Решение по кредиту принимает банк. Пример акции.","Luați un credit auto la bancă — un an Helper Premium cadou. Decizia privind creditul o ia banca. Exemplu de promoție.","Take out a car loan with the bank and get a year of Helper Premium. The bank decides on the loan. Sample promotion."],"tag":"gift-financial"}]},{"k":"school","cat":"school","ic":"book","n":["Автошкола","Școală auto","Driving school"],"pain":["Пробное занятие за км Helper — для тех, кто давно не водил или учит детей.","O lecție de probă pe km Helper — pentru cei care n-au mai condus demult sau își învață copiii.","A trial lesson for Helper km — for people who haven’t driven in a while or are teaching their kids."],"co":"Școala Auto Volan Sigur","rt":4.9,"rc":76,"lvl":"silver","own":"Vasile Melnic","ot":["Инструктор","Instructor","Instructor"],"st":[22,15,9,12,610,45,80,350,90,300],"pkg":"showcase","locs":[{"t":["Рышкановка","Rîșcani","Rîșcani"],"a":["str. Dimo 11, Рышкановка","str. Dimo 11, Rîșcani","str. Dimo 11, Rîșcani"],"lat":47.0632,"lon":28.8618,"h":["пн–сб 08:00–20:00","lun–sâm 08:00–20:00","Mon–Sat 08:00–20:00"]}],"perks":[{"id":"k16","kind":"service","pts":50,"stock":2,"sch":null,"lvl":2,"t":["Пробное занятие на площадке","Lecție de probă pe poligon","Trial lesson on the track"],"d":["30 минут с инструктором на закрытой площадке — для тех, кто давно не водил.","30 de minute cu instructorul pe un poligon închis — pentru cei care n-au mai condus demult.","30 minutes with an instructor on a closed track — for those who haven’t driven in a while."],"st":"active"},{"id":"x21","kind":"service","pts":30,"stock":null,"sch":null,"lvl":1,"t":["Разбор маршрута экзамена","Analiza traseului de examen","Exam route walkthrough"],"d":["Покажем маршрут и типичные ошибки на экзамене.","Vă arătăm traseul și greșelile tipice la examen.","We show you the route and the usual mistakes at the exam."],"st":"active"},{"id":"x22","kind":"gift","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Тесты ПДД — доступ на месяц","Teste de circulație — acces o lună","Highway-code tests — 1 month access"],"d":["Онлайн-тесты для подготовки к теории.","Teste online pentru pregătirea teoriei.","Online tests to prepare for the theory exam."],"st":"paused"}],"camps":[{"id":"o17","kind":"discount","dk":"fixed","dv":500,"dt":null,"mult":1,"s":-12,"e":40,"cp":true,"geo":false,"due":[],"ex":false,"t":["−500 MDL на курс категории B","−500 MDL la cursul categoria B","−500 MDL on a category B course"],"x":["Запишитесь на курс через Helper — скидка 500 MDL. Теория онлайн, практика на площадке в Рышкановке.","Înscrieți-vă la curs prin Helper — reducere de 500 MDL. Teoria online, practica pe poligon în Rîșcani.","Sign up through Helper and get 500 MDL off. Theory online, practice on our track in Rîșcani."],"tag":"fixed"}]},{"k":"tow","cat":"tow","ic":"sos","n":["Эвакуатор и помощь на дороге","Evacuare și asistență rutieră","Towing & roadside help"],"pain":["Ваш номер — в приложении у водителя в момент, когда машина не заводится.","Numărul vostru este în aplicația șoferului exact când mașina nu pornește.","Your number is in the driver’s app right when the car won’t start."],"co":"Asist Rutier 24","rt":4.8,"rc":54,"lvl":"gold","own":"Pavel Botnaru","ot":["Диспетчер","Dispecer","Dispatcher"],"st":[31,19,14,20,720,80,100,450,130,450],"pkg":"showcase","locs":[{"t":["Буюканы","Buiucani","Buiucani"],"a":["str. Vasile Lupu 40, Буюканы","str. Vasile Lupu 40, Buiucani","str. Vasile Lupu 40, Buiucani"],"lat":47.0451,"lon":28.7774,"h":["круглосуточно","non-stop","24/7"]},{"t":["M2 · 15 км","M2 · 15 km","M2 · 15 km"],"a":["трасса M2, 15-й км","traseul M2, km 15","M2 highway, km 15"],"lat":47.1171,"lon":28.8414,"h":["круглосуточно","non-stop","24/7"]}],"perks":[{"id":"k17","kind":"priority","pts":30,"stock":5,"sch":null,"lvl":1,"t":["Приоритетный выезд эвакуатора","Evacuator cu prioritate","Priority tow truck"],"d":["Ваш вызов — первым в очереди по Кишинёву, консультация 24/7 бесплатно.","Apelul vostru e primul la rând în Chișinău, consultația 24/7 — gratuită.","Your call goes first in Chișinău; 24/7 advice is free."],"st":"active"},{"id":"x23","kind":"service","pts":25,"stock":null,"sch":null,"lvl":1,"t":["Запуск двигателя «прикуриванием»","Pornirea motorului cu cabluri","Jump start"],"d":["Приедем и поможем завести машину в черте города.","Venim și vă ajutăm să porniți mașina în oraș.","We come and help start your car within the city."],"st":"active"}],"camps":[{"id":"o18","kind":"discount","dk":"percent","dv":15,"dt":null,"mult":1,"s":-25,"e":65,"cp":true,"geo":false,"due":[],"ex":false,"t":["−15 % на эвакуацию по Кишинёву","−15 % la evacuare în Chișinău","−15% on towing in Chișinău"],"x":["Эвакуатор по городу со скидкой 15 % для водителей Helper. Круглосуточно, подача от 30 минут.","Evacuator în oraș cu reducere de 15 % pentru șoferii Helper. Non-stop, sosire de la 30 de minute.","City towing at 15% off for Helper drivers. 24/7, arrival from 30 minutes."],"tag":"percent"}]},{"k":"itp","cat":"other","ic":"check","n":["Техосмотр (ITP)","Inspecție tehnică (ITP)","Vehicle inspection (ITP)"],"pain":["Helper помнит дату техосмотра каждого водителя — напоминание приведёт их к вам.","Helper ține minte data inspecției tehnice a fiecărui șofer — memento-ul îi aduce la voi.","Helper remembers every driver’s inspection date — the reminder brings them to you."],"co":"Testare Tehnică Telecentru","rt":4.4,"rc":29,"lvl":"bronze","own":"Tudor Ciobanu","ot":["Инспектор","Inspector","Inspector"],"st":[41,23,15,19,520,55,70,380,60,380],"pkg":"showcase","locs":[{"t":["Телецентр","Telecentru","Telecentru"],"a":["str. Pietrarilor 6, Телецентр","str. Pietrarilor 6, Telecentru","str. Pietrarilor 6, Telecentru"],"lat":47.0014,"lon":28.8072,"h":["пн–сб 08:00–17:00","lun–sâm 08:00–17:00","Mon–Sat 08:00–17:00"]}],"perks":[{"id":"k18","kind":"service","pts":15,"stock":8,"sch":null,"lvl":1,"t":["Предварительная проверка фар","Verificarea prealabilă a farurilor","Headlight pre-check"],"d":["Проверим регулировку фар и лампы до техосмотра — чтобы пройти с первого раза.","Verificăm reglajul farurilor și becurile înainte de inspecție — ca s-o treceți din prima.","We check headlight alignment and bulbs before the inspection so you pass first time."],"st":"active"},{"id":"x24","kind":"service","pts":10,"stock":null,"sch":null,"lvl":1,"t":["Проверка аптечки и огнетушителя","Verificarea trusei și a extinctorului","First-aid kit and extinguisher check"],"d":["Подскажем, что заменить перед техосмотром.","Vă spunem ce trebuie înlocuit înainte de inspecție.","We tell you what to replace before the inspection."],"st":"active"}],"camps":[{"id":"o19","kind":"bonus","dk":"none","dv":0,"dt":null,"mult":2,"s":-9,"e":22,"cp":false,"geo":false,"due":[],"ex":false,"t":["Двойные км Helper за техосмотр","Km Helper dubli pentru inspecția tehnică","Double Helper km for an inspection"],"x":["Пройдите техосмотр у нас в этом месяце — за визит придёт в 2 раза больше км Helper.","Faceți inspecția tehnică la noi luna aceasta — pentru vizită primiți de 2 ori mai mulți km Helper.","Get your inspection done with us this month and earn twice the Helper km for the visit."],"tag":"km-bonus"}]},{"k":"parking","cat":"other","ic":"park","n":["Парковка","Parcare","Parking"],"pain":["Свободные места утром и вечером — плюшка «первый час бесплатно» заполняет их.","Locuri libere dimineața și seara — beneficiul «prima oră gratuită» le umple.","Empty spaces in the morning and evening — a “first hour free” perk fills them."],"co":"Parcare Centru Plus","rt":4.2,"rc":19,"lvl":"bronze","own":"Olga Guțu","ot":["Администратор","Administrator","Manager"],"st":[260,88,110,140,1450,0,210,2600,180,1640],"pkg":"showcase","locs":[{"t":["Центр","Centru","Centre"],"a":["str. Vasile Alecsandri 1, Центр","str. Vasile Alecsandri 1, Centru","str. Vasile Alecsandri 1, Centre"],"lat":47.0229,"lon":28.8381,"h":["круглосуточно","non-stop","24/7"]}],"perks":[{"id":"k19","kind":"gift","pts":20,"stock":25,"sch":{"days":[1,2,3,4,5],"from":"07:00","to":"10:00"},"lvl":1,"t":["Первый час бесплатно","Prima oră gratuit","First hour free"],"d":["Один бесплатный час парковки в центре — по будням утром.","O oră de parcare gratuită în centru — în zilele lucrătoare, dimineața.","One free hour of parking in the centre — weekday mornings."],"st":"active"},{"id":"x25","kind":"priority","pts":15,"stock":null,"sch":null,"lvl":1,"t":["Место у входа","Loc lângă intrare","Space near the entrance"],"d":["Зарезервируем место у входа на 2 часа.","Vă rezervăm un loc lângă intrare pentru 2 ore.","We reserve a space by the entrance for 2 hours."],"st":"active"}],"camps":[{"id":"o20","kind":"discount","dk":"none","dv":0,"dt":["1-й час бесплатно","Prima oră gratuit","1st hour free"],"mult":1,"s":-30,"e":90,"cp":true,"geo":false,"due":[],"ex":false,"t":["Утром до 10:00 — первый час парковки бесплатно","Dimineața până la 10:00 — prima oră de parcare gratuit","Before 10:00 — first hour of parking free"],"x":["По будням при въезде до 10:00 первый час — бесплатно. Центр, 2 минуты до бульвара Штефан чел Маре.","În zilele lucrătoare, la intrare până la 10:00, prima oră e gratuită. Centru, la 2 minute de bd. Ștefan cel Mare.","On weekdays, enter before 10:00 and the first hour is free. City centre, 2 minutes from Ștefan cel Mare boulevard."],"tag":"happy-hours"}]},{"k":"fleet","cat":"other","ic":"users","n":["Автопарк и такси-сервис","Flotă auto și taxi","Fleet & taxi service"],"pain":["Подменный автомобиль и трансфер, пока машина клиента в ремонте, — новые заказы без рекламы.","O mașină de schimb și transfer cât timp mașina clientului e în reparație — comenzi noi fără reclamă.","A replacement car and a ride while the customer’s car is in repair — new orders without advertising."],"co":"Flota Urbană","rt":4.5,"rc":22,"lvl":"silver","own":"Alexandru Moraru","ot":["Диспетчер","Dispecer","Dispatcher"],"st":[29,16,8,12,480,35,60,290,100,340],"pkg":"showcase","locs":[{"t":["Чеканы","Ciocana","Ciocana"],"a":["str. Otovasca 13, Чеканы","str. Otovasca 13, Ciocana","str. Otovasca 13, Ciocana"],"lat":47.0398,"lon":28.9004,"h":["ежедневно 07:00–22:00","zilnic 07:00–22:00","daily 07:00–22:00"]}],"perks":[{"id":"k20","kind":"service","pts":45,"stock":3,"sch":null,"lvl":4,"t":["Трансфер, пока авто в ремонте","Transfer cât mașina e în reparație","A ride while your car is repaired"],"d":["Такси нашего парка отвезёт вас домой или на работу по Кишинёву.","Un taxi din flota noastră vă duce acasă sau la serviciu prin Chișinău.","A taxi from our fleet takes you home or to work anywhere in Chișinău."],"st":"active"},{"id":"x26","kind":"priority","pts":25,"stock":null,"sch":null,"lvl":1,"t":["Подменный автомобиль без очереди","Mașină de schimb fără coadă","Priority replacement car"],"d":["Первым в очереди на подменный автомобиль.","Primul la rând pentru o mașină de schimb.","First in line for a replacement car."],"st":"active"}],"camps":[{"id":"o21","kind":"discount","dk":"percent","dv":20,"dt":null,"mult":1,"s":-6,"e":55,"cp":true,"geo":false,"due":[],"ex":false,"t":["−20 % на подменный автомобиль на время ремонта","−20 % la mașina de schimb pe durata reparației","−20% on a replacement car while yours is repaired"],"x":["Ваша машина в сервисе? Подменный автомобиль на 1–7 дней со скидкой 20 %. Нужны паспорт и права.","Mașina e în service? O mașină de schimb pe 1–7 zile cu reducere de 20 %. Aveți nevoie de buletin și permis.","Car in the workshop? A replacement car for 1–7 days at 20% off. Bring your ID and driving licence."],"tag":"percent"}]}];
+const PD_LV = {bronze: [0, 300, 50], silver: [300, 1000, 150], gold: [1000, 3000, 400], platinum: [3000, null, 1000]}; /* опыт от/до, бесплатные гео в месяц */
+const PD_DEMAND = {sto: ['oil', 'brakes', 'filters'], ins: ['inspection', 'diagnostics'], wash: ['wash', 'pressure'], cafe: ['fuel', 'wash'], parts: ['filters', 'oil', 'battery'], tires: ['tires', 'pressure'], mall: ['wash', 'fuel'],
+  fuel: ['fuel', 'washer', 'pressure'], dealer: ['diagnostics', 'oil'], leasing: ['diagnostics'], bank: ['inspection'], school: ['other'], tow: ['battery', 'tires'], itp: ['inspection', 'diagnostics'], parking: ['wash'], fleet: ['diagnostics', 'oil']};
+const PD_CASH = ['Elena', 'Mihai', 'Cristina'];
+const pdT = a => Array.isArray(a) ? (a[LIX[LANG]] || a[0]) : (a || '');
+const pdSeg = () => PD_SEGS.find(s => s.k === DEMO.seg) || PD_SEGS[0];
+const pdPid = () => 900 + PD_SEGS.indexOf(pdSeg());
+const pdIso = (days, h, m) => { const d = new Date(); d.setDate(d.getDate() + (days || 0)); if (h != null) d.setHours(h, m || 0, 0, 0); return d.toISOString(); };
+const pdDay = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); };
+const pdLvl = () => { const s = pdSeg(), L = PD_LV[s.lvl] || PD_LV.bronze; return {key: s.lvl, title: tx('plv.' + s.lvl), from: L[0], to: L[1], geo: L[2]}; };
+/* опыт партнёра — внутри диапазона его уровня (до следующего — 25–45 %) */
+const pdXp = () => { const lv = pdLvl(), i = PD_SEGS.indexOf(pdSeg()); return lv.to ? Math.round(lv.from + (lv.to - lv.from) * (0.55 + (i % 5) * 0.05)) : lv.from + 640 + i * 35; };
+const pdGeoUsed = () => { const lv = pdLvl(); return Math.min(Math.round(lv.geo * 0.72), Math.round(pdSeg().st[5] * 0.6)); };
+/* состояние демо в памяти: касса (погашенные купоны, визиты сегодня) */
+function pdMem() {
+  if (DEMO.mem && DEMO.mem.seg === DEMO.seg) return DEMO.mem;
+  const s = pdSeg(), perk = s.perks.find(p => p.st === 'active'), camp = s.camps.find(c => c.cp);
+  DEMO.mem = {seg: DEMO.seg, used: {}, visits: [], seq: 0,
+    perkCode: 'K' + (4100 + PD_SEGS.indexOf(s) * 7), campCode: camp ? 'A' + (5200 + PD_SEGS.indexOf(s) * 9) : '', perkId: perk ? perk.id : null, campId: camp ? camp.id : null};
+  return DEMO.mem;
+}
+const pdHid = () => 'HLP-4F7Q' + String.fromCharCode(65 + PD_SEGS.indexOf(pdSeg()) % 26) + 'K';
+function pdLocs() {
+  const s = pdSeg();
+  return s.locs.map((l, i) => ({id: pdPid() * 10 + i, title: s.co + ' — ' + pdT(l.t), address: pdT(l.a), lat: l.lat, lon: l.lon, radius_m: [1000, 800, 1500][i] || 1000, hours: pdT(l.h), country: 'MD', city: 'Chișinău', created_at: pdIso(-120 + i * 30)}));
+}
+function pdPartner() {
+  const s = pdSeg(), lv = pdLvl(), xp = pdXp(), L = PD_SEGS.indexOf(s);
+  const act = s.perks.filter(p => p.st === 'active').length, camps = pdCamps();
+  return {id: pdPid(), company: s.co, category: s.cat, category_title: pdT(s.n), idno: '10260' + String(23149118 + L * 7919).slice(0, 8), contact_name: s.own, phone: '+3732200' + String(1000 + L * 37).slice(-4),
+    website: '', description: pdT(s.pain), status: 'approved', status_title: tx('pst.approved'), balance_mdl: 900 + s.st[8] * 3, offer_text: '', discount_kind: 'none', discount_value: 0,
+    package: {key: s.pkg, status: 'active', until: pdIso(48).slice(0, 10), period: 'month'}, geo_active: true, created_at: pdIso(-160), approved_at: pdIso(-159), country: 'MD', country_name: 'Moldova', city: 'Chișinău',
+    lang: LANG, currency: 'MDL', level: {key: lv.key, title: lv.title}, xp, rating: {avg: s.rt, count: s.rc}, partner_of_month: s.lvl === 'platinum', logo_url: null, show_owner: true, owner_title: pdT(s.ot), demo: true,
+    counts: {locations: s.locs.length, campaigns_active: camps.filter(c => c.status === 'active').length, staff: 3, rewards_active: act, perks_active: act}};
+}
+const PD_KT = {service: ['Бесплатная услуга', 'Serviciu gratuit', 'Free service'], gift: ['Подарок', 'Cadou', 'Gift'], priority: ['Без очереди', 'Fără coadă', 'Priority'], upgrade: ['Бесплатная опция', 'Opțiune gratuită', 'Free add-on']};
+function pdPerks() {
+  const s = pdSeg(), L = PD_SEGS.indexOf(s), lix = LIX[LANG], ids = pdLocs().map(l => l.id);
+  return s.perks.map((p, i) => {
+    const i18n = {}; LANGS.forEach((l, j) => { if (l !== LANG) i18n[l] = {title: p.t[j], description: p.d[j]}; });
+    const booked = Math.max(3, Math.round(s.st[3] / (i + 1.6))), red = Math.max(2, Math.round(s.st[2] / (i + 1.7)));
+    return {id: 'demo-' + p.id, partner_id: pdPid(), title: p.t[lix], description: p.d[lix], kind: p.kind, kind_title: PD_KT[p.kind][lix], points: p.pts, min_level: p.lvl || 1, stock_per_day: p.stock, stock_per_month: p.stock ? p.stock * 22 : null,
+      schedule: p.sch, schedule_text: p.sch ? tx('pd.sched', {from: p.sch.from, to: p.sch.to}) : null, location_ids: i === 0 ? [] : ids.slice(0, 1), coupon_days: 7, cooldown_days: 30, status: p.st,
+      status_title: tx('pks.' + p.st), moderation_note: null, moderation_flags: p.st === 'pending' ? ['manual'] : [], moderation_flag_titles: [], note: null, migrated: false, i18n, lang: LANG,
+      created_at: pdIso(-90 + i * 12), updated_at: pdIso(-20 + i * 3), stats: p.st === 'pending' ? {booked: 0, redeemed: 0, booked_today: 0, booked_month: 0} : {booked, redeemed: red, booked_today: (L + i) % 4 + (p.st === 'active' ? 1 : 0), booked_month: Math.round(booked * 0.8)}};
+  });
+}
+function pdCamps() {
+  const s = pdSeg(), lix = LIX[LANG], perks = s.perks, ids = s.locs.map((l, i) => pdPid() * 10 + i);
+  const base = s.camps.map((c, i) => {
+    const disc = c.kind === 'discount' && (c.dk === 'percent' || c.dk === 'fixed') && c.dv;
+    const kind = c.kind === 'bonus' ? 'bonus' : disc ? 'discount' : 'announcement', views = Math.round(s.st[4] / (i + 1.4)), pushes = c.geo ? Math.round(s.st[5] / (i + 1.2)) : 0;
+    const i18n = {}; LANGS.forEach((l, j) => { if (l !== LANG) i18n[l] = {title: c.t[j], text: c.x[j]}; });
+    return {id: 'd' + c.id, partner_id: pdPid(), title: c.t[lix], text: c.x[lix], kind, discount_kind: disc ? c.dk : 'none', discount_value: disc ? c.dv : 0, bonus_multiplier: c.mult || 1, reward_id: null,
+      perk_id: c.cp && !disc && perks[0] && kind === 'announcement' ? null : null, starts_at: pdIso(c.s, 0, 0), ends_at: pdIso(c.e, 23, 59), location_ids: [], radius_m: c.geo ? 2500 : 1500,
+      audience: {fuel: [], makes: [], car_age_min: null, car_age_max: null, services_due: c.due || []}, channels: {feed: true, geo_push: !!c.geo}, budget_mdl: c.geo ? 1500 : 800, spent_mdl: Math.round(views * 0.12 + pushes * 0.85),
+      status: 'active', status_title: tx('cst.active'), reject_reason: null, pause_reason: null, i18n, lang: LANG, created_at: pdIso(c.s - 2), updated_at: pdIso(c.s - 1),
+      stats: {views, pushes, opens: Math.round(views * 0.16), coupons_issued: c.cp ? Math.round(views * 0.05) : 0, coupons_redeemed: c.cp ? Math.round(views * 0.03) : 0, spent_mdl: Math.round(views * 0.12 + pushes * 0.85)}};
+  });
+  const g = (id, st0, kindK, t, x, s0, e0, extra) => Object.assign({id, partner_id: pdPid(), title: tx(t), text: tx(x), kind: kindK, discount_kind: 'none', discount_value: 0, bonus_multiplier: kindK === 'bonus' ? 2 : 1, reward_id: null, perk_id: null,
+    starts_at: pdIso(s0, 0, 0), ends_at: pdIso(e0, 23, 59), location_ids: [], radius_m: 1500, audience: {fuel: [], makes: [], car_age_min: null, car_age_max: null, services_due: []}, channels: {feed: true, geo_push: false},
+    budget_mdl: 600, status: st0, status_title: tx('cst.' + st0), reject_reason: null, pause_reason: st0 === 'paused' ? 'manual' : null, lang: LANG, created_at: pdIso(s0 - 3), updated_at: pdIso(s0 - 1)}, extra);
+  return base.concat([
+    g('dgb', 'active', 'bonus', 'pd.gc.t', 'pd.gc.x', -18, 40, {spent_mdl: Math.round(s.st[8] * 0.3), stats: {views: Math.round(s.st[4] * 0.4), pushes: 0, opens: Math.round(s.st[4] * 0.06), coupons_issued: 0, coupons_redeemed: 0, spent_mdl: Math.round(s.st[8] * 0.3)}}),
+    g('dge', 'ended', 'announcement', 'pd.ge.t', 'pd.ge.x', -75, -40, {spent_mdl: Math.round(s.st[8] * 0.5), stats: {views: Math.round(s.st[4] * 0.7), pushes: 0, opens: Math.round(s.st[4] * 0.1), coupons_issued: 0, coupons_redeemed: 0, spent_mdl: Math.round(s.st[8] * 0.5)}})]);
+}
+function pdStats(days) {
+  const s = pdSeg(), k = days / 30, S0 = s.st, series = [], n = Math.max(1, days);
+  /* дневные веса (выходные — по сегменту), суммы за период — ровно цифры сегмента × период */
+  const W = [];
+  for (let i = n - 1; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const wd = d.getDay(); W.push({day: d.toISOString().slice(0, 10), w: (wd === 0 || wd === 6 ? (s.k === 'mall' || s.k === 'cafe' || s.k === 'wash' || s.k === 'parking' ? 1.35 : 0.7) : 1) * (0.82 + ((i * 37) % 11) / 30)}); }
+  const sw = W.reduce((a, x) => a + x.w, 0), dist = total => { let acc = 0, prev = 0; return W.map(x => { acc += x.w; const c = Math.round(total * acc / sw), v = c - prev; prev = c; return v; }); };
+  const cols = {visits: dist(S0[0] * k), redeemed: dist(S0[2] * k), views: dist(S0[4] * k), pushes: dist(S0[5] * k), passes: dist(S0[7] * k)};
+  W.forEach((x, i) => series.push({day: x.day, visits: cols.visits[i], grants: cols.visits[i], points: cols.visits[i] * 20, redeemed: cols.redeemed[i], views: cols.views[i], pushes: cols.pushes[i], passes: cols.passes[i]}));
+  const sum = key => series.reduce((a, x) => a + x[key], 0), camps = pdCamps();
+  return {period_days: days, k_anonymity: 5, totals: {visits: sum('visits'), new_clients: Math.round(S0[1] * k), clients: Math.round((S0[0] * 0.7) * k), perks_redeemed: sum('redeemed'), perks_booked: Math.round(S0[3] * k),
+    points_granted: sum('points'), grants: sum('visits'), coupons_issued: Math.round(S0[3] * k * 0.6), coupons_redeemed: Math.round(S0[2] * k * 0.5), views: sum('views'), pushes: sum('pushes'), opens: Math.round(sum('views') * 0.15),
+    free_pushes: Math.min(sum('pushes'), pdLvl().geo), passes_near_points: sum('passes'), spent_mdl: Math.round(S0[8] * k), balance_mdl: 900 + S0[8] * 3},
+    series, campaigns: camps.map(c => ({id: c.id, title: c.title, status: c.status, status_title: c.status_title, views: Math.round((c.stats || {}).views * k) || 0, pushes: Math.round((c.stats || {}).pushes * k) || 0, opens: Math.round((c.stats || {}).opens * k) || 0, coupons_redeemed: Math.round((c.stats || {}).coupons_redeemed * k) || 0, spent_mdl: Math.round((c.spent_mdl || 0) * k)})),
+    note: tx('pd.note', {seg: pdT(s.n)})};
+}
+function pdGame() {
+  const s = pdSeg(), lv = pdLvl(), xp = pdXp(), keys = ['bronze', 'silver', 'gold', 'platinum'], i = keys.indexOf(lv.key);
+  const levels = keys.map(k => ({key: k, title: tx('plv.' + k), xp_from: PD_LV[k][0], xp_to: PD_LV[k][1], free_geo_push_month: PD_LV[k][2], ranking_weight: [1, 1.1, 1.25, 1.5][keys.indexOf(k)], badge_key: k === 'bronze' ? null : 'partner_' + k, badge_title: k === 'bronze' ? null : tx('pd.badge.' + k), seasonal_events: keys.indexOf(k) >= 2, benefits: []}));
+  const nx = levels[i + 1] || null, cur = levels[i], used = pdGeoUsed();
+  const rate = s.rc >= 5 ? {avg: s.rt, count: s.rc, month_avg: Math.min(5, s.rt + 0.1), month_count: Math.max(5, Math.round(s.rc / 4)), distribution: {1: Math.round(s.rc * 0.02), 2: Math.round(s.rc * 0.03), 3: Math.round(s.rc * 0.07), 4: Math.round(s.rc * 0.2), 5: s.rc - Math.round(s.rc * 0.02) - Math.round(s.rc * 0.03) - Math.round(s.rc * 0.07) - Math.round(s.rc * 0.2)},
+    tags: [{key: 'fast', title: tx('pd.rt.fast'), count: Math.round(s.rc * 0.4)}, {key: 'polite', title: tx('pd.rt.polite'), count: Math.round(s.rc * 0.3)}, {key: 'quality', title: tx('pd.rt.quality'), count: Math.round(s.rc * 0.2)}], low: false, under_review: false,
+    recent: [{stars: 5, tags: ['fast'], text: tx('pd.rv1'), day: pdDay(2)}, {stars: 5, tags: ['polite'], text: tx('pd.rv2'), day: pdDay(6)}, {stars: 4, tags: [], text: '', day: pdDay(9)}]} : {avg: null, count: s.rc, month_avg: null, month_count: 0, distribution: null, tags: [], low: false, under_review: false, recent: []};
+  return {xp, level: Object.assign({}, cur, {progress: nx ? Math.max(0, Math.min(1, (xp - cur.xp_from) / (nx.xp_from - cur.xp_from))) : 1, xp_to_next: nx ? nx.xp_from - xp : null}), next_level: nx, levels,
+    xp_rules: [{key: 'visit', title: tx('pd.xr.visit'), xp: 5}, {key: 'perk_redeemed', title: tx('pd.xr.perk'), xp: 10}, {key: 'new_client', title: tx('pd.xr.new'), xp: 15}, {key: 'good_month', title: tx('pd.xr.month'), xp: 100}, {key: 'quest', title: tx('pd.xr.quest'), xp: 50}],
+    benefits: {ranking_weight: cur.ranking_weight, badge_key: cur.badge_key, badge_title: cur.badge_title, seasonal_events: cur.seasonal_events, free_geo_push: {month_quota: lv.geo, used, left: lv.geo - used, month: new Date().toISOString().slice(0, 7)}, partner_of_month: s.lvl === 'platinum', partner_of_month_until: s.lvl === 'platinum' ? pdIso(20).slice(0, 10) : null},
+    quests: [{id: 1, key: 'starter', kind: 'starter', title: tx('pd.q1.t'), description: tx('pd.q1.d'), icon: 'flag', steps: [{key: 'loc', title: tx('pd.q1.s1'), count: 1, done: 1, complete: true}, {key: 'perk', title: tx('pd.q1.s2'), count: 1, done: 1, complete: true}, {key: 'visits', title: tx('pd.q1.s3'), count: 10, done: 10, complete: true}], progress: 1, status: 'completed', rewards: {xp: 100}, starts_at: null, ends_at: null, completed_at: pdIso(-60)},
+      {id: 2, key: 'monthly', kind: 'monthly', title: tx('pd.q2.t'), description: tx('pd.q2.d'), icon: 'flag', steps: [{key: 'new', title: tx('pd.q2.s1'), count: 30, done: Math.min(30, Math.round(s.st[1] * 0.7)), complete: s.st[1] * 0.7 >= 30}, {key: 'perks', title: tx('pd.q2.s2'), count: 20, done: Math.min(20, Math.round(s.st[2] * 0.6)), complete: s.st[2] * 0.6 >= 20}], progress: 0.7, status: 'active', rewards: {xp: 150}, starts_at: pdIso(-9), ends_at: pdIso(21), completed_at: null}],
+    rating: rate, visits: {month: s.st[0], clients_month: Math.round(s.st[0] * 0.7), new_clients_month: s.st[1], total: s.st[0] * 5},
+    demand: {radius_km: 3, sufficient: true, source: 'area', items: (PD_DEMAND[s.k] || ['diagnostics']).map((k, j) => ({service: k, title: tx('stag.' + k), drivers: [Math.max(12, Math.round(s.st[0] * 0.35)), Math.max(7, Math.round(s.st[0] * 0.15)), '<5'][j]})), note: ''},
+    recent: [{at: pdIso(0, 9, 40), kind: 'visit', title: tx('pd.xr.visit'), xp: 5}, {at: pdIso(0, 9, 12), kind: 'perk_redeemed', title: tx('pd.xr.perk'), xp: 10}, {at: pdIso(-1, 17, 5), kind: 'new_client', title: tx('pd.xr.new'), xp: 15}]};
+}
+/* касса: история сегодня — визиты, выданные плюшки, погашенные купоны акций */
+function pdOps() {
+  const s = pdSeg(), m = pdMem(), P0 = pdPerks().filter(p => p.status === 'active'), C0 = pdCamps().filter(c => c.status === 'active' && c.kind !== 'bonus'), locs = pdLocs(), tag = (STAG_CAT[s.cat] || [null])[0];
+  const now = new Date(), base = [];
+  const at = mins => new Date(now.getTime() - mins * 60000).toISOString(), hid = n => 'HLP-' + ['7K', '3Q', 'M2', 'T9', 'B4', 'R8', 'Z5', 'P1'][n % 8] + '••••';
+  const L = i => (locs[i % locs.length] || {}).title;
+  [[14, 'visit'], [38, 'redeem', 0], [52, 'visit'], [75, 'redeem_c', 0], [96, 'visit'], [130, 'redeem', 1], [171, 'visit'], [205, 'visit'], [260, 'redeem_c', 1], [320, 'visit']].forEach((x, i) => {
+    const kind = x[1] === 'visit' ? 'visit' : 'redeem', it = x[1] === 'redeem' ? P0[x[2] % Math.max(1, P0.length)] : x[1] === 'redeem_c' ? C0[x[2] % Math.max(1, C0.length)] : null;
+    if (x[1] !== 'visit' && !it) return;
+    base.push({at: at(x[0]), kind, helper_id_masked: hid(i), points: kind === 'visit' ? 20 : 0, service_tag: kind === 'visit' && i % 2 === 0 ? tag : null, title: it ? it.title : null, status: 'ok', staff_name: PD_CASH[i % PD_CASH.length], location_title: L(i)});
+  });
+  return m.visits.concat(base);
+}
+/* купоны клиента (демо): плюшка и акция этого партнёра */
+function pdCoupon(code) {
+  const m = pdMem(), lix = LIX[LANG];
+  if (code === m.perkCode && m.perkId) {
+    const p = pdSeg().perks.find(x => x.id === m.perkId);
+    return {code, kind: 'perk', perk_kind: p.kind, perk_kind_title: PD_KT[p.kind][lix], title: p.t[lix], benefit: null, perk_id: 'demo-' + p.id, campaign_id: null, status: m.used[code] ? 'redeemed' : 'active', expires_at: pdIso(5, 23, 59), schedule_ok: true, schedule_text: p.sch ? tx('pd.sched', {from: p.sch.from, to: p.sch.to}) : null, qr: 'HELPER-COUPON:' + code};
+  }
+  if (code === m.campCode && m.campId) {
+    const c = pdSeg().camps.find(x => x.id === m.campId), ben = c.dt ? c.dt[lix] : c.dk === 'percent' ? tx('pd.disc.pct', {v: c.dv}) : c.dk === 'fixed' ? tx('pd.disc.fix', {v: c.dv}) : '';
+    return {code, kind: 'campaign', perk_kind: null, title: c.t[lix], benefit: ben, campaign_id: 'd' + c.id, campaign_title: c.t[lix], campaign_ends_at: pdIso(c.e, 23, 59), status: m.used[code] ? 'redeemed' : 'active', expires_at: pdIso(6, 23, 59), schedule_ok: true, schedule_text: null, discount_text: ben, qr: 'HELPER-COUPON:' + code};
+  }
+  return null;
+}
+function pdClient(raw) {
+  const m = pdMem(), code = String(raw || '').replace(/^HELPER(-COUPON)?:/i, '').trim(), g = st.gmeta, lvlT = tx('pd.drv.lvl'), coupons = [pdCoupon(m.perkCode), pdCoupon(m.campCode)].filter(c => c && c.status === 'active');
+  const vis = m.visits.some(v => v.kind === 'visit');
+  const drv = {level: {n: 3, key: 'active', title: lvlT}, badges: [{key: 'first_service', title: tx('pd.drv.b1'), icon: 'wrench'}, {key: 'explorer', title: tx('pd.drv.b2'), icon: 'pin'}], legend: false};
+  const camp = pdCamps().find(c => c.kind === 'bonus' && c.status === 'active');
+  const prev = {points: 20 * (camp ? 2 : 1), xp: 30, multiplier: camp ? 2 : 1, campaign_id: camp ? camp.id : null};
+  if (/^(K|A)\d+$/i.test(code)) {
+    const c = pdCoupon(code.toUpperCase());
+    if (!c) throw apiErr(404, 'coupon_not_found', tx('coupon.nf'));
+    return {scanned: 'coupon', helper_id: pdHid(), valid: true, reason_code: null, reason: null, driver: drv, new_client: !vis, visited_today: vis, can_visit: !vis, visit_block: vis ? 'visit_today' : null, visit_block_text: vis ? tx('pd.vtoday') : null, visit_preview: prev, coupons, coupon: c, bonus_multiplier: prev.multiplier, campaign_id: prev.campaign_id, partner_active: true};
+  }
+  if (code.toUpperCase() !== pdHid()) throw apiErr(404, 'client_not_found', tx('pd.nf'));
+  return {scanned: 'client', helper_id: pdHid(), valid: true, reason_code: null, reason: null, driver: drv, new_client: !vis, visited_today: vis, can_visit: !vis, visit_block: vis ? 'visit_today' : null, visit_block_text: vis ? tx('pd.vtoday') : null, visit_preview: prev, coupons, coupon: null, bonus_multiplier: prev.multiplier, campaign_id: prev.campaign_id, partner_active: true};
+}
+function pdPackages() {
+  const c = PKGS.MD && PKGS.MD.d; if (c) return c;
+  const F = k => tx(k).split('|');
+  return {market: 'MD', currency: 'MDL', periods: ['month', 'year'], annual_discount_pct: 15, packages: [
+    {key: 'start', name: tx('plan.n.start'), tagline: tx('pd.pk.start.t'), price: 0, list_price: 0, discount_pct: 0, price_year: 0, list_price_year: 0, year_discount_pct: 0, period: null, price_note: tx('pd.pk.start.n'), price_note_year: null, features: F('pd.pk.start.f'), inherits: null, highlight: false, items: []},
+    {key: 'showcase', name: tx('plan.n.showcase'), tagline: tx('pd.pk.showcase.t'), price: 2125, list_price: 2125, discount_pct: 0, price_year: 21675, list_price_year: 25500, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.showcase.f'), inherits: 'start', highlight: false, items: []},
+    {key: 'district', name: tx('plan.n.district'), tagline: tx('pd.pk.district.t'), price: 4590, list_price: 5100, discount_pct: 10, price_year: 52020, list_price_year: 61200, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.district.f'), inherits: 'showcase', highlight: true, items: []},
+    {key: 'leader', name: tx('plan.n.leader'), tagline: tx('pd.pk.leader.t'), price: 12240, list_price: 13600, discount_pct: 10, price_year: 138720, list_price_year: 163200, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.leader.f'), inherits: 'district', highlight: false, items: []}],
+    addons: [], compare: [], notes: []};
+}
+const pdErr = () => apiErr(403, 'demo_readonly', tx('pd.ro'));
+/* все запросы кабинета в демо — без сети */
+async function demoApi(path, o) {
+  o = o || {};
+  await sleep(120 + Math.random() * 160);
+  const meth = (o.method || (o.body !== undefined ? 'POST' : 'GET')).toUpperCase(), q = path.indexOf('?'), p = q >= 0 ? path.slice(0, q) : path, qs = new URLSearchParams(q >= 0 ? path.slice(q + 1) : '');
+  const ok = d => JSON.parse(JSON.stringify(Object.assign({ok: true}, d)));
+  if (p === '/v1/auth/logout') return ok({});
+  if (p === '/v1/partner/meta') { if (st.meta) return ok(st.meta); throw apiErr(0, 'offline', tx('err.offline')); }
+  if (p === '/v1/game/meta') { if (st.gmeta) return ok(st.gmeta); throw apiErr(0, 'offline', tx('err.offline')); }
+  if (p === '/v1/partner/packages') return ok(pdPackages());
+  if (p === '/v1/me' && meth === 'GET') return ok({user: A.user});
+  if (p === '/v1/partner/mine') return ok({items: [{partner_id: pdPid(), company: pdSeg().co, role: 'owner', role_title: tx('role.owner'), status: 'approved', status_title: tx('pst.approved')}]});
+  const m0 = p.match(/^\/v1\/partner\/(\d+)(\/.*)?$/);
+  if (m0 && +m0[1] === pdPid()) {
+    const sub = m0[2] || '';
+    if (meth === 'GET') {
+      if (sub === '') { const pt = pdPartner(); return ok({partner: pt, role: 'owner', role_title: tx('role.owner'), package: pt.package, permissions: {kassa: true, profile: true, locations: true, rewards: true, campaigns: true, stats: true, billing: true, staff: true, delete: true}}); }
+      if (sub === '/locations') return ok({items: pdLocs()});
+      if (sub === '/perks') return ok({items: pdPerks(), corridors: {service: [5, 50], gift: [5, 50], priority: [5, 50], upgrade: [5, 50]}, auto_approve: true});
+      if (/^\/perks\/[^/]+$/.test(sub)) { const it = pdPerks().find(x => x.id === decodeURIComponent(sub.split('/')[2])); if (!it) throw apiErr(404, 'perk_not_found', tx('e.not_found')); return ok({item: it}); }
+      if (sub === '/campaigns') return ok({items: pdCamps(), prices: {geo_push_mdl: 0.85, views_1000_mdl: 510}});
+      if (/^\/campaigns\/[^/]+$/.test(sub)) { const it = pdCamps().find(x => x.id === decodeURIComponent(sub.split('/')[2])); if (!it) throw apiErr(404, 'campaign_not_found', tx('e.not_found')); return ok({item: it}); }
+      if (sub === '/staff') { const s = pdSeg(); return ok({items: [{user_id: 1, name: s.own, email_masked: null, role: 'owner', role_title: tx('role.owner'), telegram: true, is_me: true, added_at: pdIso(-160)}, {user_id: 2, name: PD_CASH[0] + ' ' + s.own.split(' ')[1].slice(0, 1) + '.', email_masked: 'e•••@mail.md', role: 'manager', role_title: tx('role.manager'), telegram: true, is_me: false, added_at: pdIso(-120)}, {user_id: 3, name: PD_CASH[1], email_masked: 'm•••@gmail.com', role: 'cashier', role_title: tx('role.cashier'), telegram: false, is_me: false, added_at: pdIso(-80)}]}); }
+      if (sub === '/billing') { const s = pdSeg(), lv = pdLvl(), used = pdGeoUsed(); return ok({balance_mdl: 900 + s.st[8] * 3, packages: [], invoices: [{invoice_no: 'HLP-2026-0' + (310 + PD_SEGS.indexOf(s)), amount_mdl: 1000, purpose: tx('pd.inv.p'), status: 'paid', method: 'card', created_at: pdIso(-35), paid_at: pdIso(-35)}, {invoice_no: 'HLP-2026-0' + (402 + PD_SEGS.indexOf(s)), amount_mdl: 2000, purpose: tx('pd.inv.p'), status: 'paid', method: 'bank', created_at: pdIso(-12), paid_at: pdIso(-10)}], topup_presets_mdl: [500, 1000, 2500, 5000], min_topup_mdl: 50, max_topup_mdl: 1000000, card_topup_available: true, payment_mode: null, campaign_prices: {geo_push_mdl: 0.85, views_1000_mdl: 510}, free_geo_push: {month_quota: lv.geo, used, left: lv.geo - used}}); }
+      if (sub === '/stats') return ok(pdStats([7, 30, 90].indexOf(+qs.get('days')) >= 0 ? +qs.get('days') : 30));
+      if (sub === '/game') return ok(pdGame());
+      if (sub === '/operations') return ok({items: pdOps()});
+      if (sub === '/visits') return ok({items: []});
+      if (sub === '/client') return ok(pdClient(qs.get('code')));
+      if (sub === '/perks/templates') throw apiErr(404, 'not_found', tx('e.not_found'));
+      if (sub === '/package') return ok({package: pdPartner().package});
+      throw apiErr(404, 'not_found', tx('e.not_found'));
+    }
+    const m = pdMem();
+    if (meth === 'POST' && sub === '/visit') {
+      const c = pdClient((o.body || {}).code), id = 'dv' + (++m.seq);
+      if (!c.can_visit) throw apiErr(409, 'visit_today', tx('pd.vtoday'));
+      const lv = pdLvl(), xp = pdXp() + 5;
+      m.visits.unshift({at: new Date().toISOString(), kind: 'visit', helper_id_masked: c.helper_id.slice(0, 6) + '••••', points: c.visit_preview.points, service_tag: (o.body || {}).service_tag || null, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
+      return ok({visit: {id, at: new Date().toISOString(), helper_id: c.helper_id, service_tag: (o.body || {}).service_tag || null, location_id: null, status: 'ok'}, driver: Object.assign({}, c.driver, {new_client: c.new_client}), awarded: {points: c.visit_preview.points, xp: 30, multiplier: c.visit_preview.multiplier, campaign_id: c.visit_preview.campaign_id}, partner_xp: {gained: 5 + (c.new_client ? 15 : 0), xp, level: {key: lv.key, title: lv.title}, level_up: false}, review: false, message: ''});
+    }
+    if (meth === 'POST' && sub === '/coupons/redeem') {
+      const code = String((o.body || {}).code || '').replace(/^HELPER-COUPON:/i, '').trim().toUpperCase(), c = pdCoupon(code);
+      if (!c) throw apiErr(404, 'coupon_not_found', tx('coupon.nf'));
+      if (m.used[code]) throw apiErr(409, 'coupon_used', tx('pd.cused'));
+      m.used[code] = 1;
+      const visitNew = !m.visits.some(v => v.kind === 'visit');
+      m.visits.unshift({at: new Date().toISOString(), kind: 'redeem', helper_id_masked: pdHid().slice(0, 6) + '••••', points: 0, title: c.title, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
+      if (visitNew) m.visits.unshift({at: new Date().toISOString(), kind: 'visit', helper_id_masked: pdHid().slice(0, 6) + '••••', points: 20, status: 'ok', staff_name: pdSeg().own, location_title: (pdLocs()[0] || {}).title});
+      const lv = pdLvl();
+      return ok(Object.assign({}, c, {helper_id_masked: pdHid().slice(0, 6) + '••••', visit: visitNew ? {id: 'dv' + (++m.seq), status: 'ok', created: true} : null, partner_xp: {gained: 10, xp: pdXp() + 10, level: {key: lv.key, title: lv.title}, level_up: false}}));
+    }
+  }
+  throw pdErr();
+}
+/* вход и выход */
+function demoStart(seg) {
+  if (!PD_SEGS.some(s => s.k === seg)) return go('demo', true);
+  if (logged() && !DEMO.on) return go(defaultRoute(), true); /* вошедшему пользователю демо не подменяет кабинет */
+  if (!DEMO.on) { DEMO.saveA = A; DEMO.savePid = st.pid; }
+  DEMO.on = true; DEMO.seg = seg; DEMO.mem = null; DEMO.step = 0;
+  const s = pdSeg();
+  A = {access: 'demo', refresh: 'demo', user: {id: 0, display_name: s.own, email: null, phone: null, has_password: false, news: false, telegram: {linked: false}, demo: true}};
+  st.partner = null; st.role = null; st.cache = {}; st.mine = []; st.pkg = null; st.pid = pdPid(); KS.locs = []; KS.client = null;
+  $('#root').dataset.shell = '';
+  closeSheet(true);
+  go('home', true);
+}
+function demoExit(toReg) {
+  const cat = DEMO.on ? pdSeg().cat : null;
+  DEMO.on = false; DEMO.step = -1; DEMO.mem = null;
+  A = DEMO.saveA || {}; st.pid = DEMO.savePid || (+store.get(K.pid) || null);
+  st.partner = null; st.role = null; st.cache = {}; st.mine = []; st.pkg = null; KS.locs = []; KS.client = null;
+  storyHide();
+  $('#root').dataset.shell = '';
+  closeSheet(true);
+  if (toReg) { const R = regState(); if (cat) R.category = cat; regSave(); go('register/1'); }
+  else go('', true);
+}
+ACTS['demo-open'] = el => demoStart(el.dataset.seg);
+ACTS['demo-exit'] = () => demoExit(false);
+ACTS['demo-reg'] = () => demoExit(true);
+ACTS['demo-tour'] = () => storyGo(0);
+ACTS['demo-scan'] = el => { const m = pdMem(); handleCode(el.dataset.k === 'id' ? 'HELPER:' + pdHid() : 'HELPER-COUPON:' + (el.dataset.k === 'perk' ? m.perkCode : m.campCode)); };
+/* выбор вида бизнеса (#/demo) */
+function pageDemoPick() {
+  document.title = tx('pd.pick.e') + ' · ' + tx('app.name');
+  $('#root').dataset.shell = '';
+  let h = '<div class="page-narrow wide demo-pick">' + pubHead('<a class="btn sm soft" href="#/">' + tx('back') + '</a>') + rings('', 'width:360px;right:-190px;top:-40px') +
+    '<p class="eyebrow">' + tx('pd.pick.e') + '</p><h1 class="wiz-title">' + tx('pd.pick.h') + '</h1><p class="muted" style="margin:0 0 20px;max-width:60ch">' + tx('pd.pick.p') + '</p>' +
+    '<div class="dp-grid">' + PD_SEGS.map(s => '<button type="button" class="dp-tile" data-act="demo-open" data-seg="' + s.k + '"><span class="ic-circle teal">' + ic(s.ic, 'sm') + '</span><span class="dp-n">' + esc(pdT(s.n)) + '</span><span class="dp-d">' + esc(pdT(s.pain)) + '</span><span class="dp-go">' + tx('pd.pick.open') + ic('chevR', 'xs') + '</span></button>').join('') + '</div>' +
+    '<div class="card tint" style="margin-top:22px"><p class="small" style="margin:0">' + tx('pd.pick.note') + '</p><div class="btn-row" style="margin-top:12px"><a class="btn ink" href="#/register">' + tx('pd.cta') + '</a></div></div></div>';
+  $('#root').innerHTML = h;
+  window.scrollTo(0, 0);
+}
+/* полоса демо (вверху кабинета, закреплена) */
+function demoBarHTML() {
+  const s = pdSeg();
+  return '<div class="demo-bar" role="region" aria-label="' + esc(tx('pd.bar.t')) + '"><span class="db-tag">' + tx('pd.tag') + '</span><span class="db-t"><b>' + tx('pd.bar.t') + '<span class="db-seg"> · ' + esc(pdT(s.n)) + '</span></b><span>' + tx('pd.bar.s') + '</span></span>' +
+    '<button type="button" class="textbtn db-tour" data-act="demo-tour">' + ic('play', 'xs') + tx('pd.tour') + '</button>' +
+    '<button type="button" class="btn sm ink db-cta" data-act="demo-reg"><span class="l">' + tx('pd.cta') + '</span><span class="s">' + tx('pd.cta.short') + '</span></button>' +
+    '<button type="button" class="iconbtn db-x" data-act="demo-exit" aria-label="' + esc(tx('pd.exit')) + '" title="' + esc(tx('pd.exit')) + '">' + ic('close', 'sm') + '</button></div>';
+}
+/* после отрисовки страницы в демо: пометка «демо-данные», строка о выгоде сегмента, касса без камеры, тур */
+const PD_NOTE = {home: 1, stats: 1, game: 1, billing: 1, campaign: 1, campaigns: 1, perks: 1};
+function demoAfter(r) {
+  const v = $('#view'); if (!v) return;
+  const s = pdSeg();
+  if (PD_NOTE[r.name] && !v.querySelector('.demo-note')) {
+    const n = document.createElement('div'); n.className = 'demo-note';
+    n.innerHTML = '<span class="ic">' + ic('info', 'sm') + '</span><div><b>' + tx('pd.note', {seg: esc(pdT(s.n))}) + '</b>' + (r.name === 'home' ? '<span>' + esc(pdT(s.pain)) + '</span>' : '') + '</div>';
+    const hd = v.querySelector('.phead'); if (hd && hd.nextSibling) v.insertBefore(n, hd.nextSibling); else v.insertBefore(n, v.firstChild);
+  }
+  if (r.name === 'kassa' && !v.querySelector('.demo-kassa')) {
+    const k = document.createElement('section'); k.className = 'card demo-kassa';
+    k.innerHTML = '<div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle teal">' + ic('scan', 'sm') + '</span><div class="grow"><div style="font-weight:600">' + tx('pd.kassa.t') + '</div><p class="small muted" style="margin:3px 0 0">' + tx('pd.kassa.d') + '</p></div></div>' +
+      '<div class="btn-row" style="margin-top:12px"><button type="button" class="btn sm ink" data-act="demo-scan" data-k="id">' + ic('qr', 'sm') + tx('pd.kassa.id') + '</button><button type="button" class="btn sm soft" data-act="demo-scan" data-k="perk">' + ic('gift', 'sm') + tx('pd.kassa.perk') + '</button>' + (pdMem().campCode ? '<button type="button" class="btn sm soft" data-act="demo-scan" data-k="camp">' + ic('tag', 'sm') + tx('pd.kassa.camp') + '</button>' : '') + '</div>';
+    const ka = v.querySelector('.kactions'); if (ka) ka.parentNode.insertBefore(k, ka.nextSibling); else v.appendChild(k);
+  }
+  storyPaint(r);
+}
+/* тур «ценность за минуту»: 5 шагов, можно пройти или пропустить */
+const PD_STEPS = [
+  {r: 'home'},
+  {r: () => { const c = pdCamps().find(x => x.status === 'active' && x.kind !== 'bonus') || pdCamps()[0]; return 'campaign/' + c.id; }, sel: '#cv-pv'},
+  {r: 'kassa', sel: '.demo-kassa'},
+  {r: 'perks', sel: '#view .grid-3'},
+  {r: 'stats?days=30', sel: '#view .kpis'},
+  {r: 'package', sel: '.pkc[data-pk="start"]', end: true}
+];
+function storyGo(n) {
+  if (!DEMO.on) return;
+  DEMO.step = n;
+  const S = PD_STEPS[n]; if (!S) return storyHide();
+  const to = typeof S.r === 'function' ? S.r() : S.r;
+  if ('#/' + to === location.hash) { render(); return; }
+  go(to);
+}
+function storyHide() { DEMO.step = -1; const e = $('#demo-story'); if (e) e.remove(); $$('.demo-hl').forEach(x => x.classList.remove('demo-hl')); }
+function storyPaint() {
+  $$('.demo-hl').forEach(x => x.classList.remove('demo-hl'));
+  let e = $('#demo-story');
+  if (!DEMO.on || DEMO.step < 0) { if (e) e.remove(); return; }
+  const n = DEMO.step, S = PD_STEPS[n], s = pdSeg(), last = n === PD_STEPS.length - 1;
+  if (!e) { e = document.createElement('div'); e.id = 'demo-story'; e.className = 'demo-story'; e.setAttribute('role', 'dialog'); document.body.appendChild(e); }
+  e.classList.toggle('end', !!S.end);
+  const dots = '<span class="ds-dots" aria-hidden="true">' + PD_STEPS.slice(1).map((x, i) => '<i class="' + (i + 1 <= n ? 'on' : '') + '"></i>').join('') + '</span>';
+  e.setAttribute('aria-label', n ? tx('pd.s' + n + '.t') : tx('pd.s0.t', {seg: pdT(s.n)}));
+  e.innerHTML = '<div class="ds-head">' + (n ? '<span class="ds-n">' + tx('pd.s.n', {n, of: PD_STEPS.length - 1}) + '</span>' + dots : '<span class="db-tag">' + tx('pd.tag') + '</span>') + '<button type="button" class="iconbtn ds-x" data-act="demo-story-x" aria-label="' + esc(tx('pd.s.skip')) + '">' + ic('close', 'sm') + '</button></div>' +
+    '<div class="ds-t">' + (n ? tx('pd.s' + n + '.t') : tx('pd.s0.t', {seg: esc(pdT(s.n))})) + '</div><p class="ds-d">' + (n ? tx('pd.s' + n + '.d') : esc(pdT(s.pain)) + ' ' + tx('pd.s0.d')) + '</p>' +
+    (last ? '<div class="ds-acts end"><button type="button" class="btn ink block" data-act="demo-reg">' + tx('pd.cta') + '</button><button type="button" class="textbtn" data-act="demo-story-x">' + tx('pd.s.stay') + '</button></div>'
+      : '<div class="ds-acts"><button type="button" class="textbtn" data-act="demo-story-x">' + tx(n ? 'pd.s.skip' : 'pd.s.self') + '</button><button type="button" class="btn sm ink" data-act="demo-story-next">' + tx(n ? 'pd.s.next' : 'pd.s.start') + ic('chevR', 'xs') + '</button></div>');
+  if (S.sel) setTimeout(() => { const t = $(S.sel); if (t) { t.classList.add('demo-hl'); try { t.scrollIntoView({block: 'center', behavior: 'smooth'}); } catch (x) { t.scrollIntoView(); } } }, 250);
+}
+ACTS['demo-story-next'] = () => storyGo(DEMO.step + 1);
+ACTS['demo-story-x'] = () => storyHide();
+
 window.addEventListener('hashchange', () => { if (specialHash()) return; render(); });
 
 { const lp = langPick(); LANG = lp[0]; LANG_SRC = lp[1]; }

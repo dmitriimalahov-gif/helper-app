@@ -205,6 +205,8 @@ select.input.ph-cc{flex:0 0 auto;width:auto;min-width:112px;padding-right:34px}
 .item .t{font-weight:600;font-size:14.5px;line-height:1.3}
 .item .s{font-size:12.5px;color:var(--ink-2);margin-top:2px}
 .item .end{text-align:right;flex:none;font-variant-numeric:tabular-nums}
+/* «Мои купоны» на телефоне: срок купона — строкой под названием, а не сжатый в столбик текст */
+@media (max-width:420px){.cpn-mine .item{flex-wrap:wrap;row-gap:6px}.cpn-mine .item .body{flex:1 1 calc(100% - 50px)}.cpn-mine .item .end{margin-left:50px}}
 .item .chev{color:var(--ink-3)}
 .ic-circle{width:38px;height:38px;border-radius:50%;background:var(--teal-3);color:var(--ink);display:grid;place-items:center;flex:none}
 .ic-circle.ok{background:var(--ok-bg);color:var(--ok-t)}
@@ -610,6 +612,7 @@ div.item:hover{background:none}
 .offer .oc{font-size:12.5px;color:var(--ink-2)}
 .offer .od{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:auto}
 .obadge{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;background:var(--teal);color:var(--on-teal);font-size:12px;font-weight:700;white-space:nowrap;flex:none;font-variant-numeric:tabular-nums}
+.offer.demo .od{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px} /* демо: срок и отметка «пример» */
 .oempty{display:flex;gap:12px;align-items:center}
 .oloc{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
 .oloc .body{flex:1;min-width:0}
@@ -1604,7 +1607,7 @@ function makeDemo(keep) {
   [-66, -45, -31, -17].forEach(dd => hist.push(H(dd, 'odo', 3, 'loy.h.odo')));
   hist.push(H(-330, 'visit', 20, 'loy.h.visit', visit(S2)), H(-172, 'visit', 20, 'loy.h.visit', visit(S1)),
     H(-150, 'ref', 50, 'loy.h.ref'), H(-120, 'ref', 50, 'loy.h.ref'), H(-60, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')), H(-59, 'rate', 2, 'loy.h.rate', visit('demo.shop.wash')),
-    H(-45, 'spend', -150, 'loy.h.perk', {perk: '@gs.p1'}), H(-44, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')), H(-20, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')));
+    H(-45, 'spend', -10, 'loy.h.perk', {perk: '@gs.p1'}), H(-44, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')), H(-20, 'visit', 20, 'loy.h.visit', visit('demo.shop.wash')));
   s.loyalty.hist = hist; s.loyalty.lastOdo = addDays(T, -17);
   s.docs = [D('rca', addDays(T, 23), 1450, 'demo.policy'), D('green', addDays(T, 128), 890), D('inspection', addDays(T, 214), 350), D('license', '2031-06-14', 0)];
   return s;
@@ -2526,9 +2529,9 @@ function pageNearby() {
     h += '<p class="eyebrow" style="margin-top:14px">' + t('nearby.cityArea') + '</p><div class="chips" role="group" aria-label="' + t('nearby.cityArea') + '" style="margin-top:8px"><button class="chip" data-act="geo-here" aria-pressed="' + (!S.geo.area && !!g.pos) + '">' + ic('target', 'xs') + t('nearby.myLoc') + '</button>' + Object.keys(AREAS).map(k => '<button class="chip" data-act="geo-area" data-id="' + k + '" aria-pressed="' + (S.geo.area === k) + '">' + AREAS[k][0] + '</button>').join('') + '</div>';
     if (!geoSrc()) h += g.status === 'denied' ? '<div class="card tint section"><p style="margin:0;font-weight:600">' + t('nearby.pickArea') + '</p><p class="small muted" style="margin:4px 0 0">' + t('nearby.denied') + '</p></div>' : '<div class="card tint section"><p style="margin:0" class="small">' + t('nearby.locating') + '</p></div>';
   }
-  const L = offersList(), src = geoSrc();
+  const dn = demoNet(), L = offersList(), src = geoSrc() || (dn ? dSrc() : null);
   h += '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('c.offers') + '</h2>' + (src && L.length ? '<span class="xsmall muted">' + esc(src.label) + '</span>' : '') + '</div>';
-  if (L.length) { h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>' : ''); setTimeout(gPartnersSeen, 0); }
+  if (L.length) { h += '<div class="stack">' + L.map(x => offerCard(x, true)).join('') + '</div>' + (src ? '<p class="xsmall muted" style="margin:10px 0 0">' + t('nearby.distLocal') + '</p>' : ''); if (!dn) setTimeout(gPartnersSeen, 0); }
   else h += emptyState('tag', offEmpty(), !OFF.ok && navigator.onLine === false ? t('nearby.offline') : t('nearby.emptyText'), '<button class="btn sm soft" data-act="partner-cabinet">' + ic('store', 'xs') + t('nearby.bizOwner') + '</button>');
   h += '</section>';
   h += bizRecCard();
@@ -3093,7 +3096,7 @@ function dropDemo() {
   S.cars = S.cars.filter(c => !c.demo);
   ['records', 'fuel', 'docs'].forEach(k => { S[k] = S[k].filter(x => x.carId !== 'demo'); });
   S.loyalty = Object.assign(baseState().loyalty, {hid});
-  S.demo = false;
+  S.demo = false; GMOCK.clear();
   if (!S.cars.find(c => c.id === S.activeCar)) S.activeCar = S.cars[0] ? S.cars[0].id : null;
 }
 /* Вход или регистрация прошли: сохранить токены, выгрузить данные устройства (слияние) и получить данные аккаунта */
@@ -5291,7 +5294,12 @@ function offersFetch(force) {
   pr.lang = lang; offP = pr;
   return pr;
 }
-const offerById = cid => (OFF.items || []).find(o => String(o.campaign_id) === String(cid)) || null;
+/* демо без аккаунта: к акциям сервера (если есть) добавляется демо-сеть партнёров — список всегда полный, как в гайде */
+const demoNet = () => !!(S && S.demo) && !logged();
+const offItems = () => demoNet() ? (OFF.items || []).concat(DNET.offers) : (OFF.items || []);
+/* демо: расстояние без согласия на геолокацию — от центра Кишинёва (подпись «пример») */
+const dSrc = () => ({lat: AREAS.kishinev[1], lon: AREAS.kishinev[2], label: t('dn.src')});
+const offerById = cid => offItems().find(o => String(o.campaign_id) === String(cid)) || null;
 /* services_due (ключи контракта) → работы приложения; inspection / insurance — документы; wash — нужна всегда */
 const DUE_MAP = {oil: ['oil'], filters: ['air', 'cabin', 'fuelf'], tires: ['tires'], brakes: ['pads', 'discs', 'brakefluid'], battery: ['battery'], timing: ['timing', 'belt'], coolant: ['coolant'], ac: ['ac'], inspection: ['doc:inspection'], insurance: ['doc:rca', 'doc:green', 'doc:casco'], wash: ['*']};
 function carDue(car) {
@@ -5332,9 +5340,11 @@ function offerNear(o, src) {
 }
 /* Список для ленты: канал feed, не закончилась, подходит автомобилю; ближние — выше */
 function offersList() {
-  const car = S.cars.length ? activeCar() : null, due = car ? carDue(car) : null, src = geoSrc();
-  const out = (OFF.items || []).filter(o => (!o.channels || o.channels.feed !== false) && offerLive(o) && offerMatch(o, car, due)).map(o => { const n = offerNear(o, src); return {o, d: n ? n.d : null, l: n ? n.l : null}; });
-  if (src) out.sort((a, b) => (a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d));
+  const car = S.cars.length ? activeCar() : null, due = car ? carDue(car) : null, src = geoSrc() || (demoNet() ? dSrc() : null);
+  const out = offItems().filter(o => (!o.channels || o.channels.feed !== false) && offerLive(o) && offerMatch(o, car, due)).map(o => { const n = offerNear(o, src); return {o, d: n ? n.d : null, l: n ? n.l : null}; });
+  /* демо: «пример»-акции финансовых сегментов — в конце списка (у настоящих акций флагов нет — порядок прежний) */
+  const exL = x => x.o.demo && x.o.example ? 1 : 0;
+  if (src) out.sort((a, b) => (exL(a) - exL(b)) || (a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d));
   return out;
 }
 const fKm = km => '~' + (km < 1 ? t('geo.m', {n: fN(Math.max(50, Math.round(km * 20) * 50))}) : t('u.km', {n: km < 10 ? f1(km) : fN(km)}));
@@ -5364,15 +5374,15 @@ const letter = s => esc((String(s || '').replace(/[«»"'()]/g, '').trim()[0] ||
 const lgo = (u, name, size) => '<span class="lgo" aria-hidden="true">' + letter(name) + pLogo(u, size) + '</span>';
 const ownerOf = x => x && x.owner && (x.owner.name || mediaUrl(x.owner.photo_url)) ? x.owner : null;
 function offerCard(x, wide) {
-  const o = x.o, bits = [], ow = wide && ownerOf(o);
+  const o = x.o, bits = [], ow = wide && ownerOf(o), dm = !!o.demo; /* демо: буквенный логотип и отметка «пример» */
   if (x.d != null) bits.push(fKm(x.d));
   if (o.ends_at) bits.push(t('c.until', {date: fDt(o.ends_at)}));
-  return '<button class="offer' + (wide ? ' wide' : '') + '" data-act="offer" data-id="' + esc(o.campaign_id) + '" data-ov="' + esc(o.campaign_id) + '"><span class="oh">' + (mediaUrl(o.logo_url) ? lgo(o.logo_url, o.company, 28) : '') + '<span class="ocat">' + esc(o.category_title || t('offer.partner')) + '</span><span class="obadge">' + esc(offerBadge(o)) + '</span></span><span class="ot">' + esc(o.title || o.company) + '</span><span class="oc">' + esc(o.company || '') + '</span>' + (bits.length ? '<span class="od">' + esc(bits.join(' · ')) + '</span>' : '') + (ow ? '<span class="oown">' + lgo(ow.photo_url, ow.name, 22) + '<span>' + esc(ow.name || '') + '</span></span>' : '') + '</button>';
+  return '<button class="offer' + (wide ? ' wide' : '') + (dm ? ' demo' : '') + '" data-act="offer" data-id="' + esc(o.campaign_id) + '" data-ov="' + esc(o.campaign_id) + '"><span class="oh">' + (mediaUrl(o.logo_url) || dm ? lgo(o.logo_url, o.company, 28) : '') + '<span class="ocat">' + esc(o.category_title || t('offer.partner')) + '</span><span class="obadge">' + esc(offerBadge(o)) + '</span></span><span class="ot">' + esc(o.title || o.company) + '</span><span class="oc">' + esc(o.company || '') + '</span>' + (bits.length || dm ? '<span class="od">' + esc(bits.join(' · ')) + (dm ? '<span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span>' : '') + (ow ? '<span class="oown">' + lgo(ow.photo_url, ow.name, 22) + '<span>' + esc(ow.name || '') + '</span></span>' : '') + '</button>';
 }
 /* шапка карточки компании: логотип, название, категория; владелец (фото и подпись), если компания его показывает */
 function coHead(x, company, cat) {
   const ow = ownerOf(x);
-  let h = mediaUrl(x.logo_url) ? '<div class="co-head">' + lgo(x.logo_url, company, 52) + '<div style="min-width:0"><p style="margin:0;font-weight:600">' + esc(company || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(cat || '') + '</p></div></div>' : '';
+  let h = mediaUrl(x.logo_url) || x.demo ? '<div class="co-head">' + lgo(x.logo_url, company, 52) + '<div style="min-width:0"><p style="margin:0;font-weight:600">' + esc(company || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(cat || '') + '</p></div></div>' : '';
   if (ow) h += '<div class="co-own">' + lgo(ow.photo_url, ow.name, 36) + '<span class="small" style="font-weight:600">' + esc(ow.name || '') + '</span></div>';
   return h;
 }
@@ -5383,7 +5393,9 @@ function offersEmpty() {
 }
 function offersHome() {
   setTimeout(() => offersFetch(), 0);
-  const L = offersList().slice(0, 3);
+  let L = offersList();
+  if (demoNet()) { const r = x => { const i = DN_HOME.indexOf(x.o.dk); return i < 0 ? 99 : i; }; L = L.slice().sort((a, b) => r(a) - r(b)); } /* демо: на главной — избранные акции */
+  L = L.slice(0, 3);
   return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('c.offers') + '</h2>' + (L.length ? '<button class="link" data-act="go" data-p="nearby">' + t('c.all') + ic('chevR', 'xs') + '</button>' : '') + '</div>' +
     (L.length ? '<div class="ostrip">' + L.map(x => offerCard(x)).join('') + '</div>' : offersEmpty()) + '</section>'; /* «Рекомендовать компанию» — карточка recHomeCard() над «Пригласить друга» */
 }
@@ -5404,24 +5416,38 @@ function openRoute(l) { const u = routeUrl(l); if (CAP) { try { location.href = 
 function offerSheet(cid, from) {
   const o = offerById(cid);
   if (!o) return toast(t('offer.gone'));
-  const src = geoSrc(), disc = offerDiscText(o);
-  let b = coHead(o, o.company, o.category_title) + '<p class="small muted" style="margin:0 0 6px">' + esc(o.category_title || t('offer.partner')) + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(offerBadge(o)) + '</span></p>' +
+  const dm = !!o.demo, src = geoSrc() || (dm ? dSrc() : null), disc = offerDiscText(o) || (dm ? offerBen(o) : ''), near = dm ? offerNear(o, src) : null;
+  /* демо: шапка с буквенным логотипом, под ней — выгода, уровень и рейтинг партнёра, расстояние, «пример» */
+  let b = coHead(o, o.company, o.category_title) + (dm ? '<p class="small muted" style="margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="obadge">' + esc(offerBadge(o)) + '</span>' + perkMeta(o, near ? near.d : null) + '<span class="badge warn">' + t('bonus.example') + '</span></p>' : '<p class="small muted" style="margin:0 0 6px">' + esc(o.category_title || t('offer.partner')) + ' <span class="obadge" style="margin-left:4px;vertical-align:1px">' + esc(offerBadge(o)) + '</span></p>') +
     '<p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(o.title || '') + '</p>' + (o.text ? '<p style="margin:8px 0 0;line-height:1.55">' + esc(o.text) + '</p>' : '');
-  if (disc || o.ends_at) b += '<div class="tip" style="margin-top:14px">' + ic('tag') + '<span>' + esc(disc || t('offer.partnerOffer')) + (o.ends_at ? '<br><span class="small muted">' + t('offer.validUntil', {date: fDt(o.ends_at)}) + '</span>' : '') + '</span></div>';
+  if (disc || o.ends_at) b += '<div class="tip" style="margin-top:14px">' + ic('tag') + '<span>' + esc(disc || t('offer.partnerOffer')) + (o.ends_at ? '<br><span class="small muted">' + t('offer.validUntil', {date: fDt(o.ends_at)}) + '</span>' : '') + (dm ? offerDemoTerms(o) : '') + '</span></div>';
   const locs = (o.locations || []).map(l => ({l, d: src && isFinite(+l.lat) ? distKm(src.lat, src.lon, +l.lat, +l.lon) : null})).sort((a, b2) => (a.d == null ? 1e9 : a.d) - (b2.d == null ? 1e9 : b2.d));
   if (locs.length) b += '<p class="eyebrow" style="margin:18px 0 0">' + t(locs.length > 1 ? 'offer.addresses' : 'offer.address') + '</p>' + locs.map((x, i) => '<div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.l.title || o.company) + (x.d != null ? ' <span class="small muted num">· ' + fKm(x.d) + '</span>' : '') + '</span><span class="s" style="display:block">' + esc(x.l.address || '') + '</span>' + (x.l.hours ? '<span class="s" style="display:block">' + t('offer.hours', {hours: esc(x.l.hours)}) + '</span>' : '') + '</span>' + (isFinite(+x.l.lat) && isFinite(+x.l.lon) ? '<button class="btn sm soft" data-act="offer-route" data-id="' + esc(o.campaign_id) + '" data-i="' + i + '" data-lid="' + esc(x.l.id) + '">' + t('offer.route') + '</button>' : '') + '</div>').join('');
   b += '<div class="stack" style="margin-top:16px">';
   const cc = o.reward ? +o.reward.cost_points || 0 : 0, pk = o.perk && o.perk.id != null ? perkById(o.perk.id) : null;
-  /* плюшка акции (perk_id): карточка плюшки — бронь за километры Helper */
-  if (pk) b += '<button class="btn block ink" data-act="perk" data-id="' + esc(pk.id) + '">' + ic('gift', 'sm') + '<span>' + esc(pk.title) + ' · </span>' + kmIco(+pk.points || 0) + '</button>';
+  /* плюшка акции (perk_id): карточка плюшки — бронь за километры Helper; демо — и купон акции, и плюшка партнёра */
+  const dc = dm && offerCouponable(o), dmine = dc ? GMOCK.local().coupons.find(c => cpnLive(c) && c.campaign_id === o.campaign_id) : null;
+  if (pk && !dc) b += '<button class="btn block ink" data-act="perk" data-id="' + esc(pk.id) + '">' + ic('gift', 'sm') + '<span>' + esc(pk.title) + ' · </span>' + kmIco(+pk.points || 0) + '</button>';
+  else if (dmine) b += '<button class="btn block ink" data-act="cpn-open" data-code="' + esc(dmine.code) + '">' + ic('qr', 'sm') + t('perk.showCoupon') + '</button>';
   else if (offerCouponable(o)) b += '<button class="btn block ink" data-act="offer-coupon" data-id="' + esc(o.campaign_id) + '">' + ic('gift', 'sm') + t('c.getCoupon') + ' · ' + (cc ? kmShort(cc) : t('offer.free')) + '</button>';
+  if (pk && dc) b += '<button class="btn block soft" data-act="perk" data-id="' + esc(pk.id) + '">' + ic('gift', 'sm') + '<span>' + esc(pk.title) + ' · </span>' + kmIco(+pk.points || 0) + '</button>';
   b += '<button class="btn block ' + (offerCouponable(o) || pk ? 'soft' : 'ink') + '" data-act="hid">' + ic('qr', 'sm') + t('offer.showCode') + '</button></div>';
   b += '<p class="xsmall muted" style="margin:12px 0 0">' + t('offer.codeNote') + '</p>';
   openSheet(esc(o.company || t('offer.partnerOfferShort')), b);
   offerEvent('open', o.campaign_id);
 }
+/* демо: условия акции — «счастливые часы», купон, подбор по автомобилю */
+function offerDemoTerms(o) {
+  const car = S.cars.length ? activeCar() : null, a = o.audience || {}, L = [];
+  if (o.schedule_text) L.push(t('perk.schedule', {when: o.schedule_text}));
+  if (offerCouponable(o)) L.push(t('dn.cpnCond'));
+  if (car && Array.isArray(a.services_due) && a.services_due.length) L.push(t('dn.forCar', {car: carName(car)}));
+  return L.map(x => '<br><span class="small muted">' + esc(x) + '</span>').join('');
+}
 async function offerCoupon(cid) {
   const o = offerById(cid); if (!o || !offerCouponable(o)) return;
+  /* демо: купон — пример на телефоне, без входа и без сервера */
+  if (o.demo) { const c = GMOCK.offerLocal(o); liveRender(['home', 'bonus']); return cpnShow(c); }
   if (!logged()) { ui.after = () => { if (!ui.onb) offerSheet(cid); }; ui.authWhy = t('offer.authWhy'); return authSheet('register', {why: ui.authWhy}); }
   const cost = o.reward ? +o.reward.cost_points || 0 : 0, s = loySrv();
   const go = async () => {
@@ -5451,7 +5477,7 @@ async function offerCoupon(cid) {
 /* --- События акций: POST /v1/offers/events пачками (до 100), с задержкой; без сети — молча отбрасываем --- */
 let OEV = Object.assign({q: [], seen: {}}, jget(K_OEV) || {}), oevT = null, oevBusy = false;
 function offerEvent(type, cid, lid) {
-  if (cid == null) return;
+  if (cid == null || String(cid).indexOf('demo-') === 0) return; /* демо-акции: событий нет */
   const T = todayISO();
   Object.keys(OEV.seen).forEach(k => { if (OEV.seen[k] !== T) delete OEV.seen[k]; });
   if (type === 'view' || type === 'near') { const k = type + ':' + cid + (lid != null ? ':' + lid : ''); if (OEV.seen[k] === T) return; OEV.seen[k] = T; }
@@ -5785,8 +5811,9 @@ const pkNorm = p => Object.assign({}, p, {reason: p.unavailable !== undefined ? 
 /* каталог для экрана: сервер; в демо без аккаунта и пустом каталоге — пример */
 function perksAll() {
   const ok = PK && PK.ok && PK.who === gWho() ? PK : null;
-  if (ok && (ok.items.length || logged())) return {items: ok.items, helper: ok.helper, sample: false};
+  /* демо без аккаунта — всегда пример сети партнёров (настоящие плюшки — после выхода из демо и входа) */
   if (!logged() && S.demo) { const m = GMOCK.catalog(); return {items: m.items, helper: m.helper, sample: true}; }
+  if (ok && (ok.items.length || logged())) return {items: ok.items, helper: ok.helper, sample: false};
   return {items: ok ? ok.items : [], helper: ok ? ok.helper : [], sample: false};
 }
 const perkById = id => { const A2 = perksAll(); return A2.items.concat(A2.helper).find(p => String(p.id) === String(id)) || null; };
@@ -5810,9 +5837,10 @@ function perkWhy(p, V) {
   return r ? t('perk.why.' + r) : '';
 }
 function perksList() {
-  const A2 = perksAll(), src = geoSrc(), f = ui.pkf || 'all', pid = ui.pkPartner;
+  const A2 = perksAll(), src = geoSrc() || (A2.sample ? dSrc() : null), f = ui.pkf || 'all', pid = ui.pkPartner;
   const out = A2.items.filter(p => (f === 'all' || p.category === f) && (!pid || String(p.partner_id) === String(pid))).map((p, i) => { const n = perkNear(p, src); return {p, i, d: n ? n.d : null}; });
-  if (src) out.sort((a, b) => (b.p.available - a.p.available) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i));
+  const exP = x => A2.sample && x.p.example ? 1 : 0; /* демо: «пример»-плюшки банка и лизинга — в конце */
+  if (src) out.sort((a, b) => (b.p.available - a.p.available) || (exP(a) - exP(b)) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i));
   return out;
 }
 
@@ -6244,9 +6272,11 @@ function helperCard(p, V) {
   return '<button class="perk" data-act="perk" data-id="' + esc(p.id) + '"><span class="ph"><span class="pk helper">' + markSVG(22, 'var(--teal)', 'var(--on-ink)') + '</span><span class="pc"><span class="pco">Helper</span><span class="pm">' + t('perk.kind.helper') + '</span></span></span><span class="pt">' + esc(p.title || t('perk.premT')) + '</span><span class="pm">' + esc(p.description || t('perk.premD', {days: +p.days || 30})) + '</span><span class="pf"><span class="price">' + kmIco(+p.points || 300) + '</span><span class="tags">' + (!p.available && p.reason ? '<span class="ptag">' + esc(perkWhy(p, V)) + '</span>' : '') + '</span></span></button>';
 }
 function gPerksPreview(V) {
-  const A2 = perksAll(), src = geoSrc();
-  const list = A2.items.map((p, i) => { const n = perkNear(p, src); return {p, i, d: n ? n.d : null}; })
-    .sort((a, b) => (b.p.available - a.p.available) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i)).slice(0, 4);
+  const A2 = perksAll(), src = geoSrc() || (A2.sample ? dSrc() : null);
+  let list = A2.items.map((p, i) => { const n = perkNear(p, src); return {p, i, d: n ? n.d : null}; })
+    .sort((a, b) => (b.p.available - a.p.available) || ((a.d == null ? 1e9 : a.d) - (b.d == null ? 1e9 : b.d)) || (a.i - b.i));
+  if (A2.sample) { const r = x => { const i = DN_TOP_K.indexOf(x.p.dk); return i < 0 ? 99 : i; }; list.sort((a, b) => r(a) - r(b)); } /* демо: в превью — разные плюшки */
+  list = list.slice(0, 4);
   let h = '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('perk.title') + '</h2><button class="link" data-act="go" data-p="perks">' + t('c.all') + ic('chevR', 'xs') + '</button></div>';
   if (list.length) h += '<div class="pstrip">' + list.map(x => perkCard(x, V, A2.sample)).join('') + '</div>';
   else h += '<div class="card tint oempty"><span class="ic-circle">' + ic('gift', 'sm') + '</span><p class="small" style="margin:0">' + t(PK && PK.ok ? 'perk.emptyShort' : navigator.onLine === false ? 'perk.offline' : 'perk.emptyShort') + '</p></div>';
@@ -6254,7 +6284,7 @@ function gPerksPreview(V) {
 }
 function pagePerks() {
   setTimeout(() => { perksFetch(); gMetaFetch(); if (logged()) { gameFetch(); cpnFetch(); } }, 0);
-  const V = gView(), A2 = perksAll(), src = geoSrc(), g = ui.geo, L = perksList();
+  const V = gView(), A2 = perksAll(), src = geoSrc() || (A2.sample ? dSrc() : null), g = ui.geo, L = perksList();
   let h = topbar(t('perk.title'), {back: true});
   h += '<div class="card tint row between" style="margin-top:10px;gap:10px"><span class="row" style="gap:10px;min-width:0"><span class="lvl-badge sm" aria-hidden="true">' + fN(V.lvl.n) + '</span><span style="min-width:0"><span class="xsmall muted" style="display:block">' + t('game.levelN', {n: V.lvl.n}) + '</span><span style="font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(V.lvl.title) + '</span></span></span><span style="text-align:right"><span class="xsmall muted" style="display:block">' + t('perk.youHave') + '</span><b style="font-size:20px;font-weight:600">' + kmIco(V.km) + '</b></span></div>';
   /* ближние — выше: согласие и выбор района — как в «Предложениях рядом» */
@@ -6278,10 +6308,10 @@ function perkSheet(id) {
   const p = String(id) === 'premium' ? helperPerks(V)[0] : perkById(id);
   if (!p) return toast(t('perk.gone'));
   const helper = String(p.id) === 'premium' || p.kind === 'helper', sample = String(p.id).indexOf('demo-') === 0;
-  const src = geoSrc();
+  const src = geoSrc() || (sample ? dSrc() : null);
   let b = '';
   if (!helper) b += coHead(p, p.company, p.category_title);
-  if (!helper) b += '<p class="small muted" style="margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">' + (p.category_title ? esc(p.category_title) + ' ' : '') + perkMeta(p, null) + (sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</p>';
+  if (!helper) b += '<p class="small muted" style="margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">' + (p.category_title && !p.demo ? esc(p.category_title) + ' ' : '') + perkMeta(p, null) + (sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</p>';
   b += '<div class="row" style="gap:12px;align-items:flex-start"><span class="ic-circle' + (helper ? ' ink' : '') + '" style="width:48px;height:48px">' + (helper ? markSVG(26, 'var(--teal)', 'var(--on-ink)') : ic(PERK_IC[p.kind] || 'gift')) + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600;font-size:18px;line-height:1.3">' + esc(p.title || '') + '</p><p class="small muted" style="margin:2px 0 0">' + esc(helper ? t('perk.kind.helper') : p.kind_title || t('perk.kind.' + (p.kind || 'gift'))) + '</p></div><span class="price" style="font-weight:300;font-size:26px;flex:none">' + kmIco(+p.points || 0) + '</span></div>';
   if (p.description) b += '<p style="margin:12px 0 0;line-height:1.55">' + esc(p.description) + '</p>';
   if (!helper) {
@@ -6295,10 +6325,10 @@ function perkSheet(id) {
     if (locs.length) b += '<p class="eyebrow" style="margin:18px 0 0">' + t(locs.length > 1 ? 'offer.addresses' : 'offer.address') + '</p>' + locs.map((x, i) => '<div class="oloc"><span class="ic-circle">' + ic('pin', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(x.l.title || p.company) + (x.d != null ? ' <span class="small muted num">· ' + fKm(x.d) + '</span>' : '') + '</span><span class="s" style="display:block">' + esc(x.l.address || '') + '</span>' + (x.l.hours ? '<span class="s" style="display:block">' + t('offer.hours', {hours: esc(x.l.hours)}) + '</span>' : '') + '</span>' + (isFinite(+x.l.lat) && isFinite(+x.l.lon) ? '<button class="btn sm soft" data-act="perk-route" data-id="' + esc(p.id) + '" data-i="' + i + '" data-lid="' + esc(x.l.id) + '">' + t('offer.route') + '</button>' : '') + '</div>').join('');
   }
   b += '<div class="stack" style="margin-top:16px">';
-  const why = perkWhy(p, V), mine = !helper && cpnMine().find(c => String(c.perk_id) === String(p.id));
+  const why = perkWhy(p, V), mine = !helper && (cpnMine().find(c => String(c.perk_id) === String(p.id)) || (sample ? GMOCK.local().coupons.find(c => cpnLive(c) && String(c.perk_id) === String(p.id)) : null));
   if (mine) b += '<button class="btn block ink" data-act="cpn-open" data-code="' + esc(mine.code) + '">' + ic('qr', 'sm') + t('perk.showCoupon') + '</button>';
   else if (!logged() && !helper && !sample) b += '<button class="btn block ink" data-act="perk-login" data-id="' + esc(p.id) + '">' + t('perk.loginToBook') + '</button>';
-  else if (p.available || (sample && V.km >= +p.points)) b += '<button class="btn block ink" data-act="perk-book" data-id="' + esc(p.id) + '"><span>' + t('perk.bookFor') + '</span>' + kmIco(+p.points || 0) + '</button>';
+  else if (p.available || (sample && !p.reason && V.km >= +p.points)) b += '<button class="btn block ink" data-act="perk-book" data-id="' + esc(p.id) + '"><span>' + t('perk.bookFor') + '</span>' + kmIco(+p.points || 0) + '</button>';
   else b += '<button class="btn block soft" disabled>' + esc(why || t('perk.unavailable')) + '</button>';
   b += '</div>';
   b += '<p class="xsmall muted" style="margin:12px 0 0">' + (helper ? t('perk.premNote') : t('perk.bookNote')) + '</p>';
@@ -6360,7 +6390,8 @@ function cpnShow(c) {
   const title = perk ? t('perk.couponTitle') : kind === 'campaign' ? t('cpn.campaignTitle') : t('hcode.coupon');
   const ben = perk ? '' : String(c.benefit || c.discount_text || '').trim();
   const until = c.expires_at ? fUntilD(c.expires_at) : '';
-  const note = [until ? t('hcode.couponUntil', {date: until}) : t('hcode.singleUse'), c.schedule_text ? t('perk.schedule', {when: c.schedule_text}) : ''].filter(Boolean).join(' ');
+  const gone = c.sample && c.status && c.status !== 'active' ? cpnGone(c) : ''; /* демо: купон из истории */
+  const note = gone || [until ? t('hcode.couponUntil', {date: until}) : t('hcode.singleUse'), c.schedule_text ? t('perk.schedule', {when: c.schedule_text}) : ''].filter(Boolean).join(' ');
   const acts = c.can_cancel ? '<button class="btn line" data-act="cpn-cancel" data-code="' + esc(c.code) + '">' + t('perk.cancel') + '</button>' : '';
   codeFull({title, sub: [c.title || c.campaign_title, c.company].filter(Boolean).join(' · '), ben: ben && ben !== c.title ? ben : '', qr: c.qr || 'HELPER-COUPON:' + c.code, bar: c.code, big: c.code, hint: perk ? t('perk.couponHint') : t('hcode.couponHint'), note: note + (c.sample ? ' ' + t('perk.sampleCoupon') : ''), extra: acts, code: c.code});
   if (!c.sample) cpnWatch(c.code);
@@ -6375,13 +6406,21 @@ function cpnCancel(code) {
     render(); cpnFetch(true); perksFetch(true); gameFetch(true); loyFetch(true);
   }, onCancel: () => cpnShow(c)});
 }
+/* демо: состояние купона из истории — «Использован 9.10» / «Срок истёк 7.10» / «Отменён» */
+const cpnGone = c => c.status === 'redeemed' ? t('dn.usedOn', {date: fDt(c.redeemed_at)}) : c.status === 'expired' || (c.expires_at && tsParse(c.expires_at) < Date.now()) ? t('dn.expiredOn', {date: fDt(c.expires_at)}) : t('dn.st.cancelled');
+function cpnHist(c) {
+  const st = c.status === 'redeemed' ? ['st-ok', 'dn.st.redeemed', c.redeemed_at] : c.status === 'cancelled' ? ['st-none', 'dn.st.cancelled', null] : ['st-none', 'dn.st.expired', c.expires_at];
+  return '<button class="item" data-act="cpn-open" data-code="' + esc(c.code) + '"><span class="ic-circle">' + ic(cpnKind(c) === 'perk' ? 'gift' : 'tag', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(c.title || t('cpn.partner')) + '</span><span class="s">' + esc([c.company, st[2] ? fDt(st[2]) : ''].filter(Boolean).join(' · ')) + '</span></span><span class="end"><span class="status ' + st[0] + '">' + t(st[1]) + '</span></span></button>';
+}
 function gCoupons() {
   const list = cpnMine().concat(!logged() ? GMOCK.local().coupons.filter(cpnLive) : []);
   const loc = LOY().coupons.filter(c => !c.used && c.exp > Date.now()).sort((a, b) => a.exp - b.exp);
-  if (!list.length && !loc.length) return '';
-  return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('cpn.mine') + '</h2><span class="xsmall muted">' + t('cpn.showQr') + '</span></div><div class="group">' +
+  const hist = S.demo && !logged() ? GMOCK.local().coupons.filter(c => c.sample && !cpnLive(c)) : []; /* демо: использованные и истёкшие */
+  if (!list.length && !loc.length && !hist.length) return '';
+  return '<section class="section"><div class="section-head"><h2 class="eyebrow">' + t('cpn.mine') + '</h2><span class="xsmall muted">' + t('cpn.showQr') + '</span></div><div class="group cpn-mine">' +
     list.map(c => '<button class="item" data-act="cpn-open" data-code="' + esc(c.code) + '"><span class="ic-circle ink">' + ic('qr', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(c.title || t('cpn.partner')) + (c.sample ? ' <span class="badge warn">' + t('bonus.example') + '</span>' : '') + '</span><span class="s">' + esc([c.company, t('cpn.code', {code: String(c.code)})].filter(Boolean).join(' · ')) + '</span></span><span class="end">' + (c.expires_at ? '<span class="status st-soon">' + fUntil(c.expires_at) + '</span>' : '') + '</span></button>').join('') +
-    loc.map(c => { const k = COUPON_BY[c.cid]; if (!k) return ''; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · ' + t('cpn.code', {code: c.code}) + ' · ' + t('bonus.example') + '</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div></section>';
+    loc.map(c => { const k = COUPON_BY[c.cid]; if (!k) return ''; return '<button class="item" data-act="coupon" data-id="' + c.id + '"><span class="ic-circle">' + (k.sp ? pi(k.sp, 28) : ic(k.ic, 'sm')) + '</span><span class="body"><span class="t" style="display:block">' + k.t + '</span><span class="s">' + k.p + ' · ' + t('cpn.code', {code: c.code}) + ' · ' + t('bonus.example') + '</span></span><span class="end"><span class="status st-soon" data-exp="' + c.exp + '">' + mmss(c.exp) + '</span></span></button>'; }).join('') + '</div>' +
+    (hist.length ? '<p class="eyebrow" style="margin:16px 0 8px">' + t('dn.hist') + '</p><div class="group">' + hist.map(cpnHist).join('') + '</div>' : '') + '</section>';
 }
 
 /* ================= главная: полоска игры — уровень, километры, серия, следующий шаг задания ================= */
@@ -6455,13 +6494,105 @@ const GAME_ACT = {
   'gbanner-open': el => { const b = $('#gbanner'), k = el.dataset.k, id = el.dataset.id; if (b && b._fin) b._fin(); if (ui.onb) return; if (k === 'badge') { setTab('bonus'); setTimeout(() => badgeSheet(id), 250); } else setTab('bonus'); }
 };
 
+/* ================= демо-сеть партнёров: пример для демо без аккаунта (S.demo, вход не выполнен, с сервера ничего нет) =================
+   16 сегментов, 20 компаний, 21 акция (скидки %, MDL и «−1 MDL/л», подарки, счастливые часы, первый визит, сезон, выходные, уровень, гео, км ×2, объявление,
+   финансовые — «пример»), 20 плюшек за 5–50 км Helper. Формы — как у GET /v1/offers и /v1/perks; тексты — словарь dn.* (ru/ro/en), здесь только данные
+   (генератор demo/net.py). Сети не касается: событий акций нет, купоны — примеры на телефоне (GMOCK). */
+/* компании: id → [сегмент, название, уровень партнёра, рейтинг, отзывов, точки [[район | [трасса, км], улица, lat, lon, часы (dn.h.*), с, до]]] */
+const DN_P = {
+  p01: ['sto', 'Atelierul Mecanic Botanica', 'gold', 4.8, 126, [['botanica', 'bd. Dacia 27', 46.9869, 28.8573, 'monsat', '08:30', '19:00'], ['ciocana', 'str. Uzinelor 21', 47.0411, 28.8935, 'monsat', '09:00', '18:00']]],
+  p02: ['sto', 'Service Nord-Motor', 'silver', 4.6, 41, [['balti', 'str. Ștefan cel Mare 152', 47.7655, 27.9302, 'monsat', '08:00', '18:00']]],
+  p03: ['ins', 'Asigurări Scut', 'silver', 4.5, 33, [['centru', 'str. Ismail 88', 47.0201, 28.8406, 'weekdays', '09:00', '18:00'], ['riscani', 'str. Alecu Russo 6', 47.0519, 28.8641, 'weekdays', '09:00', '17:00']]],
+  p04: ['wash', 'Spălătorie Picătura', 'gold', 4.7, 212, [['ciocana', 'bd. Mircea cel Bătrân 14', 47.0447, 28.8902, 'daily', '08:00', '21:00'], ['botanica', 'str. Grenoble 130', 46.9935, 28.8299, 'daily', '08:00', '20:00']]],
+  p05: ['wash', 'Detailing Luciu', 'platinum', 4.9, 58, [['centru', 'str. Calea Ieșilor 9', 47.0362, 28.8053, 'monsat', '09:00', '19:00']]],
+  p06: ['cafe', 'Popas la Răscruce', 'silver', 4.6, 97, [[['M2', 23], null, 47.1702, 28.8301, 'daily', '07:00', '23:00'], [['M2', 61], null, 47.3801, 28.8155, 'daily', '07:00', '22:00']]],
+  p07: ['cafe', 'Cafe Stop M1', 'bronze', 4.4, 64, [[['M1', 12], null, 47.0398, 28.6879, 'h24', '', '']]],
+  p08: ['parts', 'Piese Rapide', 'silver', 4.7, 88, [['riscani', 'str. Kiev 7', 47.0605, 28.8691, 'monsat', '08:00', '19:00'], ['buiucani', 'str. Ion Creangă 64', 47.0335, 28.7955, 'monsat', '09:00', '18:00']]],
+  p09: ['tires', 'Vulcanizare Roata Bună', 'gold', 4.8, 143, [['telecentru', 'str. Grenoble 211', 46.9981, 28.8117, 'daily', '08:00', '20:00'], ['ciocana', 'str. Petru Zadnipru 2', 47.0461, 28.8851, 'daily', '08:00', '19:00']]],
+  p10: ['mall', 'Galeria Sudului', 'silver', 4.3, 51, [['botanica', 'bd. Decebal 23', 46.9897, 28.8619, 'daily', '09:00', '22:00']]],
+  p11: ['fuel', 'Carburant Expres', 'platinum', 4.5, 301, [['botanica', 'bd. Dacia 58', 46.9806, 28.8655, 'h24', '', ''], ['riscani', 'bd. Moscova 21', 47.0577, 28.8752, 'h24', '', ''], [['M1', 9], null, 47.0336, 28.7228, 'h24', '', '']]],
+  p12: ['fuel', 'Benzinăria Codrului', 'bronze', 4.6, 37, [[['M3', 18], null, 46.9002, 28.7561, 'daily', '06:00', '23:00']]],
+  p13: ['dealer', 'AutoGalerie Buiucani', 'gold', 4.7, 45, [['buiucani', 'str. Alba Iulia 75', 47.0398, 28.782, 'monsat', '09:00', '19:00'], ['telecentru', 'str. Sarmizegetusa 90', 46.9962, 28.8221, 'monsat', '09:00', '18:00']]],
+  p14: ['leasing', 'Leasing Drum Lin', 'bronze', 4.6, 12, [['centru', 'bd. Ștefan cel Mare 71', 47.0247, 28.8336, 'weekdays', '09:00', '18:00']]],
+  p15: ['bank', 'Banca Plaiului', 'bronze', null, 0, [['centru', 'str. București 45', 47.0258, 28.8312, 'weekdays', '09:00', '17:00'], ['botanica', 'bd. Dacia 12', 46.9911, 28.8541, 'weekdays', '09:00', '17:00']]],
+  p16: ['school', 'Școala Auto Volan Sigur', 'silver', 4.9, 76, [['riscani', 'str. Dimo 11', 47.0632, 28.8618, 'monsat', '08:00', '20:00']]],
+  p17: ['tow', 'Asist Rutier 24', 'gold', 4.8, 54, [['buiucani', 'str. Vasile Lupu 40', 47.0451, 28.7774, 'h24', '', ''], [['M2', 15], null, 47.1171, 28.8414, 'h24', '', '']]],
+  p18: ['itp', 'Testare Tehnică Telecentru', 'bronze', 4.4, 29, [['telecentru', 'str. Pietrarilor 6', 47.0014, 28.8072, 'monsat', '08:00', '17:00']]],
+  p19: ['parking', 'Parcare Centru Plus', 'bronze', 4.2, 19, [['centru', 'str. Vasile Alecsandri 1', 47.0229, 28.8381, 'h24', '', '']]],
+  p20: ['fleet', 'Flota Urbană', 'silver', 4.5, 22, [['ciocana', 'str. Otovasca 13', 47.0398, 28.9004, 'daily', '07:00', '22:00']]]
+};
+/* акции: [id, компания, вид, скидка (percent | fixed | none), значение, ×км, начало, конец (дни от сегодня), купон, гео-уведомление, services_due, финансовая (пример), своя выгода (dn.o.<id>.b), расписание] */
+const DN_O = [
+  ['o01', 'p01', 'discount', 'none', 0, 1, -6, 24, 1, 0, ['oil'], 0, 1, null],
+  ['o02', 'p02', 'discount', 'percent', 10, 1, -10, 40, 1, 0, [], 0, 0, null],
+  ['o03', 'p03', 'discount', 'none', 0, 1, -3, 45, 1, 0, ['insurance'], 1, 1, null],
+  ['o04', 'p04', 'discount', 'percent', 20, 1, -14, 30, 1, 1, [], 0, 0, {days: [1, 2, 3, 4, 5], from: '10:00', to: '15:00'}],
+  ['o05', 'p05', 'discount', 'percent', 25, 1, -20, 60, 1, 0, [], 0, 0, null],
+  ['o06', 'p06', 'discount', 'none', 0, 1, -30, 60, 1, 1, [], 0, 1, null],
+  ['o07', 'p07', 'discount', 'none', 0, 1, -7, 35, 1, 0, [], 0, 1, null],
+  ['o08', 'p08', 'discount', 'percent', 10, 1, -5, 50, 1, 0, ['oil', 'filters'], 0, 0, null],
+  ['o09', 'p09', 'discount', 'fixed', 100, 1, -8, 21, 1, 0, [], 0, 0, null],
+  ['o10', 'p09', 'discount', 'none', 0, 1, -2, 50, 1, 0, ['tires'], 0, 1, null],
+  ['o11', 'p10', 'discount', 'none', 0, 1, -10, 70, 1, 0, [], 0, 1, null],
+  ['o12', 'p11', 'discount', 'none', 0, 1, -12, 30, 1, 0, [], 0, 1, null],
+  ['o13', 'p12', 'discount', 'none', 0, 1, -20, 60, 1, 1, [], 0, 1, null],
+  ['o14', 'p13', 'announcement', 'none', 0, 1, -1, 9, 0, 0, [], 0, 0, null],
+  ['o15', 'p14', 'discount', 'none', 0, 1, -15, 75, 1, 0, [], 1, 1, null],
+  ['o16', 'p15', 'discount', 'none', 0, 1, -15, 75, 1, 0, [], 1, 1, null],
+  ['o17', 'p16', 'discount', 'fixed', 500, 1, -12, 40, 1, 0, [], 0, 0, null],
+  ['o18', 'p17', 'discount', 'percent', 15, 1, -25, 65, 1, 0, [], 0, 0, null],
+  ['o19', 'p18', 'bonus', 'none', 0, 2, -9, 22, 0, 0, [], 0, 0, null],
+  ['o20', 'p19', 'discount', 'none', 0, 1, -30, 90, 1, 0, [], 0, 1, {days: [1, 2, 3, 4, 5], from: '07:00', to: '10:00'}],
+  ['o21', 'p20', 'discount', 'percent', 20, 1, -6, 55, 1, 0, [], 0, 0, null]
+];
+/* плюшки (5–50 км Helper): [id, компания, вид, км, в день, осталось сегодня (null — как в день), с уровня, пример, «счастливые часы»] */
+const DN_K = [
+  ['k01', 'p01', 'service', 40, 3, 2, 1, 0, null],
+  ['k02', 'p02', 'service', 15, 6, null, 1, 0, null],
+  ['k03', 'p03', 'priority', 20, 10, null, 1, 0, null],
+  ['k04', 'p04', 'upgrade', 15, 8, null, 1, 0, {days: [1, 2, 3, 4, 5], from: '10:00', to: '15:00'}],
+  ['k05', 'p05', 'gift', 10, 12, null, 1, 0, null],
+  ['k06', 'p06', 'gift', 10, 20, null, 1, 0, null],
+  ['k07', 'p07', 'gift', 10, 15, null, 1, 0, null],
+  ['k08', 'p08', 'gift', 10, 15, null, 1, 0, null],
+  ['k09', 'p09', 'service', 5, 20, null, 1, 0, null],
+  ['k10', 'p10', 'gift', 25, 30, null, 1, 0, null],
+  ['k11', 'p11', 'gift', 20, 15, null, 1, 0, null],
+  ['k12', 'p12', 'service', 10, 10, null, 1, 0, null],
+  ['k13', 'p13', 'upgrade', 35, 5, null, 2, 0, null],
+  ['k14', 'p14', 'gift', 30, 5, null, 1, 1, null],
+  ['k15', 'p15', 'gift', 30, 10, null, 1, 1, null],
+  ['k16', 'p16', 'service', 50, 2, 0, 2, 0, null],
+  ['k17', 'p17', 'priority', 30, 5, null, 1, 0, null],
+  ['k18', 'p18', 'service', 15, 8, null, 1, 0, null],
+  ['k19', 'p19', 'gift', 20, 25, null, 1, 0, {days: [1, 2, 3, 4, 5], from: '07:00', to: '10:00'}],
+  ['k20', 'p20', 'service', 45, 3, null, 4, 0, null]
+];
+const DN_HOME = ['o12', 'o04', 'o01']; /* полоска «Акции партнёров» на главной: АЗС, мойка, СТО */
+const DN_TOP_K = ['k09', 'k06', 'k04', 'k11']; /* превью «Плюшки партнёров» в «Игре»: шиномонтаж, кафе, мойка, АЗС */
+const DNET = {offers: [], perks: []};
+onLang(() => {
+  const day = (n, end) => { const d = new Date(); d.setDate(d.getDate() + n); d.setHours(end ? 23 : 0, end ? 59 : 0, 0, 0); return d.toISOString(); };
+  const sch = x => x ? t('dn.h.weekdays', {from: x.from, to: x.to}) : null; /* все расписания — по будням */
+  const locs = pid => DN_P[pid][5].map((l, i) => ({id: 'demo-' + pid + '-' + (i + 1), title: Array.isArray(l[0]) ? t('dn.hw', {road: l[0][0], km: l[0][1]}) : t('dn.sec.' + l[0]), address: l[1] || '', lat: l[2], lon: l[3], hours: t('dn.h.' + l[4], {from: l[5], to: l[6]})}));
+  const partner = pid => { const p = DN_P[pid]; return {level: {key: p[2], title: t('perk.plvl.' + p[2])}, badge_title: null, rating: p[3] ? {avg: p[3], count: p[4]} : null, partner_of_month: pid === 'p11'}; };
+  /* k09 — «Проверка давления»: прежний id demo-p2 (на него ссылается задание q-p1) */
+  DNET.perks = DN_K.map(k => { const p = DN_P[k[1]]; return {id: k[0] === 'k09' ? 'demo-p2' : 'demo-' + k[0], dk: k[0], partner_id: 'demo-' + k[1], company: p[1], logo_url: null, category: p[0], category_title: t('dn.seg.' + p[0]), partner: partner(k[1]),
+    title: t('dn.k.' + k[0] + '.t'), description: t('dn.k.' + k[0] + '.d'), kind: k[2], kind_title: t('perk.kind.' + k[2]), points: k[3], min_level: k[6], min_level_title: k[6] > 1 ? t('game.lvl.' + k[6]) : null,
+    stock_left_today: k[5] != null ? k[5] : k[4], stock_left_month: null, schedule: k[8], schedule_text: sch(k[8]), happy_hours_now: null, coupon_days: 7, cooldown_days: 30, locations: locs(k[1]), distance_m: null, example: !!k[7], demo: true}; });
+  DNET.offers = DN_O.map(o => { const p = DN_P[o[1]], pk = DNET.perks.find(x => x.partner_id === 'demo-' + o[1]); return {campaign_id: 'demo-' + o[0], dk: o[0], partner_id: 'demo-' + o[1], company: p[1], logo_url: null, category: p[0], category_title: t('dn.seg.' + p[0]),
+    title: t('dn.o.' + o[0] + '.t'), text: t('dn.o.' + o[0] + '.x'), kind: o[2], discount_kind: o[3], discount_value: o[4], discount_text: o[12] ? t('dn.o.' + o[0] + '.b') : null, bonus_multiplier: o[5], reward: null,
+    perk: pk ? {id: pk.id, title: pk.title, points: pk.points, kind: pk.kind} : null, starts_at: day(o[6]), ends_at: day(o[7], true), audience: {fuel: [], makes: [], car_age_min: null, car_age_max: null, services_due: o[10]},
+    channels: {feed: true, geo_push: !!o[9]}, has_coupon: !!o[8], partner: partner(o[1]), locations: locs(o[1]), schedule: o[13], schedule_text: sch(o[13]), example: !!o[11], demo: true}; });
+});
+
 /* ================= GMOCK: пример (демо без аккаунта) и имитация сервера игры для разработки (?gamemock) =================
    Формы ответов — как в GAME_API.md; тексты — из словаря (gs.*), числа — правила GAME_MODEL.md. */
 const GMOCK = (() => {
   const T0 = () => new Date(), isoAt = d => d.toISOString().replace(/\.\d{3}Z$/, 'Z'), inDays = n => isoAt(new Date(Date.now() + n * 864e5));
   const MEM = {coupons: [], rated: {}};
   let M = null;
-  const st = () => { if (!M) M = Object.assign({points: 1250, xp: 430, coupons: [], rated: {}, notices: [], claimed: {}, events: {}, visits: [{id: 'mv1', partner_id: 2, ck: 'demo.shop.tires', at: inDays(-1), points: 20, xp: 30, can_rate: true, rated: false, rate_until: inDays(6)}]}, jget(K_GMOCK) || {}); return M; };
+  const st = () => { if (!M) M = Object.assign({points: 1250, xp: 430, coupons: [], rated: {}, notices: [], claimed: {}, events: {}, visits: [{id: 'mv1', partner_id: 'demo-p09', company: DN_P.p09[1], at: inDays(-1), points: 20, xp: 30, can_rate: true, rated: false, rate_until: inDays(6)}]}, jget(K_GMOCK) || {}); return M; };
   const persist = () => jset(K_GMOCK, M);
   const lvlOf = xp => gLevelFor(xp);
   function meta() {
@@ -6483,7 +6614,7 @@ const GMOCK = (() => {
       q('q-w2', 'weekly', 'fuel', [['fuel', 2, 1]], {xp: 10, points: 15, badge: null, perk: null}),
       q('q-w3', 'weekly', 'rate', [['rate', 1, 0]], {xp: 10, points: 10, badge: null, perk: null}),
       q('q-s1', 'seasonal', 'winter', [['tires', 1, 0], ['battery', 1, 1], ['coolant', 1, 0], ['washer', 1, 0]], {xp: 100, points: 150, badge: {key: 'winter_ready', title: t('game.b.winter_ready'), icon: 'snow'}, perk: null}, {starts_at: y + '-10-15T00:00:00Z', ends_at: (y + 1) + '-02-28T21:00:00Z'}),
-      q('q-p1', 'sponsor', 'pressure', [['partner_visit_pressure', 2, 0]], {xp: 20, points: 40, badge: null, perk: {id: 'demo-p2', title: t('gs.p2'), company: t('demo.shop.tires')}}, {sponsor: {partner_id: 2, company: t('demo.shop.tires')}, starts_at: y + '-11-01T00:00:00Z', ends_at: y + '-11-30T21:00:00Z'})
+      q('q-p1', 'sponsor', 'pressure', [['partner_visit_pressure', 2, 0]], {xp: 20, points: 40, badge: null, perk: {id: 'demo-p2', title: t('dn.k.k09.t'), company: DN_P.p09[1]}}, {sponsor: {partner_id: 'demo-p09', company: DN_P.p09[1]}, starts_at: y + '-11-01T00:00:00Z', ends_at: y + '-11-30T21:00:00Z'})
     ];
     L.forEach(x => { const s = x.steps; x.progress = s.reduce((a, z) => a + Math.min(1, (+z.done || 0) / (+z.count || 1)), 0) / s.length; x.status = x.status === 'completed' || x.progress >= 1 ? 'completed' : 'active'; });
     return L;
@@ -6500,32 +6631,56 @@ const GMOCK = (() => {
       multipliers: {level: lv.mult, mileage_streak: 1, total_mileage: 1}, ambassador: false, streaks: streaks(), badges: B.map(b => ({key: b.key, title: b.title, icon: b.icon, earned_at: b.earned_at})), badges_earned: B.length, badges_total: G_BADGES.length, quests: [], recent: [], notices: []};
   }
   const EARNED = ['start', 'first_car', 'first_service', 'friend', 'scanner'];
-  /* каталог-пример: демо-партнёры из «Предложений рядом» (SPOT_SRC) */
+  /* опыт демо-водителя — из истории демо-автомобиля (как в snapshot) */
+  const demoXp = () => (S.loyalty.hist || []).reduce((a, h) => a + (h.p > 0 ? G_LOCAL_XP[h.k] || 0 : 0), 0);
+  /* каталог-пример: плюшки демо-сети партнёров (DNET), 5–50 км Helper; доступность — по уровню, остатку на сегодня и километрам демо */
   function catalog() {
-    const sp = i => SPOT_SRC[i], loc = (i, id) => ({id, title: sp(i).name || t(sp(i).n), address: SPOTS[i][3], lat: sp(i).lat, lon: sp(i).lon, hours: t('gs.hours')});
-    const P = (id, si, pid, cat, catT, kind, pts, lvl, extra) => Object.assign({id, partner_id: pid, company: sp(si).name || t(sp(si).n), category: cat, category_title: catT, partner: {level: {key: lvl[0], title: t('perk.plvl.' + lvl[0])}, badge_title: null, rating: lvl[1] ? {avg: lvl[1], count: lvl[2]} : null, partner_of_month: !!lvl[3]},
-      title: t('gs.' + id.replace('demo-', '')), description: t('gs.' + id.replace('demo-', '') + 'd'), kind, kind_title: t('perk.kind.' + kind), points: pts, min_level: 1, min_level_title: null, available: true, unavailable: null, unavailable_text: null, next_available_at: null,
-      stock_left_today: null, stock_left_month: null, schedule: null, schedule_text: null, happy_hours_now: null, coupon_days: 7, cooldown_days: 30, locations: [loc(si, id + '-l')], distance_m: null}, extra || {});
-    const items = [
-      P('demo-p1', 0, 1, 'wash', t('spot.type.wash'), 'gift', 150, ['silver', 4.7, 38], {stock_left_today: 5}),
-      P('demo-p2', 2, 2, 'tires', t('biz.cat.tires'), 'service', 200, ['gold', 4.9, 112, true], {schedule: {days: [1, 2, 3, 4, 5], from: '10:00', to: '16:00'}, schedule_text: t('gs.sched'), stock_left_today: 3}),
-      P('demo-p3', 1, 3, 'sto', t('c.sto'), 'service', 400, ['platinum', 4.8, 64], {min_level: 3, min_level_title: t('game.lvl.3')}),
-      P('demo-p4', 4, 4, 'sto', t('c.sto'), 'upgrade', 250, ['silver', 4.6, 21], {min_level: 4, min_level_title: t('game.lvl.4'), available: false, unavailable: 'level'}),
-      P('demo-p5', 3, 5, 'parts', t('spot.type.parts'), 'gift', 100, ['bronze', 0, 0], {stock_left_today: 12}),
-      P('demo-p6', 6, 6, 'sto', t('c.sto'), 'priority', 150, ['bronze', 4.4, 9])
-    ];
+    const lv = lvlOf(demoXp()).n, km = balance();
+    const items = DNET.perks.map(p => {
+      const x = Object.assign({}, p, {partner: Object.assign({}, p.partner), locations: p.locations.map(l => Object.assign({}, l))});
+      const r = +x.min_level > lv ? 'level' : x.stock_left_today === 0 ? 'stock' : km < +x.points ? 'points' : null;
+      return Object.assign(x, {available: !r, unavailable: r, unavailable_text: null, next_available_at: null});
+    });
     return {items: items.map(pkNorm), helper: [{id: 'premium', kind: 'helper', title: t('perk.premT'), description: t('perk.premD', {days: 30}), points: 300, days: 30, available: true, unavailable: null, unavailable_text: null}].map(pkNorm)};
   }
   /* пример для демо: опыт и километры — из истории демо-автомобиля, остальное — как у активного водителя */
   function snapshot() {
-    const hist = S.loyalty.hist || [], xp = hist.reduce((a, h) => a + (h.p > 0 ? G_LOCAL_XP[h.k] || 0 : 0), 0);
-    return {me: me(balance(), xp, EARNED), quests: quests(true), badges: badges(EARNED), visits: [{id: 'demo-v1', company: t('demo.shop.wash'), can_rate: !MEM.rated['demo-v1'], rated: !!MEM.rated['demo-v1'], rate_until: inDays(5)}], at: 0};
+    const xp = demoXp();
+    return {me: me(balance(), xp, EARNED), quests: quests(true), badges: badges(EARNED), visits: [{id: 'demo-v1', company: DN_P.p04[1], can_rate: !MEM.rated['demo-v1'], rated: !!MEM.rated['demo-v1'], rate_until: inDays(5)}], at: 0};
   }
   function coupon(p, code, sample) {
-    return {code, qr: 'HELPER-COUPON:' + code, perk_id: p.id, title: p.title, kind: p.kind, kind_title: p.kind_title, partner_id: p.partner_id, company: p.company, points: +p.points, status: 'active', created_at: isoAt(T0()), expires_at: inDays(+p.coupon_days || 7), redeemed_at: null, schedule: p.schedule, schedule_text: p.schedule_text, locations: p.locations, can_cancel: true, visit_id: null, can_rate: false, sample: !!sample};
+    return {code, qr: 'HELPER-COUPON:' + code, perk_id: p.id, title: p.title, kind: p.kind, kind_title: p.kind_title, partner_id: p.partner_id, company: p.company, points: +p.points, status: 'active', created_at: isoAt(T0()), expires_at: inDays(+p.coupon_days || 7), redeemed_at: null, schedule: p.schedule, schedule_text: p.schedule_text, locations: p.locations, can_cancel: true, visit_id: null, can_rate: false, sample: !!sample, dk: p.dk || null};
   }
   const code6 = () => Array.from({length: 6}, () => ALPH[Math.floor(Math.random() * 32)]).join('');
   function bookLocal(p) { const c = coupon(p, code6(), true); MEM.coupons.unshift(c); award('spend', -(+p.points || 0), 'loy.h.perk', {perk: p.title}); save(); return c; }
+  /* демо: купон акции — пример на телефоне (без сервера); уже есть живой — тот же */
+  function offerLocal(o) {
+    const ex = MEM.coupons.find(c => c.campaign_id === o.campaign_id && cpnLive(c)); if (ex) return ex;
+    const code = code6(), c = {code, qr: 'HELPER-COUPON:' + code, coupon_kind: 'campaign', campaign_id: o.campaign_id, title: o.title, company: o.company, benefit: offerBen(o), status: 'active', created_at: isoAt(T0()), expires_at: inDays(7), redeemed_at: null, can_cancel: false, sample: true, dk: o.dk};
+    MEM.coupons.unshift(c); return c;
+  }
+  /* демо: «Мои купоны» — два живых (акция АЗС «−1 MDL/л», плюшка «Кофе в подарок») и история (использован вчера, истёк) — один раз, только в памяти */
+  let seeded = false;
+  function seed() {
+    if (seeded || !S || !S.demo || logged()) return;
+    seeded = true;
+    const O = k => DNET.offers.find(x => x.dk === k), P = k => DNET.perks.find(x => x.dk === k);
+    const oc = (k, code, extra) => Object.assign(offerLocal(O(k)), {code, qr: 'HELPER-COUPON:' + code}, extra);
+    const pc = (k, code, extra) => Object.assign(coupon(P(k), code, true), {can_cancel: false}, extra);
+    MEM.coupons = [];
+    const a = oc('o12', 'F7KQ2M', {created_at: inDays(-2), expires_at: inDays(5)}), b = pc('k06', 'C4FE9R', {created_at: inDays(-1), expires_at: inDays(6)});
+    const u = oc('o04', 'W2HP8D', {status: 'redeemed', created_at: inDays(-3), redeemed_at: inDays(-1), expires_at: inDays(4)}), x = pc('k10', 'P3RK6T', {status: 'expired', created_at: inDays(-10), expires_at: inDays(-3)});
+    MEM.coupons = [a, b, u, x];
+  }
+  const relabel = c => {
+    if (!c.dk) return;
+    const o = DNET.offers.find(x => x.dk === c.dk), p = DNET.perks.find(x => x.dk === c.dk);
+    if (o) Object.assign(c, {title: o.title, benefit: offerBen(o)});
+    else if (p) Object.assign(c, {title: p.title, kind_title: p.kind_title, schedule_text: p.schedule_text, locations: p.locations});
+  };
+  onLang(() => MEM.coupons.forEach(relabel));
+  /* выход из демо: купоны-примеры и оценки — забыть */
+  function clear() { MEM.coupons = []; MEM.rated = {}; seeded = false; }
   function cancelLocal(code) { const c = MEM.coupons.find(x => x.code === code); if (!c || c.status !== 'active') return; c.status = 'cancelled'; award('refund', +c.points || 0, 'loy.h.perkRefund', {perk: c.title}); save(); }
   const err = (s, code, msg) => { throw apiErr(s, code, msg || code); };
   /* ответ — копия, как по сети (кэш приложения не должен делить объекты с «сервером») */
@@ -6534,7 +6689,7 @@ const GMOCK = (() => {
     await sleep(120);
     const m = st(), meth = (o.method || (o.body !== undefined ? 'POST' : 'GET')).toUpperCase(), p = path.split('?')[0];
     const cat = catalog(), lv = lvlOf(m.xp);
-    cat.items.forEach(x => { x.id = x.id.replace('demo-', 'mock-'); let r = null; if (+x.min_level > lv.n) r = 'level'; else if (m.points < x.points) r = 'points'; if (m.coupons.some(c => c.perk_id === x.id && c.status === 'active')) r = 'coupon_active'; x.available = !r; x.unavailable = r; delete x.reason; delete x.reason_text; });
+    cat.items.forEach(x => { x.id = x.id.replace('demo-', 'mock-'); let r = null; if (+x.min_level > lv.n) r = 'level'; else if (x.stock_left_today === 0) r = 'stock'; else if (m.points < x.points) r = 'points'; if (m.coupons.some(c => c.perk_id === x.id && c.status === 'active')) r = 'coupon_active'; x.available = !r; x.unavailable = r; delete x.reason; delete x.reason_text; });
     if (p === '/v1/game/meta') return meta();
     if (p === '/v1/game/me') { const r = me(m.points, m.xp, EARNED.concat(Object.keys(m.claimed).length ? ['explorer'] : [])); r.notices = m.notices.slice(-30); return r; }
     if (p === '/v1/game/quests') return {ok: true, items: quests(false).map(q => m.claimed[q.id] ? Object.assign(q, {status: 'claimed'}) : q), week: '2026-W40', weekly_left: 1};
@@ -6563,7 +6718,7 @@ const GMOCK = (() => {
     reset() { M = null; jset(K_GMOCK, null); }
   };
   if (GAME_MOCK) try { window.__gameMock = dev; } catch (e) {}
-  return {api: mockApi, snapshot, catalog, bookLocal, cancelLocal, rateLocal: id => { MEM.rated[id] = 1; }, local: () => MEM};
+  return {api: mockApi, snapshot, catalog, bookLocal, cancelLocal, offerLocal, clear, rateLocal: id => { MEM.rated[id] = 1; }, local: () => { seed(); return MEM; }};
 })();
 
 /* ================= Кнопка «Назад» Android, возврат в приложение, скрытые настройки ================= */
@@ -6884,7 +7039,7 @@ const ACT = {
   sos: () => sosSheet(),
   copy: el => { const src = el.dataset.from ? $('#' + el.dataset.from) : null; copyText(src ? src.value : el.dataset.text, src); },
   'demo-exit': () => confirmSheet({title: t('act.demoExitTitle'), text: t('act.demoExitText'), ok: t('act.demoExitOk'), danger: false,
-    onOk: () => { const k = S; S = baseState(); S.settings = k.settings; S.premium = k.premium; S.flags = k.flags; S.loyalty.hid = k.loyalty.hid; S.geo = k.geo; S.bizApps = k.bizApps; save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
+    onOk: () => { const k = S; S = baseState(); S.settings = k.settings; S.premium = k.premium; S.flags = k.flags; S.loyalty.hid = k.loyalty.hid; S.geo = k.geo; S.bizApps = k.bizApps; GMOCK.clear(); save(); ui.stacks = emptyStacks(); startOnb('first'); }}),
   'demo-restore': () => {
     if (logged() && S.cars.some(c => !c.demo)) return confirmSheet({title: t('act.demoOpenTitle'), text: t('act.demoOpenAcct', {email: esc(acctName())}), ok: t('act.demoOpenAcctOk'), danger: false, onOk: async () => { await acctLogout(false); restoreDemo(); }});
     if (S.cars.some(c => !c.demo)) confirmSheet({title: t('act.demoOpenTitle'), text: t('act.demoReplaceText'), ok: t('act.demoReplaceOk'), onOk: restoreDemo});
