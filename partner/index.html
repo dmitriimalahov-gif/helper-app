@@ -1600,9 +1600,21 @@ Object.assign(TX, {
   'nav.billing': ['Баланс', 'Sold', 'Balance'],
   'nav.settings': ['Настройки', 'Setări', 'Settings'],
   'nav.package': ['Пакет', 'Pachet', 'Plan'],
+  "plan.stripe.pay": ["Продолжить в Stripe", "Continuă în Stripe", "Continue to Stripe"],
+  "plan.stripe.terms": ["Автоматическое продление каждый месяц. Отмена в Stripe прекращает продление в конце оплаченного периода.", "Reînnoire automată în fiecare lună. Anularea în Stripe oprește reînnoirea la sfârșitul perioadei achitate.", "Automatically renews each month. Cancel in Stripe to stop renewal at the end of the paid period."],
+  "plan.stripe.test": ["Тестовый режим Stripe: реальные деньги не списываются. Используйте только тестовые платёжные данные.", "Mod de test Stripe: fără debitări reale. Folosiți doar date de plată de test.", "Stripe test mode: no real charges. Use test payment details only."],
+  "plan.stripe.manage": ["Управлять подпиской в Stripe", "Gestionează abonamentul în Stripe", "Manage subscription in Stripe"],
+  "plan.stripe.none": ["Нет оплаченной подписки", "Niciun abonament achitat", "No paid subscription"],
+  "plan.stripe.wait": ["Ожидаем подтверждение оплаты. Обновите страницу через минуту.", "Așteptăm confirmarea plății. Reîncărcați pagina într-un minut.", "Waiting for payment confirmation. Refresh in a minute."],
+  "plan.stripe.cancel": ["Оформление прервано. Вы можете выбрать пакет заново.", "Plata a fost întreruptă. Puteți alege din nou un pachet.", "Checkout was canceled. You can choose a plan again."],
+  "plan.stripe.stop": ["Автопродление отключено", "Reînnoirea automată este oprită", "Automatic renewal is off"],
+  "plan.stripe.owner": ["Подпиской управляет владелец компании.", "Abonamentul este gestionat de proprietarul companiei.", "The business owner manages the subscription."],
+  "plan.stripe.change": ["Чтобы выбрать другой пакет, отмените продление в Stripe и дождитесь окончания текущей подписки.", "Pentru alt pachet, anulați reînnoirea în Stripe și așteptați expirarea abonamentului curent.", "To choose another plan, cancel renewal in Stripe and wait for the current subscription to end."],
+  "plan.stripe.reset": ["Отменить незавершённую оплату", "Anulează plata nefinalizată", "Cancel unfinished checkout"],
+  "plan.stripe.unavailable": ["Оплата временно недоступна", "Plata este temporar indisponibilă", "Payments are temporarily unavailable"],
   'plan.e': ['Пакеты подключения', 'Pachete de conectare', 'Partner plans'],
   'plan.h': ['Выберите, как вас увидят водители', 'Alegeți cum vă vor vedea șoferii', 'Choose how drivers will see you'],
-  'plan.lead': ['Начните бесплатно — пакет можно сменить в любой момент. Платные пакеты подключает менеджер Helper, оплата — после подтверждения.', 'Începeți gratuit — pachetul se poate schimba oricând. Pachetele plătite le activează managerul Helper, plata — după confirmare.', 'Start for free — you can change your plan at any time. A Helper manager activates paid plans; you pay after confirmation.'],
+  "plan.lead": ["Выберите пакет для вашей компании. Ежемесячную подписку можно оформить в Stripe.", "Alegeți pachetul companiei. Abonamentul lunar se activează prin Stripe.", "Choose a plan for your business. Subscribe monthly through Stripe."],
   'plan.popular': ['Популярный', 'Popular', 'Popular'],
   'plan.perMonth': ['/мес', '/lună', '/mo'],
   'plan.perYear': ['/год', '/an', '/yr'],
@@ -1642,7 +1654,7 @@ Object.assign(TX, {
   'plan.send': ['Отправить заявку', 'Trimiteți cererea', 'Send request'],
   'plan.readonly': ['Сменить пакет может владелец или менеджер компании.', 'Pachetul îl poate schimba proprietarul sau managerul companiei.', 'Only the company owner or a manager can change the plan.'],
   'plan.reg.h': ['Пакет подключения', 'Pachetul de conectare', 'Partner plan'],
-  'plan.reg.p': ['Платный пакет — это заявка менеджеру сразу после регистрации; оплата — после подтверждения. Начать можно со «Старта» и сменить пакет позже.', 'Pachetul plătit este o cerere către manager imediat după înregistrare; plata — după confirmare. Puteți începe cu „Start” și schimba pachetul mai târziu.', 'A paid plan is a request to a manager right after sign-up; you pay after confirmation. You can start with “Start” and change later.'],
+  "plan.reg.p": ["После регистрации вы перейдёте в Stripe для оформления выбранной подписки.", "După înregistrare, veți continua în Stripe pentru abonamentul ales.", "After registration, continue to Stripe for your selected subscription."],
   'plan.reg.done': ['Компания зарегистрирована. Заявка на «{name}» отправлена — менеджер свяжется.', 'Compania a fost înregistrată. Cererea pentru „{name}” a fost trimisă — managerul vă va contacta.', 'Your business is registered. Request for “{name}” sent — a manager will contact you.'],
   'plan.err': ['Пакеты сейчас не загрузились — попробуйте позже или напишите менеджеру.', 'Pachetele nu s-au încărcat — încercați mai târziu sau scrieți managerului.', 'Plans didn’t load — try again later or message a manager.'],
   'plan.n.start': ['Старт', 'Start', 'Start'],
@@ -1890,7 +1902,7 @@ Object.assign(TX, {
   'pd.s3.d': ['Водители копят км Helper и бронируют ваши бесплатные услуги и подарки. Вы ничего не платите за километры — клиент приходит сам.', 'Șoferii adună km Helper și rezervă serviciile și cadourile voastre gratuite. Nu plătiți nimic pentru kilometri — clientul vine singur.', 'Drivers collect Helper km and book your free services and gifts. You pay nothing for the km — the customer comes to you.'],
   'pd.s4.t': ['Статистика за месяц', 'Statistica pe lună', 'Monthly statistics'],
   'pd.s4.d': ['Визиты, новые клиенты, выданные плюшки, показы акций и уведомления — по дням. Здесь демо-данные, у вас будут ваши.', 'Vizite, clienți noi, beneficii acordate, afișări ale promoțiilor și notificări — pe zile. Aici sunt date demo, la voi vor fi ale voastre.', 'Visits, new customers, perks given, promotion views and notifications — by day. These are demo numbers; yours will be real.'],
-  'pd.s5.t': ['Начните бесплатно: пакет «Старт» — 0 MDL', 'Începeți gratuit: pachetul «Start» — 0 MDL', 'Start free: the Start package is 0 MDL'],
+  'pd.s5.t': ['Выберите пакет для вашей компании', 'Alegeți pachetul companiei', 'Choose a plan for your business'],
   'pd.s5.d': ['Регистрация — 3 минуты. Кабинет, касса, плюшки и статистика бесплатны; платите только за рекламу, если захотите.', 'Înregistrarea durează 3 minute. Cabinetul, casa, beneficiile și statisticile sunt gratuite; plătiți doar pentru reclamă, dacă doriți.', 'Sign-up takes 3 minutes. The dashboard, till, perks and statistics are free; you only pay for advertising if you want it.'],
   'pwr.title': ['Старый пароль удалён', 'Parola veche a fost ștearsă', 'Old password removed'],
   'pwr.text': ['Для безопасности старый пароль удалён — входите через Google или задайте новый пароль через «Забыли пароль?».', 'Pentru siguranță, parola veche a fost ștearsă — intrați prin Google sau setați o parolă nouă prin „Ați uitat parola?”.', 'For security, the old password was removed — sign in with Google or set a new password via “Forgot password?”.'],
@@ -5075,6 +5087,7 @@ function pkPerSw(d, sel, scope) {
 const pkPerOf = (d, sel) => pkHasYear(d) && sel === 'year' ? 'year' : 'month';
 function pkChip() {
   const k = st.pkg || {}, rq = k.requested || null;
+  if (k.source === 'stripe' && !k.active) return '<span class="pk-chip">' + tx('plan.stripe.none') + '</span>';
   return '<span class="pk-chip' + (rq ? ' req' : '') + '">' + esc(rq ? tx('plan.req.chip', {name: pkName(rq, PKGS[pkMarket()] && PKGS[pkMarket()].d)}) : pkName(k.key || 'start', PKGS[pkMarket()] && PKGS[pkMarket()].d)) + '</span>';
 }
 /* карточка пакета: o.mode — land (лендинг) | cab (кабинет); o.cur — текущий, o.req — запрошенный, o.ro — только просмотр */
@@ -5112,7 +5125,7 @@ function pkMini(p, d, sel, per) {
 /* «Для сетей и брендов», сравнение, примечания */
 function pkExtras(d, o) {
   o = o || {};
-  const cc = d.currency || 'MDL', P0 = d.packages || [];
+  const cc = d.addon_currency || d.currency || 'MDL', P0 = d.packages || [];
   let h = '';
   if ((d.addons || []).length) h += '<div class="pk-sec"><h3>' + tx('plan.addons') + '</h3><div class="pk-adds">' + d.addons.map(a => '<div class="pk-add"><span class="ring"></span><span class="n">' + esc(a.name || '') + '</span><span class="i">' + esc(Array.isArray(a.includes) ? a.includes.join(' · ') : a.includes || '') + '</span>' +
     (a.from_price != null ? '<span class="fr">' + tx('plan.from', {sum: esc(pkMoney(a.from_price, cc))}) + (a.unit ? (/^\//.test(a.unit) ? '' : ' ') + '<small>' + esc(a.unit) + '</small>' : '') + '</span>' : '') +
@@ -5158,6 +5171,13 @@ async function pkRegFill() {
 function pkConfirm(key) {
   const d = PKGS[pkMarket()] && PKGS[pkMarket()].d, p = d && d.packages.find(x => x.key === key);
   if (!p) return;
+  if (d.checkout) {
+    openSheet(p.name, '<div class="pkc-price"><span class="v">' + pkBig(p.price) + '</span><span class="u">' + esc(d.currency) + tx('plan.perMonth') + '</span></div>' +
+      '<p>' + tx('plan.stripe.terms') + '</p>' + (d.checkout.mode !== 'live' ? '<div class="banner">' + tx('plan.stripe.test') + '</div>' : '') +
+      '<form class="form" data-form="pk-req"><input type="hidden" id="pk-k" value="' + esc(p.key) + '">' + errBox('pk-err') +
+      '<button class="btn ink block" type="submit"' + (d.checkout.ready ? '' : ' disabled') + '>' + tx(d.checkout.ready ? 'plan.stripe.pay' : 'plan.stripe.unavailable') + '</button></form>');
+    return;
+  }
   const per = pkPerOf(d, UI.pkPer), pr = pkPrice(p, per), paid = +p.price > 0, nm = esc(p.name || pkName(p.key)), cv = pkConv(pr.v, d.currency);
   openSheet(tx('plan.confirm.h', {name: p.name || pkName(p.key)}), '<div class="pkc-price"><span class="v" style="font-size:38px">' + pkBig(pr.v) + '</span><span class="u">' + esc(d.currency || 'MDL') + pr.unit + '</span></div>' +
     (pr.year ? '<p class="small tnum" style="margin:4px 0 0;font-weight:600">' + esc(tx('plan.eqMonth', {sum: pkMoney(Math.round(pr.v / 12), d.currency)})) + (pr.list > pr.v ? ' · <s class="muted">' + esc(pkMoney(pr.list, d.currency)) + '</s>' : '') + '</p>' : '') +
@@ -5252,6 +5272,12 @@ FORMS.reg4 = async f => {
   st.partner = null; st.cache = {}; st.mine = [];
   store.del(K.todo(p.id));
   let doneMsg = tx('reg.done');
+  if (p.id && pkD && pkD.d.checkout) {
+    store.del(K.dref); go('package', true);
+    try { const payment = await P('/subscription/checkout', {body: {key: pkSel}}); partnerStripeRedirect(payment.url); }
+    catch (e) { toast(tx('reg.done') + ' ' + e.message, 7000); }
+    return;
+  }
   if (pkSel !== 'start' && p.id) {
     /* платный пакет из регистрации — сразу заявка менеджеру (оплата после подтверждения) */
     try { const pb = {key: pkSel}; if (pkD && pkHasYear(pkD.d)) pb.period = R.pkPer === 'year' ? 'year' : 'month'; const r2 = await api('/v1/partner/' + p.id + '/package', {body: pb}); if (r2.package) st.pkg = r2.package; doneMsg = tx('plan.reg.done', {name: pkName(pkSel, pkD && pkD.d)}); }
@@ -5283,7 +5309,29 @@ ACTS['pk-cancel'] = async el => {
   st.pkg = d.package || Object.assign({}, st.pkg, {requested: null, status: 'active'});
   toast(tx('plan.req.cancelled')); $('#root').dataset.shell = ''; render();
 };
+function partnerStripeRedirect(url) {
+  const u = new URL(url);
+  if (u.protocol !== 'https:' || !['checkout.stripe.com', 'billing.stripe.com'].includes(u.hostname) || u.username || u.password) throw new Error(tx('plan.stripe.unavailable'));
+  location.assign(u.href);
+}
+ACTS['pk-portal'] = async el => {
+  const done = busy(el, tx('busy.save'));
+  try { const d = await P('/subscription/portal', {body: {}}); partnerStripeRedirect(d.url); }
+  catch (e) { toast(e.message, 6000); } finally { done(); }
+};
+ACTS['pk-reset-checkout'] = async el => {
+  const done = busy(el, tx('busy.save'));
+  try { await P('/subscription/checkout', {method: 'DELETE'}); toast(tx('plan.stripe.cancel')); }
+  catch (e) { toast(e.message, 6000); } finally { done(); }
+};
 FORMS['pk-req'] = async f => {
+  const catalogue = PKGS[pkMarket()] && PKGS[pkMarket()].d;
+  if (catalogue && catalogue.checkout) {
+    const done = busy(f.querySelector('[type=submit]'), tx('busy.save'));
+    try { const d = await P('/subscription/checkout', {body: {key: val('pk-k')}}); partnerStripeRedirect(d.url); }
+    catch (e) { showErr('pk-err', e.message); } finally { done(); }
+    return;
+  }
   const body = {key: val('pk-k')}, c = val('pk-comment').trim(); if (c) body.comment = c;
   if (val('pk-per')) body.period = val('pk-per');
   const done = busy(f.querySelector('[type=submit]'), tx('busy.save'));
@@ -6907,6 +6955,27 @@ const purposeT = x => { const p = x.purpose || ''; if (!p || LANG === 'ru' || !C
 const TOP = {amount: 0};
 /* кабинет: страница «Пакет» */
 VIEWS.package = async (v, r, alive) => {
+  const catalogue = await pkgsLoad(pkMarket());
+  if (catalogue.checkout) {
+    if (r.q.subscription === 'cancel' && role() === 'owner') {
+      try { await P('/subscription/checkout', {method: 'DELETE'}); } catch (e) { toast(e.message, 5000); }
+    }
+    await refreshPartner();
+    if (!alive()) return;
+    const k = st.pkg || {}, owner = role() === 'owner', ongoing = !['none', 'canceled', 'incomplete_expired'].includes(k.status || 'none');
+    let h = phead(navT('package'), tx('plan.cur.h'), null);
+    if (catalogue.checkout.mode !== 'live') h += '<div class="banner">' + tx('plan.stripe.test') + '</div>';
+    if (r.q.subscription === 'success' && !k.active) h += '<div class="banner">' + tx('plan.stripe.wait') + '</div>';
+    if (r.q.subscription === 'cancel') h += '<div class="banner">' + tx('plan.stripe.cancel') + '</div>';
+    h += '<section class="card pad-lg"><h2>' + esc(k.active ? pkName(k.key, catalogue) : tx('plan.stripe.none')) + '</h2>' +
+      (k.active && k.until ? '<p>' + tx('plan.until', {date: fDate(k.until)}) + (k.will_renew ? '' : ' · ' + tx('plan.stripe.stop')) + '</p>' : '') +
+      '<p>' + tx('plan.stripe.terms') + '</p>' +
+      (!owner ? '<p class="hint">' + tx('plan.stripe.owner') + '</p>' : k.manage_available ? '<button class="btn ink" data-act="pk-portal">' + tx('plan.stripe.manage') + '</button>' : '') +
+      (ongoing ? '<p class="hint">' + tx('plan.stripe.change') + '</p>' : owner && k.checkout_pending ? '<button class="btn soft" data-act="pk-reset-checkout">' + tx('plan.stripe.reset') + '</button>' : '') + '</section>';
+    h += '<div class="pk-grid">' + catalogue.packages.map(p => pkCard(p, catalogue, {mode: 'cab', cur: k.active ? k.key : null, ro: !owner || ongoing || !catalogue.checkout.ready, per: 'month'})).join('') + '</div>' + pkExtras(catalogue, {});
+    v.innerHTML = h;
+    return;
+  }
   const k = st.pkg || {key: 'start', status: 'active'}, ro = !canManage(), cur = k.key || 'start', rq = k.requested || null;
   let d;
   try { d = await pkgsLoad(pkMarket()); } catch (e) { if (alive()) v.innerHTML = phead(navT('package'), tx('plan.cur.h'), null) + errorHTML(e); return; }
@@ -7576,14 +7645,8 @@ function pdClient(raw) {
   return {scanned: 'client', helper_id: pdHid(), valid: true, reason_code: null, reason: null, driver: drv, new_client: !vis, visited_today: vis, can_visit: !vis, visit_block: vis ? 'visit_today' : null, visit_block_text: vis ? tx('pd.vtoday') : null, visit_preview: prev, coupons, coupon: null, bonus_multiplier: prev.multiplier, campaign_id: prev.campaign_id, partner_active: true};
 }
 function pdPackages() {
-  const c = PKGS.MD && PKGS.MD.d; if (c) return c;
-  const F = k => tx(k).split('|');
-  return {market: 'MD', currency: 'MDL', periods: ['month', 'year'], annual_discount_pct: 15, packages: [
-    {key: 'start', name: tx('plan.n.start'), tagline: tx('pd.pk.start.t'), price: 0, list_price: 0, discount_pct: 0, price_year: 0, list_price_year: 0, year_discount_pct: 0, period: null, price_note: tx('pd.pk.start.n'), price_note_year: null, features: F('pd.pk.start.f'), inherits: null, highlight: false, items: []},
-    {key: 'showcase', name: tx('plan.n.showcase'), tagline: tx('pd.pk.showcase.t'), price: 2125, list_price: 2125, discount_pct: 0, price_year: 21675, list_price_year: 25500, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.showcase.f'), inherits: 'start', highlight: false, items: []},
-    {key: 'district', name: tx('plan.n.district'), tagline: tx('pd.pk.district.t'), price: 4590, list_price: 5100, discount_pct: 10, price_year: 52020, list_price_year: 61200, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.district.f'), inherits: 'showcase', highlight: true, items: []},
-    {key: 'leader', name: tx('plan.n.leader'), tagline: tx('pd.pk.leader.t'), price: 12240, list_price: 13600, discount_pct: 10, price_year: 138720, list_price_year: 163200, year_discount_pct: 15, period: 'month', price_note: '', price_note_year: '', features: F('pd.pk.leader.f'), inherits: 'district', highlight: false, items: []}],
-    addons: [], compare: [], notes: []};
+  const c = PKGS.MD && PKGS.MD.d; if (c) return Object.assign({}, c, {checkout: c.checkout ? Object.assign({}, c.checkout, {ready: false}) : undefined});
+  return {market: 'MD', currency: '', periods: [], packages: [], addons: [], compare: [], notes: [tx('plan.err')]};
 }
 const pdErr = () => apiErr(403, 'demo_readonly', tx('pd.ro'));
 /* все запросы кабинета в демо — без сети */
