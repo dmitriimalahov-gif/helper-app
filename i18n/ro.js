@@ -3,6 +3,11 @@
    kb — ghidul auto (67 de componente): [denumire, pentru ce, întreținere, semne, dacă nu, interval]; art — articole. */
 (window.HELPER_I18N = window.HELPER_I18N || {}).ro = {
   "ui": {
+    "web.pilotTestNote": "Pilot: plata este în modul de testare. Nu se debitează bani. Folosiți doar un card de test Stripe.",
+    "web.pilotTestBuy": "Testează abonamentul fără debitare",
+    "web.pilotTestTerms": "Prețurile indică planul selectat. Abonamentul de test nu generează debitări reale.",
+    "web.unavailable": "Plata este temporar indisponibilă. Puteți vedea planurile; încercați să vă abonați mai târziu.",
+    "web.checkingPayment": "Verificăm disponibilitatea plății…",
     "dn.src": "exemplu: de la centrul Chișinăului",
     "dn.hist": "Istoric",
     "dn.st.redeemed": "Folosit",
@@ -1292,7 +1297,7 @@
     "pw.fDiscounts": "Reduceri de la parteneri",
     "pw.yes": "inclus",
     "pw.no": "nu este inclus",
-    "pw.hero": "Mașina în ordine, cheltuielile sub control, iar la vânzare — un istoric confirmat.",
+    "pw.hero": "Mașina, cheltuielile și istoricul întreținerii — într-un singur loc.",
     "pw.features": "Funcții",
     "pw.colFree": "Gratuit",
     "pw.codeLabel": "Cod de activare",

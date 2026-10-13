@@ -1656,6 +1656,17 @@ function relabelDemo() {
   (S.loyalty && S.loyalty.hist || []).forEach(h => { if (h.tk) h.t = histText(h.tk, h.tp); });
 }
 onLang(relabelDemo);
+/* Only small JPEG data URLs are accepted for device-local receipt previews. */
+function safeReceipt(value) {
+  if (typeof value !== 'string' || value.length > 120 * 1024) return '';
+  const m = /^data:image\/jpeg;base64,((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)$/.exec(value);
+  if (!m) return '';
+  try {
+    const b = atob(m[1]);
+    return b.length >= 4 && b.charCodeAt(0) === 255 && b.charCodeAt(1) === 216 &&
+      b.charCodeAt(b.length - 2) === 255 && b.charCodeAt(b.length - 1) === 217 ? value : '';
+  } catch (e) { return ''; }
+}
 function normalize(s) {
   const b = baseState();
   s.settings = Object.assign(b.settings, s.settings || {});
@@ -1668,6 +1679,7 @@ function normalize(s) {
   s.geo = Object.assign(b.geo, s.geo || {});
   if (!Array.isArray(s.bizApps)) s.bizApps = [];
   ['cars', 'records', 'fuel', 'docs'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
+  s.fuel.forEach(f => { if (f && f.ex && typeof f.ex === 'object' && 'receipt' in f.ex) { const rc = safeReceipt(f.ex.receipt); if (rc) f.ex.receipt = rc; else delete f.ex.receipt; } });
   s.cars.forEach(c => { if (!Array.isArray(c.odoLog)) c.odoLog = []; c.currency = c.currency || 'MDL'; });
   if (!s.cars.find(c => c.id === s.activeCar)) s.activeCar = s.cars[0] ? s.cars[0].id : null;
   return s;
@@ -2830,7 +2842,8 @@ const NP = CAP ? (CAP.Plugins || {}) : {};
    Всё работает и без сервера: данные остаются на устройстве (local-first), аккаунт — по желанию. Контракт API —
    04_AUTOMATION/README.md «API и аккаунты», синхронизация — helper_core/sync.py (LWW по updatedAt, курсор, «надгробия»). */
 const IS_AND = !!(CAP && CAP.getPlatform && CAP.getPlatform() === 'android');
-const PRIVACY_URL = 'https://dmitriimalahov-gif.github.io/helper-app/legal/privacy.html';
+const APP_WEB_BASE = CAP ? 'https://dmitriimalahov-gif.github.io/helper-app/' : new URL('./', location.href).href;
+const PRIVACY_URL = new URL('legal/privacy.html', APP_WEB_BASE).href;
 const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PLAY_MANAGE_URL = 'https://play.google.com/store/account/subscriptions?package=md.numerom.helper';
 const CFG_REMOTE = 'https://dmitriimalahov-gif.github.io/helper-app/config.json';
@@ -3266,6 +3279,8 @@ function entIn(k, e) {
     ['brand', 'shop', 'phone', 'note'].forEach(f => { if (x[f] == null) x[f] = ''; });
     if (x.ex === undefined) x.ex = null;
   } else if (k === 'fuel') {
+    if (x.ex && typeof x.ex === 'object') { x.ex = Object.assign({}, x.ex); delete x.ex.receipt; }
+    else x.ex = null;
     x.liters = +x.liters || 0; x.price = +x.price || 0; x.full = x.full !== false; if (x.station == null) x.station = '';
   } else if (k === 'docs') {
     if (!DOCT[x.type]) x.type = 'other';
@@ -3280,7 +3295,8 @@ function entPut(k, e, force) {
   if (cur && isDemoEnt(k, cur)) return false;
   if (cur && !force && isDirty(k, cur) && (cur.updatedAt || 0) > (e.updatedAt || 0)) return false;
   const x = entIn(k, e), h = hashOf(x);
-  if (cur && cur.ex && cur.ex.receipt && !(x.ex && x.ex.receipt)) x.ex = Object.assign({}, x.ex || {}, {receipt: cur.ex.receipt}); /* фото чека есть только здесь */
+  const localReceipt = k === 'fuel' && cur && cur.ex ? safeReceipt(cur.ex.receipt) : '';
+  if (localReceipt) x.ex = Object.assign({}, x.ex || {}, {receipt: localReceipt}); /* только проверенное фото с этого устройства */
   SY.acked[k][x.id] = x.updatedAt; SY.hash[k][x.id] = h;
   if (cur && cur.updatedAt === x.updatedAt && hashOf(cur) === h) return false;
   if (cur) arr[i] = x; else arr.push(x);
@@ -3420,11 +3436,14 @@ function planRow(per, cars) {
   const p = PL && Array.isArray(PL.plans) ? PL.plans.find(x => x.plan === per && +x.cars === cars) : null;
   return p || {plan: per, cars, usd: PLAN_USD[per][cars - 1], stars: PLAN_XTR[per][cars - 1], product_id: productId(per, cars), trial_days: per === 'year' ? 7 : 0};
 }
+let WEB_PAY = null; /* payment readiness is refreshed from the API, never trusted from localStorage */
 async function plansLoad() {
   try {
     const d = await api('/v1/premium/plans', {auth: false});
-    if (d && Array.isArray(d.plans) && d.plans.length) { PL = {plans: d.plans, extra: d.extra_car_percent, at: Date.now()}; jset(K_PLANS, PL); pwRefresh(); }
-  } catch (e) {}
+    WEB_PAY = d && d.web && d.web.provider === 'stripe' ? d.web : null;
+    if (d && Array.isArray(d.plans) && d.plans.length) { PL = {plans: d.plans, extra: d.extra_car_percent, at: Date.now()}; jset(K_PLANS, PL); }
+    pwRefresh();
+  } catch (e) { WEB_PAY = null; pwRefresh(); }
 }
 const usd = v => iapMoney(v, 'USD');
 
@@ -3705,7 +3724,7 @@ function fuelSheet(id) {
   const d = f || {date: todayISO(), odo: car.odo, liters: '', price: lastPrice, full: last ? last.full !== false : true, station: ''};
   const quick = !f, delta = last && prev && last.odo > prev.odo ? last.odo - prev.odo : 0;
   FQ.typed = null; FQ.receipt = undefined;
-  const rc = f && f.ex && f.ex.receipt ? f.ex.receipt : '';
+  const rc = safeReceipt(f && f.ex && f.ex.receipt);
   const num = v => v === '' || v == null ? '' : String(v).replace('.', ',');
   const sum0 = f ? Math.round((+f.liters || 0) * (+f.price || 0) * 100) / 100 : '';
   const tank = d.full ? t('fq.fullShort') : t('fq.partShort');
@@ -3719,7 +3738,7 @@ function fuelSheet(id) {
     chips +
     (quick ? '<p class="hint fq-sum" id="fq-summary">' + esc(t('fq.summary', {date: t('fq.today'), odo: kmTxt(d.odo), tank})) + '</p>' : '');
   const receipt = '<div class="field fq-rc"><span class="flabel">' + t('fq.receipt') + ' <span class="muted" style="font-weight:400">· ' + t('c.optional').toLowerCase() + '</span></span><div class="row wrap" style="gap:10px;align-items:center"><label class="btn sm soft file-btn">' + ic('camera', 'sm') + t('fq.receipt') + '<input type="file" id="fuel-rcpt" accept="image/*" capture="environment" class="vh"></label>' +
-    '<span id="fuel-rcpt-box" class="fq-rcpt"' + (rc ? '' : ' hidden') + '><img id="fuel-rcpt-img" alt="' + esc(t('fq.receiptOpen')) + '" src="' + (rc ? rc : '') + '"><button type="button" class="iconbtn" data-act="fq-rcpt-del" aria-label="' + esc(t('fq.receiptDel')) + '">' + ic('close', 'xs') + '</button></span></div><span class="hint">' + t('fq.receiptHint') + '</span></div>';
+    '<span id="fuel-rcpt-box" class="fq-rcpt"' + (rc ? '' : ' hidden') + '><img id="fuel-rcpt-img" alt="' + esc(t('fq.receiptOpen')) + '"><button type="button" class="iconbtn" data-act="fq-rcpt-del" aria-label="' + esc(t('fq.receiptDel')) + '">' + ic('close', 'xs') + '</button></span></div><span class="hint">' + t('fq.receiptHint') + '</span></div>';
   const more = '<div class="grid2">' + fld('fuel-date', t('c.date'), inp('fuel-date', d.date, 'type="date" max="' + todayISO() + '"')) + fld('fuel-odo', t('c.odoKm'), inp('fuel-odo', d.odo, 'inputmode="numeric"')) + '</div>' +
     '<div class="field"><span class="flabel">' + t('fill.sum') + '</span>' + curSel('fuel-cur', cur) + '</div>' +
     '<label class="switch" for="fuel-full"><span><span style="font-weight:600;display:block">' + t('fill.full') + '</span><span class="hint">' + t('fill.fullHint') + '</span></span><input type="checkbox" id="fuel-full"' + (d.full ? ' checked' : '') + '></label>' +
@@ -3730,6 +3749,7 @@ function fuelSheet(id) {
     errBox('fuel-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (f ? '<button class="btn block danger" type="button" data-act="fuel-del" data-id="' + f.id + '">' + ic('trash', 'sm') + t('fill.del') + '</button>' : '') + '</form>';
   openSheet(f ? t('fill.title') : t('fill.newTitle'), b);
+  const receiptImage = $('#fuel-rcpt-img'); if (receiptImage && rc) receiptImage.src = rc;
   fxFormUpd();
   if (quick) setTimeout(() => { const i = $('#fuel-sum'); if (i) try { i.focus({preventScroll: true}); } catch (e) {} }, 120);
 }
@@ -4223,10 +4243,10 @@ function paywall(o) {
   b += payBlock();
   b += refBlock();
   if (!CAP && !IN_TG) b += '<div class="card section row" style="gap:12px"><span class="ic-circle">' + ic('send', 'sm') + '</span><div style="flex:1;min-width:0"><p style="margin:0;font-weight:600">' + t('pw.tgTitle') + '</p><p class="small muted num" style="margin:2px 0 0">' + t('pw.tgText', {bot: TG_BOT}) + '</p></div><button class="iconbtn" data-act="copy" data-text="' + TG_BOT + '" aria-label="' + t('pw.copyBot') + '">' + ic('copy', 'sm') + '</button></div>';
-  if (!CAP) b += '<p class="xsmall muted" style="margin:18px 0 0">' + (IN_TG ? t('pw.tgPayNote', {bot: TG_BOT}) : t('pw.webPayNote')) + '</p>';
+  if (!CAP) b += '<p id="pw-pay-note" class="xsmall muted" style="margin:18px 0 0">' + (IN_TG ? t('pw.tgPayNote', {bot: TG_BOT}) : t(WEB_PAY && WEB_PAY.mode === 'test' ? 'web.pilotTestTerms' : 'pw.webPayNote')) + '</p>';
   openSheet('Premium', b, {full: true});
   if (STORE && !iap.products && !iap.loading) storeLoad();
-  if (!PL || Date.now() - (PL.at || 0) > 3 * 3600000) plansLoad();
+  plansLoad();
   if (logged() && (!A.premAt || Date.now() - A.premAt > 60000)) premFetch();
 }
 function pwDefaults(o) {
@@ -4237,7 +4257,7 @@ function pwDefaults(o) {
   ui.pwCars = clamp(o.cars || tierCars() || 1, 1, MAX_CARS);
   ui.pwNote = o.note || '';
 }
-function pwRefresh() { const el = $('#pw-main'); if (el) setHTML(el, pwMain()); }
+function pwRefresh() { const el = $('#pw-main'); if (el) setHTML(el, pwMain()); const note = $('#pw-pay-note'); if (note && !CAP && !IN_TG) note.textContent = t(WEB_PAY && WEB_PAY.mode === 'test' ? 'web.pilotTestTerms' : 'pw.webPayNote'); }
 function pwPrice(per, c) {
   const T = planRow(per, c), perTxt = t(per === 'year' ? 'c.perYear' : 'c.perMonth');
   if (STORE) {
@@ -4338,7 +4358,9 @@ async function storeManage() {
 const appBase = () => location.origin + location.pathname;
 function webBlock() {
   const s = srvPrem(), per = ui.pwPer, n = ui.pwCars, T = planRow(per, n);
-  let b = '';
+  const test = WEB_PAY && WEB_PAY.mode === 'test', ready = !!(WEB_PAY && WEB_PAY.ready);
+  let b = test ? '<div class="card tint section" role="status" style="margin-top:14px"><p class="small" style="margin:0">' + t('web.pilotTestNote') + '</p></div>' : '';
+  if (!ready) b += '<p class="small muted" role="status" style="margin-top:14px">' + t(WEB_PAY ? 'web.unavailable' : 'web.checkingPayment') + '</p>';
   if (s && s.source === 'stripe_subscription') {
     const same = n === +(s.cars || 1);
     b += '<button class="btn block ink" style="margin-top:16px" data-act="pw-stripe-cars"' + (same ? ' disabled' : '') + '>' + (same ? t('pw.currentPlan') : t('web.changeTo', {cars: tn('u.cars', n)})) + '</button>';
@@ -4348,8 +4370,8 @@ function webBlock() {
   }
   if (s && isStoreSrc(s.source)) return b + '<div class="card section"><p class="small" style="margin:0">' + t('web.viaStore', {src: SRC_N[s.source]}) + '</p></div>';
   const tr = per === 'year' && T.trial_days > 0, perW = t(per === 'year' ? 'pw.unitYear' : 'pw.unitMonth');
-  b += '<button class="btn block ink" style="margin-top:16px" id="pw-web-buy" data-act="pw-web-buy">' + (tr ? t('web.tryDays', {days: fDays(T.trial_days)}) : t('pw.buyFor', {price: usd(T.usd), per: perW})) + '</button>';
-  b += '<p class="xsmall muted num" style="text-align:center;margin:8px 0 0">' + (tr ? t('web.trialThen', {days: fDays(T.trial_days), price: usd(T.usd), per: t(per === 'year' ? 'c.perYear' : 'c.perMonth')}) : t('pw.autoRenew', {price: usd(T.usd), per: t(per === 'year' ? 'c.perYear' : 'c.perMonth')})) + '</p>' + errBox('pw-web-err');
+  b += '<button class="btn block ink" style="margin-top:16px" id="pw-web-buy" data-act="pw-web-buy"' + (ready ? '' : ' disabled') + '>' + (test ? t('web.pilotTestBuy') : tr ? t('web.tryDays', {days: fDays(T.trial_days)}) : t('pw.buyFor', {price: usd(T.usd), per: perW})) + '</button>';
+  b += '<p class="xsmall muted num" style="text-align:center;margin:8px 0 0">' + (test ? t('web.pilotTestTerms') : tr ? t('web.trialThen', {days: fDays(T.trial_days), price: usd(T.usd), per: t(per === 'year' ? 'c.perYear' : 'c.perMonth')}) : t('pw.autoRenew', {price: usd(T.usd), per: t(per === 'year' ? 'c.perYear' : 'c.perMonth')})) + '</p>' + errBox('pw-web-err');
   b += '<p class="xsmall muted" style="margin:10px 0 0">' + (logged() ? t('web.payLogged', {email: esc(acctName())}) : t('web.payGuest')) + '</p>';
   return b;
 }
@@ -4357,6 +4379,8 @@ async function webBuy() {
   if (!logged()) { const n = ui.pwCars; ui.after = () => paywall({cars: n}); ui.authWhy = t('web.authWhy'); return authSheet('register', {why: ui.authWhy}); }
   const btn = $('#pw-web-buy'); if (btn) { btn.disabled = true; btn.textContent = t('web.opening'); }
   try {
+    await plansLoad();
+    if (!WEB_PAY || !WEB_PAY.ready) throw new Error(t('web.unavailable'));
     const d = await api('/v1/billing/stripe/checkout', {body: {plan: ui.pwPer, extra_cars: ui.pwCars - 1, success_url: appBase() + '?pay=success', cancel_url: appBase() + '?pay=cancel'}});
     location.href = d.url;
   } catch (e) {
@@ -4420,7 +4444,7 @@ function formBusy(f, label) {
 }
 
 /* ================= Аккаунт: приветствие, вход, регистрация, пароль, удаление, выгрузка ================= */
-const TERMS_APP_URL = 'https://dmitriimalahov-gif.github.io/helper-app/legal/terms.html';
+const TERMS_APP_URL = new URL('legal/terms.html', APP_WEB_BASE).href;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 function acctWelcome() {
   let h = '<div class="onb"><div class="corner-ring" style="width:320px;height:320px;right:-170px;top:-120px"></div><div class="corner-ring" style="width:180px;height:180px;right:-70px;top:-40px;border-color:var(--teal)"></div>';

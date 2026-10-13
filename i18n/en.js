@@ -3,6 +3,11 @@
    kb — car guide (67 parts): [name, what it does, care, signs, if neglected, interval]; art — articles. */
 (window.HELPER_I18N = window.HELPER_I18N || {}).en = {
   "ui": {
+    "web.pilotTestNote": "Pilot: payments are in test mode. No money is charged. Use only a Stripe test card.",
+    "web.pilotTestBuy": "Test the subscription without a charge",
+    "web.pilotTestTerms": "Prices show the selected plan. A test subscription does not create real charges.",
+    "web.unavailable": "Payments are temporarily unavailable. You can view the plans; please try subscribing later.",
+    "web.checkingPayment": "Checking payment availability…",
     "dn.src": "sample: from Chișinău centre",
     "dn.hist": "History",
     "dn.st.redeemed": "Used",
@@ -1277,7 +1282,7 @@
     "pw.fDiscounts": "Partner discounts",
     "pw.yes": "included",
     "pw.no": "not included",
-    "pw.hero": "Your car in good shape, expenses under control and a verified history when you sell.",
+    "pw.hero": "Your car, expenses and service history in one place.",
     "pw.features": "Features",
     "pw.colFree": "Free",
     "pw.codeLabel": "Activation code",
