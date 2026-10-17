@@ -1,8 +1,8 @@
 /* Helper — offline cache */
 /* Меняйте версию кэша при каждом изменении index.html или словарей i18n/*.js */
-const CACHE = 'helper-v17-pilot';
+const CACHE = 'helper-v18-ux';
 const FONTS = 'helper-fonts-v1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './i18n/ru.js', './i18n/ro.js', './i18n/en.js'];
+const ASSETS = ['./', './index.html', './drafts.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './i18n/ru.js', './i18n/ro.js', './i18n/en.js'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

@@ -3,6 +3,18 @@
    kb — car guide (67 parts): [name, what it does, care, signs, if neglected, interval]; art — articles. */
 (window.HELPER_I18N = window.HELPER_I18N || {}).en = {
   "ui": {
+    "ux.draft.reset": "Start again",
+    "ux.draft.resetAsk": "Clear this unfinished form? Saved records will remain.",
+
+    "ux.rec.hint": "Choose the work and check the date and mileage. Costs are optional.",
+    "ux.rec.details": "Materials, garage and notes — optional",
+    "ux.rec.reuse": "Use previous record details",
+    "ux.rec.reuseHint": "Same work on {date}: materials and garage. Check the date, mileage and costs separately.",
+    "ux.rec.reused": "Materials and garage filled in. Review the details before saving.",
+    "ux.draft.saved": "Draft saved on this device for 7 days.",
+    "ux.draft.restored": "Unfinished entry restored. Check the date, mileage and costs.",
+    "ux.draft.unavailable": "The browser could not save your draft. Keep the form open until you save the entry.",
+
     "web.pilotTestNote": "Pilot: payments are in test mode. No money is charged. Use only a Stripe test card.",
     "web.pilotTestBuy": "Test the subscription without a charge",
     "web.pilotTestTerms": "Prices show the selected plan. A test subscription does not create real charges.",
@@ -1524,7 +1536,7 @@
     "fq.hint": "Enter the amount or the litres — we work out the rest from last time’s price.",
     "fq.needPrice": "Enter the price per {unit} — next time it will be filled in for you.",
     "fq.receipt": "Receipt photo",
-    "fq.receiptHint": "Stored only on this device.",
+    "fq.receiptHint": "After saving the fill-up, the photo stays on this device. Drafts do not include photos.",
     "fq.receiptDel": "Remove photo",
     "fq.receiptBad": "Couldn’t process the photo",
     "fq.receiptOpen": "Receipt",

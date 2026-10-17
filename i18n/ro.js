@@ -3,6 +3,18 @@
    kb — ghidul auto (67 de componente): [denumire, pentru ce, întreținere, semne, dacă nu, interval]; art — articole. */
 (window.HELPER_I18N = window.HELPER_I18N || {}).ro = {
   "ui": {
+    "ux.draft.reset": "Începeți din nou",
+    "ux.draft.resetAsk": "Goliți formularul neterminat? Înregistrările salvate rămân.",
+
+    "ux.rec.hint": "Alegeți lucrarea, verificați data și kilometrajul. Costurile sunt opționale.",
+    "ux.rec.details": "Materiale, service și notițe — opțional",
+    "ux.rec.reuse": "Completați din înregistrarea anterioară",
+    "ux.rec.reuseHint": "Aceeași lucrare din {date}: materiale și service. Verificați separat data, kilometrajul și costurile.",
+    "ux.rec.reused": "Materialele și service-ul au fost completate. Verificați datele înainte de salvare.",
+    "ux.draft.saved": "Ciornă salvată pe acest dispozitiv pentru 7 zile.",
+    "ux.draft.restored": "Datele neterminate au fost restaurate. Verificați data, kilometrajul și costurile.",
+    "ux.draft.unavailable": "Browserul nu a salvat ciorna. Nu închideți formularul înainte de salvare.",
+
     "web.pilotTestNote": "Pilot: plata este în modul de testare. Nu se debitează bani. Folosiți doar un card de test Stripe.",
     "web.pilotTestBuy": "Testează abonamentul fără debitare",
     "web.pilotTestTerms": "Prețurile indică planul selectat. Abonamentul de test nu generează debitări reale.",
@@ -1539,7 +1551,7 @@
     "fq.hint": "Introduceți suma sau litrii — restul îl calculăm după prețul alimentării trecute.",
     "fq.needPrice": "Indicați prețul per {unit} — data viitoare se completează singur.",
     "fq.receipt": "Poza bonului",
-    "fq.receiptHint": "Se păstrează doar pe acest dispozitiv.",
+    "fq.receiptHint": "După salvarea alimentării, fotografia rămâne pe acest dispozitiv. Ciorna nu include fotografia.",
     "fq.receiptDel": "Eliminați poza",
     "fq.receiptBad": "Poza nu a putut fi procesată",
     "fq.receiptOpen": "Bon",

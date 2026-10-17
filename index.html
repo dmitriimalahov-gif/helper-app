@@ -818,6 +818,7 @@ button.qstep:hover .tx{color:var(--teal-ink)}
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <noscript><p style="padding:24px;font-family:sans-serif" lang="ru">Для работы Helper включите JavaScript.</p><p style="padding:0 24px;font-family:sans-serif" lang="ro">Pentru a folosi Helper, activați JavaScript.</p><p style="padding:0 24px;font-family:sans-serif" lang="en">Please enable JavaScript to use Helper.</p></noscript>
 <!-- Словари интерфейса (ru — источник, ro, en): грузятся до приложения, чтобы первый экран сразу был на нужном языке; офлайн — из кэша sw.js -->
+<script src="drafts.js"></script>
 <script src="i18n/ru.js"></script>
 <script src="i18n/ro.js"></script>
 <script src="i18n/en.js"></script>
@@ -3673,28 +3674,101 @@ function carSwitchSheet() {
   openSheet(t('c.car'), '<div class="group">' + S.cars.map(c => '<button class="item" data-act="car-pick" data-id="' + c.id + '"><span class="ic-circle ' + (c.id === S.activeCar ? 'ink' : '') + '">' + ic('car', 'sm') + '</span><span class="body"><span class="t" style="display:block">' + esc(carName(c)) + '</span><span class="s num">' + esc(carSub(c)) + '</span></span>' + (c.id === S.activeCar ? ic('check', 'sm') : '') + '</button>').join('') + '</div><div class="stack" style="margin-top:14px"><button class="btn block soft" data-act="car-add">' + ic('plus', 'sm') + t('c.addCar') + (S.cars.length >= carLimit() ? ' ' + ic('lock', 'xs') : '') + '</button><button class="btn block line" data-act="go" data-p="cars">' + t('carsw.all') + '</button></div>');
 }
 function svcSheet(id) { partSheet(id); }
+const ENTRY_FIELDS = {
+  rec: ['cat', 'date', 'odo', 'brand', 'parts', 'labor', 'cur', 'shop', 'phone', 'note', 'season', 'w', 'p', 'r', 'wr', 'wtype', 'warranty'],
+  fuel: ['date', 'odo', 'sum', 'liters', 'price', 'cur', 'full', 'station']
+};
+function entryDraftScope() { return 'driver:' + (A.user && A.user.id || 'guest') + ':' + activeCar().id; }
+function entryDraftRestore(kind, preset) {
+  const form = $('#sheet form[data-form="' + kind + '"]');
+  if (!form || val(kind + '-id') || !window.HelperDrafts) return;
+  form.dataset.draftScope = entryDraftScope();
+  let draft; try { draft = HelperDrafts.get(localStorage, form.dataset.draftScope, kind === 'rec' && preset ? 'rec:' + preset : kind); } catch (_) {}
+  if (!draft) return;
+  ENTRY_FIELDS[kind].forEach(k => {
+    const el = $('#' + kind + '-' + k), x = draft[k];
+    if (!el || (typeof x !== 'string' && typeof x !== 'boolean')) return;
+    if (el.type === 'checkbox') el.checked = x === true; else el.value = x;
+  });
+  if (kind === 'rec') {
+    $('#rec-x-tires').hidden = val('rec-cat') !== 'tires'; $('#rec-x-wheels').hidden = val('rec-cat') !== 'wheels';
+    $('#rec-more').open = ['brand', 'shop', 'phone', 'note'].some(k => val('rec-' + k));
+  } else {
+    FQ.typed = draft.typed === 'liters' ? 'liters' : 'sum';
+    ['sum', 'liters'].forEach(k => { $('#fuel-' + k).dataset.auto = draft[k + 'Auto'] === '1' ? '1' : ''; });
+    $('#fuel-more').open = true;
+  }
+  const note = $('#entry-draft-note'); if (note) note.textContent = t('ux.draft.restored');
+}
+function entryDraftSave() {
+  const form = $('#sheet form[data-draft-scope]');
+  if (!form || form.dataset.draftDone || !window.HelperDrafts) return;
+  const kind = form.dataset.form, data = {};
+  ENTRY_FIELDS[kind].forEach(k => { const el = $('#' + kind + '-' + k); if (el) data[k] = el.type === 'checkbox' ? el.checked : el.value; });
+  if (kind === 'fuel') { data.typed = FQ.typed; ['sum', 'liters'].forEach(k => { data[k + 'Auto'] = $('#fuel-' + k).dataset.auto || ''; }); }
+  let ok = false; try { ok = HelperDrafts.put(localStorage, form.dataset.draftScope, kind, data); if (kind === 'rec') ok = HelperDrafts.put(localStorage, form.dataset.draftScope, 'rec:' + data.cat, data) && ok; } catch (_) {}
+  const note = $('#entry-draft-note'); if (note) note.textContent = t(ok ? 'ux.draft.saved' : 'ux.draft.unavailable');
+}
+function entryDraftDone(kind) {
+  const form = $('#sheet form[data-form="' + kind + '"]');
+  if (!form || !form.dataset.draftScope || !window.HelperDrafts) return;
+  form.dataset.draftDone = '1';
+  entryDraftDrop(form.dataset.draftScope, kind, kind === 'rec' ? val('rec-cat') : '');
+}
+function entryDraftDrop(scope, kind, cat) {
+  try {
+    if (kind === 'rec') {
+      HelperDrafts.drop(localStorage, scope, 'rec:' + cat);
+      const last = HelperDrafts.get(localStorage, scope, kind);
+      if (last && last.cat !== cat) return;
+    }
+    HelperDrafts.drop(localStorage, scope, kind);
+  } catch (_) {}
+}
+function recPrevious() { return carRecs(activeCar().id).filter(r => !r.baseline && r.cat === val('rec-cat')).sort(byDateDesc)[0]; }
+function recRepeatPaint() {
+  const box = $('#rec-repeat'), prev = recPrevious(); if (!box) return;
+  box.innerHTML = !val('rec-id') && prev ? '<button type="button" class="btn soft block" data-act="rec-reuse">' + ic('copy', 'sm') + t('ux.rec.reuse') + '</button><p class="hint">' + esc(t('ux.rec.reuseHint', {date: fD(prev.date)})) + '</p>' : '';
+}
+function recReuse() {
+  const r = recPrevious(); if (!r) return;
+  ['brand', 'shop', 'phone'].forEach(k => { const el = $('#rec-' + k); if (el && !el.value) el.value = r[k] || ''; });
+  if (r.ex) ['season', 'w', 'p', 'r', 'wtype', 'warranty'].forEach(k => { const el = $('#rec-' + (r.cat === 'wheels' && k === 'r' ? 'wr' : k)); if (el && !el.value) el.value = r.ex[k] == null ? el.value : r.ex[k]; });
+  $('#rec-more').open = true; entryDraftSave(); toast(t('ux.rec.reused'));
+}
+function recShopPhone() {
+  const el = $('#rec-phone'); if (!el || el.value && el.value !== el.dataset.autoPhone) return;
+  const shop = val('rec-shop').trim().toLowerCase();
+  const r = carRecs(activeCar().id).filter(x => String(x.shop || '').trim().toLowerCase() === shop && x.phone).sort(byDateDesc)[0];
+  el.value = r && shop ? r.phone : ''; el.dataset.autoPhone = el.value;
+}
+
 function recSheet(id, preset) {
   const car = activeCar(), r = id ? S.records.find(x => x.id === id) : null;
   const d = r || {cat: preset || 'oil', date: todayISO(), odo: car.odo, brand: '', parts: '', labor: '', shop: '', phone: '', note: '', ex: null};
   const ex = d.ex || {}, cur = r ? entCur(r, car) : car.currency;
-  const shops = Array.from(new Set(S.records.map(x => x.shop).filter(Boolean)));
+  const shops = Array.from(new Set(carRecs(car.id).map(x => x.shop).filter(Boolean)));
   const cats = GROUPS.map(g => '<optgroup label="' + g[1] + '">' + Object.keys(CATS).filter(k => CATS[k][1] === g[0]).map(k => '<option value="' + k + '"' + (k === d.cat ? ' selected' : '') + '>' + CATS[k][0] + '</option>').join('') + '</optgroup>').join('');
   const b = '<form class="form" data-form="rec" novalidate><input type="hidden" id="rec-id" value="' + (r ? r.id : '') + '">' +
+    '<p class="hint" style="margin:0">' + t('ux.rec.hint') + '</p><div id="rec-repeat"></div>' +
     '<div class="field"><label for="rec-cat">' + t('rec.cat') + '</label><select id="rec-cat" class="input">' + cats + '</select></div>' +
     '<div class="grid2">' + fld('rec-date', t('c.date'), inp('rec-date', d.date, 'type="date" max="' + todayISO() + '"')) + fld('rec-odo', t('c.odoKm'), inp('rec-odo', d.odo, 'inputmode="numeric"')) + '</div>' +
     '<div id="rec-x-tires" class="form"' + (d.cat === 'tires' ? '' : ' hidden') + '>' + fld('rec-season', t('rec.season'), sel('rec-season', SEASON, ex.season || 'summer')) +
     '<div class="grid3">' + fld('rec-w', t('rec.width'), inp('rec-w', ex.w, 'inputmode="numeric" placeholder="205"')) + fld('rec-p', t('rec.profile'), inp('rec-p', ex.p, 'inputmode="numeric" placeholder="55"')) + fld('rec-r', t('rec.radiusR'), inp('rec-r', ex.r, 'inputmode="numeric" placeholder="16"')) + '</div>' +
     fld('rec-warranty', t('rec.warrantyKm'), inp('rec-warranty', ex.warranty, 'inputmode="numeric" placeholder="' + t('rec.warrantyPh') + '"'), t('rec.warrantyHint')) + '</div>' +
     '<div id="rec-x-wheels" class="grid2"' + (d.cat === 'wheels' ? '' : ' hidden') + '>' + fld('rec-wtype', t('rec.wtype'), sel('rec-wtype', WTYPE, ex.wtype || 'cast')) + fld('rec-wr', t('rec.radiusR'), inp('rec-wr', ex.r, 'inputmode="numeric" placeholder="16"')) + '</div>' +
-    fld('rec-brand', t('rec.brand'), inp('rec-brand', d.brand, 'autocomplete="off" placeholder="' + t('rec.brandPh') + '"')) +
     '<div class="grid2">' + fld('rec-parts', t('rec.partsCur', {cur}), inp('rec-parts', d.parts, 'inputmode="decimal" placeholder="0"')) + fld('rec-labor', t('rec.laborCur', {cur}), inp('rec-labor', d.labor, 'inputmode="decimal" placeholder="0"')) + '</div>' +
     '<div class="total"><span class="tot-l"><span class="small muted">' + t('rec.total') + '</span>' + curSel('rec-cur', cur) + '</span><span class="tot-r"><span class="v" id="rec-total">' + moneyIn((parseNum(d.parts) || 0) + (parseNum(d.labor) || 0), cur) + '</span><span class="fx-conv" id="rec-conv"></span></span></div>' +
+    '<details class="fq-more" id="rec-more"' + (r ? ' open' : '') + '><summary>' + t('ux.rec.details') + '</summary><div class="stack" style="gap:14px;margin-top:12px">' +
+    fld('rec-brand', t('rec.brand'), inp('rec-brand', d.brand, 'autocomplete="off" placeholder="' + t('rec.brandPh') + '"')) +
     '<div class="grid2">' + fld('rec-shop', t('c.sto'), inp('rec-shop', d.shop, 'list="dl-shops" autocomplete="off" placeholder="' + t('rec.shopPh') + '"') + '<datalist id="dl-shops">' + shops.map(s => '<option value="' + esc(s) + '">').join('') + '</datalist>') + fld('rec-phone', t('rec.shopPhone'), inp('rec-phone', d.phone, 'type="tel" inputmode="tel" placeholder="022 …"')) + '</div>' +
     '<div class="field"><label for="rec-note">' + t('rec.note') + '</label><textarea id="rec-note" class="input" rows="3" placeholder="' + t('rec.notePh') + '">' + esc(d.note) + '</textarea></div>' +
+    '</div></details>' +
+    '<p class="hint" id="entry-draft-note" role="status"></p>' + (!r ? '<button type="button" class="textbtn" style="min-height:44px" data-act="entry-reset" data-kind="rec">' + t('ux.draft.reset') + '</button>' : '') +
     errBox('rec-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (r ? '<button class="btn block danger" type="button" data-act="rec-del" data-id="' + r.id + '">' + ic('trash', 'sm') + t('rec.del') + '</button>' : '') + '</form>';
   openSheet(r ? t('rec.editTitle') : t('rec.newTitle'), b);
-  fxFormUpd();
+  entryDraftRestore('rec', preset); recRepeatPaint(); fxFormUpd();
 }
 function recDetail(id) {
   const r = S.records.find(x => x.id === id); if (!r) return;
@@ -3746,9 +3820,10 @@ function fuelSheet(id) {
   const b = '<form class="form fq" data-form="fuel" novalidate><input type="hidden" id="fuel-id" value="' + (f ? f.id : '') + '">' + quickBlock +
     (quick ? '<p class="hint" style="margin:0">' + t('fq.hint') + '</p>' : '') +
     '<details class="fq-more" id="fuel-more"' + (quick ? '' : ' open') + '><summary>' + ic('sliders', 'xs') + '<span class="o">' + t('fq.more') + '</span><span class="c">' + t('fq.less') + '</span></summary><div class="stack" style="gap:14px;margin-top:12px">' + more + '</div></details>' +
-    errBox('fuel-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
+    '<p class="hint" id="entry-draft-note" role="status"></p>' + (!f ? '<button type="button" class="textbtn" style="min-height:44px" data-act="entry-reset" data-kind="fuel">' + t('ux.draft.reset') + '</button>' : '') + errBox('fuel-err') + '<button class="btn block ink" type="submit">' + ic('check', 'sm') + t('c.save') + '</button>' +
     (f ? '<button class="btn block danger" type="button" data-act="fuel-del" data-id="' + f.id + '">' + ic('trash', 'sm') + t('fill.del') + '</button>' : '') + '</form>';
   openSheet(f ? t('fill.title') : t('fill.newTitle'), b);
+  entryDraftRestore('fuel');
   const receiptImage = $('#fuel-rcpt-img'); if (receiptImage && rc) receiptImage.src = rc;
   fxFormUpd();
   if (quick) setTimeout(() => { const i = $('#fuel-sum'); if (i) try { i.focus({preventScroll: true}); } catch (e) {} }, 120);
@@ -7009,7 +7084,7 @@ const FORMS = {
     let got = 0;
     if (!id) { S.records.push(Object.assign({id: uid(), carId: car.id}, data)); S.stats.recAdded = (S.stats.recAdded || 0) + 1; got = awardRec(cat); }
     bumpOdo(car, data.odo, date);
-    save(); closeSheet(); render();
+    save(); entryDraftDone('rec'); closeSheet(); render();
     const it = CAT_ITEM[cat];
     toast(id ? t('act.recUpdated') : (it ? t('act.recRestart', {item: ITEM[it].n}) : t('act.recSaved')) + (got ? ' · ' + ptsTxt(got) : ''));
     if (!id && S.stats.recAdded === 3 && !isPrem() && !S.flags.upRec3) { S.flags.upRec3 = true; save(); setTimeout(() => upsell('rec3'), 800); }
@@ -7032,7 +7107,7 @@ const FORMS = {
     if (FQ.receipt !== undefined) { const ex = Object.assign({}, ex0); if (FQ.receipt) ex.receipt = FQ.receipt; else delete ex.receipt; data.ex = Object.keys(ex).length ? ex : null; }
     let got = 0;
     if (id) Object.assign(S.fuel.find(x => x.id === id), data); else { S.fuel.push(Object.assign({id: uid(), carId: car.id}, data)); got = awardFuel(); }
-    bumpOdo(car, data.odo, date); save(); closeSheet(); render(); toast(id ? t('act.fuelUpdated') : t('act.fuelSaved') + (got ? ' · ' + ptsTxt(got) : ''));
+    bumpOdo(car, data.odo, date); save(); entryDraftDone('fuel'); closeSheet(); render(); toast(id ? t('act.fuelUpdated') : t('act.fuelSaved') + (got ? ' · ' + ptsTxt(got) : ''));
   },
   doc() {
     const car = activeCar(), exp = val('doc-expires'), cost = parseNum(val('doc-cost')) || 0, T = todayISO();
@@ -7233,6 +7308,12 @@ const ACT = {
   svc: el => svcSheet(el.dataset.id),
   'svc-done': el => { closeSheet(); recSheet(null, el.dataset.cat); },
   'rec-new': () => recSheet(null),
+  'rec-reuse': () => recReuse(),
+  'entry-reset': el => {
+    const kind = el.dataset.kind, scope = entryDraftScope(), cat = kind === 'rec' ? val('rec-cat') : ''; entryDraftSave();
+    const reopen = () => kind === 'rec' ? recSheet(null, cat) : fuelSheet(null);
+    confirmSheet({title: t('ux.draft.reset'), text: t('ux.draft.resetAsk'), ok: t('ux.draft.reset'), onCancel: reopen, onOk: () => { entryDraftDrop(scope, kind, cat); reopen(); }});
+  },
   rec: el => recDetail(el.dataset.id),
   'rec-edit': el => recSheet(el.dataset.id),
   'rec-del': el => { const id = el.dataset.id; confirmSheet({title: t('act.recDelTitle'), text: t('act.recDelText'), ok: t('c.delete'), onOk: () => { S.records = S.records.filter(r => r.id !== id); save(); render(); toast(t('act.recDeleted')); }, onCancel: () => recDetail(id)}); },
@@ -7382,7 +7463,8 @@ function onInput(e) {
 function onChange(e) {
   const tt = e.target, id = tt.id;
   if (id === 'set-news') { newsSave(tt); return; }
-  if (id === 'rec-cat') { $('#rec-x-tires').hidden = tt.value !== 'tires'; $('#rec-x-wheels').hidden = tt.value !== 'wheels'; return; }
+  if (id === 'rec-cat') { $('#rec-x-tires').hidden = tt.value !== 'tires'; $('#rec-x-wheels').hidden = tt.value !== 'wheels'; recRepeatPaint(); return; }
+  if (id === 'rec-shop') { recShopPhone(); return; }
   if (id === 'sae-w' || id === 'sae-h') { ui.saeW = val('sae-w'); ui.saeH = val('sae-h'); setHTML($('#sae-out'), saeOut()); return; }
   if (tt.dataset && tt.dataset.fx) { fxFormUpd(); return; }
   if (id === 'ph-cc') { const n = $('#ph-num'); if (n) { n.placeholder = PHC[tt.value].ex; n.value = phFmt(tt.value, phNat(tt.value, n.value)); } return; }
@@ -7650,6 +7732,7 @@ function init() {
   document.addEventListener('click', onClick);
   document.addEventListener('input', onInput);
   document.addEventListener('change', onChange);
+  ['input', 'change', 'click'].forEach(n => document.addEventListener(n, e => { if (e.target.closest && e.target.closest('#sheet form[data-draft-scope]') && e.target.type !== 'file') entryDraftSave(); }));
   document.addEventListener('submit', onSubmit);
   document.addEventListener('keydown', onKey);
   document.addEventListener('pointerover', onTip);

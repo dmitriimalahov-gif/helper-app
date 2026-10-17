@@ -1140,6 +1140,7 @@ pre.inv{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monos
 <body>
 <div id="root"></div>
 <div id="sheets"></div>
+<script src="../drafts.js"></script>
 <script>
 'use strict';
 (() => {
@@ -1420,7 +1421,27 @@ const fold = s => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g
 const flagOf = cc => /^[A-Z]{2}$/.test(cc || '') ? String.fromCodePoint(127397 + cc.charCodeAt(0), 127397 + cc.charCodeAt(1)) : '';
 
 /* ================= словарь: ключ → [ru, ro, en]; множественное число — {one, few, many, other} ================= */
-const TX = {};
+const TX = {
+  "ux.draft.reset": ["Начать заново", "Începeți din nou", "Start again"],
+  "ux.draft.resetAsk": ["Очистить незавершённую форму? Сохранённые записи останутся.", "Goliți formularul neterminat? Înregistrările salvate rămân.", "Clear this unfinished form? Saved records will remain."],
+
+  "ux.draft.hint": ["Новая акция или подарок сохраняются как черновик на этом устройстве.", "Promoțiile și beneficiile noi se păstrează ca ciornă pe acest dispozitiv.", "New promotions and perks are kept as drafts on this device."],
+  "ux.draft.saved": ["Черновик сохранён на этом устройстве на 7 дней. Клиенты его пока не видят.", "Ciornă salvată pe acest dispozitiv pentru 7 zile. Clienții încă nu o văd.", "Draft saved on this device for 7 days. Customers cannot see it yet."],
+  "ux.draft.restored": ["Восстановлен незавершённый черновик. Проверьте условия и даты перед публикацией.", "Ciorna neterminată a fost restaurată. Verificați condițiile și datele înainte de publicare.", "Your unfinished draft was restored. Check terms and dates before publishing."],
+  "ux.draft.unavailable": ["Браузер не сохранил черновик. Не закрывайте страницу до сохранения.", "Browserul nu a salvat ciorna. Nu închideți pagina înainte de salvare.", "The browser could not save the draft. Keep this page open until you save."],
+  "ux.template.button": ["Подготовить текст на RU · RO · EN", "Pregătiți textul RU · RO · EN", "Prepare RU · RO · EN text"],
+  "ux.template.hint": ["Заполним только пустые поля по выбранным условиям. Уточните услуги и ограничения перед публикацией.", "Completăm doar câmpurile goale pe baza condițiilor alese. Precizați serviciile și restricțiile înainte de publicare.", "Fill only empty fields using your chosen terms. Add services and restrictions before publishing."],
+  "ux.template.done": ["Текст подготовлен. Уточните условия предложения.", "Text pregătit. Precizați condițiile ofertei.", "Text prepared. Review the offer terms."],
+  "ux.template.discount.title": ["Скидка {value} для водителей Helper", "Reducere {value} pentru șoferii Helper", "{value} off for Helper drivers"],
+  "ux.template.discount.text": ["Откройте акцию в Helper и покажите купон для скидки {value}. Уточните услуги и ограничения у сотрудника.", "Deschideți promoția în Helper și arătați cuponul pentru reducerea de {value}. Întrebați angajatul despre servicii și restricții.", "Open this offer in Helper and show the coupon for {value} off. Ask a staff member about eligible services and restrictions."],
+  "ux.template.bonus.title": ["Километры Helper ×{value} за визит", "Kilometri Helper ×{value} pentru vizită", "Helper kilometres ×{value} per visit"],
+  "ux.template.bonus.text": ["Покажите Helper-код сотруднику: за засчитанный визит получите километры Helper ×{value}. Действуют лимиты программы.", "Arătați codul Helper angajatului: pentru o vizită înregistrată primiți kilometri Helper ×{value}. Se aplică limitele programului.", "Show your Helper code to a staff member: an eligible recorded visit earns Helper kilometres ×{value}. Programme limits apply."],
+  "ux.template.announcement.title": ["Ждём водителей Helper", "Vă așteptăm cu Helper", "Welcome, Helper drivers"],
+  "ux.template.announcement.text": ["Мы на карте Helper. Посмотрите адрес и часы работы, а доступные услуги уточните у сотрудника.", "Ne găsiți pe harta Helper. Consultați adresa și programul și întrebați angajatul despre serviciile disponibile.", "Find us on the Helper map. Check our address and opening hours, and ask a staff member about available services."],
+  "ux.duration": ["Срок акции", "Durata promoției", "Promotion duration"],
+  "ux.days": ["{n} дней", "{n} zile", "{n} days"],
+  "ux.duration.hint": ["Считаем от даты начала, включая первый день. Даты можно изменить.", "Calculat de la data începerii, inclusiv prima zi. Datele pot fi modificate.", "Calculated from the start date, including the first day. You can edit the dates."],
+};
 Object.assign(TX, {
   'app.name': ['Helper для бизнеса', 'Helper pentru business', 'Helper for Business'],
   'logo.sub': ['для<br>бизнеса', 'pentru<br>business', 'for<br>business'],
@@ -1826,12 +1847,12 @@ Object.assign(TX, {
   'pd.pick.h': ['Какой у вас бизнес?', 'Ce afacere aveți?', 'What’s your business?'],
   'pd.pick.p': ['Откроем кабинет вымышленной компании вашего сегмента: точки, плюшки, акции, касса и статистика. Ничего не сохраняется, регистрация не нужна.', 'Deschidem cabinetul unei companii fictive din segmentul vostru: locații, beneficii, promoții, casă și statistici. Nimic nu se salvează, înregistrarea nu e necesară.', 'We’ll open the dashboard of a fictional company in your segment: locations, perks, promotions, the till and statistics. Nothing is saved and no sign-up is needed.'],
   'pd.pick.open': ['Открыть демо', 'Deschideți demo', 'Open demo'],
-  'pd.pick.note': ['Компании и цифры в демо вымышлены. Регистрация настоящей компании — 3 минуты, пакет «Старт» — 0 MDL.', 'Companiile și cifrele din demo sunt fictive. Înregistrarea unei companii reale durează 3 minute, pachetul «Start» — 0 MDL.', 'Companies and numbers in the demo are fictional. Registering a real company takes 3 minutes; the Start package is 0 MDL.'],
+  "pd.pick.note": ["Компании и цифры в демо вымышлены. Подписки: 30, 65, 125 и 200 EUR в месяц. В пилоте Stripe работает в тестовом режиме.", "Companiile și cifrele din demo sunt fictive. Abonamente: 30, 65, 125 și 200 EUR pe lună. În pilot, Stripe este în modul de test.", "Demo companies and numbers are fictional. Subscriptions: 30, 65, 125 and 200 EUR per month. Stripe runs in test mode during the pilot."],
   'pd.tag': ['Демо', 'Demo', 'Demo'],
   'pd.bar.t': ['Демо-кабинет', 'Cabinet demo', 'Demo dashboard'],
   'pd.bar.s': ['данные не сохраняются', 'datele nu se salvează', 'nothing is saved'],
-  'pd.cta': ['Зарегистрировать компанию — бесплатно', 'Înregistrați compania — gratuit', 'Register your company — free'],
-  'pd.cta.short': ['Регистрация — 0 MDL', 'Înregistrare — 0 MDL', 'Sign up — 0 MDL'],
+  "pd.cta": ["Зарегистрировать компанию", "Înregistrați compania", "Register your company"],
+  "pd.cta.short": ["Регистрация", "Înregistrare", "Sign up"],
   'pd.tour': ['Тур', 'Tur', 'Tour'],
   'pd.exit': ['Выйти из демо', 'Ieșiți din demo', 'Exit demo'],
   'pd.ro': ['В демо изменения не сохраняются — зарегистрируйте компанию, чтобы сделать это по-настоящему.', 'În demo modificările nu se salvează — înregistrați compania ca s-o faceți pe bune.', 'Changes aren’t saved in the demo — register your company to do it for real.'],
@@ -3319,7 +3340,7 @@ function apiRefresh() {
 }
 function sessionLost() {
   if (!logged()) return;
-  A = {}; acctSave();
+  A = {}; acctSave(); ED = null; PE = null;
   st.partner = null; st.role = null; st.cache = {};
   toast(tx('err.session'), 4200);
   setTimeout(() => go('login', true), 30);
@@ -3612,6 +3633,7 @@ async function enterCabinet(alive) {
 }
 async function selectPartner(pid) {
   st.pid = +pid; if (!DEMO.on) store.set(K.pid, String(pid));
+  ED = null; PE = null;
   st.cache = {}; st.partner = null; st.role = null;
   await loadPartner();
 }
@@ -3626,7 +3648,7 @@ async function logout() {
   if (DEMO.on) return demoExit(false);
   closeSheet(true);
   try { await Promise.race([api('/v1/auth/logout', {body: {}}), sleep(3000)]); } catch (e) {}
-  A = {}; acctSave();
+  A = {}; acctSave(); ED = null; PE = null;
   st.partner = null; st.role = null; st.cache = {}; st.mine = [];
   $('#root').dataset.shell = '';
   go('', true);
@@ -6068,6 +6090,63 @@ ACTS['camp-delete'] = async el => {
 /* ---------- редактор акции ---------- */
 const MAKES = ['Toyota', 'Volkswagen', 'Mercedes-Benz', 'BMW', 'Dacia', 'Renault', 'Skoda', 'Opel', 'Ford', 'Hyundai', 'Kia', 'Audi', 'Lexus', 'Nissan', 'Honda', 'Mazda'];
 const audKeys = kind => { const m = M().audience; return m && m[kind] && m[kind].length ? m[kind].map(x => x.key) : (kind === 'fuel' ? FUEL_K : SERV_K); };
+/* New campaigns/perks survive a reload without publishing or spending money. */
+function businessDraftScope() { return 'partner:' + (A.user && A.user.id || 'guest') + ':' + st.pid; }
+function businessDraftRestore(kind, fresh) {
+  fresh._draftScope = businessDraftScope();
+  if (DEMO.on || !window.HelperDrafts) return fresh;
+  let d; try { d = HelperDrafts.get(localStorage, fresh._draftScope, kind + ':' + fresh._key); } catch (_) {}
+  if (!d || d.id != null || d.lang !== fresh.lang) return fresh;
+  // Only restore fields from this editor's schema, never caches or account state.
+  Object.keys(fresh).filter(k => !k.startsWith('_') && !['id', 'status'].includes(k)).forEach(k => {
+    if (!Object.prototype.hasOwnProperty.call(d, k)) return;
+    if (fresh[k] === null || typeof fresh[k] === 'number') {
+      if (d[k] === null && fresh[k] === null || typeof d[k] === 'number' && Number.isFinite(d[k]) || typeof d[k] === 'string' && d[k].length < 30 && /^[\d.,-]*$/.test(d[k])) fresh[k] = d[k];
+    }
+    else if (d[k] !== null && typeof d[k] === typeof fresh[k] && Array.isArray(d[k]) === Array.isArray(fresh[k])) fresh[k] = d[k];
+  });
+  fresh._restored = true;
+  return fresh;
+}
+function businessDraftSave() {
+  if (DEMO.on || !window.HelperDrafts) return;
+  const kind = $('#ed-form') ? 'campaign' : $('#pe-form') ? 'perk' : null;
+  const e = kind === 'campaign' ? ED : kind === 'perk' ? PE : null;
+  if (!e || e.id || e._draftScope !== businessDraftScope()) return;
+  const d = {}; Object.keys(e).filter(k => !k.startsWith('_')).forEach(k => { d[k] = e[k]; });
+  let ok = false; try { ok = HelperDrafts.put(localStorage, e._draftScope, kind + ':' + e._key, d); } catch (_) {}
+  const n = $('#business-draft-note'); if (n) n.textContent = tx(ok ? 'ux.draft.saved' : 'ux.draft.unavailable');
+}
+function businessDraftDone(kind, e) {
+  if (!e || !window.HelperDrafts || DEMO.on) return;
+  try { HelperDrafts.drop(localStorage, e._draftScope, kind + ':' + e._key); } catch (_) {}
+}
+function businessDraftNote(e) {
+  return e.id || DEMO.on ? '' : '<p class="hint" id="business-draft-note" role="status">' + tx(e._restored ? 'ux.draft.restored' : 'ux.draft.hint') + '</p><div><button type="button" class="textbtn" style="min-height:44px" data-act="business-draft-reset">' + tx('ux.draft.reset') + '</button></div>';
+}
+ACTS['business-draft-reset'] = async () => {
+  const kind = $('#ed-form') ? 'campaign' : 'perk', e = kind === 'campaign' ? ED : PE;
+  if (!e || e.id) return;
+  if (!await confirmSheet({title: tx('ux.draft.reset'), text: tx('ux.draft.resetAsk'), ok: tx('ux.draft.reset')})) return;
+  businessDraftDone(kind, e); if (kind === 'campaign') ED = null; else PE = null; render();
+};
+function edTextTemplate() {
+  const e = ED;
+  const value = e.kind === 'discount' ? e.discount_value + (e.discount_kind === 'percent' ? '%' : ' ' + cur()) : e.bonus_multiplier;
+  LANGS.forEach(l => {
+    const row = l === e.lang ? e : (e.i18n[l] || (e.i18n[l] = {title: '', text: ''}));
+    if (!String(row.title || '').trim()) row.title = tl(l, 'ux.template.' + e.kind + '.title', {value});
+    if (!String(row.text || '').trim()) row.text = tl(l, 'ux.template.' + e.kind + '.text', {value});
+  });
+  edRender(); toast(tx('ux.template.done'));
+}
+ACTS['ed-template'] = () => edTextTemplate();
+ACTS['ed-duration'] = el => {
+  if (!ED.starts) ED.starts = ymd(new Date());
+  const d = new Date(ED.starts + 'T12:00:00'); d.setDate(d.getDate() + Number(el.dataset.days) - 1);
+  ED.ends = ymd(d); edRender();
+};
+
 let ED = null;
 const trClone = (i18n, orig) => { const o = {}; LANGS.forEach(l => { if (l !== orig) { const x = i18n && i18n[l] || {}; o[l] = {title: x.title || '', text: x.text || ''}; } }); return o; };
 function edNew(copy, due) {
@@ -6148,7 +6227,7 @@ VIEWS['campaign-edit'] = async (v, r, alive) => {
   const id = r.params[0];
   if (id === 'new') {
     const nk = 'new' + (r.q.copy || '') + (r.q.due ? ':' + r.q.due : '');
-    if (!ED || ED.id || ED._key !== nk) { ED = edNew(r.q.copy ? items.find(x => String(x.id) === r.q.copy) : null, r.q.due); ED._key = nk; }
+    if (!ED || ED.id || ED._key !== nk || ED._draftScope !== businessDraftScope()) { ED = edNew(r.q.copy ? items.find(x => String(x.id) === r.q.copy) : null, r.q.due); ED._key = nk; ED = businessDraftRestore('campaign', ED); }
   } else {
     const c = items.find(x => String(x.id) === String(id));
     if (!c) { v.innerHTML = emptyHTML('megaphone', tx('camp.nf.t'), '', '<a class="btn sm soft" href="#/campaigns">' + tx('camp.tolist') + '</a>'); return; }
@@ -6164,7 +6243,7 @@ function edRender(v) {
   const back = isNew ? ['#/campaigns', tx('camp.all')] : ['#/campaign/' + e.id, tx('ed.back')];
   let h = phead(isNew ? tx('camp.new') : tx('ed.edit'), esc(e.title.trim() || (isNew ? tx('ed.title.new') : tx('ed.title'))), null, null, back) +
     '<nav class="stepnav" aria-label="' + esc(tx('ed.steps')) + '">' + [1, 2, 3, 4, 5].map(i => '<button type="button" data-act="ed-step" data-s="' + i + '"' + (e.step === i ? ' aria-current="step"' : '') + '><span class="n">' + i + '</span>' + tx('es.' + i) + '</button>').join('') + '</nav>' +
-    '<div class="cols"><form class="form" data-form="ed" novalidate id="ed-form">' + edStepHTML() + errBox('ed-err') + edFootHTML() + '</form>' +
+    '<div class="cols"><form class="form" data-form="ed" novalidate id="ed-form">' + businessDraftNote(e) + edStepHTML() + errBox('ed-err') + edFootHTML() + '</form>' +
     '<div class="sticky phone-wrap" id="ed-pv"></div></div>';
   v.innerHTML = h;
   edPv();
@@ -6195,7 +6274,8 @@ function edStepHTML() {
     const rw = (ED._rewards || []).filter(x => x.status === 'active' || String(x.id) === String(e.reward_id));
     const isO = e.tl === e.lang, tr = isO ? e : (e.i18n[e.tl] || (e.i18n[e.tl] = {title: '', text: ''}));
     const ti = tr.title || '', te = tr.text || '';
-    return '<div class="field"><span class="flabel">' + tx('tr.label') + '</span>' + trTabs('ed-tl', e.lang, e.tl, edFilled) +
+    return '<div class="card pad"><button type="button" class="btn soft" data-act="ed-template">' + tx('ux.template.button') + '</button><p class="hint">' + tx('ux.template.hint') + '</p></div>' +
+      '<div class="field"><span class="flabel">' + tx('tr.label') + '</span>' + trTabs('ed-tl', e.lang, e.tl, edFilled) +
         '<span class="hint">' + (isO ? tx('tr.hint.orig', {lang: tx('ln.' + e.lang)}) : tx('tr.hint.tr', {lang: tx('ln.' + e.tl), orig: e.lang.toUpperCase()})) + '</span></div>' +
       fld('ed-title', tx('ed.f.title') + ' ' + cnt('ed-title-c', ti.length, 80), inp('ed-title', ti, 'maxlength="80" lang="' + e.tl + '" placeholder="' + esc(isO ? tx('ed.title.ph') : (e.title || tx('ed.title.ph'))) + '" data-in="ed-tr" data-f="title" autofocus')) +
       fld('ed-text', tx('ed.f.text') + ' ' + cnt('ed-text-c', te.length, 500), '<textarea class="input" id="ed-text" rows="4" maxlength="500" lang="' + e.tl + '" placeholder="' + esc(isO ? tx('ed.text.ph') : (e.text || tx('ed.text.ph'))) + '" data-in="ed-tr" data-f="text">' + esc(te) + '</textarea>', isO ? tx('ed.text.hint') : '') +
@@ -6204,7 +6284,8 @@ function edStepHTML() {
   }
   if (e.step === 3) {
     const locs = ED._locs || [], R = m.radius;
-    return '<div class="grid2">' + fld('ed-starts', tx('ed.starts'), inp('ed-starts', e.starts, 'type="date" data-in="ed-f" data-f="starts"')) + fld('ed-ends', tx('ed.ends'), inp('ed-ends', e.ends, 'type="date" data-in="ed-f" data-f="ends"')) + '</div>' +
+    return '<div class="opt-grid" role="group" aria-label="' + esc(tx('ux.duration')) + '">' + [7, 14, 30].map(n => '<button type="button" class="btn soft" data-act="ed-duration" data-days="' + n + '">' + tx('ux.days', {n}) + '</button>').join('') + '</div><p class="hint">' + tx('ux.duration.hint') + '</p>' +
+      '<div class="grid2">' + fld('ed-starts', tx('ed.starts'), inp('ed-starts', e.starts, 'type="date" data-in="ed-f" data-f="starts"')) + fld('ed-ends', tx('ed.ends'), inp('ed-ends', e.ends, 'type="date" data-in="ed-f" data-f="ends"')) + '</div>' +
       '<div class="field"><span class="flabel">' + tx('camp.points') + '</span><div class="opt-grid">' + opt('ed-loc', 'all', tx('camp.allpoints'), !e.location_ids.length) + locs.map(l => opt('ed-loc', l.id, esc(l.title), e.location_ids.indexOf(+l.id) >= 0)).join('') + '</div>' + (locs.length ? '' : '<span class="hint">' + tx('ed.nolocs') + '</span>') + '</div>' +
       '<div class="field"><label for="ed-rad">' + tx('ed.radius') + ' <span class="cnt" id="ed-radv">' + fDist(e.radius_m) + '</span></label><input type="range" id="ed-rad" min="' + R.min + '" max="' + R.max + '" step="50" value="' + e.radius_m + '" data-in="ed-f" data-f="radius_m"><span class="hint">' + tx('ed.radius.hint') + '</span></div>';
   }
@@ -6290,7 +6371,7 @@ async function edSave(submit, btn) {
   let id = ED.id, status = ED.status;
   try {
     if (id) { const d = await P('/campaigns/' + id, {method: 'PATCH', body}); if (d.item && d.item.status) status = d.item.status; }
-    else { const d = await P('/campaigns', {body}); id = d.item && d.item.id; status = (d.item && d.item.status) || 'draft'; ED.id = id; ED.status = status; }
+    else { const d = await P('/campaigns', {body}); id = d.item && d.item.id; status = (d.item && d.item.status) || 'draft'; businessDraftDone('campaign', ED); ED.id = id; ED.status = status; }
   } catch (e) { done(); return showErr('ed-err', e.message); }
   let msg = tx('ed.saved');
   if (submit && id) {
@@ -6302,7 +6383,7 @@ async function edSave(submit, btn) {
   }
   done();
   inval('campaigns', 'stats'); refreshPartner();
-  ED = null;
+  businessDraftDone('campaign', ED); ED = null;
   toast(msg);
   go('campaign/' + id);
 }
@@ -6611,7 +6692,7 @@ VIEWS['perk-edit'] = async (v, r, alive) => {
   const id = r.params[0];
   if (id === 'new') {
     const key = 'new' + (r.q.tpl || '');
-    if (!PE || PE.id || PE._key !== key) { PE = peBlank(); PE._key = key; const t = r.q.tpl && tpls.find(x => x.key === r.q.tpl); if (t) peApplyTpl(t); }
+    if (!PE || PE.id || PE._key !== key || PE._draftScope !== businessDraftScope()) { PE = peBlank(); PE._key = key; const t = r.q.tpl && tpls.find(x => x.key === r.q.tpl); if (t) peApplyTpl(t); PE = businessDraftRestore('perk', PE); }
   } else {
     const x = items.find(y => String(y.id) === String(id));
     if (!x) { v.innerHTML = emptyHTML('gift', tx('e.perk_not_found'), '', '<a class="btn sm soft" href="#/perks">' + tx('pk.back') + '</a>'); return; }
@@ -6630,7 +6711,7 @@ function peRender(v) {
   const e = PE, c = corrOf(e.kind);
   e.points = clamp(Math.round(+e.points || Math.round((c[0] + c[1]) / 10) * 5), c[0], c[1]);
   const h = phead(e.id ? tx('pk.edit') : tx('pk.new'), '<span id="pe-h">' + esc(peHead()) + '</span>', null, null, ['#/perks', tx('pk.back')]) +
-    '<div class="cols"><form class="form" data-form="pe" novalidate id="pe-form">' + peFormHTML() + errBox('pe-err') + peFootHTML() + '</form>' +
+    '<div class="cols"><form class="form" data-form="pe" novalidate id="pe-form">' + businessDraftNote(e) + peFormHTML() + errBox('pe-err') + peFootHTML() + '</form>' +
     '<div class="sticky phone-wrap" id="pe-pv"></div></div>';
   v.innerHTML = h;
   pePv();
@@ -6761,6 +6842,7 @@ async function peSave(publish, btn) {
     if (PE.id) item = (await P('/perks/' + PE.id, {method: 'PATCH', body})).item;
     else { if (publish) body.submit = true; item = (await P('/perks', {body})).item; }
   } catch (e) { done(); return showErr('pe-err', e.message); }
+  if (item && item.id) businessDraftDone('perk', PE);
   let s0 = item && item.status;
   if (PE.id && publish && item && (s0 === 'draft' || s0 === 'rejected' || s0 === 'paused')) {
     try { item = (await P('/perks/' + item.id + '/' + (s0 === 'paused' ? 'resume' : 'submit'), {body: {}})).item || item; s0 = item.status; }
@@ -6768,7 +6850,7 @@ async function peSave(publish, btn) {
   }
   done();
   inval('perks', 'game'); refreshPartner();
-  PE = null;
+  businessDraftDone('perk', PE); PE = null;
   toast(!publish && s0 !== 'pending' ? tx('pk.saved') : s0 === 'active' ? tx('pk.published') : s0 === 'pending' ? tx('pk.sent.review') : tx('pk.saved'), 4000);
   go('perks');
 }
@@ -7477,6 +7559,7 @@ document.addEventListener('click', e => {
   if (!f) return;
   e.preventDefault();
   f(el, e);
+  if (/^(ed|pe)-/.test(el.dataset.act)) businessDraftSave();
 });
 document.addEventListener('submit', e => {
   const f = e.target.closest('form[data-form]');
@@ -7484,10 +7567,10 @@ document.addEventListener('submit', e => {
   e.preventDefault();
   if (CB_OPEN) cbClose();
   const h = FORMS[f.dataset.form];
-  if (h) h(f, e);
+  if (h) { h(f, e); businessDraftSave(); }
 });
-document.addEventListener('input', e => { const el = e.target; if (el && el.dataset && INPUTS[el.dataset.in]) INPUTS[el.dataset.in](el, e); });
-document.addEventListener('change', e => { const el = e.target; if (el && el.dataset && CHANGES[el.dataset.ch]) CHANGES[el.dataset.ch](el, e); });
+document.addEventListener('input', e => { const el = e.target; if (el && el.dataset && INPUTS[el.dataset.in]) INPUTS[el.dataset.in](el, e); businessDraftSave(); });
+document.addEventListener('change', e => { const el = e.target; if (el && el.dataset && CHANGES[el.dataset.ch]) CHANGES[el.dataset.ch](el, e); businessDraftSave(); });
 document.addEventListener('keydown', e => {
   const el = e.target;
   if (el && el.classList && el.classList.contains('cb-q')) { if (cbKey(e)) { e.preventDefault(); e.stopPropagation(); } return; }
