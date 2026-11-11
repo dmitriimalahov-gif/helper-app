@@ -2850,7 +2850,7 @@ const PLAY_MANAGE_URL = 'https://play.google.com/store/account/subscriptions?pac
 const CFG_REMOTE = 'https://dmitriimalahov-gif.github.io/helper-app/config.json';
 const K_CFG = 'helper.cfg.v1', K_DEV = 'helper.dev.api', K_ACCT = 'helper.acct.v1', K_SYNC = 'helper.sync.v1', K_PLANS = 'helper.plans.v1';
 const K_INV = 'helper.invite.v1', K_STATUS = 'helper.status.v1', K_REF = 'helper.ref.v1', K_NOTICES = 'helper.notices.v1';
-const MAX_CARS = 4, SYNC_KINDS = ['cars', 'records', 'fuel', 'docs'];
+const MAX_CARS = 5, PREMIUM_MAX_CARS = 2, SYNC_KINDS = ['cars', 'records', 'fuel', 'docs'];
 const jget = k => { const v = store.get(k); if (!v) return null; try { return JSON.parse(v); } catch (e) { return null; } };
 const jset = (k, v) => { if (v == null) store.del(k); else store.set(k, JSON.stringify(v)); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -3427,12 +3427,12 @@ function premStatusText() {
   return (l.trial ? t('prem.trial') : (PLAN_N[l.plan] || 'Premium')) + ' · ' + carTxt + ' · ' + t('c.until', {date: fD(l.until)}) + (isStoreSrc(l.source) ? ' · ' + SRC_N[l.source] : '');
 }
 
-/* --- Тарифы: GET /v1/premium/plans (месяц/год × 1–4 авто), без сети — таблица по умолчанию --- */
-const PLAN_USD = {month: [4.99, 7.49, 9.99, 12.49], year: [29.99, 44.99, 59.99, 74.99]}, PLAN_XTR = {month: [384, 576, 768, 961], year: [2307, 3461, 4615, 5768]};
+/* --- Тарифы: GET /v1/premium/plans (месяц/год × 1–2 авто), без сети — таблица по умолчанию --- */
+const PLAN_USD = {month: [4.99, 7.49], year: [29.99, 44.99]}, PLAN_XTR = {month: [384, 576], year: [2307, 3461]};
 let PL = jget(K_PLANS);
 const productId = (per, cars) => 'md.numerom.helper.premium.' + per + '.' + cars;
-const STORE_IDS = ['month', 'year'].reduce((a, p) => a.concat([1, 2, 3, 4].map(n => productId(p, n))), []);
-const prodParse = id => { const m = /^md\.numerom\.helper\.premium\.(month|year)\.([1-4])$/.exec(id || ''); return m ? {plan: m[1], cars: +m[2]} : null; };
+const STORE_IDS = ['month', 'year'].reduce((a, p) => a.concat([1, PREMIUM_MAX_CARS].map(n => productId(p, n))), []);
+const prodParse = id => { const m = /^md\.numerom\.helper\.premium\.(month|year)\.([1-2])$/.exec(id || ''); return m ? {plan: m[1], cars: +m[2]} : null; };
 function planRow(per, cars) {
   const p = PL && Array.isArray(PL.plans) ? PL.plans.find(x => x.plan === per && +x.cars === cars) : null;
   return p || {plan: per, cars, usd: PLAN_USD[per][cars - 1], stars: PLAN_XTR[per][cars - 1], product_id: productId(per, cars), trial_days: per === 'year' ? 7 : 0};
@@ -4329,7 +4329,7 @@ function pwDefaults(o) {
   const cur = (l && isStoreSrc(l.source) && l.plan) || (s && (s.plan === 'month' || s.plan === 'year') ? s.plan : null);
   if (cur) ui.pwPer = cur; /* действующая подписка: цены того же периода */
   if (ui.pwPer !== 'month' && ui.pwPer !== 'year') ui.pwPer = 'year';
-  ui.pwCars = clamp(o.cars || tierCars() || 1, 1, MAX_CARS);
+  ui.pwCars = clamp(o.cars || tierCars() || 1, 1, PREMIUM_MAX_CARS);
   ui.pwNote = o.note || '';
 }
 function pwRefresh() { const el = $('#pw-main'); if (el) setHTML(el, pwMain()); const note = $('#pw-pay-note'); if (note && !CAP && !IN_TG) note.textContent = t(WEB_PAY && WEB_PAY.mode === 'test' ? 'web.pilotTestTerms' : 'pw.webPayNote'); }
@@ -4349,7 +4349,7 @@ function pwMain() {
   if (ui.pwNote) b += '<div class="card section" style="margin-top:14px"><p class="small" style="margin:0;line-height:1.5">' + esc(ui.pwNote) + '</p></div>';
   const disc = Math.round((1 - planRow('year', 1).usd / (planRow('month', 1).usd * 12)) * 100);
   b += '<div class="seg" role="group" aria-label="' + t('pw.period') + '" style="margin-top:20px">' + [['month', t('plan.month')], ['year', disc >= 5 && !STORE ? t('pw.yearDisc', {pct: disc}) : t('plan.year')]].map(p => '<button data-act="pw-per" data-v="' + p[0] + '" aria-pressed="' + (per === p[0]) + '">' + p[1] + '</button>').join('') + '</div>';
-  b += '<div class="plans" role="radiogroup" aria-label="' + t('pw.carsCount') + '" style="margin-top:14px">' + [1, 2, 3, 4].map(c => {
+  b += '<div class="plans" role="radiogroup" aria-label="' + t('pw.carsCount') + '" style="margin-top:14px">' + [1, PREMIUM_MAX_CARS].map(c => {
     const pr = pwPrice(per, c);
     return '<button class="plan" role="radio" aria-checked="' + (n === c) + '" data-act="pw-cars" data-v="' + c + '"><span class="radio"></span><span><span class="pn" style="display:block">' + tn('u.cars', c) + '</span><span class="pd">' + (c === 1 ? t('pw.oneCar') : t('pw.extraCars', {n: c - 1})) + '</span></span><span class="pp"><b>' + esc(pr.main) + '</b><span>' + esc(pr.sub) + '</span></span></button>';
   }).join('') + '</div>';
@@ -4547,7 +4547,7 @@ function pageAccount() {
   const u = A.user || {}, tg = u.telegram || {}, nm = String(u.display_name || '').trim();
   h += '<div class="card section" style="margin-top:12px"><p class="eyebrow">' + t('c.account') + '</p><p style="margin:6px 0 0;font-weight:600;word-break:break-all">' + esc(nm || acctName()) + '</p>' + (nm && acctName() ? '<p class="small muted num" style="margin:2px 0 0;word-break:break-all">' + esc(acctName()) + '</p>' : '') + (u.email && u.phone ? '<p class="small muted num" style="margin:2px 0 0">' + esc(phShow(u.phone)) + '</p>' : '') + (u.helper_id ? '<p class="small muted num" style="margin:2px 0 0">Helper ID ' + esc(u.helper_id) + '</p>' : '') + '</div>';
   h += '<div class="card section"><p class="eyebrow">' + t('account.sync') + '</p><p class="small num" style="margin:6px 0 0;font-weight:600" data-sync-text>' + esc(syncText()) + '</p>' + (SY.notice ? '<p class="small muted" style="margin:6px 0 0">' + esc(SY.notice) + '</p>' : '') + '<p class="xsmall muted" style="margin:6px 0 0">' + t('account.syncText') + '</p><button class="btn block soft" style="margin-top:12px" data-act="acct-sync">' + ic('sync', 'sm') + t('account.syncNow') + '</button></div>';
-  h += '<div class="card section"><p class="eyebrow">Premium</p><p style="margin:6px 0 0;font-weight:600">' + (isPrem() ? 'Helper Premium' : t('c.free')) + '</p><p class="small muted num" style="margin:2px 0 0">' + (isPrem() ? esc(premStatusText()) : t('account.premHint', {max: MAX_CARS})) + '</p><button class="btn block soft" style="margin-top:12px" data-act="paywall">' + (isPrem() ? t('account.planManage') : trialCta()) + '</button></div>';
+  h += '<div class="card section"><p class="eyebrow">Premium</p><p style="margin:6px 0 0;font-weight:600">' + (isPrem() ? 'Helper Premium' : t('c.free')) + '</p><p class="small muted num" style="margin:2px 0 0">' + (isPrem() ? esc(premStatusText()) : t('account.premHint', {max: PREMIUM_MAX_CARS})) + '</p><button class="btn block soft" style="margin-top:12px" data-act="paywall">' + (isPrem() ? t('account.planManage') : trialCta()) + '</button></div>';
   h += '<div class="card section"><p class="eyebrow">Telegram</p>' + (tg.linked
     ? '<p class="small" style="margin:6px 0 0">' + t('account.tgLinked', {bot: TG_BOT, user: tg.username ? ' (@' + esc(tg.username) + ')' : ''}) + '</p>' +
       '<button class="btn block soft" style="margin-top:12px" data-act="acct-tg-unlink"' + (tgOnly() ? ' disabled' : '') + '>' + ic('close', 'sm') + t('tg.unlink') + '</button>' + (tgOnly() ? '<p class="hint" style="margin:8px 0 0">' + t('tg.lastMethod') + '</p>' : '')
